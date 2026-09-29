@@ -336,6 +336,7 @@ type GlueUtilityType =
     | ReturnType of GlueType
     | ThisParameterType of GlueType
     | Omit of GlueMember list
+    | Pick of GlueMember list
     | Readonly of GlueReadonly
 
     member this.TypeParameters =
@@ -344,7 +345,8 @@ type GlueUtilityType =
         | Record _ -> []
         | ReturnType returnType -> returnType.TypeParameters
         | ThisParameterType thisType -> thisType.TypeParameters
-        | Omit members -> members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
+        | Omit members
+        | Pick members -> members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
         | Readonly(GlueReadonly.Members members) ->
             members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
         | Readonly(GlueReadonly.Union interfaces) ->
@@ -464,6 +466,7 @@ type GlueType =
             match utilityType with
             | GlueUtilityType.Partial _
             | GlueUtilityType.Omit _
+            | GlueUtilityType.Pick _
             | GlueUtilityType.Readonly _
             | GlueUtilityType.Record _ -> "obj"
             | GlueUtilityType.ReturnType returnType -> returnType.Name

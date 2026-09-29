@@ -8665,6 +8665,18 @@ module Web =
         abstract member desynchronized: bool option with get, set
         abstract member willReadFrequently: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?alpha: bool,
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?desynchronized: bool,
+                ?willReadFrequently: bool
+            )
+            : CanvasRenderingContext2DSettings
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CaretPositionFromPointOptions =
@@ -9959,6 +9971,21 @@ module Web =
         abstract member toneMapping: Web.GPUCanvasToneMapping option with get, set
         abstract member usage: Web.GPUTextureUsageFlags option with get, set
         abstract member viewFormats: ResizeArray<Web.GPUTextureFormat> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                device: Web.GPUDevice,
+                format: Web.GPUTextureFormat,
+                ?alphaMode: Web.GPUCanvasAlphaMode,
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?toneMapping: Web.GPUCanvasToneMapping,
+                ?usage: Web.GPUTextureUsageFlags,
+                ?viewFormats: ResizeArray<Web.GPUTextureFormat>
+            )
+            : GPUCanvasConfiguration
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12059,6 +12086,30 @@ module Web =
         inherit Web.MediaTrackConstraintSet
         abstract member advanced: ResizeArray<Web.MediaTrackConstraintSet> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?aspectRatio: Web.ConstrainDouble,
+                ?autoGainControl: Web.ConstrainBoolean,
+                ?backgroundBlur: Web.ConstrainBoolean,
+                ?channelCount: Web.ConstrainULong,
+                ?deviceId: Web.ConstrainDOMString,
+                ?displaySurface: Web.ConstrainDOMString,
+                ?echoCancellation: Web.ConstrainBooleanOrDOMString,
+                ?facingMode: Web.ConstrainDOMString,
+                ?frameRate: Web.ConstrainDouble,
+                ?groupId: Web.ConstrainDOMString,
+                ?height: Web.ConstrainULong,
+                ?noiseSuppression: Web.ConstrainBoolean,
+                ?sampleRate: Web.ConstrainULong,
+                ?sampleSize: Web.ConstrainULong,
+                ?width: Web.ConstrainULong,
+                ?advanced: ResizeArray<Web.MediaTrackConstraintSet>
+            )
+            : MediaTrackConstraints
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaTrackSettings =
@@ -13447,6 +13498,20 @@ module Web =
         abstract member iceTransportPolicy: Web.RTCIceTransportPolicy option with get, set
         abstract member rtcpMuxPolicy: Web.RTCRtcpMuxPolicy option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bundlePolicy: Web.RTCBundlePolicy,
+                ?certificates: ResizeArray<Web.RTCCertificate>,
+                ?iceCandidatePoolSize: float,
+                ?iceServers: ResizeArray<Web.RTCIceServer>,
+                ?iceTransportPolicy: Web.RTCIceTransportPolicy,
+                ?rtcpMuxPolicy: Web.RTCRtcpMuxPolicy
+            )
+            : RTCConfiguration
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCDTMFToneChangeEventInit =
@@ -13574,6 +13639,13 @@ module Web =
         abstract member sdpMLineIndex: float option with get, set
         abstract member sdpMid: string option with get, set
         abstract member usernameFragment: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?candidate: string, ?sdpMLineIndex: float, ?sdpMid: string, ?usernameFragment: string)
+            : RTCIceCandidateInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13901,6 +13973,20 @@ module Web =
         abstract member encodings: ResizeArray<Web.RTCRtpEncodingParameters> with get, set
         abstract member transactionId: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                codecs: ResizeArray<Web.RTCRtpCodecParameters>,
+                headerExtensions: ResizeArray<Web.RTCRtpHeaderExtensionParameters>,
+                rtcp: Web.RTCRtcpParameters,
+                encodings: ResizeArray<Web.RTCRtpEncodingParameters>,
+                transactionId: string,
+                ?degradationPreference: Web.RTCDegradationPreference
+            )
+            : RTCRtpSendParameters
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpStreamStats =
@@ -13945,6 +14031,10 @@ module Web =
     type RTCSessionDescriptionInit =
         abstract member sdp: string option with get, set
         abstract member ``type``: Web.RTCSdpType with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(``type``: Web.RTCSdpType, ?sdp: string) : RTCSessionDescriptionInit =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14335,6 +14425,23 @@ module Web =
         abstract member removeElements: ResizeArray<Web.SanitizerElement> option with get, set
         abstract member removeProcessingInstructions: ResizeArray<Web.SanitizerPI> option with get, set
         abstract member replaceWithChildrenElements: ResizeArray<Web.SanitizerElement> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?attributes: ResizeArray<Web.SanitizerAttribute>,
+                ?comments: bool,
+                ?dataAttributes: bool,
+                ?elements: ResizeArray<Web.SanitizerElementWithAttributes>,
+                ?processingInstructions: ResizeArray<Web.SanitizerPI>,
+                ?removeAttributes: ResizeArray<Web.SanitizerAttribute>,
+                ?removeElements: ResizeArray<Web.SanitizerElement>,
+                ?removeProcessingInstructions: ResizeArray<Web.SanitizerPI>,
+                ?replaceWithChildrenElements: ResizeArray<Web.SanitizerElement>
+            )
+            : SanitizerConfig
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15316,6 +15423,18 @@ module Web =
         abstract member primaries: Web.VideoColorPrimaries option with get, set
         abstract member transfer: Web.VideoTransferCharacteristics option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?fullRange: bool,
+                ?matrix: Web.VideoMatrixCoefficients,
+                ?primaries: Web.VideoColorPrimaries,
+                ?transfer: Web.VideoTransferCharacteristics
+            )
+            : VideoColorSpaceInit
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type VideoConfiguration =
@@ -15659,6 +15778,24 @@ module Web =
         abstract member preserveDrawingBuffer: bool option with get, set
         abstract member stencil: bool option with get, set
         abstract member xrCompatible: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?alpha: bool,
+                ?antialias: bool,
+                ?depth: bool,
+                ?desynchronized: bool,
+                ?failIfMajorPerformanceCaveat: bool,
+                ?powerPreference: Web.WebGLPowerPreference,
+                ?premultipliedAlpha: bool,
+                ?preserveDrawingBuffer: bool,
+                ?stencil: bool,
+                ?xrCompatible: bool
+            )
+            : WebGLContextAttributes
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -17119,6 +17256,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AnimationTimeline/duration)
         /// </summary>
         abstract member duration: Web.CSSNumberish option with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?currentTime: Web.CSSNumberish, ?duration: Web.CSSNumberish)
+            : AnimationTimeline
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>Attr</c>** interface represents one of an element's attributes as an object. In most situations, you will directly retrieve the attribute value as a string (e.g., Element.getAttribute()), but some cases may require interacting with Attr instances (e.g., Element.getAttributeNode()).
@@ -33954,6 +34098,9 @@ module Web =
     type GPUBindGroup =
         inherit Web.GPUObjectBase
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUBindGroup = nativeOnly
+
     /// <summary>
     /// The **<c>GPUBindGroupLayout</c>** interface of the WebGPU API defines the structure and purpose of related GPU resources such as buffers that will be used in a pipeline, and is used as a template when creating GPUBindGroups.
     /// Available only in secure contexts.
@@ -33964,6 +34111,9 @@ module Web =
     [<Interface>]
     type GPUBindGroupLayout =
         inherit Web.GPUObjectBase
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUBindGroupLayout = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -35543,6 +35693,9 @@ module Web =
     type GPUTextureView =
         inherit Web.GPUObjectBase
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUTextureView = nativeOnly
+
     /// <summary>
     /// The **<c>GPUUncapturedErrorEvent</c>** interface of the WebGPU API is the event object type for the GPUDevice uncapturederror event, used for telemetry and to report unexpected errors.
     /// Available only in secure contexts.
@@ -35643,6 +35796,22 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Gamepad/vibrationActuator)
         /// </summary>
         abstract member vibrationActuator: Web.GamepadHapticActuator with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                axes: ReadonlyArray<float>,
+                buttons: ReadonlyArray<Web.GamepadButton>,
+                connected: bool,
+                id: string,
+                index: float,
+                mapping: Web.GamepadMappingType,
+                timestamp: Web.DOMHighResTimeStamp,
+                vibrationActuator: Web.GamepadHapticActuator
+            )
+            : Gamepad
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>GamepadButton</c>** interface defines an individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
@@ -57295,6 +57464,18 @@ module Web =
         /// </summary>
         abstract member width: float with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                colorSpace: Web.PredefinedColorSpace,
+                data: Web.ImageDataArray,
+                height: float,
+                width: float
+            )
+            : ImageData
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ImageDecoder</c>** interface of the WebCodecs API provides a way to unpack and decode encoded image data.
     /// Available only in secure contexts.
@@ -62787,6 +62968,17 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationActivation/navigationType)
         /// </summary>
         abstract member navigationType: Web.NavigationType with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                entry: Web.NavigationHistoryEntry,
+                navigationType: Web.NavigationType,
+                ?from: Web.NavigationHistoryEntry
+            )
+            : NavigationActivation
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>NavigationCurrentEntryChangeEvent</c>** interface of the Navigation API is the event object for the currententrychange event, which fires when the Navigation.currentEntry has changed.
@@ -81464,6 +81656,9 @@ module Web =
         /// </summary>
         abstract member value: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(value: float) : SVGNumber = nativeOnly
+
     /// <summary>
     /// The **<c>SVGNumberList</c>** interface defines a list of numbers.
     ///
@@ -89810,6 +90005,19 @@ module Web =
     type StaticRange =
         inherit Web.AbstractRange
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                collapsed: bool,
+                endContainer: Web.Node,
+                endOffset: float,
+                startContainer: Web.Node,
+                startOffset: float
+            )
+            : StaticRange
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>StereoPannerNode</c>** interface of the Web Audio API represents a simple stereo panner node that can be used to pan an audio stream left or right. It is an AudioNode audio-processing module that positions an incoming audio stream in a stereo image using a low-cost equal-power panning algorithm.
     ///
@@ -92932,6 +93140,26 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Touch/target)
         /// </summary>
         abstract member target: Web.EventTarget with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                clientX: float,
+                clientY: float,
+                force: float,
+                identifier: float,
+                pageX: float,
+                pageY: float,
+                radiusX: float,
+                radiusY: float,
+                rotationAngle: float,
+                screenX: float,
+                screenY: float,
+                target: Web.EventTarget
+            )
+            : Touch
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>TouchEvent</c>** interface represents an UIEvent which is sent when the state of contacts with a touch-sensitive surface changes. This surface can be a touch screen or trackpad, for example. The event can describe one or more points of contact with the screen and includes support for detecting movement, addition and removal of contact points, and so forth.

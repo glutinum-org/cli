@@ -1627,7 +1627,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         | GlueUtilityType.ReturnType innerType
         | GlueUtilityType.ThisParameterType innerType -> transformType context innerType
 
-        | GlueUtilityType.Omit members ->
+        | GlueUtilityType.Omit members
+        | GlueUtilityType.Pick members ->
             let name =
                 context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
 
@@ -1639,6 +1640,27 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 |> List.map (fun name ->
                     FSharpTypeParameterInfo.Create name |> FSharpTypeParameter.FSharpTypeParameter
                 )
+
+            let creates =
+                if
+                    members
+                    |> List.forall (
+                        function
+                        | GlueMember.Property _ -> true
+                        | _ -> false
+                    )
+                then
+                    let returnType =
+                        ({
+                            Name = name
+                            TypeParameters = freeTypeParameters
+                        }
+                        : FSharpMapped)
+                        |> FSharpType.Mapped
+
+                    paramObjectCreateMembers context returnType members
+                else
+                    []
 
             {
                 XmlDoc = []
@@ -3927,54 +3949,6 @@ module private ParamObjectCandidate =
         | GlueType.ExportDefault innerType -> parameters innerType
         | _ -> []
 
-    let private memberReturnTypes (glueMember: GlueMember) =
-        match glueMember with
-        | GlueMember.Method info -> [ info.Type ]
-        | GlueMember.MethodSignature info -> [ info.Type ]
-        | GlueMember.CallSignature info -> [ info.Type ]
-        | GlueMember.GetAccessor info -> [ info.Type ]
-        | GlueMember.ConstructSignature _
-        | GlueMember.Property _
-        | GlueMember.SetAccessor _
-        | GlueMember.IndexSignature _ -> []
-
-    let private hasMethods (members: GlueMember list) =
-        members
-        |> List.exists (
-            function
-            | GlueMember.Method _
-            | GlueMember.MethodSignature _
-            | GlueMember.CallSignature _ -> true
-            | _ -> false
-        )
-
-    let private propertyTypes (members: GlueMember list) =
-        members
-        |> List.choose (
-            function
-            | GlueMember.Property info -> Some info.Type
-            | _ -> None
-        )
-
-    let rec private outputTypes (glueType: GlueType) =
-        match glueType with
-        | GlueType.ExportDefault innerType -> outputTypes innerType
-        | GlueType.FunctionDeclaration info -> [ info.Type ]
-        | GlueType.Variable info -> [ info.Type ]
-        | GlueType.ClassDeclaration info ->
-            (info.Members |> List.collect memberReturnTypes)
-            @ (if hasMethods info.Members || not info.Constructors.IsEmpty then
-                   propertyTypes info.Members
-               else
-                   [])
-        | GlueType.Interface info ->
-            (info.Members |> List.collect memberReturnTypes)
-            @ (if hasMethods info.Members then
-                   propertyTypes info.Members
-               else
-                   [])
-        | _ -> []
-
     let tryResolveMembers (typeMemory: GlueType list) (info: GlueInterface) =
         let tryFindInterface (fullName: string) =
             typeMemory
@@ -4009,7 +3983,8 @@ module private ParamObjectCandidate =
                             )
                         | _ -> None
 
-                    | GlueType.UtilityType(GlueUtilityType.Omit members) -> Some members
+                    | GlueType.UtilityType(GlueUtilityType.Omit members)
+                    | GlueType.UtilityType(GlueUtilityType.Pick members) -> Some members
 
                     // `ReadableOptions<T> extends StreamOptions<T>` passes its own parameter on,
                     // the members of the base name it the same way
@@ -4164,7 +4139,8 @@ module private ParamObjectCandidate =
                    )
             | None -> false
 
-        // A type parameter no member names can only be given explicitly at the call site
+        // A type parameter no member names is bound by the specialized alias when it has a
+        // default, and can only be given explicitly at the call site otherwise
         let typeParametersAreInferable =
             let mentioned =
                 members
@@ -4173,21 +4149,11 @@ module private ParamObjectCandidate =
                 |> Set.ofList
 
             info.TypeParameters
-            |> List.forall (fun typeParameter -> mentioned.Contains typeParameter.Name)
+            |> List.forall (fun typeParameter ->
+                mentioned.Contains typeParameter.Name || typeParameter.Default.IsSome
+            )
 
         let isUsedAsArgument = argumentReachable.Contains info.FullName
-
-        let isUsedAsOutput =
-            typeMemory
-            |> List.exists (fun glueType ->
-                outputTypes glueType
-                |> List.collect (fun typ ->
-                    match typ with
-                    | GlueType.Array innerType -> typeReferenceFullNames innerType
-                    | _ -> typeReferenceFullNames typ
-                )
-                |> List.contains info.FullName
-            )
 
         // The declarations of a merged interface are generated as one interface
         let isDeclaredOnce =
@@ -4205,7 +4171,6 @@ module private ParamObjectCandidate =
         hasOnlyProperties
         && typeParametersAreInferable
         && isUsedAsArgument
-        && not isUsedAsOutput
         && isDeclaredOnce
 
 // `inherit obj` or `inherit JS.Uint8Array` is invalid, those base types are not interfaces
@@ -5869,7 +5834,8 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
         |> List.map context.ExposeTypeAlias
         |> List.collect (fun heritageClause ->
             match heritageClause with
-            | GlueType.UtilityType(GlueUtilityType.Omit members) ->
+            | GlueType.UtilityType(GlueUtilityType.Omit members)
+            | GlueType.UtilityType(GlueUtilityType.Pick members) ->
                 TransformMembers.toFSharpMember context members
             | _ -> []
         )
@@ -5895,7 +5861,8 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | GlueType.TypeReference typeReference ->
                 not (typeReference.IsStandardLibrary && typeReference.Name = "Partial")
             // Omit members are inlined above, don't keep it as inheritance
-            | GlueType.UtilityType(GlueUtilityType.Omit _) -> false
+            | GlueType.UtilityType(GlueUtilityType.Omit _)
+            | GlueType.UtilityType(GlueUtilityType.Pick _) -> false
             // External base types can't be inherited
             | GlueType.Discard -> false
             | _ -> true
@@ -7510,7 +7477,8 @@ let private transformTypeAliasDeclaration
             | GlueUtilityType.ThisParameterType innerType ->
                 transformType context innerType |> makeTypeAlias
 
-            | GlueUtilityType.Omit members ->
+            | GlueUtilityType.Omit members
+            | GlueUtilityType.Pick members ->
                 let typParameters = declarationTypeParameters.Value
 
                 {

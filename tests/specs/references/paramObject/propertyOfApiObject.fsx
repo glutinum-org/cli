@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type TerminalOptions =
     abstract member name: string option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?name: string) : TerminalOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

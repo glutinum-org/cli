@@ -9240,6 +9240,9 @@ TypeScript versions earlier than 5.7.""")>]
             abstract member user: float with get, set
             abstract member system: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(user: float, system: float) : CpuUsage = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ProcessRelease =
@@ -20906,11 +20909,4622 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
-            type Assert = interface end
+            type Assert =
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: unit -> obj
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: message: string -> obj
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: message: Exception -> obj
+
+                [<Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+                abstract member fail: actual: obj * expected: obj -> obj
+
+                [<Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+                abstract member fail:
+                    actual: obj *
+                    expected: obj *
+                    message: string *
+                    ?operator: string *
+                    ?stackStartFn: Action ->
+                        obj
+
+                [<Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+                abstract member fail:
+                    actual: obj *
+                    expected: obj *
+                    message: Exception *
+                    ?operator: string *
+                    ?stackStartFn: Action ->
+                        obj
+
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj -> unit
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj * message: string -> unit
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="strictEqual">strictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+                /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+                /// and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.equal(1, 1);
+                /// // OK, 1 == 1
+                /// assert.equal(1, '1');
+                /// // OK, 1 == '1'
+                /// assert.equal(NaN, NaN);
+                /// // OK
+                ///
+                /// assert.equal(1, 2);
+                /// // AssertionError: 1 == 2
+                /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+                /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+                /// </code>
+                ///
+                /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member equal: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="strictEqual">strictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+                /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+                /// and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.equal(1, 1);
+                /// // OK, 1 == 1
+                /// assert.equal(1, '1');
+                /// // OK, 1 == '1'
+                /// assert.equal(NaN, NaN);
+                /// // OK
+                ///
+                /// assert.equal(1, 2);
+                /// // AssertionError: 1 == 2
+                /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+                /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+                /// </code>
+                ///
+                /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member equal: actual: obj * expected: obj * message: string -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="strictEqual">strictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+                /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+                /// and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.equal(1, 1);
+                /// // OK, 1 == 1
+                /// assert.equal(1, '1');
+                /// // OK, 1 == '1'
+                /// assert.equal(NaN, NaN);
+                /// // OK
+                ///
+                /// assert.equal(1, 2);
+                /// // AssertionError: 1 == 2
+                /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+                /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+                /// </code>
+                ///
+                /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member equal: actual: obj * expected: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+                /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.notEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notEqual(1, 1);
+                /// // AssertionError: 1 != 1
+                ///
+                /// assert.notEqual(1, '1');
+                /// // AssertionError: 1 != '1'
+                /// </code>
+                ///
+                /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+                /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notEqual: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+                /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.notEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notEqual(1, 1);
+                /// // AssertionError: 1 != 1
+                ///
+                /// assert.notEqual(1, '1');
+                /// // AssertionError: 1 != '1'
+                /// </code>
+                ///
+                /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+                /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notEqual: actual: obj * expected: obj * message: string -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+                /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.notEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notEqual(1, 1);
+                /// // AssertionError: 1 != 1
+                ///
+                /// assert.notEqual(1, '1');
+                /// // AssertionError: 1 != '1'
+                /// </code>
+                ///
+                /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+                /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notEqual: actual: obj * expected: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+                ///
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+                /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+                /// surprising results.
+                ///
+                /// _Deep equality_ means that the enumerable "own" properties of child objects
+                /// are also recursively evaluated by the following rules.
+                /// </summary>
+                abstract member deepEqual: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+                ///
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+                /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+                /// surprising results.
+                ///
+                /// _Deep equality_ means that the enumerable "own" properties of child objects
+                /// are also recursively evaluated by the following rules.
+                /// </summary>
+                abstract member deepEqual: actual: obj * expected: obj * message: string -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+                ///
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+                /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+                /// surprising results.
+                ///
+                /// _Deep equality_ means that the enumerable "own" properties of child objects
+                /// are also recursively evaluated by the following rules.
+                /// </summary>
+                abstract member deepEqual: actual: obj * expected: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+                ///
+                /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// const obj1 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj2 = {
+                ///   a: {
+                ///     b: 2,
+                ///   },
+                /// };
+                /// const obj3 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj4 = { __proto__: obj1 };
+                ///
+                /// assert.notDeepEqual(obj1, obj1);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj2);
+                /// // OK
+                ///
+                /// assert.notDeepEqual(obj1, obj3);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj4);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepEqual: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+                ///
+                /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// const obj1 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj2 = {
+                ///   a: {
+                ///     b: 2,
+                ///   },
+                /// };
+                /// const obj3 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj4 = { __proto__: obj1 };
+                ///
+                /// assert.notDeepEqual(obj1, obj1);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj2);
+                /// // OK
+                ///
+                /// assert.notDeepEqual(obj1, obj3);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj4);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepEqual: actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+                ///
+                /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// const obj1 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj2 = {
+                ///   a: {
+                ///     b: 2,
+                ///   },
+                /// };
+                /// const obj3 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj4 = { __proto__: obj1 };
+                ///
+                /// assert.notDeepEqual(obj1, obj1);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj2);
+                /// // OK
+                ///
+                /// assert.notDeepEqual(obj1, obj3);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj4);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> : actual: obj * expected: 'T -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> :
+                    actual: obj * expected: 'T * message: string -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> :
+                    actual: obj * expected: 'T * message: Exception -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> : actual: obj * expected: 'T -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> :
+                    actual: obj * expected: 'T * message: string -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> :
+                    actual: obj * expected: 'T * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) -> unit
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) * message: string -> unit
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: RegExp -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: RegExp * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: RegExp * message: Exception -> unit
+
+                abstract member throws: block: (unit -> unit) * error: Assert.throws.error -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: Assert.throws.error * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: Assert.throws.error * message: Exception -> unit
+
+                abstract member throws: block: (unit -> unit) * error: (obj -> bool) -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: (obj -> bool) * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: (obj -> bool) * message: Exception -> unit
+
+                abstract member throws: block: (unit -> unit) * error: obj -> unit
+                abstract member throws: block: (unit -> unit) * error: obj * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: obj * message: Exception -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: Exception * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: Exception * message: Exception -> unit
+
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) -> unit
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) * message: string -> unit
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: RegExp -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: RegExp * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: RegExp * message: Exception -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Assert.doesNotThrow.error -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Assert.doesNotThrow.error * message: string ->
+                        unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Assert.doesNotThrow.error * message: Exception ->
+                        unit
+
+                abstract member doesNotThrow: block: (unit -> unit) * error: (obj -> bool) -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: (obj -> bool) * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: (obj -> bool) * message: Exception -> unit
+
+                abstract member doesNotThrow: block: (unit -> unit) * error: obj -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: obj * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: obj * message: Exception -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Exception * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Exception * message: Exception -> unit
+
+                /// <summary>
+                /// Throws <c>value</c> if <c>value</c> is not <c>undefined</c> or <c>null</c>. This is useful when
+                /// testing the <c>error</c> argument in callbacks. The stack trace contains all frames
+                /// from the error passed to <c>ifError()</c> including the potential new frames for <c>ifError()</c> itself.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ifError(null);
+                /// // OK
+                /// assert.ifError(0);
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 0
+                /// assert.ifError('error');
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 'error'
+                /// assert.ifError(new Error());
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Error
+                ///
+                /// // Create some random error frames.
+                /// let err;
+                /// (function errorFrame() {
+                ///   err = new Error('test error');
+                /// })();
+                ///
+                /// (function ifErrorFrame() {
+                ///   assert.ifError(err);
+                /// })();
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: test error
+                /// //     at ifErrorFrame
+                /// //     at errorFrame
+                /// </code>
+                /// </summary>
+                abstract member ifError: value: obj -> unit
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects: block: (unit -> JS.Promise<obj>) -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects: block: JS.Promise<obj> -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: JS.Promise<obj> * message: string -> JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: RegExp *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: Assert.rejects.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: (obj -> bool) *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: Exception *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: RegExp * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> *
+                    error: Assert.rejects.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: (obj -> bool) * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: Exception * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>> *
+                    error: Node.``assert``.assert_.AssertPredicate *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject: block: (unit -> JS.Promise<obj>) -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject: block: JS.Promise<obj> -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * message: string -> JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: RegExp *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: Assert.doesNotReject.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: (obj -> bool) *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: Exception *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: RegExp * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> *
+                    error: Assert.doesNotReject.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: (obj -> bool) * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: Exception * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>> *
+                    error: Node.``assert``.assert_.AssertPredicate *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``: value: string * regExp: RegExp -> unit
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``: value: string * regExp: RegExp * message: string -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``:
+                    value: string * regExp: RegExp * message: Exception -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch: value: string * regExp: RegExp -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch:
+                    value: string * regExp: RegExp * message: string -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch:
+                    value: string * regExp: RegExp * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type AssertStrict = interface end
+            type AssertStrict =
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> : actual: obj * expected: 'T -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> :
+                    actual: obj * expected: 'T * message: string -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> :
+                    actual: obj * expected: 'T * message: Exception -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch: value: string * regExp: RegExp -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch:
+                    value: string * regExp: RegExp * message: string -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch:
+                    value: string * regExp: RegExp * message: Exception -> unit
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject: block: (unit -> JS.Promise<obj>) -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) * message: Exception -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject: block: JS.Promise<obj> -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * message: Exception -> JS.Promise<unit>
+
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) -> unit
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) * message: string -> unit
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) * message: Exception -> unit
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: unit -> obj
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: message: string -> obj
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: message: Exception -> obj
+                /// <summary>
+                /// Throws <c>value</c> if <c>value</c> is not <c>undefined</c> or <c>null</c>. This is useful when
+                /// testing the <c>error</c> argument in callbacks. The stack trace contains all frames
+                /// from the error passed to <c>ifError()</c> including the potential new frames for <c>ifError()</c> itself.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ifError(null);
+                /// // OK
+                /// assert.ifError(0);
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 0
+                /// assert.ifError('error');
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 'error'
+                /// assert.ifError(new Error());
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Error
+                ///
+                /// // Create some random error frames.
+                /// let err;
+                /// (function errorFrame() {
+                ///   err = new Error('test error');
+                /// })();
+                ///
+                /// (function ifErrorFrame() {
+                ///   assert.ifError(err);
+                /// })();
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: test error
+                /// //     at ifErrorFrame
+                /// //     at errorFrame
+                /// </code>
+                /// </summary>
+                abstract member ifError: value: obj -> unit
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``: value: string * regExp: RegExp -> unit
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``: value: string * regExp: RegExp * message: string -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``:
+                    value: string * regExp: RegExp * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj -> unit
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj * message: string -> unit
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj * message: Exception -> unit
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects: block: (unit -> JS.Promise<obj>) -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) * message: Exception -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects: block: JS.Promise<obj> -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: JS.Promise<obj> * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: JS.Promise<obj> * message: Exception -> JS.Promise<unit>
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> : actual: obj * expected: 'T -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> :
+                    actual: obj * expected: 'T * message: string -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> :
+                    actual: obj * expected: 'T * message: Exception -> unit
+
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) -> unit
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) * message: string -> unit
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) * message: Exception -> unit
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -21210,6 +25824,40 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 type diff =
                     | simple
                     | full
+
+            module Assert =
+
+                module throws =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
+                module doesNotThrow =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
+                module rejects =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
+                module doesNotReject =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
 
             module AssertionErrorOptions =
 
@@ -31260,6 +35908,62 @@ AsyncLocalStorage.snapshot()""")>]
             /// Hide the forked processes console window that would normally be created on Windows systems.
             /// </summary>
             abstract member windowsHide: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?execArgv: ResizeArray<string>,
+                    ?exec: string,
+                    ?args: ReadonlyArray<string>,
+                    ?silent: bool,
+                    ?stdio: ResizeArray<obj>,
+                    ?uid: float,
+                    ?gid: float,
+                    ?serialization: Node.cluster.SerializationType,
+                    ?cwd: string,
+                    ?windowsHide: bool
+                )
+                : ClusterSettings
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    inspectPort: float,
+                    ?execArgv: ResizeArray<string>,
+                    ?exec: string,
+                    ?args: ReadonlyArray<string>,
+                    ?silent: bool,
+                    ?stdio: ResizeArray<obj>,
+                    ?uid: float,
+                    ?gid: float,
+                    ?serialization: Node.cluster.SerializationType,
+                    ?cwd: string,
+                    ?windowsHide: bool
+                )
+                : ClusterSettings
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    inspectPort: (unit -> float),
+                    ?execArgv: ResizeArray<string>,
+                    ?exec: string,
+                    ?args: ReadonlyArray<string>,
+                    ?silent: bool,
+                    ?stdio: ResizeArray<obj>,
+                    ?uid: float,
+                    ?gid: float,
+                    ?serialization: Node.cluster.SerializationType,
+                    ?cwd: string,
+                    ?windowsHide: bool
+                )
+                : ClusterSettings
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -49788,6 +54492,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 /// </summary>
                 abstract member usages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> with get
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        algorithm: Node.crypto.webcrypto_.KeyAlgorithm,
+                        extractable: bool,
+                        ``type``: Node.crypto.webcrypto_.KeyType,
+                        usages: ResizeArray<Node.crypto.webcrypto_.KeyUsage>
+                    )
+                    : CryptoKey
+                    =
+                    nativeOnly
+
             /// <summary>
             /// The <c>CryptoKeyPair</c> is a simple dictionary object with <c>publicKey</c> and <c>privateKey</c> properties, representing an asymmetric key pair.
             /// </summary>
@@ -52659,13 +57375,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Interface>]
                 type options =
                     abstract member subject: X509Certificate.checkEmail.options.subject option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (?subject: X509Certificate.checkEmail.options.subject)
-                        : options
-                        =
-                        nativeOnly
 
                 module options =
 
@@ -101382,6 +106091,45 @@ recursive mode, operations are retried on failure.""")>]
             abstract member timeout: float option with get, set
             abstract member uniqueHeaders: ResizeArray<U2<string, ResizeArray<string>>> option with get, set
             abstract member joinDuplicateHeaders: bool option with get, set
+            /// <summary>
+            /// One or more [supported <c>getaddrinfo</c>](https://nodejs.org/docs/latest-v22.x/api/dns.html#supported-getaddrinfo-flags) flags. Multiple flags may be
+            /// passed by bitwise <c>OR</c>ing their values.
+            /// </summary>
+            abstract member hints: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?hints: float,
+                    ?_defaultAgent: Node.http.Agent,
+                    ?agent: U2<Node.http.Agent, bool>,
+                    ?auth: string,
+                    ?createConnection: ClientRequestArgs.createConnection,
+                    ?defaultPort: U2<float, string>,
+                    ?family: float,
+                    ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
+                    ?host: string,
+                    ?hostname: string,
+                    ?insecureHTTPParser: bool,
+                    ?localAddress: string,
+                    ?localPort: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?maxHeaderSize: float,
+                    ?``method``: string,
+                    ?path: string,
+                    ?port: U2<float, string>,
+                    ?protocol: string,
+                    ?setDefaultHeaders: bool,
+                    ?setHost: bool,
+                    ?signal: Node.AbortSignal,
+                    ?socketPath: string,
+                    ?timeout: float,
+                    ?uniqueHeaders: ResizeArray<U2<string, ResizeArray<string>>>,
+                    ?joinDuplicateHeaders: bool
+                )
+                : ClientRequestArgs
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -107707,6 +112455,40 @@ recursive mode, operations are retried on failure.""")>]
         type RequestOptions =
             inherit Node.http.ClientRequestArgs
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?hints: float,
+                    ?_defaultAgent: Node.http.Agent,
+                    ?agent: U2<Node.http.Agent, bool>,
+                    ?auth: string,
+                    ?createConnection: RequestOptions.createConnection,
+                    ?defaultPort: U2<float, string>,
+                    ?family: float,
+                    ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
+                    ?host: string,
+                    ?hostname: string,
+                    ?insecureHTTPParser: bool,
+                    ?localAddress: string,
+                    ?localPort: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?maxHeaderSize: float,
+                    ?``method``: string,
+                    ?path: string,
+                    ?port: U2<float, string>,
+                    ?protocol: string,
+                    ?setDefaultHeaders: bool,
+                    ?setHost: bool,
+                    ?signal: Node.AbortSignal,
+                    ?socketPath: string,
+                    ?timeout: float,
+                    ?uniqueHeaders: ResizeArray<U2<string, ResizeArray<string>>>,
+                    ?joinDuplicateHeaders: bool
+                )
+                : RequestOptions
+                =
+                nativeOnly
+
         type ServerOptions<'Request> = ServerOptions<'Request, Node.http.ServerResponse<obj>>
 
         type ServerOptions = ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>
@@ -107962,6 +112744,19 @@ recursive mode, operations are retried on failure.""")>]
 
                 type callback =
                     delegate of err: Exception option * stream: Node.stream.Stream_.Duplex -> unit
+
+        module RequestOptions =
+
+            type createConnection =
+                delegate of
+                    options: Node.http.ClientRequestArgs *
+                    oncreate: RequestOptions.createConnection.oncreate ->
+                        Node.stream.Stream_.Duplex option
+
+            module createConnection =
+
+                type oncreate =
+                    delegate of err: Exception option * socket: Node.stream.Stream_.Duplex -> unit
 
         module Exports =
 
@@ -114874,6 +119669,22 @@ recursive mode, operations are retried on failure.""")>]
             abstract member maxHeaderListSize: float option with get, set
             abstract member enableConnectProtocol: bool option with get, set
             abstract member customSettings: Settings.customSettings option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?headerTableSize: float,
+                    ?enablePush: bool,
+                    ?initialWindowSize: float,
+                    ?maxFrameSize: float,
+                    ?maxConcurrentStreams: float,
+                    ?maxHeaderListSize: float,
+                    ?enableConnectProtocol: bool,
+                    ?customSettings: Settings.customSettings
+                )
+                : Settings
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -139094,6 +143905,76 @@ recursive mode, operations are retried on failure.""")>]
             abstract member rejectUnauthorized: bool option with get, set
             abstract member servername: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?hints: float,
+                    ?_defaultAgent: Node.http.Agent,
+                    ?agent: U2<Node.http.Agent, bool>,
+                    ?auth: string,
+                    ?createConnection: RequestOptions.createConnection_1,
+                    ?defaultPort: U2<float, string>,
+                    ?family: float,
+                    ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
+                    ?host: string,
+                    ?hostname: string,
+                    ?insecureHTTPParser: bool,
+                    ?localAddress: string,
+                    ?localPort: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?maxHeaderSize: float,
+                    ?``method``: string,
+                    ?path: string,
+                    ?port: U2<float, string>,
+                    ?protocol: string,
+                    ?setDefaultHeaders: bool,
+                    ?setHost: bool,
+                    ?signal: Node.AbortSignal,
+                    ?socketPath: string,
+                    ?timeout: float,
+                    ?uniqueHeaders: ResizeArray<U2<string, ResizeArray<string>>>,
+                    ?joinDuplicateHeaders: bool,
+                    ?ALPNCallback: (ServerOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?ticketKeys: Node.Buffer,
+                    ?sessionTimeout: float,
+                    ?checkServerIdentity: RequestOptions.checkServerIdentity,
+                    ?rejectUnauthorized: bool,
+                    ?servername: string
+                )
+                : RequestOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AgentOptions =
@@ -142100,6 +146981,17 @@ recursive mode, operations are retried on failure.""")>]
             type checkServerIdentity =
                 delegate of
                     hostname: string * cert: Node.tls.DetailedPeerCertificate -> Exception option
+
+            type createConnection_1 =
+                delegate of
+                    options: Node.http.ClientRequestArgs *
+                    oncreate: RequestOptions.createConnection.oncreate_1 ->
+                        Node.stream.Stream_.Duplex option
+
+            module createConnection =
+
+                type oncreate_1 =
+                    delegate of err: Exception option * socket: Node.stream.Stream_.Duplex -> unit
 
         module Agent =
 
@@ -146659,6 +151551,21 @@ recursive mode, operations are retried on failure.""")>]
                 abstract member names: ResizeArray<string> with get, set
                 abstract member mappings: string with get, set
                 abstract member sourceRoot: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        file: string,
+                        version: float,
+                        sources: ResizeArray<string>,
+                        sourcesContent: ResizeArray<string>,
+                        names: ResizeArray<string>,
+                        mappings: string,
+                        sourceRoot: string
+                    )
+                    : SourceMapPayload
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -167614,6 +172521,23 @@ the userland-provided Punycode.js module instead.""")>]
                 abstract member encoding: Node.BufferEncoding option with get, set
                 abstract member read: (float -> unit) option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?signal: Node.AbortSignal,
+                        ?emitClose: bool,
+                        ?highWaterMark: float,
+                        ?objectMode: bool,
+                        ?construct: ((Exception option -> unit) -> unit),
+                        ?destroy: ReadableOptions.destroy,
+                        ?autoDestroy: bool,
+                        ?encoding: Node.BufferEncoding,
+                        ?read: (float -> unit)
+                    )
+                    : ReadableOptions<'T>
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ArrayOptions =
@@ -172375,6 +177299,26 @@ Readable.isDisturbed($0)""")>]
                 abstract member writev: WritableOptions.writev option with get, set
                 abstract member final: ((Exception option -> unit) -> unit) option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?signal: Node.AbortSignal,
+                        ?emitClose: bool,
+                        ?highWaterMark: float,
+                        ?objectMode: bool,
+                        ?construct: ((Exception option -> unit) -> unit),
+                        ?destroy: WritableOptions.destroy,
+                        ?autoDestroy: bool,
+                        ?decodeStrings: bool,
+                        ?defaultEncoding: Node.BufferEncoding,
+                        ?write: WritableOptions.write,
+                        ?writev: WritableOptions.writev,
+                        ?final: ((Exception option -> unit) -> unit)
+                    )
+                    : WritableOptions<'T>
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type Writable =
@@ -176535,6 +181479,34 @@ Writable.toWeb($0)""")>]
                 abstract member readableHighWaterMark: float option with get, set
                 abstract member writableHighWaterMark: float option with get, set
                 abstract member writableCorked: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?signal: Node.AbortSignal,
+                        ?emitClose: bool,
+                        ?highWaterMark: float,
+                        ?objectMode: bool,
+                        ?construct: ((Exception option -> unit) -> unit),
+                        ?destroy: DuplexOptions.destroy,
+                        ?autoDestroy: bool,
+                        ?encoding: Node.BufferEncoding,
+                        ?read: (float -> unit),
+                        ?decodeStrings: bool,
+                        ?defaultEncoding: Node.BufferEncoding,
+                        ?write: DuplexOptions.write,
+                        ?writev: DuplexOptions.writev,
+                        ?final: ((Exception option -> unit) -> unit),
+                        ?allowHalfOpen: bool,
+                        ?readableObjectMode: bool,
+                        ?writableObjectMode: bool,
+                        ?readableHighWaterMark: float,
+                        ?writableHighWaterMark: float,
+                        ?writableCorked: float
+                    )
+                    : DuplexOptions<'T>
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Duplex streams are streams that implement both the <c>Readable</c> and <c>Writable</c> interfaces.
@@ -181794,6 +186766,36 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member transform: TransformOptions.transform option with get, set
                 abstract member flush: (Node.stream.Stream_.TransformCallback -> unit) option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?signal: Node.AbortSignal,
+                        ?emitClose: bool,
+                        ?highWaterMark: float,
+                        ?objectMode: bool,
+                        ?construct: ((Exception option -> unit) -> unit),
+                        ?destroy: TransformOptions.destroy,
+                        ?autoDestroy: bool,
+                        ?encoding: Node.BufferEncoding,
+                        ?read: (float -> unit),
+                        ?decodeStrings: bool,
+                        ?defaultEncoding: Node.BufferEncoding,
+                        ?write: TransformOptions.write,
+                        ?writev: TransformOptions.writev,
+                        ?final: ((Exception option -> unit) -> unit),
+                        ?allowHalfOpen: bool,
+                        ?readableObjectMode: bool,
+                        ?writableObjectMode: bool,
+                        ?readableHighWaterMark: float,
+                        ?writableHighWaterMark: float,
+                        ?writableCorked: float,
+                        ?transform: TransformOptions.transform,
+                        ?flush: (Node.stream.Stream_.TransformCallback -> unit)
+                    )
+                    : TransformOptions<'T>
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Transform streams are <c>Duplex</c> streams where the output is in some way
             /// related to the input. Like all <c>Duplex</c> streams, <c>Transform</c> streams
@@ -182059,6 +187061,12 @@ Duplex.fromWeb($0, $1)""")>]
                     delegate of
                         error: Exception option * callback: (Exception option -> unit) -> unit
 
+            module ReadableOptions =
+
+                type destroy =
+                    delegate of
+                        error: Exception option * callback: (Exception option -> unit) -> unit
+
             module Readable =
 
                 module fromWeb__ =
@@ -182066,25 +187074,13 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create
-                            (
-                                ?signal: Node.AbortSignal,
-                                ?encoding: Node.BufferEncoding,
-                                ?highWaterMark: float,
-                                ?objectMode: bool
-                            )
-                            : options
-                            =
-                            nativeOnly
 
                 module toWeb__ =
 
@@ -182125,9 +187121,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                 module filter =
 
                     type fn =
@@ -182144,9 +187137,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module forEach =
 
@@ -182165,9 +187155,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                 module toArray =
 
                     [<AllowNullLiteral>]
@@ -182177,9 +187164,6 @@ Duplex.fromWeb($0, $1)""")>]
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module some =
 
@@ -182198,9 +187182,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                 module find =
 
                     type fn = delegate of data: obj * ?options: Readable.find.fn.options -> bool
@@ -182214,9 +187195,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                     type fn_1 =
                         delegate of
@@ -182240,9 +187218,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                 module flatMap =
 
                     type fn = delegate of data: obj * ?options: Readable.flatMap.fn.options -> unit
@@ -182257,9 +187232,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                 module drop =
 
                     [<AllowNullLiteral>]
@@ -182269,9 +187241,6 @@ Duplex.fromWeb($0, $1)""")>]
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module take =
 
@@ -182283,9 +187252,6 @@ Duplex.fromWeb($0, $1)""")>]
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
 
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                 module asIndexedPairs =
 
                     [<AllowNullLiteral>]
@@ -182295,9 +187261,6 @@ Duplex.fromWeb($0, $1)""")>]
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module reduce =
 
@@ -182313,9 +187276,6 @@ Duplex.fromWeb($0, $1)""")>]
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
 
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
-
                     module fn =
 
                         [<AllowNullLiteral>]
@@ -182325,9 +187285,6 @@ Duplex.fromWeb($0, $1)""")>]
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                     type fn_1 =
                         delegate of
@@ -182364,6 +187321,10 @@ Duplex.fromWeb($0, $1)""")>]
                         static member Create(chunk: obj, encoding: Node.BufferEncoding) : chunks =
                             nativeOnly
 
+                type destroy =
+                    delegate of
+                        error: Exception option * callback: (Exception option -> unit) -> unit
+
             module Writable =
 
                 module fromWeb__ =
@@ -182371,25 +187332,13 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
+                        abstract member decodeStrings: bool option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
-                        abstract member decodeStrings: bool option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create
-                            (
-                                ?signal: Node.AbortSignal,
-                                ?highWaterMark: float,
-                                ?objectMode: bool,
-                                ?decodeStrings: bool
-                            )
-                            : options
-                            =
-                            nativeOnly
 
                 module _writev =
 
@@ -182402,6 +187351,25 @@ Duplex.fromWeb($0, $1)""")>]
                         [<ParamObject; Emit("$0")>]
                         static member Create(chunk: obj, encoding: Node.BufferEncoding) : chunks =
                             nativeOnly
+
+            module DuplexOptions =
+
+                type destroy =
+                    delegate of
+                        error: Exception option * callback: (Exception option -> unit) -> unit
+
+                type write =
+                    delegate of
+                        chunk: obj *
+                        encoding: Node.BufferEncoding *
+                        callback: (Exception option -> unit) ->
+                            unit
+
+                type writev =
+                    delegate of
+                        chunks: ResizeArray<WritableOptions.writev.chunks> *
+                        callback: (Exception option -> unit) ->
+                            unit
 
             module Duplex =
 
@@ -182442,29 +187410,15 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
+                        abstract member allowHalfOpen: bool option with get, set
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
                         abstract member decodeStrings: bool option with get, set
-                        abstract member allowHalfOpen: bool option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create
-                            (
-                                ?signal: Node.AbortSignal,
-                                ?encoding: Node.BufferEncoding,
-                                ?highWaterMark: float,
-                                ?objectMode: bool,
-                                ?decodeStrings: bool,
-                                ?allowHalfOpen: bool
-                            )
-                            : options
-                            =
-                            nativeOnly
 
             module TransformOptions =
 
@@ -182473,6 +187427,23 @@ Duplex.fromWeb($0, $1)""")>]
                         chunk: obj *
                         encoding: Node.BufferEncoding *
                         callback: Node.stream.Stream_.TransformCallback ->
+                            unit
+
+                type destroy =
+                    delegate of
+                        error: Exception option * callback: (Exception option -> unit) -> unit
+
+                type write =
+                    delegate of
+                        chunk: obj *
+                        encoding: Node.BufferEncoding *
+                        callback: (Exception option -> unit) ->
+                            unit
+
+                type writev =
+                    delegate of
+                        chunks: ResizeArray<WritableOptions.writev.chunks> *
+                        callback: (Exception option -> unit) ->
                             unit
 
         type StreamOptions<'T> = Stream_.StreamOptions<'T>
@@ -188716,6 +193687,2511 @@ Duplex.fromWeb($0, $1)""")>]
                 [<EmitIndexer>]
                 abstract member Item: name: string -> System.Delegate with get, set
 
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: unit -> obj
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: message: string -> obj
+                /// <summary>
+                /// Throws an <c>AssertionError</c> with the provided error message or a default
+                /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+                /// it will be thrown instead of the <c>AssertionError</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.fail();
+                /// // AssertionError [ERR_ASSERTION]: Failed
+                ///
+                /// assert.fail('boom');
+                /// // AssertionError [ERR_ASSERTION]: boom
+                ///
+                /// assert.fail(new TypeError('need array'));
+                /// // TypeError: need array
+                /// </code>
+                ///
+                /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+                /// See below for further details.
+                /// </summary>
+                /// <param name="message">
+                ///
+                /// </param>
+                abstract member fail: message: Exception -> obj
+
+                [<Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+                abstract member fail: actual: obj * expected: obj -> obj
+
+                [<Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+                abstract member fail:
+                    actual: obj *
+                    expected: obj *
+                    message: string *
+                    ?operator: string *
+                    ?stackStartFn: Action ->
+                        obj
+
+                [<Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+                abstract member fail:
+                    actual: obj *
+                    expected: obj *
+                    message: Exception *
+                    ?operator: string *
+                    ?stackStartFn: Action ->
+                        obj
+
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj -> unit
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj * message: string -> unit
+                /// <summary>
+                /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+                ///
+                /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+                ///
+                /// Be aware that in the <c>repl</c> the error message will be different to the one
+                /// thrown in a file! See below for further details.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ok(true);
+                /// // OK
+                /// assert.ok(1);
+                /// // OK
+                ///
+                /// assert.ok();
+                /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+                ///
+                /// assert.ok(false, 'it\'s false');
+                /// // AssertionError: it's false
+                ///
+                /// // In the repl:
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: false == true
+                ///
+                /// // In a file (e.g. test.js):
+                /// assert.ok(typeof 123 === 'string');
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(typeof 123 === 'string')
+                ///
+                /// assert.ok(false);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(false)
+                ///
+                /// assert.ok(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert.ok(0)
+                /// <code>
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// // Using </c>assert()<c> works the same:
+                /// assert(0);
+                /// // AssertionError: The expression evaluated to a falsy value:
+                /// //
+                /// //   assert(0)
+                /// </c><c></c>
+                /// </summary>
+                abstract member ok: value: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="strictEqual">strictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+                /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+                /// and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.equal(1, 1);
+                /// // OK, 1 == 1
+                /// assert.equal(1, '1');
+                /// // OK, 1 == '1'
+                /// assert.equal(NaN, NaN);
+                /// // OK
+                ///
+                /// assert.equal(1, 2);
+                /// // AssertionError: 1 == 2
+                /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+                /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+                /// </code>
+                ///
+                /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member equal: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="strictEqual">strictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+                /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+                /// and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.equal(1, 1);
+                /// // OK, 1 == 1
+                /// assert.equal(1, '1');
+                /// // OK, 1 == '1'
+                /// assert.equal(NaN, NaN);
+                /// // OK
+                ///
+                /// assert.equal(1, 2);
+                /// // AssertionError: 1 == 2
+                /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+                /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+                /// </code>
+                ///
+                /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member equal: actual: obj * expected: obj * message: string -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="strictEqual">strictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+                /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+                /// and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.equal(1, 1);
+                /// // OK, 1 == 1
+                /// assert.equal(1, '1');
+                /// // OK, 1 == '1'
+                /// assert.equal(NaN, NaN);
+                /// // OK
+                ///
+                /// assert.equal(1, 2);
+                /// // AssertionError: 1 == 2
+                /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+                /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+                /// </code>
+                ///
+                /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member equal: actual: obj * expected: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+                /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.notEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notEqual(1, 1);
+                /// // AssertionError: 1 != 1
+                ///
+                /// assert.notEqual(1, '1');
+                /// // AssertionError: 1 != '1'
+                /// </code>
+                ///
+                /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+                /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notEqual: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+                /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.notEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notEqual(1, 1);
+                /// // AssertionError: 1 != 1
+                ///
+                /// assert.notEqual(1, '1');
+                /// // AssertionError: 1 != '1'
+                /// </code>
+                ///
+                /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+                /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notEqual: actual: obj * expected: obj * message: string -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+                ///
+                /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+                /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// assert.notEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notEqual(1, 1);
+                /// // AssertionError: 1 != 1
+                ///
+                /// assert.notEqual(1, '1');
+                /// // AssertionError: 1 != '1'
+                /// </code>
+                ///
+                /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+                /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notEqual: actual: obj * expected: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+                ///
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+                /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+                /// surprising results.
+                ///
+                /// _Deep equality_ means that the enumerable "own" properties of child objects
+                /// are also recursively evaluated by the following rules.
+                /// </summary>
+                abstract member deepEqual: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+                ///
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+                /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+                /// surprising results.
+                ///
+                /// _Deep equality_ means that the enumerable "own" properties of child objects
+                /// are also recursively evaluated by the following rules.
+                /// </summary>
+                abstract member deepEqual: actual: obj * expected: obj * message: string -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+                ///
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+                /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+                /// surprising results.
+                ///
+                /// _Deep equality_ means that the enumerable "own" properties of child objects
+                /// are also recursively evaluated by the following rules.
+                /// </summary>
+                abstract member deepEqual: actual: obj * expected: obj * message: Exception -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+                ///
+                /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// const obj1 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj2 = {
+                ///   a: {
+                ///     b: 2,
+                ///   },
+                /// };
+                /// const obj3 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj4 = { __proto__: obj1 };
+                ///
+                /// assert.notDeepEqual(obj1, obj1);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj2);
+                /// // OK
+                ///
+                /// assert.notDeepEqual(obj1, obj3);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj4);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepEqual: actual: obj * expected: obj -> unit
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+                ///
+                /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// const obj1 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj2 = {
+                ///   a: {
+                ///     b: 2,
+                ///   },
+                /// };
+                /// const obj3 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj4 = { __proto__: obj1 };
+                ///
+                /// assert.notDeepEqual(obj1, obj1);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj2);
+                /// // OK
+                ///
+                /// assert.notDeepEqual(obj1, obj3);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj4);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepEqual: actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// **Strict assertion mode**
+                ///
+                /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+                ///
+                /// **Legacy assertion mode**
+                ///
+                /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+                ///
+                /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// const obj1 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj2 = {
+                ///   a: {
+                ///     b: 2,
+                ///   },
+                /// };
+                /// const obj3 = {
+                ///   a: {
+                ///     b: 1,
+                ///   },
+                /// };
+                /// const obj4 = { __proto__: obj1 };
+                ///
+                /// assert.notDeepEqual(obj1, obj1);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj2);
+                /// // OK
+                ///
+                /// assert.notDeepEqual(obj1, obj3);
+                /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+                ///
+                /// assert.notDeepEqual(obj1, obj4);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+                /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> : actual: obj * expected: 'T -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> :
+                    actual: obj * expected: 'T * message: string -> unit
+
+                /// <summary>
+                /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.strictEqual(1, 2);
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// //
+                /// // 1 !== 2
+                ///
+                /// assert.strictEqual(1, 1);
+                /// // OK
+                ///
+                /// assert.strictEqual('Hello foobar', 'Hello World!');
+                /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+                /// // + actual - expected
+                /// //
+                /// // + 'Hello foobar'
+                /// // - 'Hello World!'
+                /// //          ^
+                ///
+                /// const apples = 1;
+                /// const oranges = 2;
+                /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+                /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+                ///
+                /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+                /// // TypeError: Inputs are not identical
+                /// </c><c></c>
+                ///
+                /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member strictEqual<'T> :
+                    actual: obj * expected: 'T * message: Exception -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+                /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notStrictEqual(1, 2);
+                /// // OK
+                ///
+                /// assert.notStrictEqual(1, 1);
+                /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+                /// //
+                /// // 1
+                ///
+                /// assert.notStrictEqual(1, '1');
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+                /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> : actual: obj * expected: 'T -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> :
+                    actual: obj * expected: 'T * message: string -> unit
+
+                /// <summary>
+                /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules.
+                /// </summary>
+                abstract member deepStrictEqual<'T> :
+                    actual: obj * expected: 'T * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+                /// // OK
+                /// </code>
+                ///
+                /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+                /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+                /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+                /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+                /// instead of the <c>AssertionError</c>.
+                /// </summary>
+                abstract member notDeepStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) -> unit
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) * message: string -> unit
+                /// <summary>
+                /// Expects the function <c>fn</c> to throw an error.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// a validation object where each property will be tested for strict deep equality,
+                /// or an instance of error where each property will be tested for strict deep
+                /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+                /// using an object, it is also possible to use a regular expression, when
+                /// validating against a string property. See below for examples.
+                ///
+                /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+                /// fails.
+                ///
+                /// Custom validation object/error instance:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// const err = new TypeError('Wrong value');
+                /// err.code = 404;
+                /// err.foo = 'bar';
+                /// err.info = {
+                ///   nested: true,
+                ///   baz: 'text',
+                /// };
+                /// err.reg = /abc/i;
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///     info: {
+                ///       nested: true,
+                ///       baz: 'text',
+                ///     },
+                ///     // Only properties on the validation object will be tested for.
+                ///     // Using nested objects requires all properties to be present. Otherwise
+                ///     // the validation is going to fail.
+                ///   },
+                /// );
+                ///
+                /// // Using regular expressions to validate error properties:
+                /// assert.throws(
+                ///   () => {
+                ///     throw err;
+                ///   },
+                ///   {
+                ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+                ///     // expressions on those will match against the string. If they fail, an
+                ///     // error is thrown.
+                ///     name: /^TypeError$/,
+                ///     message: /Wrong/,
+                ///     foo: 'bar',
+                ///     info: {
+                ///       nested: true,
+                ///       // It is not possible to use regular expressions for nested properties!
+                ///       baz: 'text',
+                ///     },
+                ///     // The </c>reg<c> property contains a regular expression and only if the
+                ///     // validation object contains an identical regular expression, it is going
+                ///     // to pass.
+                ///     reg: /abc/i,
+                ///   },
+                /// );
+                ///
+                /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+                /// assert.throws(
+                ///   () => {
+                ///     const otherErr = new Error('Not found');
+                ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+                ///     for (const [key, value] of Object.entries(err)) {
+                ///       otherErr[key] = value;
+                ///     }
+                ///     throw otherErr;
+                ///   },
+                ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+                ///   // an error as validation object.
+                ///   err,
+                /// );
+                /// <code>
+                ///
+                /// Validate instanceof using constructor:
+                ///
+                /// </code>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   Error,
+                /// );
+                /// </c><c></c>
+                ///
+                /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+                ///
+                /// Using a regular expression runs <c>.toString</c> on the error object, and will
+                /// therefore also include the error name.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   /^Error: Wrong value$/,
+                /// );
+                /// </code>
+                ///
+                /// Custom error validation:
+                ///
+                /// The function must return <c>true</c> to indicate all internal validations passed.
+                /// It will otherwise fail with an <c>AssertionError</c>.
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.throws(
+                ///   () => {
+                ///     throw new Error('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert(err instanceof Error);
+                ///     assert(/value/.test(err));
+                ///     // Avoid returning anything from validation functions besides </c>true<c>.
+                ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+                ///     // throw an error about the specific validation that failed (as done in this
+                ///     // example) and add as much helpful debugging information to that error as
+                ///     // possible.
+                ///     return true;
+                ///   },
+                ///   'unexpected error',
+                /// );
+                /// </c><c></c>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second
+                /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+                /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+                /// a string as the second argument gets considered:
+                ///
+                /// <c></c><c>js
+                /// import assert from 'node:assert/strict';
+                ///
+                /// function throwingFirst() {
+                ///   throw new Error('First');
+                /// }
+                ///
+                /// function throwingSecond() {
+                ///   throw new Error('Second');
+                /// }
+                ///
+                /// function notThrowing() {}
+                ///
+                /// // The second argument is a string and the input function threw an Error.
+                /// // The first case will not throw as it does not match for the error message
+                /// // thrown by the input function!
+                /// assert.throws(throwingFirst, 'Second');
+                /// // In the next example the message has no benefit over the message from the
+                /// // error and since it is not clear if the user intended to actually match
+                /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+                /// assert.throws(throwingSecond, 'Second');
+                /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+                ///
+                /// // The string is only used (as message) in case the function does not throw:
+                /// assert.throws(notThrowing, 'Second');
+                /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+                ///
+                /// // If it was intended to match for the error message do this instead:
+                /// // It does not throw because the error messages match.
+                /// assert.throws(throwingSecond, /Second$/);
+                ///
+                /// // If the error message does not match, an AssertionError is thrown.
+                /// assert.throws(throwingFirst, /Second$/);
+                /// // AssertionError [ERR_ASSERTION]
+                /// </c><c></c>
+                ///
+                /// Due to the confusing error-prone notation, avoid a string as the second
+                /// argument.
+                /// </summary>
+                abstract member throws: block: (unit -> unit) * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: RegExp -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: RegExp * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: RegExp * message: Exception -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: TestContextAssert.throws.error -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: TestContextAssert.throws.error * message: string ->
+                        unit
+
+                abstract member throws:
+                    block: (unit -> unit) *
+                    error: TestContextAssert.throws.error *
+                    message: Exception ->
+                        unit
+
+                abstract member throws: block: (unit -> unit) * error: (obj -> bool) -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: (obj -> bool) * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: (obj -> bool) * message: Exception -> unit
+
+                abstract member throws: block: (unit -> unit) * error: obj -> unit
+                abstract member throws: block: (unit -> unit) * error: obj * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: obj * message: Exception -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: Exception * message: string -> unit
+
+                abstract member throws:
+                    block: (unit -> unit) * error: Exception * message: Exception -> unit
+
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) -> unit
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) * message: string -> unit
+                /// <summary>
+                /// Asserts that the function <c>fn</c> does not throw an error.
+                ///
+                /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+                /// is no benefit in catching an error and then rethrowing it. Instead, consider
+                /// adding a comment next to the specific code path that should not throw and keep
+                /// error messages as expressive as possible.
+                ///
+                /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+                ///
+                /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+                /// different type, or if the <c>error</c> parameter is undefined, the error is
+                /// propagated back to the caller.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// The following, for instance, will throw the <c>TypeError</c> because there is no
+                /// matching error type in the assertion:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// However, the following will result in an <c>AssertionError</c> with the message
+                /// 'Got unwanted exception...':
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   TypeError,
+                /// );
+                /// </code>
+                ///
+                /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotThrow(
+                ///   () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   /Wrong value/,
+                ///   'Whoops',
+                /// );
+                /// // Throws: AssertionError: Got unwanted exception: Whoops
+                /// </code>
+                /// </summary>
+                abstract member doesNotThrow: block: (unit -> unit) * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: RegExp -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: RegExp * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: RegExp * message: Exception -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: TestContextAssert.doesNotThrow.error -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) *
+                    error: TestContextAssert.doesNotThrow.error *
+                    message: string ->
+                        unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) *
+                    error: TestContextAssert.doesNotThrow.error *
+                    message: Exception ->
+                        unit
+
+                abstract member doesNotThrow: block: (unit -> unit) * error: (obj -> bool) -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: (obj -> bool) * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: (obj -> bool) * message: Exception -> unit
+
+                abstract member doesNotThrow: block: (unit -> unit) * error: obj -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: obj * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: obj * message: Exception -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Exception * message: string -> unit
+
+                abstract member doesNotThrow:
+                    block: (unit -> unit) * error: Exception * message: Exception -> unit
+
+                /// <summary>
+                /// Throws <c>value</c> if <c>value</c> is not <c>undefined</c> or <c>null</c>. This is useful when
+                /// testing the <c>error</c> argument in callbacks. The stack trace contains all frames
+                /// from the error passed to <c>ifError()</c> including the potential new frames for <c>ifError()</c> itself.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.ifError(null);
+                /// // OK
+                /// assert.ifError(0);
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 0
+                /// assert.ifError('error');
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 'error'
+                /// assert.ifError(new Error());
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Error
+                ///
+                /// // Create some random error frames.
+                /// let err;
+                /// (function errorFrame() {
+                ///   err = new Error('test error');
+                /// })();
+                ///
+                /// (function ifErrorFrame() {
+                ///   assert.ifError(err);
+                /// })();
+                /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: test error
+                /// //     at ifErrorFrame
+                /// //     at errorFrame
+                /// </code>
+                /// </summary>
+                abstract member ifError: value: obj -> unit
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects: block: (unit -> JS.Promise<obj>) -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects: block: JS.Promise<obj> -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+                /// error. In both cases the error handler is skipped.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+                /// an object where each property will be tested for, or an instance of error where
+                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+                ///
+                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   {
+                ///     name: 'TypeError',
+                ///     message: 'Wrong value',
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.rejects(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   (err) => {
+                ///     assert.strictEqual(err.name, 'TypeError');
+                ///     assert.strictEqual(err.message, 'Wrong value');
+                ///     return true;
+                ///   },
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.rejects(
+                ///   Promise.reject(new Error('Wrong value')),
+                ///   Error,
+                /// ).then(() => {
+                ///   // ...
+                /// });
+                /// </code>
+                ///
+                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+                /// </summary>
+                abstract member rejects:
+                    block: JS.Promise<obj> * message: string -> JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: RegExp *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: TestContextAssert.rejects.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: (obj -> bool) *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: Exception *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: RegExp * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> *
+                    error: TestContextAssert.rejects.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: (obj -> bool) * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: JS.Promise<obj> * error: Exception * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member rejects:
+                    block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>> *
+                    error: Node.``assert``.assert_.AssertPredicate *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject: block: (unit -> JS.Promise<obj>) -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) * message: string -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject: block: JS.Promise<obj> -> JS.Promise<unit>
+
+                /// <summary>
+                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+                /// calls the function and awaits the returned promise to complete. It will then
+                /// check that the promise is not rejected.
+                ///
+                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+                /// the error handler is skipped.
+                ///
+                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+                /// benefit in catching a rejection and then rejecting it again. Instead, consider
+                /// adding a comment next to the specific code path that should not reject and keep
+                /// error messages as expressive as possible.
+                ///
+                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+                /// function. See <see href="throws">throws</see> for more details.
+                ///
+                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// await assert.doesNotReject(
+                ///   async () => {
+                ///     throw new TypeError('Wrong value');
+                ///   },
+                ///   SyntaxError,
+                /// );
+                /// </code>
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+                ///   .then(() => {
+                ///     // ...
+                ///   });
+                /// </code>
+                /// </summary>
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * message: string -> JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: RegExp *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: TestContextAssert.doesNotReject.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: (obj -> bool) *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: (unit -> JS.Promise<obj>) *
+                    error: Exception *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: RegExp * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> *
+                    error: TestContextAssert.doesNotReject.error *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: (obj -> bool) * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: obj * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: JS.Promise<obj> * error: Exception * ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                abstract member doesNotReject:
+                    block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>> *
+                    error: Node.``assert``.assert_.AssertPredicate *
+                    ?message: U2<string, Exception> ->
+                        JS.Promise<unit>
+
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``: value: string * regExp: RegExp -> unit
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``: value: string * regExp: RegExp * message: string -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.match('I will fail', /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+                ///
+                /// assert.match(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.match('I will pass', /pass/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member ``match``:
+                    value: string * regExp: RegExp * message: Exception -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch: value: string * regExp: RegExp -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch:
+                    value: string * regExp: RegExp * message: string -> unit
+
+                /// <summary>
+                /// Expects the <c>string</c> input not to match the regular expression.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert/strict';
+                ///
+                /// assert.doesNotMatch('I will fail', /fail/);
+                /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+                ///
+                /// assert.doesNotMatch(123, /pass/);
+                /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+                ///
+                /// assert.doesNotMatch('I will pass', /different/);
+                /// // OK
+                /// </code>
+                ///
+                /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+                /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+                /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+                /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+                /// </summary>
+                abstract member doesNotMatch:
+                    value: string * regExp: RegExp * message: Exception -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual: actual: obj * expected: obj -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual:
+                    actual: obj * expected: obj * message: string -> unit
+
+                /// <summary>
+                /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+                /// "Deep" equality means that the enumerable "own" properties of child objects
+                /// are recursively evaluated also by the following rules. "Partial" equality means
+                /// that only properties that exist on the <c>expected</c> parameter are going to be
+                /// compared.
+                ///
+                /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+                /// behaving as a super set of it.
+                /// </summary>
+                abstract member partialDeepStrictEqual:
+                    actual: obj * expected: obj * message: Exception -> unit
+
             [<AllowNullLiteral>]
             [<Interface>]
             type AssertSnapshotOptions =
@@ -190031,6 +197507,40 @@ Duplex.fromWeb($0, $1)""")>]
                 type test =
                     delegate of ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
+            module TestContextAssert =
+
+                module throws =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
+                module doesNotThrow =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
+                module rejects =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
+                module doesNotReject =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type error =
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> obj
+
             module MockTracker =
 
                 [<AllowNullLiteral>]
@@ -191166,6 +198676,33 @@ Duplex.fromWeb($0, $1)""")>]
             /// (not all well-known curves have been assigned names by NIST).
             /// </summary>
             abstract member nistCurve: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ca: bool,
+                    raw: Node.NonSharedBuffer,
+                    subject: Node.tls.Certificate,
+                    issuer: Node.tls.Certificate,
+                    valid_from: string,
+                    valid_to: string,
+                    serialNumber: string,
+                    fingerprint: string,
+                    fingerprint256: string,
+                    fingerprint512: string,
+                    ?ext_key_usage: ResizeArray<string>,
+                    ?subjectaltname: string,
+                    ?infoAccess: Node.NodeJS.Dict<ResizeArray<string>>,
+                    ?bits: float,
+                    ?exponent: string,
+                    ?modulus: string,
+                    ?pubkey: Node.NonSharedBuffer,
+                    ?asn1Curve: string,
+                    ?nistCurve: string
+                )
+                : PeerCertificate
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -194815,6 +202352,9 @@ Duplex.fromWeb($0, $1)""")>]
         [<Interface>]
         type SecureContext =
             abstract member context: obj with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(context: obj) : SecureContext = nativeOnly
 
         module TLSSocketOptions =
 
@@ -200122,6 +207662,26 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member numericSeparator: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?showHidden: bool,
+                    ?depth: float,
+                    ?colors: bool,
+                    ?customInspect: bool,
+                    ?showProxy: bool,
+                    ?maxArrayLength: float,
+                    ?maxStringLength: float,
+                    ?breakLength: float,
+                    ?compact: U2<bool, float>,
+                    ?sorted: U2<bool, InspectOptions.sorted.U2.Case2>,
+                    ?getters: InspectOptions.getters,
+                    ?numericSeparator: bool
+                )
+                : InspectOptions
+                =
+                nativeOnly
+
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
         type Style =
@@ -204192,6 +211752,30 @@ URL.parse($0, $1)""")>]
             abstract member contextCodeGeneration:
                 RunningScriptInNewContextOptions.contextCodeGeneration option option with get, set
 
+            /// <summary>
+            /// If set to <c>afterEvaluate</c>, microtasks will be run immediately after the script has run.
+            /// </summary>
+            abstract member microtaskMode: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?microtaskMode: string,
+                    ?contextName: string option,
+                    ?contextOrigin: string option,
+                    ?contextCodeGeneration:
+                        RunningScriptInNewContextOptions.contextCodeGeneration option
+                )
+                : RunningScriptInNewContextOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type RunningCodeOptions =
@@ -204205,6 +211789,58 @@ URL.parse($0, $1)""")>]
             abstract member importModuleDynamically:
                 U2<Node.vm.DynamicModuleLoader<Node.vm.Script>, float> option with get, set
 
+            /// <summary>
+            /// Provides an optional data with V8's code cache data for the supplied source.
+            /// </summary>
+            abstract member cachedData: Node.NodeJS.ArrayBufferView option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Script>,
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    importModuleDynamically: float,
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type RunningCodeInNewContextOptions =
@@ -204217,6 +211853,73 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member importModuleDynamically:
                 U2<Node.vm.DynamicModuleLoader<Node.vm.Script>, float> option with get, set
+
+            /// <summary>
+            /// Provides an optional data with V8's code cache data for the supplied source.
+            /// </summary>
+            abstract member cachedData: Node.NodeJS.ArrayBufferView option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?microtaskMode: string,
+                    ?contextName: string option,
+                    ?contextOrigin: string option,
+                    ?contextCodeGeneration:
+                        RunningCodeInNewContextOptions.contextCodeGeneration option,
+                    ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeInNewContextOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Script>,
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?microtaskMode: string,
+                    ?contextName: string option,
+                    ?contextOrigin: string option,
+                    ?contextCodeGeneration:
+                        RunningCodeInNewContextOptions.contextCodeGeneration option,
+                    ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeInNewContextOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    importModuleDynamically: float,
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?microtaskMode: string,
+                    ?contextName: string option,
+                    ?contextOrigin: string option,
+                    ?contextCodeGeneration:
+                        RunningCodeInNewContextOptions.contextCodeGeneration option,
+                    ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeInNewContextOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -204238,6 +211941,61 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member importModuleDynamically:
                 U2<Node.vm.DynamicModuleLoader<obj>, float> option with get, set
+
+            /// <summary>
+            /// Provides an optional data with V8's code cache data for the supplied source.
+            /// </summary>
+            abstract member cachedData: Node.NodeJS.ArrayBufferView option with get, set
+
+            [<Obsolete("in favor of `script.createCachedData()`")>]
+            abstract member produceCachedData: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?produceCachedData: bool,
+                    ?parsingContext: Node.vm.Context,
+                    ?contextExtensions: ResizeArray<obj>
+                )
+                : CompileFunctionOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    importModuleDynamically: Node.vm.DynamicModuleLoader<obj>,
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?produceCachedData: bool,
+                    ?parsingContext: Node.vm.Context,
+                    ?contextExtensions: ResizeArray<obj>
+                )
+                : CompileFunctionOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    importModuleDynamically: float,
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?produceCachedData: bool,
+                    ?parsingContext: Node.vm.Context,
+                    ?contextExtensions: ResizeArray<obj>
+                )
+                : CompileFunctionOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -204606,7 +212364,22 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
-        type ModuleEvaluateOptions = interface end
+        type ModuleEvaluateOptions =
+            /// <summary>
+            /// Specifies the number of milliseconds to execute code before terminating execution.
+            /// If execution is terminated, an <c>Error</c> will be thrown. This value must be a strictly positive integer.
+            /// </summary>
+            abstract member timeout: float option with get, set
+            /// <summary>
+            /// If <c>true</c>, the execution will be terminated when <c>SIGINT</c> (Ctrl+C) is received.
+            /// Existing handlers for the event that have been attached via <c>process.on('SIGINT')</c> will be disabled during script execution, but will continue to work after that.
+            /// If execution is terminated, an <c>Error</c> will be thrown.
+            /// </summary>
+            abstract member breakOnSigint: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?timeout: float, ?breakOnSigint: bool) : ModuleEvaluateOptions =
+                nativeOnly
 
         type ModuleLinker =
             delegate of
@@ -204854,6 +212627,34 @@ URL.parse($0, $1)""")>]
             abstract member importModuleDynamically:
                 Node.vm.DynamicModuleLoader<Node.vm.SourceTextModule> option with get, set
 
+            /// <summary>
+            /// Provides an optional data with V8's code cache data for the supplied source.
+            /// </summary>
+            abstract member cachedData: Node.NodeJS.ArrayBufferView option with get, set
+            /// <summary>
+            /// Specifies the line number offset that is displayed in stack traces produced by this script.
+            /// </summary>
+            abstract member lineOffset: float option with get, set
+            /// <summary>
+            /// Specifies the column number offset that is displayed in stack traces produced by this script.
+            /// </summary>
+            abstract member columnOffset: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?identifier: string,
+                    ?context: Node.vm.Context,
+                    ?initializeImportMeta: SourceTextModuleOptions.initializeImportMeta,
+                    ?importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.SourceTextModule>
+                )
+                : SourceTextModuleOptions
+                =
+                nativeOnly
+
         /// <summary>
         /// This feature is only available with the <c>--experimental-vm-modules</c> command
         /// flag enabled.
@@ -205013,6 +212814,18 @@ URL.parse($0, $1)""")>]
                 abstract member DONT_CONTEXTIFY: float
 
         module RunningScriptInNewContextOptions =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type contextCodeGeneration =
+                abstract member strings: bool option with get, set
+                abstract member wasm: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?strings: bool, ?wasm: bool) : contextCodeGeneration =
+                    nativeOnly
+
+        module RunningCodeInNewContextOptions =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -206411,6 +214224,18 @@ URL.parse($0, $1)""")>]
             /// The default maximum stack size for the thread. Small values may lead to unusable Worker instances.
             /// </summary>
             abstract member stackSizeMb: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?maxYoungGenerationSizeMb: float,
+                    ?maxOldGenerationSizeMb: float,
+                    ?codeRangeSizeMb: float,
+                    ?stackSizeMb: float
+                )
+                : ResourceLimits
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -213840,6 +221665,13 @@ module UndiciTypes =
             abstract member parameters: obj with get, set
             abstract member essence: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (``type``: string, subtype: string, parameters: obj, essence: string)
+                : MIMEType
+                =
+                nativeOnly
+
     module cookies =
 
         [<AllowNullLiteral>]
@@ -213855,6 +221687,59 @@ module UndiciTypes =
             abstract member httpOnly: bool option with get, set
             abstract member sameSite: Cookie.sameSite option with get, set
             abstract member unparsed: ResizeArray<string> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    name: string,
+                    value: string,
+                    ?maxAge: float,
+                    ?domain: string,
+                    ?path: string,
+                    ?secure: bool,
+                    ?httpOnly: bool,
+                    ?sameSite: Cookie.sameSite,
+                    ?unparsed: ResizeArray<string>
+                )
+                : Cookie
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    name: string,
+                    value: string,
+                    expires: Date,
+                    ?maxAge: float,
+                    ?domain: string,
+                    ?path: string,
+                    ?secure: bool,
+                    ?httpOnly: bool,
+                    ?sameSite: Cookie.sameSite,
+                    ?unparsed: ResizeArray<string>
+                )
+                : Cookie
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    name: string,
+                    value: string,
+                    expires: float,
+                    ?maxAge: float,
+                    ?domain: string,
+                    ?path: string,
+                    ?secure: bool,
+                    ?httpOnly: bool,
+                    ?sameSite: Cookie.sameSite,
+                    ?unparsed: ResizeArray<string>
+                )
+                : Cookie
+                =
+                nativeOnly
 
         module Cookie =
 

@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Entry =
     abstract member ratio: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (ratio: float) : Entry = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

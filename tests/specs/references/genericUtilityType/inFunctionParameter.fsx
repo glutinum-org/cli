@@ -16,8 +16,10 @@ type User =
     abstract member id: string with get, set
     abstract member name: string with get, set
 
+[<AllowNullLiteral>]
+[<Interface>]
 type Picked<'T, 'K when 'K :> obj> =
-    Pick<'T, 'K>
+    interface end
 
 module Exports =
 

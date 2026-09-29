@@ -14,15 +14,8 @@ type X =
 [<AllowNullLiteral>]
 [<Interface>]
 type Y =
-    inherit Pick<X, Y.Extends>
-
-module Y =
-
-    [<RequireQualifiedAccess>]
-    [<StringEnum(CaseRules.None)>]
-    type Extends =
-        | a
-        | c
+    abstract member a: string with get, set
+    abstract member c: bool with get, set
 
 (***)
 #r "nuget: Fable.Core"

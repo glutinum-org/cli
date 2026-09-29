@@ -11,8 +11,10 @@ type User =
     abstract member name: string with get, set
     abstract member password: string with get, set
 
+[<AllowNullLiteral>]
+[<Interface>]
 type Picked<'T, 'K when 'K :> obj> =
-    Pick<'T, 'K>
+    interface end
 
 [<AllowNullLiteral>]
 [<Interface>]

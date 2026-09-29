@@ -35,8 +35,6 @@ module Links =
     type Links =
         abstract member href: string with get, set
         abstract member title: string option with get, set
-        [<ParamObject; Emit("$0")>]
-        static member Create (href: string, ?title: string) : Links = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

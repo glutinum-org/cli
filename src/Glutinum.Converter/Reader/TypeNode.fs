@@ -770,7 +770,11 @@ module UtilityType =
             |> GlueUtilityType.ThisParameterType
             |> GlueType.UtilityType
 
-    let readOmit (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
+    let readOmitOrPick
+        (reader: ITypeScriptReader)
+        (typeReferenceNode: Ts.TypeReferenceNode)
+        (keepListedKeys: bool)
+        =
 
         let keysToOmitType =
             typeReferenceNode.typeArguments.Value[1] |> reader.checker.getTypeFromTypeNode
@@ -825,7 +829,7 @@ module UtilityType =
 
         let filteredProperties =
             baseProperties
-            |> Seq.filter (fun prop -> not (keysToOmit |> Seq.contains prop.name))
+            |> Seq.filter (fun prop -> keysToOmit |> Seq.contains prop.name |> (=) keepListedKeys)
             |> Seq.toList
 
         let members =
@@ -861,8 +865,8 @@ module UtilityType =
                 literalMembers
                 |> List.filter (fun glueMember ->
                     match memberName glueMember with
-                    | Some name -> not (keysToOmit |> Seq.contains name)
-                    | None -> true
+                    | Some name -> keysToOmit |> Seq.contains name |> (=) keepListedKeys
+                    | None -> not keepListedKeys
                 )
             | None -> members
 
@@ -873,8 +877,17 @@ module UtilityType =
                 withoutForeignTypeParameters reader defaults members
             else
                 members
-        |> GlueUtilityType.Omit
+        |> (if keepListedKeys then
+                GlueUtilityType.Pick
+            else
+                GlueUtilityType.Omit)
         |> GlueType.UtilityType
+
+    let readOmit (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
+        readOmitOrPick reader typeReferenceNode false
+
+    let readPick (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
+        readOmitOrPick reader typeReferenceNode true
 
     let readReadonly (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
 
@@ -1142,6 +1155,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
             | "ThisParameterType" -> UtilityType.readThisParameterType reader typeReferenceNode
             | "Omit" -> UtilityType.readOmit reader typeReferenceNode
+            | "Pick" -> UtilityType.readPick reader typeReferenceNode
             | "Readonly" -> UtilityType.readReadonly reader typeReferenceNode
             | _ -> readTypeReference true
         else
@@ -1626,6 +1640,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         // properties the reader needs (`typeArguments`).
         match isFromEs5Lib symbolOpt, getFullNameOrEmpty checker expression.expression with
         | true, "Omit" -> UtilityType.readOmit reader (unbox<Ts.TypeReferenceNode> expression)
+        | true, "Pick" -> UtilityType.readPick reader (unbox<Ts.TypeReferenceNode> expression)
         | _ ->
             let isQualified =
                 expression.expression.kind = Ts.SyntaxKind.PropertyAccessExpression

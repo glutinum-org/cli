@@ -450,6 +450,9 @@ type GlueASTViewer =
             | GlueUtilityType.Omit members ->
                 ASTViewer.renderNode "Omit" (members |> List.map GlueASTViewer.GlueMember) context
 
+            | GlueUtilityType.Pick members ->
+                ASTViewer.renderNode "Pick" (members |> List.map GlueASTViewer.GlueMember) context
+
             | GlueUtilityType.Readonly readonlyType ->
                 ASTViewer.renderNode
                     "Readonly"
