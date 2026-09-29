@@ -15,9 +15,7 @@ let readSourceFile (checker: Ts.TypeChecker) (sourceFile: option<Ts.SourceFile>)
         // The module the file is made of, when it is one
         ImportSpecifier =
             promotedAmbientModule sourceFile.Value
-            |> Option.map (fun moduleDeclaration ->
-                Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
-            )
+            |> Option.map (ambientModuleSpecifier (ambientModuleNames checker))
         Warnings = reader.Warnings
         TypeMemory = reader.TypeMemory |> List.ofSeq
     |}
@@ -189,6 +187,7 @@ let readPackages
     (sourceFiles: Ts.SourceFile list)
     =
     let reader: ITypeScriptReader = TypeScriptReader(checker, packageContext)
+    let ambientModules = ambientModuleNames checker
 
     let filesOfPackage (package: PackageInfo) =
         sourceFiles
@@ -276,7 +275,7 @@ let readPackages
                 let importSpecifier =
                     match promotedAmbientModule sourceFile with
                     | Some moduleDeclaration ->
-                        Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
+                        ambientModuleSpecifier ambientModules moduleDeclaration
                     | None -> packageContext.ImportSpecifier fileName
 
                 let fileModule (types: GlueType list) =

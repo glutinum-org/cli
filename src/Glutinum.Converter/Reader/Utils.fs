@@ -717,6 +717,26 @@ let promotedAmbientModule (sourceFile: Ts.SourceFile) : Ts.ModuleDeclaration opt
         |> Option.orElse (List.tryHead namedLikeTheFile)
         |> Option.orElse (List.tryHead ambientModules)
 
+/// The names of the ambient modules the program declares, `node:fs` when declared as such
+let ambientModuleNames (checker: Ts.TypeChecker) =
+    checker.getAmbientModules ()
+    |> Seq.map (fun symbol -> Naming.removeSurroundingQuotes symbol.name)
+    |> Collections.Set.ofSeq
+
+/// The specifier of the ambient module a file is made of, `node:fs` when the program declares
+/// that alias too
+let ambientModuleSpecifier
+    (ambientModuleNames: Collections.Set<string>)
+    (moduleDeclaration: Ts.ModuleDeclaration)
+    =
+    let name: string = Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
+    let prefixed = "node:" + name
+
+    if not (name.StartsWith "node:") && ambientModuleNames.Contains prefixed then
+        prefixed
+    else
+        name
+
 let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =
     let parent: Ts.Node = !!declaration.parent
 
