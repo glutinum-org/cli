@@ -8,28 +8,28 @@ open System
 open Glutinum.Types.TypeScript
 
 type Documentation =
-    ResizeArray<Documentation.ResizeArray>
+    ResizeArray<Documentation.Item>
 
 type Docs =
-    ReadonlyArray<Docs.ReadonlyArray>
+    ReadonlyArray<Docs.Item>
 
 module Documentation =
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type ResizeArray =
+    type Item =
         abstract member kind: string with get
         [<ParamObject; Emit("$0")>]
-        static member Create (kind: string) : ResizeArray = nativeOnly
+        static member Create (kind: string) : Item = nativeOnly
 
 module Docs =
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type ReadonlyArray =
+    type Item =
         abstract member kind: string with get
         [<ParamObject; Emit("$0")>]
-        static member Create (kind: string) : ReadonlyArray = nativeOnly
+        static member Create (kind: string) : Item = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

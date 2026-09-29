@@ -1120,7 +1120,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
-    | GlueType.Array glueType -> transformType context glueType |> FSharpType.ResizeArray
+    | GlueType.Array glueType ->
+        transformType (context.PushScope "Item") glueType |> FSharpType.ResizeArray
 
     | GlueType.ClassDeclaration classDeclaration ->
         ({
@@ -7440,10 +7441,8 @@ let private transformTypeAliasDeclaration
 
             | _ -> handleDefaultCase ()
 
-        // The scope avoids naming an anonymous element type after the alias
         | GlueType.Array glueType ->
-            transformType (context.PushScope "ResizeArray") (GlueType.Array glueType)
-            |> makeTypeAlias
+            transformType context (GlueType.Array glueType) |> makeTypeAlias
 
         | GlueType.UtilityType utilityType ->
             match utilityType with
@@ -7670,7 +7669,7 @@ let private transformTypeAliasDeclaration
                 makeTypeAlias FSharpType.Object
 
         | GlueType.ReadOnly glueType ->
-            transformReadOnly (context.PushScope "ReadonlyArray") glueType |> makeTypeAlias
+            transformReadOnly (context.PushScope "Item") glueType |> makeTypeAlias
 
         // We don't know how to handle these types yet, so we default to obj
         | GlueType.ClassDeclaration _
