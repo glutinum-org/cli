@@ -6,6 +6,9 @@ open System
 
 module NodeLike =
 
+    type _Helper =
+        string
+
     module os =
 
         [<AbstractClass>]
@@ -42,6 +45,31 @@ module NodeLike =
         type PlatformPath =
             path_.PlatformPath
 
+    module stream =
+
+        module web =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStream =
+                abstract member locked: bool with get, set
+
+    module util =
+
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            [<Import("format", "node:util")>]
+            static member format (format: string) : string = nativeOnly
+
+        module types =
+
+            [<AbstractClass>]
+            [<Erase>]
+            type Exports =
+                [<Import("isDate", "node:util/types")>]
+                static member isDate (value: obj) : bool = nativeOnly
+
     module Exports =
 
         type os =
@@ -49,6 +77,14 @@ module NodeLike =
 
         type path =
             path.Exports
+
+        type util =
+            util.Exports
+
+        module util =
+
+            type types =
+                util.types.Exports
 
 (***)
 #r "nuget: Fable.Core"

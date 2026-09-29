@@ -177,6 +177,76 @@ let private readStatements (reader: ITypeScriptReader) (sourceFile: Ts.SourceFil
     )
     |> dropShadowedReExports
 
+/// The ambient modules a script declares beside its own: `declare module "util/types"` is the
+/// module `types` nested in `util`, `declare module "node:util"` is `util` itself
+let private nestAmbientModules
+    (packageContext: PackageContext)
+    (package: PackageInfo)
+    (fileName: string)
+    (types: GlueType list)
+    =
+    let ambient, others =
+        types
+        |> List.partition (
+            function
+            | GlueType.ModuleDeclaration info ->
+                info.Name.StartsWith "\"" || info.Name.StartsWith "'"
+            | _ -> false
+        )
+
+    let converted =
+        ambient
+        |> List.choose (
+            function
+            | GlueType.ModuleDeclaration info ->
+                let name = Naming.removeSurroundingQuotes info.Name
+
+                Some(
+                    packageContext.NestedAmbientModuleSegments(package, fileName, name),
+                    packageContext.AmbientSpecifier name,
+                    info.Types
+                )
+            | _ -> None
+        )
+        |> List.groupBy (fun (segments, _, _) -> segments)
+        |> List.map (fun (segments, group) ->
+            let _, specifier, _ = List.head group
+
+            segments,
+            specifier,
+            group |> List.collect (fun (_, _, types) -> types) |> dropShadowedReExports
+        )
+
+    let own, nested =
+        converted |> List.partition (fun (segments, _, _) -> segments.IsEmpty)
+
+    let ownTypes, ownSpecifier =
+        match own with
+        | [ (_, specifier, ownTypes) ] -> ownTypes, Some specifier
+        | _ -> [], None
+
+    let nestedModules =
+        nested
+        |> List.map (fun (segments, specifier, moduleTypes) ->
+            (moduleTypes, List.rev segments)
+            ||> List.fold (fun types segment ->
+                ({
+                    Name = segment
+                    ImportSpecifier = specifier
+                    SymbolSpecifiers = Map.empty
+                    IsGlobal = false
+                    HasRuntime = package.HasRuntime
+                    Types = types
+                }
+                : GlueFileModule)
+                |> GlueType.FileModule
+                |> List.singleton
+            )
+        )
+        |> List.concat
+
+    others, ownTypes @ nestedModules, ownSpecifier
+
 /// <summary>
 /// Read every file of the packages, the target package entry file stays at the top level,
 /// its other files and the dependency packages become modules.
@@ -272,15 +342,32 @@ let readPackages
                 let types, fileGlobals = readStatements reader sourceFile |> extractGlobals
                 globals.AddRange fileGlobals
 
+                let promotedSpecifier =
+                    promotedAmbientModule sourceFile
+                    |> Option.map (ambientModuleSpecifier ambientModules)
+
+                let moduleName = packageContext.FileModuleName(package, fileName)
+
+                let scriptGlobals, types, ownSpecifier =
+                    if ts.isExternalModule sourceFile then
+                        [], types, None
+                    elif isScript sourceFile then
+                        nestAmbientModules packageContext package fileName types
+                    else
+                        let others, nested, ownSpecifier =
+                            nestAmbientModules packageContext package fileName types
+
+                        [], others @ nested, ownSpecifier
+
                 let importSpecifier =
-                    match promotedAmbientModule sourceFile with
-                    | Some moduleDeclaration ->
-                        ambientModuleSpecifier ambientModules moduleDeclaration
-                    | None -> packageContext.ImportSpecifier fileName
+                    match promotedSpecifier, ownSpecifier with
+                    | Some specifier, _
+                    | None, Some specifier -> specifier
+                    | None, None -> packageContext.ImportSpecifier fileName
 
                 let fileModule (types: GlueType list) =
                     ({
-                        Name = packageContext.FileModuleName(package, fileName)
+                        Name = moduleName
                         ImportSpecifier = importSpecifier
                         SymbolSpecifiers = packageContext.SymbolSpecifiers fileName
                         IsGlobal = false
@@ -293,23 +380,14 @@ let readPackages
                     |> Some
 
                 if fileName = package.EntryFile then
-                    Some(Choice1Of2(types, isScript sourceFile))
+                    Some(Choice1Of2(scriptGlobals @ types, isScript sourceFile))
                 elif isScript sourceFile then
-                    let ambientModules, scriptGlobals =
-                        types
-                        |> List.partition (
-                            function
-                            | GlueType.ModuleDeclaration info ->
-                                info.Name.StartsWith "\"" || info.Name.StartsWith "'"
-                            | _ -> false
-                        )
-
                     globals.AddRange scriptGlobals
 
-                    if ambientModules.IsEmpty then
+                    if types.IsEmpty then
                         None
                     else
-                        fileModule ambientModules
+                        fileModule types
                 else
                     let types = withoutUnexported fileName types
 

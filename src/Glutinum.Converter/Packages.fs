@@ -88,6 +88,7 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
         DefaultExportNames = Map.empty
         HasExportsMap = false
         HoistableDeclarations = Set.empty
+        AmbientModuleFiles = Map.empty
     }
 
 /// The names a public entry of the package exports, with the subpath to import each from
@@ -541,8 +542,25 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
         |> List.map (fun description -> String.normalizePath description.dir + "/")
         |> set
 
+    let ambientNames = ambientModuleNames checker
+
     let withReExportedFiles (package: Reader.Types.PackageInfo) =
         let hasExportsMap = exportsMapPackages.Contains package.Dir
+
+        let ambientModuleFiles =
+            program.getSourceFiles ()
+            |> Seq.choose (fun sourceFile ->
+                let fileName = String.normalizePath sourceFile.fileName
+
+                if fileName.StartsWith package.Dir then
+                    promotedAmbientModule sourceFile
+                    |> Option.map (fun moduleDeclaration ->
+                        fileName, ambientModuleSpecifier ambientNames moduleDeclaration
+                    )
+                else
+                    None
+            )
+            |> Map.ofSeq
 
         let symbols, defaultExportNames =
             reExportedSymbols program checker hasExportsMap package
@@ -569,6 +587,7 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
             ReExportedSymbols = symbols
             ReExportedNames = reExportedNames program checker hasExportsMap package
             DefaultExportNames = defaultExportNames
+            AmbientModuleFiles = ambientModuleFiles
             ReExportedFiles =
                 symbols
                 |> Map.toList
@@ -591,6 +610,7 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
             // Without the library, the declarations left out of the package stand for it
             IsLibraryName =
                 fun name -> options.NoLib && not included.IsEmpty && not (included.Contains name)
+            AmbientModuleNames = ambientNames
         }
 
     let sourceFiles =

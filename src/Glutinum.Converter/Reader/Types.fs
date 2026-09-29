@@ -35,6 +35,8 @@ type PackageInfo =
         /// A declaration the root entry exports under a name nothing else declares, keyed by the
         /// file declaring it: it is read into the package module
         HoistableDeclarations: Set<string * string>
+        /// The specifier of the ambient module a file is made of, keyed by the file
+        AmbientModuleFiles: Map<string, string>
     }
 
 /// A package published as its own binding: its types are referenced, never generated
@@ -48,6 +50,13 @@ type ExternalPackage =
         LibFilePrefixes: string list
     }
 
+/// `node:fs` when the program declares that alias of `fs`, the specifier Node documents
+let ambientSpecifier (ambientModuleNames: Collections.Set<string>) (name: string) =
+    if not (name.StartsWith "node:") && ambientModuleNames.Contains("node:" + name) then
+        "node:" + name
+    else
+        name
+
 type PackageContext =
     {
         Packages: PackageInfo list
@@ -55,7 +64,32 @@ type PackageContext =
         /// A declaration of the generated package standing for the standard library, when the
         /// package is the library itself generated without it
         IsLibraryName: string -> bool
+        /// The names of the ambient modules the program declares
+        AmbientModuleNames: Collections.Set<string>
     }
+
+    member this.AmbientSpecifier(name: string) =
+        ambientSpecifier this.AmbientModuleNames name
+
+    /// The F# modules of an ambient module, spelled as its specifier is: `node:stream/web` is
+    /// `stream.web`, `dayjs/locale/*` of the package `dayjs` is `locale`
+    member this.AmbientModuleSegments(package: PackageInfo, specifier: string) : string list =
+        let withoutPrefix =
+            if specifier.StartsWith "node:" then
+                specifier.Substring "node:".Length
+            elif specifier.StartsWith(package.RuntimeName + "/") then
+                specifier.Substring(package.RuntimeName.Length + 1)
+            else
+                specifier
+
+        withoutPrefix.Split('/')
+        |> Array.toList
+        |> List.filter (fun segment -> segment <> "" && segment <> "*")
+        |> List.map (fun segment ->
+            segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
+            |> String.concat "_"
+            |> Naming.sanitizeTypeName
+        )
 
     member this.TryFindPackage(fileName: string) =
         let fileName = String.normalizePath fileName
@@ -124,11 +158,19 @@ type PackageContext =
     member this.FileModuleName(package: PackageInfo, fileName: string) =
         let fileName = String.normalizePath fileName
 
+        // `buffer.buffer.d.ts` made of `declare module "buffer"` is the module `buffer`
+        let fromAmbientModule =
+            package.AmbientModuleFiles.TryFind fileName
+            |> Option.map (fun specifier ->
+                this.AmbientModuleSegments(package, specifier) |> String.concat "."
+            )
+
         // `animejs/svg` is `Animejs.svg`, spelled as the import specifier is, the file declaring
         // it is an implementation detail
         let fromSubpath =
-            match this.SubpathOf(package, fileName) with
-            | Some subpath when subpath <> "" ->
+            match fromAmbientModule, this.SubpathOf(package, fileName) with
+            | Some name, _ -> Some name
+            | None, Some subpath when subpath <> "" ->
                 subpath.Split('/')
                 |> Array.map (fun segment ->
                     segment.Split(
@@ -184,6 +226,22 @@ type PackageContext =
                 |> Naming.sanitizeTypeName
             )
             |> String.concat "."
+
+    /// The F# modules of `declare module "util/types"` under the module of its file `util`
+    member this.NestedAmbientModuleSegments
+        (package: PackageInfo, fileName: string, name: string)
+        : string list
+        =
+        let segments = this.AmbientModuleSegments(package, this.AmbientSpecifier name)
+        let fileSegments = this.FileModuleName(package, fileName).Split('.') |> Array.toList
+
+        if
+            List.length segments >= List.length fileSegments
+            && List.take fileSegments.Length segments = fileSegments
+        then
+            List.skip fileSegments.Length segments
+        else
+            segments
 
     /// F# modules qualifying a type declared in `fileName`, empty for the target entry file
     member this.ModulePath(fileName: string) : string list = this.ModulePath(fileName, true)

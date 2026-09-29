@@ -729,13 +729,9 @@ let ambientModuleSpecifier
     (ambientModuleNames: Collections.Set<string>)
     (moduleDeclaration: Ts.ModuleDeclaration)
     =
-    let name: string = Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
-    let prefixed = "node:" + name
-
-    if not (name.StartsWith "node:") && ambientModuleNames.Contains prefixed then
-        prefixed
-    else
-        name
+    ambientSpecifier
+        ambientModuleNames
+        (Naming.removeSurroundingQuotes (moduleDeclaration.name?text))
 
 let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =
     let parent: Ts.Node = !!declaration.parent
@@ -908,14 +904,34 @@ let private namespaceChain (packageContext: PackageContext option) (declaration:
                     (unbox<Ts.Node> moduleDeclaration.name).getText()
                     |> Naming.removeSurroundingQuotes
 
-                // The suffix is part of the name to escape (`assert_`, not ``` ``assert``_ ```)
-                let name =
-                    if isTopLevelModuleDeclaration packageContext node then
-                        Naming.sanitizeTypeName (rawName + "_")
-                    else
-                        Naming.sanitizeTypeName rawName
+                let sourceFile = node.getSourceFile ()
 
-                collect node.parent (name :: acc)
+                let ambientModuleOfScript =
+                    match packageContext with
+                    | Some packageContext when
+                        isAmbientModuleDeclaration node && not (ts.isExternalModule sourceFile)
+                        ->
+                        packageContext.TryFindPackage sourceFile.fileName
+                        |> Option.map (fun package ->
+                            packageContext.NestedAmbientModuleSegments(
+                                package,
+                                sourceFile.fileName,
+                                rawName
+                            )
+                        )
+                    | _ -> None
+
+                match ambientModuleOfScript with
+                | Some segments -> collect node.parent (segments @ acc)
+                | None ->
+                    // The suffix is part of the name to escape (`assert_`, not ``` ``assert``_ ```)
+                    let name =
+                        if isTopLevelModuleDeclaration packageContext node then
+                            Naming.sanitizeTypeName (rawName + "_")
+                        else
+                            Naming.sanitizeTypeName rawName
+
+                    collect node.parent (name :: acc)
             | _ -> collect node.parent acc
 
     collect declaration.parent []

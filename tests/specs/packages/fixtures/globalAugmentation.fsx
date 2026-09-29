@@ -48,21 +48,11 @@ module NodeLike =
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<ImportAll("buffer")>]
-            static member inline buffer
-                with get () : buffer_.Exports =
-                    nativeOnly
+            [<Import("isUtf8", "node:buffer")>]
+            static member isUtf8 (input: NodeLike.Buffer) : bool = nativeOnly
 
-        module buffer_ =
-
-            [<AbstractClass>]
-            [<Erase>]
-            type Exports =
-                [<Emit("$0.isUtf8($1...)")>]
-                abstract member isUtf8: input: NodeLike.Buffer -> bool
-
-            type ImplicitArrayBuffer =
-                obj
+        type ImplicitArrayBuffer =
+            obj
 
     module fs =
 

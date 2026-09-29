@@ -818,8 +818,7 @@ module Node =
         /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
-        abstract member from:
-            array: Node.buffer.buffer_.WithImplicitCoercion<obj> -> Node.Buffer<obj>
+        abstract member from: array: Node.buffer.WithImplicitCoercion<obj> -> Node.Buffer<obj>
 
         /// <summary>
         /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
@@ -1388,8 +1387,7 @@ module Node =
         /// The encoding of <c>string</c>. **Default:** <c>'utf8'</c>.
         /// </param>
         abstract member from:
-            string: Node.buffer.buffer_.WithImplicitCoercion<string> *
-            ?encoding: Node.BufferEncoding ->
+            string: Node.buffer.WithImplicitCoercion<string> * ?encoding: Node.BufferEncoding ->
                 Node.Buffer<obj>
 
         /// <summary>
@@ -1603,8 +1601,7 @@ module Node =
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
         abstract member from:
-            arrayOrString: Node.buffer.buffer_.WithImplicitCoercion<U2<obj, string>> ->
-                Node.Buffer<obj>
+            arrayOrString: Node.buffer.WithImplicitCoercion<U2<obj, string>> -> Node.Buffer<obj>
 
         /// <summary>
         /// Creates a new Buffer using the passed {data}
@@ -17010,7 +17007,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
                 [<EmitConstructor>]
                 abstract member Create:
-                    body: Node.buffer.buffer_.Blob * ?init: Node.ResponseInit -> Node.Response
+                    body: Node.buffer.Blob * ?init: Node.ResponseInit -> Node.Response
 
                 [<EmitConstructor>]
                 abstract member Create:
@@ -17190,8 +17187,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
         type async_hooks = async_hooks.Exports
 
-        type buffer_buffer = buffer_buffer.Exports
-
         type buffer = buffer.Exports
 
         type child_process = child_process.Exports
@@ -17229,6 +17224,10 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         type https = https.Exports
 
         type inspector = inspector.Exports
+
+        module inspector =
+
+            type promises = inspector.promises.Exports
 
         type ``module`` = ``module``.Exports
 
@@ -17272,6 +17271,10 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
         type test = test.Exports
 
+        module test =
+
+            type reporters = test.reporters.Exports
+
         module timers =
 
             type promises = timers.promises.Exports
@@ -17285,6 +17288,10 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         type url = url.Exports
 
         type util = util.Exports
+
+        module util =
+
+            type types = util.types.Exports
 
         type v8 = v8.Exports
 
@@ -26902,7 +26909,7 @@ AsyncLocalStorage.snapshot()""")>]
             type snapshot__<'R, 'TArgs> =
                 delegate of fn: System.Delegate * [<ParamArray>] args: 'TArgs[] -> 'R
 
-    module buffer_buffer =
+    module buffer =
 
         [<AbstractClass>]
         [<Erase>]
@@ -26911,9 +26918,287 @@ AsyncLocalStorage.snapshot()""")>]
             [<Obsolete("Use `Buffer.allocUnsafeSlow()` instead.")>]
             static member inline SlowBuffer: Exports.SlowBuffer__.Type = nativeOnly
 
+            /// <summary>
+            /// This function returns <c>true</c> if <c>input</c> contains only valid UTF-8-encoded data,
+            /// including the case in which <c>input</c> is empty.
+            ///
+            /// Throws if the <c>input</c> is a detached array buffer.
+            /// </summary>
+            /// <param name="input">
+            /// The input to validate.
+            /// </param>
+            [<Import("isUtf8", "node:buffer")>]
+            static member isUtf8(input: U2<obj, Node.NodeJS.TypedArray>) : bool = nativeOnly
+
+            /// <summary>
+            /// This function returns <c>true</c> if <c>input</c> contains only valid ASCII-encoded data,
+            /// including the case in which <c>input</c> is empty.
+            ///
+            /// Throws if the <c>input</c> is a detached array buffer.
+            /// </summary>
+            /// <param name="input">
+            /// The input to validate.
+            /// </param>
+            [<Import("isAscii", "node:buffer")>]
+            static member isAscii(input: U2<obj, Node.NodeJS.TypedArray>) : bool = nativeOnly
+
+            [<Import("INSPECT_MAX_BYTES", "node:buffer")>]
+            static member inline INSPECT_MAX_BYTES: float = nativeOnly
+
+            [<Import("kMaxLength", "node:buffer")>]
+            static member inline kMaxLength: float = nativeOnly
+
+            [<Import("kStringMaxLength", "node:buffer")>]
+            static member inline kStringMaxLength: float = nativeOnly
+
+            [<Import("constants", "node:buffer")>]
+            static member inline constants: Exports.constants__.Type = nativeOnly
+
+            /// <summary>
+            /// Re-encodes the given <c>Buffer</c> or <c>Uint8Array</c> instance from one character
+            /// encoding to another. Returns a new <c>Buffer</c> instance.
+            ///
+            /// Throws if the <c>fromEnc</c> or <c>toEnc</c> specify invalid character encodings or if
+            /// conversion from <c>fromEnc</c> to <c>toEnc</c> is not permitted.
+            ///
+            /// Encodings supported by <c>buffer.transcode()</c> are: <c>'ascii'</c>, <c>'utf8'</c>, <c>'utf16le'</c>, <c>'ucs2'</c>, <c>'latin1'</c>, and <c>'binary'</c>.
+            ///
+            /// The transcoding process will use substitution characters if a given byte
+            /// sequence cannot be adequately represented in the target encoding. For instance:
+            ///
+            /// <code lang="js">
+            /// import { Buffer, transcode } from 'node:buffer';
+            ///
+            /// const newBuf = transcode(Buffer.from('€'), 'utf8', 'ascii');
+            /// console.log(newBuf.toString('ascii'));
+            /// // Prints: '?'
+            /// </code>
+            ///
+            /// Because the Euro (<c>€</c>) sign is not representable in US-ASCII, it is replaced
+            /// with <c>?</c> in the transcoded <c>Buffer</c>.
+            /// </summary>
+            /// <param name="source">
+            /// A <c>Buffer</c> or <c>Uint8Array</c> instance.
+            /// </param>
+            /// <param name="fromEnc">
+            /// The current encoding.
+            /// </param>
+            /// <param name="toEnc">
+            /// To target encoding.
+            /// </param>
+            [<Import("transcode", "node:buffer")>]
+            static member transcode
+                (
+                    source: JS.Uint8Array,
+                    fromEnc: Node.buffer.TranscodeEncoding,
+                    toEnc: Node.buffer.TranscodeEncoding
+                )
+                : Node.NonSharedBuffer
+                =
+                nativeOnly
+
+            /// <summary>
+            /// Resolves a <c>'blob:nodedata:...'</c> an associated <c>Blob</c> object registered using
+            /// a prior call to <c>URL.createObjectURL()</c>.
+            /// </summary>
+            /// <param name="id">
+            /// A <c>'blob:nodedata:...</c> URL string returned by a prior call to <c>URL.createObjectURL()</c>.
+            /// </param>
+            [<Import("resolveObjectURL", "node:buffer")>]
+            static member resolveObjectURL(id: string) : Node.buffer.Blob option = nativeOnly
+
+            /// <summary>
+            /// Creates a new <c>Blob</c> object containing a concatenation of the given sources.
+            ///
+            /// {ArrayBuffer}, {TypedArray}, {DataView}, and {Buffer} sources are copied into
+            /// the 'Blob' and can therefore be safely modified after the 'Blob' is created.
+            ///
+            /// String sources are also copied into the <c>Blob</c>.
+            /// </summary>
+            [<Import("Blob", "node:buffer"); EmitConstructor>]
+            static member Blob
+                (
+                    sources: ResizeArray<U3<obj, Node.crypto.BinaryLike, Node.buffer.Blob>>,
+                    ?options: Node.buffer.BlobOptions
+                )
+                : Blob
+                =
+                nativeOnly
+
+            [<Import("File", "node:buffer"); EmitConstructor>]
+            static member File
+                (
+                    sources: ResizeArray<U2<Node.crypto.BinaryLike, Node.buffer.Blob>>,
+                    fileName: string,
+                    ?options: Node.buffer.FileOptions
+                )
+                : File
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ImplicitArrayBuffer<'T> = interface end
+
+        [<RequireQualifiedAccess>]
+        [<StringEnum(CaseRules.None)>]
+        type TranscodeEncoding =
+            | ascii
+            | utf8
+            | ``utf-8``
+            | utf16le
+            | ``utf-16le``
+            | ucs2
+            | ``ucs-2``
+            | latin1
+            | binary
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type BlobOptions =
+            /// <summary>
+            /// One of either <c>'transparent'</c> or <c>'native'</c>. When set to <c>'native'</c>, line endings in string source parts
+            /// will be converted to the platform native line-ending as specified by <c>import { EOL } from 'node:os'</c>.
+            /// </summary>
+            abstract member endings: BlobOptions.endings option with get, set
+            /// <summary>
+            /// The Blob content-type. The intent is for <c>type</c> to convey
+            /// the MIME media type of the data, however no validation of the type format
+            /// is performed.
+            /// </summary>
+            abstract member ``type``: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?endings: BlobOptions.endings, ?``type``: string) : BlobOptions =
+                nativeOnly
+
+        /// <summary>
+        /// A <c>Blob</c> encapsulates immutable, raw data that can be safely shared across
+        /// multiple worker threads.
+        /// </summary>
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Blob =
+            /// <summary>
+            /// The total size of the <c>Blob</c> in bytes.
+            /// </summary>
+            abstract member size: float with get
+            /// <summary>
+            /// The content-type of the <c>Blob</c>.
+            /// </summary>
+            abstract member ``type``: string with get
+            /// <summary>
+            /// Returns a promise that fulfills with an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) containing a copy of
+            /// the <c>Blob</c> data.
+            /// </summary>
+            abstract member arrayBuffer: unit -> JS.Promise<obj>
+            /// <summary>
+            /// The <c>blob.bytes()</c> method returns the byte of the <c>Blob</c> object as a <c>Promise<Uint8Array></c>.
+            ///
+            /// <code lang="js">
+            /// const blob = new Blob(['hello']);
+            /// blob.bytes().then((bytes) => {
+            ///   console.log(bytes); // Outputs: Uint8Array(5) [ 104, 101, 108, 108, 111 ]
+            /// });
+            /// </code>
+            /// </summary>
+            abstract member bytes: unit -> JS.Promise<JS.Uint8Array>
+
+            /// <summary>
+            /// Creates and returns a new <c>Blob</c> containing a subset of this <c>Blob</c> objects
+            /// data. The original <c>Blob</c> is not altered.
+            /// </summary>
+            /// <param name="start">
+            /// The starting index.
+            /// </param>
+            /// <param name="end">
+            /// The ending index.
+            /// </param>
+            /// <param name="type">
+            /// The content-type for the new <c>Blob</c>
+            /// </param>
+            abstract member slice:
+                ?start: float * ?``end``: float * ?``type``: string -> Node.buffer.Blob
+
+            /// <summary>
+            /// Returns a promise that fulfills with the contents of the <c>Blob</c> decoded as a
+            /// UTF-8 string.
+            /// </summary>
+            abstract member text: unit -> JS.Promise<string>
+            /// <summary>
+            /// Returns a new <c>ReadableStream</c> that allows the content of the <c>Blob</c> to be read.
+            /// </summary>
+            abstract member stream: unit -> Node.stream.web.ReadableStream
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type FileOptions =
+            /// <summary>
+            /// One of either <c>'transparent'</c> or <c>'native'</c>. When set to <c>'native'</c>, line endings in string source parts will be
+            /// converted to the platform native line-ending as specified by <c>import { EOL } from 'node:os'</c>.
+            /// </summary>
+            abstract member endings: FileOptions.endings option with get, set
+            /// <summary>
+            /// The File content-type.
+            /// </summary>
+            abstract member ``type``: string option with get, set
+            /// <summary>
+            /// The last modified date of the file. <c>Default</c>: Date.now().
+            /// </summary>
+            abstract member lastModified: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?endings: FileOptions.endings, ?``type``: string, ?lastModified: float)
+                : FileOptions
+                =
+                nativeOnly
+
+        /// <summary>
+        /// A [<c>File</c>](https://developer.mozilla.org/en-US/docs/Web/API/File) provides information about files.
+        /// </summary>
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type File =
+            inherit Node.buffer.Blob
+            /// <summary>
+            /// The name of the <c>File</c>.
+            /// </summary>
+            abstract member name: string with get
+            /// <summary>
+            /// The last modified date of the <c>File</c>.
+            /// </summary>
+            abstract member lastModified: float with get
+
+        type WithImplicitCoercion<'T> = U3<'T, WithImplicitCoercion.U3.Case2<'T>, obj>
+
+        module BlobOptions =
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type endings =
+                | transparent
+                | native
+
+        module FileOptions =
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type endings =
+                | native
+                | transparent
+
+        module WithImplicitCoercion =
+
+            module U3 =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Case2<'T> =
+                    abstract member valueOf: unit -> 'T
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(valueOf: (unit -> 'T)) : Case2<'T> = nativeOnly
 
         module Exports =
 
@@ -26927,345 +27212,17 @@ AsyncLocalStorage.snapshot()""")>]
 
                     abstract member prototype: Node.Buffer with get, set
 
-    module buffer =
+            module constants__ =
 
-        [<AbstractClass>]
-        [<Erase>]
-        type Exports =
-            /// <summary>
-            /// <c>Buffer</c> objects are used to represent a fixed-length sequence of bytes. Many
-            /// Node.js APIs support <c>Buffer</c>s.
-            ///
-            /// The <c>Buffer</c> class is a subclass of JavaScript's [<c>Uint8Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) class and
-            /// extends it with methods that cover additional use cases. Node.js APIs accept
-            /// plain [<c>Uint8Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) s wherever <c>Buffer</c>s are supported as well.
-            ///
-            /// While the <c>Buffer</c> class is available within the global scope, it is still
-            /// recommended to explicitly reference it via an import or require statement.
-            ///
-            /// <c></c><c>js
-            /// import { Buffer } from 'node:buffer';
-            ///
-            /// // Creates a zero-filled Buffer of length 10.
-            /// const buf1 = Buffer.alloc(10);
-            ///
-            /// // Creates a Buffer of length 10,
-            /// // filled with bytes which all have the value </c>1<c>.
-            /// const buf2 = Buffer.alloc(10, 1);
-            ///
-            /// // Creates an uninitialized buffer of length 10.
-            /// // This is faster than calling Buffer.alloc() but the returned
-            /// // Buffer instance might contain old data that needs to be
-            /// // overwritten using fill(), write(), or other functions that fill the Buffer's
-            /// // contents.
-            /// const buf3 = Buffer.allocUnsafe(10);
-            ///
-            /// // Creates a Buffer containing the bytes [1, 2, 3].
-            /// const buf4 = Buffer.from([1, 2, 3]);
-            ///
-            /// // Creates a Buffer containing the bytes [1, 1, 1, 1] – the entries
-            /// // are all truncated using </c>(value &#x26; 255)<c> to fit into the range 0–255.
-            /// const buf5 = Buffer.from([257, 257.5, -255, '1']);
-            ///
-            /// // Creates a Buffer containing the UTF-8-encoded bytes for the string 'tést':
-            /// // [0x74, 0xc3, 0xa9, 0x73, 0x74] (in hexadecimal notation)
-            /// // [116, 195, 169, 115, 116] (in decimal notation)
-            /// const buf6 = Buffer.from('tést');
-            ///
-            /// // Creates a Buffer containing the Latin-1 bytes [0x74, 0xe9, 0x73, 0x74].
-            /// const buf7 = Buffer.from('tést', 'latin1');
-            /// </c><c></c>
-            /// </summary>
-            [<ImportAll("buffer")>]
-            static member buffer: buffer_.Exports = nativeOnly
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Type =
+                    abstract member MAX_LENGTH: float with get, set
+                    abstract member MAX_STRING_LENGTH: float with get, set
 
-        module buffer_ =
-
-            [<AbstractClass>]
-            [<Erase>]
-            type Exports =
-                /// <summary>
-                /// This function returns <c>true</c> if <c>input</c> contains only valid UTF-8-encoded data,
-                /// including the case in which <c>input</c> is empty.
-                ///
-                /// Throws if the <c>input</c> is a detached array buffer.
-                /// </summary>
-                /// <param name="input">
-                /// The input to validate.
-                /// </param>
-                [<Emit("$0.isUtf8($1...)")>]
-                abstract member isUtf8: input: U2<obj, Node.NodeJS.TypedArray> -> bool
-
-                /// <summary>
-                /// This function returns <c>true</c> if <c>input</c> contains only valid ASCII-encoded data,
-                /// including the case in which <c>input</c> is empty.
-                ///
-                /// Throws if the <c>input</c> is a detached array buffer.
-                /// </summary>
-                /// <param name="input">
-                /// The input to validate.
-                /// </param>
-                [<Emit("$0.isAscii($1...)")>]
-                abstract member isAscii: input: U2<obj, Node.NodeJS.TypedArray> -> bool
-
-                [<Emit("$0.INSPECT_MAX_BYTES")>]
-                abstract member INSPECT_MAX_BYTES: float
-
-                [<Emit("$0.kMaxLength")>]
-                abstract member kMaxLength: float
-
-                [<Emit("$0.kStringMaxLength")>]
-                abstract member kStringMaxLength: float
-
-                [<Emit("$0.constants")>]
-                abstract member constants: Exports.constants.Type
-
-                /// <summary>
-                /// Re-encodes the given <c>Buffer</c> or <c>Uint8Array</c> instance from one character
-                /// encoding to another. Returns a new <c>Buffer</c> instance.
-                ///
-                /// Throws if the <c>fromEnc</c> or <c>toEnc</c> specify invalid character encodings or if
-                /// conversion from <c>fromEnc</c> to <c>toEnc</c> is not permitted.
-                ///
-                /// Encodings supported by <c>buffer.transcode()</c> are: <c>'ascii'</c>, <c>'utf8'</c>, <c>'utf16le'</c>, <c>'ucs2'</c>, <c>'latin1'</c>, and <c>'binary'</c>.
-                ///
-                /// The transcoding process will use substitution characters if a given byte
-                /// sequence cannot be adequately represented in the target encoding. For instance:
-                ///
-                /// <code lang="js">
-                /// import { Buffer, transcode } from 'node:buffer';
-                ///
-                /// const newBuf = transcode(Buffer.from('€'), 'utf8', 'ascii');
-                /// console.log(newBuf.toString('ascii'));
-                /// // Prints: '?'
-                /// </code>
-                ///
-                /// Because the Euro (<c>€</c>) sign is not representable in US-ASCII, it is replaced
-                /// with <c>?</c> in the transcoded <c>Buffer</c>.
-                /// </summary>
-                /// <param name="source">
-                /// A <c>Buffer</c> or <c>Uint8Array</c> instance.
-                /// </param>
-                /// <param name="fromEnc">
-                /// The current encoding.
-                /// </param>
-                /// <param name="toEnc">
-                /// To target encoding.
-                /// </param>
-                [<Emit("$0.transcode($1...)")>]
-                abstract member transcode:
-                    source: JS.Uint8Array *
-                    fromEnc: Node.buffer.buffer_.TranscodeEncoding *
-                    toEnc: Node.buffer.buffer_.TranscodeEncoding ->
-                        Node.NonSharedBuffer
-
-                /// <summary>
-                /// Resolves a <c>'blob:nodedata:...'</c> an associated <c>Blob</c> object registered using
-                /// a prior call to <c>URL.createObjectURL()</c>.
-                /// </summary>
-                /// <param name="id">
-                /// A <c>'blob:nodedata:...</c> URL string returned by a prior call to <c>URL.createObjectURL()</c>.
-                /// </param>
-                [<Emit("$0.resolveObjectURL($1...)")>]
-                abstract member resolveObjectURL: id: string -> Node.buffer.buffer_.Blob option
-
-                /// <summary>
-                /// Creates a new <c>Blob</c> object containing a concatenation of the given sources.
-                ///
-                /// {ArrayBuffer}, {TypedArray}, {DataView}, and {Buffer} sources are copied into
-                /// the 'Blob' and can therefore be safely modified after the 'Blob' is created.
-                ///
-                /// String sources are also copied into the <c>Blob</c>.
-                /// </summary>
-                [<Emit("new $0.Blob($1...)")>]
-                abstract member Blob:
-                    sources: ResizeArray<U3<obj, Node.crypto.BinaryLike, Node.buffer.buffer_.Blob>> *
-                    ?options: Node.buffer.buffer_.BlobOptions ->
-                        Blob
-
-                [<Emit("new $0.File($1...)")>]
-                abstract member File:
-                    sources: ResizeArray<U2<Node.crypto.BinaryLike, Node.buffer.buffer_.Blob>> *
-                    fileName: string *
-                    ?options: Node.buffer.buffer_.FileOptions ->
-                        File
-
-            [<RequireQualifiedAccess>]
-            [<StringEnum(CaseRules.None)>]
-            type TranscodeEncoding =
-                | ascii
-                | utf8
-                | ``utf-8``
-                | utf16le
-                | ``utf-16le``
-                | ucs2
-                | ``ucs-2``
-                | latin1
-                | binary
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type BlobOptions =
-                /// <summary>
-                /// One of either <c>'transparent'</c> or <c>'native'</c>. When set to <c>'native'</c>, line endings in string source parts
-                /// will be converted to the platform native line-ending as specified by <c>import { EOL } from 'node:os'</c>.
-                /// </summary>
-                abstract member endings: BlobOptions.endings option with get, set
-                /// <summary>
-                /// The Blob content-type. The intent is for <c>type</c> to convey
-                /// the MIME media type of the data, however no validation of the type format
-                /// is performed.
-                /// </summary>
-                abstract member ``type``: string option with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (?endings: BlobOptions.endings, ?``type``: string)
-                    : BlobOptions
-                    =
-                    nativeOnly
-
-            /// <summary>
-            /// A <c>Blob</c> encapsulates immutable, raw data that can be safely shared across
-            /// multiple worker threads.
-            /// </summary>
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Blob =
-                /// <summary>
-                /// The total size of the <c>Blob</c> in bytes.
-                /// </summary>
-                abstract member size: float with get
-                /// <summary>
-                /// The content-type of the <c>Blob</c>.
-                /// </summary>
-                abstract member ``type``: string with get
-                /// <summary>
-                /// Returns a promise that fulfills with an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) containing a copy of
-                /// the <c>Blob</c> data.
-                /// </summary>
-                abstract member arrayBuffer: unit -> JS.Promise<obj>
-                /// <summary>
-                /// The <c>blob.bytes()</c> method returns the byte of the <c>Blob</c> object as a <c>Promise<Uint8Array></c>.
-                ///
-                /// <code lang="js">
-                /// const blob = new Blob(['hello']);
-                /// blob.bytes().then((bytes) => {
-                ///   console.log(bytes); // Outputs: Uint8Array(5) [ 104, 101, 108, 108, 111 ]
-                /// });
-                /// </code>
-                /// </summary>
-                abstract member bytes: unit -> JS.Promise<JS.Uint8Array>
-
-                /// <summary>
-                /// Creates and returns a new <c>Blob</c> containing a subset of this <c>Blob</c> objects
-                /// data. The original <c>Blob</c> is not altered.
-                /// </summary>
-                /// <param name="start">
-                /// The starting index.
-                /// </param>
-                /// <param name="end">
-                /// The ending index.
-                /// </param>
-                /// <param name="type">
-                /// The content-type for the new <c>Blob</c>
-                /// </param>
-                abstract member slice:
-                    ?start: float * ?``end``: float * ?``type``: string -> Node.buffer.buffer_.Blob
-
-                /// <summary>
-                /// Returns a promise that fulfills with the contents of the <c>Blob</c> decoded as a
-                /// UTF-8 string.
-                /// </summary>
-                abstract member text: unit -> JS.Promise<string>
-                /// <summary>
-                /// Returns a new <c>ReadableStream</c> that allows the content of the <c>Blob</c> to be read.
-                /// </summary>
-                abstract member stream: unit -> Node.stream.web.stream_SLASH_web_.ReadableStream
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type FileOptions =
-                /// <summary>
-                /// One of either <c>'transparent'</c> or <c>'native'</c>. When set to <c>'native'</c>, line endings in string source parts will be
-                /// converted to the platform native line-ending as specified by <c>import { EOL } from 'node:os'</c>.
-                /// </summary>
-                abstract member endings: FileOptions.endings option with get, set
-                /// <summary>
-                /// The File content-type.
-                /// </summary>
-                abstract member ``type``: string option with get, set
-                /// <summary>
-                /// The last modified date of the file. <c>Default</c>: Date.now().
-                /// </summary>
-                abstract member lastModified: float option with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (?endings: FileOptions.endings, ?``type``: string, ?lastModified: float)
-                    : FileOptions
-                    =
-                    nativeOnly
-
-            /// <summary>
-            /// A [<c>File</c>](https://developer.mozilla.org/en-US/docs/Web/API/File) provides information about files.
-            /// </summary>
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type File =
-                inherit Node.buffer.buffer_.Blob
-                /// <summary>
-                /// The name of the <c>File</c>.
-                /// </summary>
-                abstract member name: string with get
-                /// <summary>
-                /// The last modified date of the <c>File</c>.
-                /// </summary>
-                abstract member lastModified: float with get
-
-            type WithImplicitCoercion<'T> = U3<'T, WithImplicitCoercion.U3.Case2<'T>, obj>
-
-            module BlobOptions =
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type endings =
-                    | transparent
-                    | native
-
-            module FileOptions =
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type endings =
-                    | native
-                    | transparent
-
-            module WithImplicitCoercion =
-
-                module U3 =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type Case2<'T> =
-                        abstract member valueOf: unit -> 'T
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(valueOf: (unit -> 'T)) : Case2<'T> = nativeOnly
-
-            module Exports =
-
-                module constants =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type Type =
-                        abstract member MAX_LENGTH: float with get, set
-                        abstract member MAX_STRING_LENGTH: float with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(MAX_LENGTH: float, MAX_STRING_LENGTH: float) : Type =
-                            nativeOnly
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(MAX_LENGTH: float, MAX_STRING_LENGTH: float) : Type =
+                        nativeOnly
 
     module child_process =
 
@@ -102192,7 +102149,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </summary>
                 abstract member readableWebStream:
                     ?options: Node.fs.promises.ReadableWebStreamOptions ->
-                        Node.stream.web.stream_SLASH_web_.ReadableStream
+                        Node.stream.web.ReadableStream
 
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
@@ -147424,13 +147381,6 @@ recursive mode, operations are retried on failure.""")>]
             [<ImportAll("node:inspector")>]
             static member NetworkResources: NetworkResources_.Exports = nativeOnly
 
-            /// <summary>
-            /// The <c>node:inspector/promises</c> module provides an API for interacting with the V8
-            /// inspector.
-            /// </summary>
-            [<ImportAll("inspector/promises")>]
-            static member inspector_SLASH_promises: inspector_SLASH_promises_.Exports = nativeOnly
-
         /// <summary>
         /// The <c>inspector.Session</c> is used for dispatching messages to the V8 inspector
         /// back-end and receiving message responses and notifications.
@@ -147493,8 +147443,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </summary>
                 [<Emit("$0.requestWillBeSent($1...)")>]
                 abstract member requestWillBeSent:
-                    ``params``: Node.inspector_generated.Network_.RequestWillBeSentEventDataType ->
-                        unit
+                    ``params``: Node.inspector.Network_.RequestWillBeSentEventDataType -> unit
 
                 /// <summary>
                 /// This feature is only available with the <c>--experimental-network-inspection</c> flag enabled.
@@ -147506,7 +147455,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </summary>
                 [<Emit("$0.dataReceived($1...)")>]
                 abstract member dataReceived:
-                    ``params``: Node.inspector_generated.Network_.DataReceivedEventDataType -> unit
+                    ``params``: Node.inspector.Network_.DataReceivedEventDataType -> unit
 
                 /// <summary>
                 /// This feature is only available with the <c>--experimental-network-inspection</c> flag enabled.
@@ -147524,8 +147473,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </summary>
                 [<Emit("$0.responseReceived($1...)")>]
                 abstract member responseReceived:
-                    ``params``: Node.inspector_generated.Network_.ResponseReceivedEventDataType ->
-                        unit
+                    ``params``: Node.inspector.Network_.ResponseReceivedEventDataType -> unit
 
                 /// <summary>
                 /// This feature is only available with the <c>--experimental-network-inspection</c> flag enabled.
@@ -147535,8 +147483,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </summary>
                 [<Emit("$0.loadingFinished($1...)")>]
                 abstract member loadingFinished:
-                    ``params``: Node.inspector_generated.Network_.LoadingFinishedEventDataType ->
-                        unit
+                    ``params``: Node.inspector.Network_.LoadingFinishedEventDataType -> unit
 
                 /// <summary>
                 /// This feature is only available with the <c>--experimental-network-inspection</c> flag enabled.
@@ -147546,7 +147493,363 @@ recursive mode, operations are retried on failure.""")>]
                 /// </summary>
                 [<Emit("$0.loadingFailed($1...)")>]
                 abstract member loadingFailed:
-                    ``params``: Node.inspector_generated.Network_.LoadingFailedEventDataType -> unit
+                    ``params``: Node.inspector.Network_.LoadingFailedEventDataType -> unit
+
+            /// <summary>
+            /// Resource type as it was perceived by the rendering engine.
+            /// </summary>
+            type ResourceType = string
+
+            /// <summary>
+            /// Unique request identifier.
+            /// </summary>
+            type RequestId = string
+
+            /// <summary>
+            /// UTC time in seconds, counted from January 1, 1970.
+            /// </summary>
+            type TimeSinceEpoch = float
+
+            /// <summary>
+            /// Monotonically increasing time in seconds since an arbitrary point in the past.
+            /// </summary>
+            type MonotonicTime = float
+
+            /// <summary>
+            /// Information about the request initiator.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Initiator =
+                /// <summary>
+                /// Type of this initiator.
+                /// </summary>
+                abstract member ``type``: string with get, set
+                /// <summary>
+                /// Initiator JavaScript stack trace, set for Script only.
+                /// Requires the Debugger domain to be enabled.
+                /// </summary>
+                abstract member stack: Node.inspector.Runtime_.StackTrace option with get, set
+                /// <summary>
+                /// Initiator URL, set for Parser type or for Script type (when script is importing module) or for SignedExchange type.
+                /// </summary>
+                abstract member url: string option with get, set
+                /// <summary>
+                /// Initiator line number, set for Parser type or for Script type (when script is importing
+                /// module) (0-based).
+                /// </summary>
+                abstract member lineNumber: float option with get, set
+                /// <summary>
+                /// Initiator column number, set for Parser type or for Script type (when script is importing
+                /// module) (0-based).
+                /// </summary>
+                abstract member columnNumber: float option with get, set
+                /// <summary>
+                /// Set if another request triggered this request (e.g. preflight).
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ``type``: string,
+                        ?stack: Node.inspector.Runtime_.StackTrace,
+                        ?url: string,
+                        ?lineNumber: float,
+                        ?columnNumber: float,
+                        ?requestId: Node.inspector.Network_.RequestId
+                    )
+                    : Initiator
+                    =
+                    nativeOnly
+
+            /// <summary>
+            /// HTTP request data.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Request =
+                abstract member url: string with get, set
+                abstract member ``method``: string with get, set
+                abstract member headers: Node.inspector.Network_.Headers with get, set
+                abstract member hasPostData: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        url: string,
+                        ``method``: string,
+                        headers: Node.inspector.Network_.Headers,
+                        hasPostData: bool
+                    )
+                    : Request
+                    =
+                    nativeOnly
+
+            /// <summary>
+            /// HTTP response data.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Response =
+                abstract member url: string with get, set
+                abstract member status: float with get, set
+                abstract member statusText: string with get, set
+                abstract member headers: Node.inspector.Network_.Headers with get, set
+                abstract member mimeType: string with get, set
+                abstract member charset: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        url: string,
+                        status: float,
+                        statusText: string,
+                        headers: Node.inspector.Network_.Headers,
+                        mimeType: string,
+                        charset: string
+                    )
+                    : Response
+                    =
+                    nativeOnly
+
+            /// <summary>
+            /// Request / response headers as keys / values of JSON object.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Headers = interface end
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadNetworkResourcePageResult =
+                abstract member success: bool with get, set
+                abstract member stream: Node.inspector.IO_.StreamHandle option with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type GetRequestPostDataParameterType =
+                /// <summary>
+                /// Identifier of the network request to get content for.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type GetResponseBodyParameterType =
+                /// <summary>
+                /// Identifier of the network request to get content for.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type StreamResourceContentParameterType =
+                /// <summary>
+                /// Identifier of the request to stream.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadNetworkResourceParameterType =
+                /// <summary>
+                /// URL of the resource to get content for.
+                /// </summary>
+                abstract member url: string with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type GetRequestPostDataReturnType =
+                /// <summary>
+                /// Request body string, omitting files from multipart requests
+                /// </summary>
+                abstract member postData: string with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type GetResponseBodyReturnType =
+                /// <summary>
+                /// Response body.
+                /// </summary>
+                abstract member body: string with get, set
+                /// <summary>
+                /// True, if content was sent as base64.
+                /// </summary>
+                abstract member base64Encoded: bool with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type StreamResourceContentReturnType =
+                /// <summary>
+                /// Data that has been buffered until streaming is enabled.
+                /// </summary>
+                abstract member bufferedData: string with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadNetworkResourceReturnType =
+                abstract member resource: Node.inspector.Network_.LoadNetworkResourcePageResult with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type RequestWillBeSentEventDataType =
+                /// <summary>
+                /// Request identifier.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+                /// <summary>
+                /// Request data.
+                /// </summary>
+                abstract member request: Node.inspector.Network_.Request with get, set
+                /// <summary>
+                /// Request initiator.
+                /// </summary>
+                abstract member initiator: Node.inspector.Network_.Initiator with get, set
+                /// <summary>
+                /// Timestamp.
+                /// </summary>
+                abstract member timestamp: Node.inspector.Network_.MonotonicTime with get, set
+                /// <summary>
+                /// Timestamp.
+                /// </summary>
+                abstract member wallTime: Node.inspector.Network_.TimeSinceEpoch with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        requestId: Node.inspector.Network_.RequestId,
+                        request: Node.inspector.Network_.Request,
+                        initiator: Node.inspector.Network_.Initiator,
+                        timestamp: Node.inspector.Network_.MonotonicTime,
+                        wallTime: Node.inspector.Network_.TimeSinceEpoch
+                    )
+                    : RequestWillBeSentEventDataType
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ResponseReceivedEventDataType =
+                /// <summary>
+                /// Request identifier.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+                /// <summary>
+                /// Timestamp.
+                /// </summary>
+                abstract member timestamp: Node.inspector.Network_.MonotonicTime with get, set
+                /// <summary>
+                /// Resource type.
+                /// </summary>
+                abstract member ``type``: Node.inspector.Network_.ResourceType with get, set
+                /// <summary>
+                /// Response data.
+                /// </summary>
+                abstract member response: Node.inspector.Network_.Response with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        requestId: Node.inspector.Network_.RequestId,
+                        timestamp: Node.inspector.Network_.MonotonicTime,
+                        ``type``: Node.inspector.Network_.ResourceType,
+                        response: Node.inspector.Network_.Response
+                    )
+                    : ResponseReceivedEventDataType
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadingFailedEventDataType =
+                /// <summary>
+                /// Request identifier.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+                /// <summary>
+                /// Timestamp.
+                /// </summary>
+                abstract member timestamp: Node.inspector.Network_.MonotonicTime with get, set
+                /// <summary>
+                /// Resource type.
+                /// </summary>
+                abstract member ``type``: Node.inspector.Network_.ResourceType with get, set
+                /// <summary>
+                /// Error message.
+                /// </summary>
+                abstract member errorText: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        requestId: Node.inspector.Network_.RequestId,
+                        timestamp: Node.inspector.Network_.MonotonicTime,
+                        ``type``: Node.inspector.Network_.ResourceType,
+                        errorText: string
+                    )
+                    : LoadingFailedEventDataType
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadingFinishedEventDataType =
+                /// <summary>
+                /// Request identifier.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+                /// <summary>
+                /// Timestamp.
+                /// </summary>
+                abstract member timestamp: Node.inspector.Network_.MonotonicTime with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        requestId: Node.inspector.Network_.RequestId,
+                        timestamp: Node.inspector.Network_.MonotonicTime
+                    )
+                    : LoadingFinishedEventDataType
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type DataReceivedEventDataType =
+                /// <summary>
+                /// Request identifier.
+                /// </summary>
+                abstract member requestId: Node.inspector.Network_.RequestId with get, set
+                /// <summary>
+                /// Timestamp.
+                /// </summary>
+                abstract member timestamp: Node.inspector.Network_.MonotonicTime with get, set
+                /// <summary>
+                /// Data chunk length.
+                /// </summary>
+                abstract member dataLength: float with get, set
+                /// <summary>
+                /// Actual bytes received (might be less than dataLength for compressed encodings).
+                /// </summary>
+                abstract member encodedDataLength: float with get, set
+                /// <summary>
+                /// Data that was received.
+                /// </summary>
+                abstract member data: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        requestId: Node.inspector.Network_.RequestId,
+                        timestamp: Node.inspector.Network_.MonotonicTime,
+                        dataLength: float,
+                        encodedDataLength: float,
+                        ?data: string
+                    )
+                    : DataReceivedEventDataType
+                    =
+                    nativeOnly
 
         module NetworkResources_ =
 
@@ -147585,7 +147888,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Emit("$0.put($1...)")>]
                 abstract member put: url: string * data: string -> unit
 
-        module inspector_SLASH_promises_ =
+        module promises =
 
             [<AbstractClass>]
             [<Erase>]
@@ -147594,8 +147897,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// Create a new instance of the inspector.Session class.
                 /// The inspector session needs to be connected through <c>session.connect()</c> before the messages can be dispatched to the inspector backend.
                 /// </summary>
-                [<Emit("new $0.Session($1...)")>]
-                abstract member Session: unit -> Session
+                [<Import("Session", "node:inspector/promises"); EmitConstructor>]
+                static member Session() : Session = nativeOnly
 
             /// <summary>
             /// The <c>inspector.Session</c> is used for dispatching messages to the V8 inspector
@@ -147620,8 +147923,6 @@ recursive mode, operations are retried on failure.""")>]
                 /// Reconnected session will lose all inspector state, such as enabled agents or configured breakpoints.
                 /// </summary>
                 abstract member disconnect: unit -> unit
-
-    module inspector_generated =
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -147652,7 +147953,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// List of supported domains.
                 /// </summary>
-                abstract member domains: ResizeArray<Node.inspector_generated.Schema_.Domain> with get, set
+                abstract member domains: ResizeArray<Node.inspector.Schema_.Domain> with get, set
 
         module Runtime_ =
 
@@ -147698,7 +147999,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// Primitive value which can not be JSON-stringified does not have <code>value</code>, but gets this property.
                 /// </summary>
                 abstract member unserializableValue:
-                    Node.inspector_generated.Runtime_.UnserializableValue option with get, set
+                    Node.inspector.Runtime_.UnserializableValue option with get, set
 
                 /// <summary>
                 /// String representation of the object.
@@ -147707,27 +148008,21 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Unique object identifier (for non-primitive values).
                 /// </summary>
-                abstract member objectId: Node.inspector_generated.Runtime_.RemoteObjectId option with get, set
+                abstract member objectId: Node.inspector.Runtime_.RemoteObjectId option with get, set
                 /// <summary>
                 /// Preview containing abbreviated property values. Specified for <code>object</code> type values only.
                 /// </summary>
-                abstract member preview: Node.inspector_generated.Runtime_.ObjectPreview option with get, set
-
-                abstract member customPreview:
-                    Node.inspector_generated.Runtime_.CustomPreview option with get, set
+                abstract member preview: Node.inspector.Runtime_.ObjectPreview option with get, set
+                abstract member customPreview: Node.inspector.Runtime_.CustomPreview option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
             type CustomPreview =
                 abstract member header: string with get, set
                 abstract member hasBody: bool with get, set
-                abstract member formatterObjectId: Node.inspector_generated.Runtime_.RemoteObjectId with get, set
-
-                abstract member bindRemoteObjectFunctionId:
-                    Node.inspector_generated.Runtime_.RemoteObjectId with get, set
-
-                abstract member configObjectId:
-                    Node.inspector_generated.Runtime_.RemoteObjectId option with get, set
+                abstract member formatterObjectId: Node.inspector.Runtime_.RemoteObjectId with get, set
+                abstract member bindRemoteObjectFunctionId: Node.inspector.Runtime_.RemoteObjectId with get, set
+                abstract member configObjectId: Node.inspector.Runtime_.RemoteObjectId option with get, set
 
             /// <summary>
             /// Object containing abbreviated remote object value.
@@ -147751,18 +148046,14 @@ recursive mode, operations are retried on failure.""")>]
                 /// True iff some of the properties or entries of the original object did not fit.
                 /// </summary>
                 abstract member overflow: bool with get, set
-
                 /// <summary>
                 /// List of the properties.
                 /// </summary>
-                abstract member properties:
-                    ResizeArray<Node.inspector_generated.Runtime_.PropertyPreview> with get, set
-
+                abstract member properties: ResizeArray<Node.inspector.Runtime_.PropertyPreview> with get, set
                 /// <summary>
                 /// List of the entries. Specified for <code>map</code> and <code>set</code> subtype values only.
                 /// </summary>
-                abstract member entries:
-                    ResizeArray<Node.inspector_generated.Runtime_.EntryPreview> option with get, set
+                abstract member entries: ResizeArray<Node.inspector.Runtime_.EntryPreview> option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -147782,7 +148073,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Nested value preview.
                 /// </summary>
-                abstract member valuePreview: Node.inspector_generated.Runtime_.ObjectPreview option with get, set
+                abstract member valuePreview: Node.inspector.Runtime_.ObjectPreview option with get, set
                 /// <summary>
                 /// Object subtype hint. Specified for <code>object</code> type values only.
                 /// </summary>
@@ -147794,11 +148085,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Preview of the key. Specified for map-like collection entries.
                 /// </summary>
-                abstract member key: Node.inspector_generated.Runtime_.ObjectPreview option with get, set
+                abstract member key: Node.inspector.Runtime_.ObjectPreview option with get, set
                 /// <summary>
                 /// Preview of the value.
                 /// </summary>
-                abstract member value: Node.inspector_generated.Runtime_.ObjectPreview with get, set
+                abstract member value: Node.inspector.Runtime_.ObjectPreview with get, set
 
             /// <summary>
             /// Object property descriptor.
@@ -147813,7 +148104,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// The value associated with the property.
                 /// </summary>
-                abstract member value: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member value: Node.inspector.Runtime_.RemoteObject option with get, set
                 /// <summary>
                 /// True if the value associated with the property may be changed (data descriptors only).
                 /// </summary>
@@ -147821,11 +148112,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// A function which serves as a getter for the property, or <code>undefined</code> if there is no getter (accessor descriptors only).
                 /// </summary>
-                abstract member get: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member get: Node.inspector.Runtime_.RemoteObject option with get, set
                 /// <summary>
                 /// A function which serves as a setter for the property, or <code>undefined</code> if there is no setter (accessor descriptors only).
                 /// </summary>
-                abstract member set: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member set: Node.inspector.Runtime_.RemoteObject option with get, set
                 /// <summary>
                 /// True if the type of this property descriptor may be changed and if the property may be deleted from the corresponding object.
                 /// </summary>
@@ -147845,7 +148136,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Property symbol object, if the property is of the <code>symbol</code> type.
                 /// </summary>
-                abstract member symbol: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member symbol: Node.inspector.Runtime_.RemoteObject option with get, set
 
             /// <summary>
             /// Object internal property descriptor. This property isn't normally visible in JavaScript code.
@@ -147860,7 +148151,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// The value associated with the property.
                 /// </summary>
-                abstract member value: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member value: Node.inspector.Runtime_.RemoteObject option with get, set
 
             /// <summary>
             /// Represents function call argument. Either remote object id <code>objectId</code>, primitive <code>value</code>, unserializable primitive value or neither of (for undefined) them should be specified.
@@ -147877,12 +148168,12 @@ recursive mode, operations are retried on failure.""")>]
                 /// Primitive value which can not be JSON-stringified.
                 /// </summary>
                 abstract member unserializableValue:
-                    Node.inspector_generated.Runtime_.UnserializableValue option with get, set
+                    Node.inspector.Runtime_.UnserializableValue option with get, set
 
                 /// <summary>
                 /// Remote object handle.
                 /// </summary>
-                abstract member objectId: Node.inspector_generated.Runtime_.RemoteObjectId option with get, set
+                abstract member objectId: Node.inspector.Runtime_.RemoteObjectId option with get, set
 
             /// <summary>
             /// Id of an execution context.
@@ -147898,7 +148189,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed.
                 /// </summary>
-                abstract member id: Node.inspector_generated.Runtime_.ExecutionContextId with get, set
+                abstract member id: Node.inspector.Runtime_.ExecutionContextId with get, set
                 /// <summary>
                 /// Execution context origin.
                 /// </summary>
@@ -147937,7 +148228,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Script ID of the exception location.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId option with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId option with get, set
                 /// <summary>
                 /// URL of the exception location, to be used when the script was not reported.
                 /// </summary>
@@ -147945,17 +148236,17 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// JavaScript stack trace if available.
                 /// </summary>
-                abstract member stackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
+                abstract member stackTrace: Node.inspector.Runtime_.StackTrace option with get, set
                 /// <summary>
                 /// Exception object if available.
                 /// </summary>
-                abstract member ``exception``: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member ``exception``: Node.inspector.Runtime_.RemoteObject option with get, set
 
                 /// <summary>
                 /// Identifier of the context where exception happened.
                 /// </summary>
                 abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId option with get, set
+                    Node.inspector.Runtime_.ExecutionContextId option with get, set
 
             /// <summary>
             /// Number of milliseconds since epoch.
@@ -147975,7 +148266,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// JavaScript script id.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// JavaScript script name or url.
                 /// </summary>
@@ -147993,7 +148284,7 @@ recursive mode, operations are retried on failure.""")>]
                 static member Create
                     (
                         functionName: string,
-                        scriptId: Node.inspector_generated.Runtime_.ScriptId,
+                        scriptId: Node.inspector.Runtime_.ScriptId,
                         url: string,
                         lineNumber: float,
                         columnNumber: float
@@ -148015,23 +148306,23 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// JavaScript function name.
                 /// </summary>
-                abstract member callFrames: ResizeArray<Node.inspector_generated.Runtime_.CallFrame> with get, set
+                abstract member callFrames: ResizeArray<Node.inspector.Runtime_.CallFrame> with get, set
                 /// <summary>
                 /// Asynchronous JavaScript stack trace that preceded this stack, if available.
                 /// </summary>
-                abstract member parent: Node.inspector_generated.Runtime_.StackTrace option with get, set
+                abstract member parent: Node.inspector.Runtime_.StackTrace option with get, set
                 /// <summary>
                 /// Asynchronous JavaScript stack trace that preceded this stack, if available.
                 /// </summary>
-                abstract member parentId: Node.inspector_generated.Runtime_.StackTraceId option with get, set
+                abstract member parentId: Node.inspector.Runtime_.StackTraceId option with get, set
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        callFrames: ResizeArray<Node.inspector_generated.Runtime_.CallFrame>,
+                        callFrames: ResizeArray<Node.inspector.Runtime_.CallFrame>,
                         ?description: string,
-                        ?parent: Node.inspector_generated.Runtime_.StackTrace,
-                        ?parentId: Node.inspector_generated.Runtime_.StackTraceId
+                        ?parent: Node.inspector.Runtime_.StackTrace,
+                        ?parentId: Node.inspector.Runtime_.StackTraceId
                     )
                     : StackTrace
                     =
@@ -148049,13 +148340,11 @@ recursive mode, operations are retried on failure.""")>]
             [<Interface>]
             type StackTraceId =
                 abstract member id: string with get, set
-
-                abstract member debuggerId:
-                    Node.inspector_generated.Runtime_.UniqueDebuggerId option with get, set
+                abstract member debuggerId: Node.inspector.Runtime_.UniqueDebuggerId option with get, set
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (id: string, ?debuggerId: Node.inspector_generated.Runtime_.UniqueDebuggerId)
+                    (id: string, ?debuggerId: Node.inspector.Runtime_.UniqueDebuggerId)
                     : StackTraceId
                     =
                     nativeOnly
@@ -148079,13 +148368,10 @@ recursive mode, operations are retried on failure.""")>]
                 /// In silent mode exceptions thrown during evaluation are not reported and do not pause execution. Overrides <code>setPauseOnException</code> state.
                 /// </summary>
                 abstract member silent: bool option with get, set
-
                 /// <summary>
                 /// Specifies in which execution context to perform evaluation. If the parameter is omitted the evaluation will be performed in the context of the inspected page.
                 /// </summary>
-                abstract member contextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId option with get, set
-
+                abstract member contextId: Node.inspector.Runtime_.ExecutionContextId option with get, set
                 /// <summary>
                 /// Whether the result is expected to be a JSON object that should be sent by value.
                 /// </summary>
@@ -148109,7 +148395,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the promise.
                 /// </summary>
-                abstract member promiseObjectId: Node.inspector_generated.Runtime_.RemoteObjectId with get, set
+                abstract member promiseObjectId: Node.inspector.Runtime_.RemoteObjectId with get, set
                 /// <summary>
                 /// Whether the result is expected to be a JSON object that should be sent by value.
                 /// </summary>
@@ -148129,14 +148415,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the object to call function on. Either objectId or executionContextId should be specified.
                 /// </summary>
-                abstract member objectId: Node.inspector_generated.Runtime_.RemoteObjectId option with get, set
-
+                abstract member objectId: Node.inspector.Runtime_.RemoteObjectId option with get, set
                 /// <summary>
                 /// Call arguments. All call arguments must belong to the same JavaScript world as the target object.
                 /// </summary>
-                abstract member arguments:
-                    ResizeArray<Node.inspector_generated.Runtime_.CallArgument> option with get, set
-
+                abstract member arguments: ResizeArray<Node.inspector.Runtime_.CallArgument> option with get, set
                 /// <summary>
                 /// In silent mode exceptions thrown during evaluation are not reported and do not pause execution. Overrides <code>setPauseOnException</code> state.
                 /// </summary>
@@ -148162,7 +148445,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// Specifies execution context which global object will be used to call function on. Either executionContextId or objectId should be specified.
                 /// </summary>
                 abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId option with get, set
+                    Node.inspector.Runtime_.ExecutionContextId option with get, set
 
                 /// <summary>
                 /// Symbolic group name that can be used to release multiple objects. If objectGroup is not specified and objectId is, objectGroup will be inherited from object.
@@ -148175,7 +148458,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the object to return properties for.
                 /// </summary>
-                abstract member objectId: Node.inspector_generated.Runtime_.RemoteObjectId with get, set
+                abstract member objectId: Node.inspector.Runtime_.RemoteObjectId with get, set
                 /// <summary>
                 /// If true, returns properties belonging only to the element itself, not to its prototype chain.
                 /// </summary>
@@ -148195,7 +148478,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the object to release.
                 /// </summary>
-                abstract member objectId: Node.inspector_generated.Runtime_.RemoteObjectId with get, set
+                abstract member objectId: Node.inspector.Runtime_.RemoteObjectId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148230,7 +148513,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// Specifies in which execution context to perform script run. If the parameter is omitted the evaluation will be performed in the context of the inspected page.
                 /// </summary>
                 abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId option with get, set
+                    Node.inspector.Runtime_.ExecutionContextId option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148238,13 +148521,13 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the script to run.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
 
                 /// <summary>
                 /// Specifies in which execution context to perform script run. If the parameter is omitted the evaluation will be performed in the context of the inspected page.
                 /// </summary>
                 abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId option with get, set
+                    Node.inspector.Runtime_.ExecutionContextId option with get, set
 
                 /// <summary>
                 /// Symbolic group name that can be used to release multiple objects.
@@ -148277,7 +148560,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the prototype to return objects for.
                 /// </summary>
-                abstract member prototypeObjectId: Node.inspector_generated.Runtime_.RemoteObjectId with get, set
+                abstract member prototypeObjectId: Node.inspector.Runtime_.RemoteObjectId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148286,7 +148569,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// Specifies in which execution context to lookup global scope variables.
                 /// </summary>
                 abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId option with get, set
+                    Node.inspector.Runtime_.ExecutionContextId option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148294,13 +148577,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Evaluation result.
                 /// </summary>
-                abstract member result: Node.inspector_generated.Runtime_.RemoteObject with get, set
-
+                abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
                 /// <summary>
                 /// Exception details.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148308,13 +148589,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Promise result. Will contain rejected value if promise was rejected.
                 /// </summary>
-                abstract member result: Node.inspector_generated.Runtime_.RemoteObject with get, set
-
+                abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
                 /// <summary>
                 /// Exception details if stack strace is available.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148322,13 +148601,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Call result.
                 /// </summary>
-                abstract member result: Node.inspector_generated.Runtime_.RemoteObject with get, set
-
+                abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
                 /// <summary>
                 /// Exception details.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148336,20 +148613,18 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Object properties.
                 /// </summary>
-                abstract member result:
-                    ResizeArray<Node.inspector_generated.Runtime_.PropertyDescriptor> with get, set
+                abstract member result: ResizeArray<Node.inspector.Runtime_.PropertyDescriptor> with get, set
 
                 /// <summary>
                 /// Internal object properties (only of the element itself).
                 /// </summary>
                 abstract member internalProperties:
-                    ResizeArray<Node.inspector_generated.Runtime_.InternalPropertyDescriptor> option with get, set
+                    ResizeArray<Node.inspector.Runtime_.InternalPropertyDescriptor> option with get, set
 
                 /// <summary>
                 /// Exception details.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148357,13 +148632,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the script.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId option with get, set
-
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId option with get, set
                 /// <summary>
                 /// Exception details.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148371,13 +148644,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Run result.
                 /// </summary>
-                abstract member result: Node.inspector_generated.Runtime_.RemoteObject with get, set
-
+                abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
                 /// <summary>
                 /// Exception details.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148385,7 +148656,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Array with objects.
                 /// </summary>
-                abstract member objects: Node.inspector_generated.Runtime_.RemoteObject with get, set
+                abstract member objects: Node.inspector.Runtime_.RemoteObject with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148398,8 +148669,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// A newly created execution context.
                 /// </summary>
-                abstract member context:
-                    Node.inspector_generated.Runtime_.ExecutionContextDescription with get, set
+                abstract member context: Node.inspector.Runtime_.ExecutionContextDescription with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148407,8 +148677,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the destroyed context
                 /// </summary>
-                abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId with get, set
+                abstract member executionContextId: Node.inspector.Runtime_.ExecutionContextId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148416,8 +148685,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Timestamp of the exception.
                 /// </summary>
-                abstract member timestamp: Node.inspector_generated.Runtime_.Timestamp with get, set
-                abstract member exceptionDetails: Node.inspector_generated.Runtime_.ExceptionDetails with get, set
+                abstract member timestamp: Node.inspector.Runtime_.Timestamp with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148441,22 +148710,19 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Call arguments.
                 /// </summary>
-                abstract member args: ResizeArray<Node.inspector_generated.Runtime_.RemoteObject> with get, set
-
+                abstract member args: ResizeArray<Node.inspector.Runtime_.RemoteObject> with get, set
                 /// <summary>
                 /// Identifier of the context where the call was made.
                 /// </summary>
-                abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId with get, set
-
+                abstract member executionContextId: Node.inspector.Runtime_.ExecutionContextId with get, set
                 /// <summary>
                 /// Call timestamp.
                 /// </summary>
-                abstract member timestamp: Node.inspector_generated.Runtime_.Timestamp with get, set
+                abstract member timestamp: Node.inspector.Runtime_.Timestamp with get, set
                 /// <summary>
                 /// Stack trace captured when the call was made.
                 /// </summary>
-                abstract member stackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
+                abstract member stackTrace: Node.inspector.Runtime_.StackTrace option with get, set
                 /// <summary>
                 /// Console context descriptor for calls on non-default console context (not console.*): 'anonymous#unique-logger-id' for call on unnamed context, 'name#unique-logger-id' for call on named context.
                 /// </summary>
@@ -148465,7 +148731,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type InspectRequestedEventDataType =
-                abstract member ``object``: Node.inspector_generated.Runtime_.RemoteObject with get, set
+                abstract member ``object``: Node.inspector.Runtime_.RemoteObject with get, set
                 abstract member hints: obj with get, set
 
         module Debugger_ =
@@ -148489,7 +148755,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Script identifier as reported in the <code>Debugger.scriptParsed</code>.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// Line number in the script (0-based).
                 /// </summary>
@@ -148517,7 +148783,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Call frame identifier. This identifier is only valid while the virtual machine is paused.
                 /// </summary>
-                abstract member callFrameId: Node.inspector_generated.Debugger_.CallFrameId with get, set
+                abstract member callFrameId: Node.inspector.Debugger_.CallFrameId with get, set
                 /// <summary>
                 /// Name of the JavaScript function called on this call frame.
                 /// </summary>
@@ -148525,11 +148791,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Location in the source code.
                 /// </summary>
-                abstract member functionLocation: Node.inspector_generated.Debugger_.Location option with get, set
+                abstract member functionLocation: Node.inspector.Debugger_.Location option with get, set
                 /// <summary>
                 /// Location in the source code.
                 /// </summary>
-                abstract member location: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member location: Node.inspector.Debugger_.Location with get, set
                 /// <summary>
                 /// JavaScript script name or url.
                 /// </summary>
@@ -148537,15 +148803,15 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Scope chain for this call frame.
                 /// </summary>
-                abstract member scopeChain: ResizeArray<Node.inspector_generated.Debugger_.Scope> with get, set
+                abstract member scopeChain: ResizeArray<Node.inspector.Debugger_.Scope> with get, set
                 /// <summary>
                 /// <code>this</code> object for this call frame.
                 /// </summary>
-                abstract member this: Node.inspector_generated.Runtime_.RemoteObject with get, set
+                abstract member this: Node.inspector.Runtime_.RemoteObject with get, set
                 /// <summary>
                 /// The value being returned, if the function is at return point.
                 /// </summary>
-                abstract member returnValue: Node.inspector_generated.Runtime_.RemoteObject option with get, set
+                abstract member returnValue: Node.inspector.Runtime_.RemoteObject option with get, set
 
             /// <summary>
             /// Scope description.
@@ -148560,16 +148826,16 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Object representing the scope. For <code>global</code> and <code>with</code> scopes it represents the actual object; for the rest of the scopes, it is artificial transient object enumerating scope variables as its properties.
                 /// </summary>
-                abstract member ``object``: Node.inspector_generated.Runtime_.RemoteObject with get, set
+                abstract member ``object``: Node.inspector.Runtime_.RemoteObject with get, set
                 abstract member name: string option with get, set
                 /// <summary>
                 /// Location in the source code where scope starts
                 /// </summary>
-                abstract member startLocation: Node.inspector_generated.Debugger_.Location option with get, set
+                abstract member startLocation: Node.inspector.Debugger_.Location option with get, set
                 /// <summary>
                 /// Location in the source code where scope ends
                 /// </summary>
-                abstract member endLocation: Node.inspector_generated.Debugger_.Location option with get, set
+                abstract member endLocation: Node.inspector.Debugger_.Location option with get, set
 
             /// <summary>
             /// Search match for resource.
@@ -148592,7 +148858,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Script identifier as reported in the <code>Debugger.scriptParsed</code>.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// Line number in the script (0-based).
                 /// </summary>
@@ -148653,7 +148919,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Location to set breakpoint in.
                 /// </summary>
-                abstract member location: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member location: Node.inspector.Debugger_.Location with get, set
                 /// <summary>
                 /// Expression to use as a breakpoint condition. When specified, debugger will only stop on the breakpoint if this expression evaluates to true.
                 /// </summary>
@@ -148662,7 +148928,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type RemoveBreakpointParameterType =
-                abstract member breakpointId: Node.inspector_generated.Debugger_.BreakpointId with get, set
+                abstract member breakpointId: Node.inspector.Debugger_.BreakpointId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148670,11 +148936,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Start of range to search possible breakpoint locations in.
                 /// </summary>
-                abstract member start: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member start: Node.inspector.Debugger_.Location with get, set
                 /// <summary>
                 /// End of range to search possible breakpoint locations in (excluding). When not specified, end of scripts is used as end of range.
                 /// </summary>
-                abstract member ``end``: Node.inspector_generated.Debugger_.Location option with get, set
+                abstract member ``end``: Node.inspector.Debugger_.Location option with get, set
                 /// <summary>
                 /// Only consider locations which are in the same (non-nested) function as start.
                 /// </summary>
@@ -148686,7 +148952,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Location to continue to.
                 /// </summary>
-                abstract member location: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member location: Node.inspector.Debugger_.Location with get, set
                 abstract member targetCallFrames: string option with get, set
 
             [<AllowNullLiteral>]
@@ -148695,7 +148961,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Debugger will pause when async call with given stack trace is started.
                 /// </summary>
-                abstract member parentStackTraceId: Node.inspector_generated.Runtime_.StackTraceId with get, set
+                abstract member parentStackTraceId: Node.inspector.Runtime_.StackTraceId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148708,7 +148974,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type GetStackTraceParameterType =
-                abstract member stackTraceId: Node.inspector_generated.Runtime_.StackTraceId with get, set
+                abstract member stackTraceId: Node.inspector.Runtime_.StackTraceId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148716,7 +148982,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the script to search in.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// String to search for.
                 /// </summary>
@@ -148736,7 +149002,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the script to edit.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// New content of the script.
                 /// </summary>
@@ -148752,7 +149018,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Call frame identifier to evaluate on.
                 /// </summary>
-                abstract member callFrameId: Node.inspector_generated.Debugger_.CallFrameId with get, set
+                abstract member callFrameId: Node.inspector.Debugger_.CallFrameId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148760,7 +149026,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the script to get source for.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148776,7 +149042,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Call frame identifier to evaluate on.
                 /// </summary>
-                abstract member callFrameId: Node.inspector_generated.Debugger_.CallFrameId with get, set
+                abstract member callFrameId: Node.inspector.Debugger_.CallFrameId with get, set
                 /// <summary>
                 /// Expression to evaluate.
                 /// </summary>
@@ -148820,11 +149086,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// New variable value.
                 /// </summary>
-                abstract member newValue: Node.inspector_generated.Runtime_.CallArgument with get, set
+                abstract member newValue: Node.inspector.Runtime_.CallArgument with get, set
                 /// <summary>
                 /// Id of callframe that holds variable.
                 /// </summary>
-                abstract member callFrameId: Node.inspector_generated.Debugger_.CallFrameId with get, set
+                abstract member callFrameId: Node.inspector.Debugger_.CallFrameId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148832,7 +149098,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// New return value.
                 /// </summary>
-                abstract member newValue: Node.inspector_generated.Runtime_.CallArgument with get, set
+                abstract member newValue: Node.inspector.Runtime_.CallArgument with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148856,10 +149122,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the script.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
-
-                abstract member positions:
-                    ResizeArray<Node.inspector_generated.Debugger_.ScriptPosition> with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
+                abstract member positions: ResizeArray<Node.inspector.Debugger_.ScriptPosition> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148867,7 +149131,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Unique identifier of the debugger.
                 /// </summary>
-                abstract member debuggerId: Node.inspector_generated.Runtime_.UniqueDebuggerId with get, set
+                abstract member debuggerId: Node.inspector.Runtime_.UniqueDebuggerId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148875,11 +149139,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the created breakpoint for further reference.
                 /// </summary>
-                abstract member breakpointId: Node.inspector_generated.Debugger_.BreakpointId with get, set
+                abstract member breakpointId: Node.inspector.Debugger_.BreakpointId with get, set
                 /// <summary>
                 /// List of the locations this breakpoint resolved into upon addition.
                 /// </summary>
-                abstract member locations: ResizeArray<Node.inspector_generated.Debugger_.Location> with get, set
+                abstract member locations: ResizeArray<Node.inspector.Debugger_.Location> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148887,11 +149151,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Id of the created breakpoint for further reference.
                 /// </summary>
-                abstract member breakpointId: Node.inspector_generated.Debugger_.BreakpointId with get, set
+                abstract member breakpointId: Node.inspector.Debugger_.BreakpointId with get, set
                 /// <summary>
                 /// Location this breakpoint resolved into.
                 /// </summary>
-                abstract member actualLocation: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member actualLocation: Node.inspector.Debugger_.Location with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148899,13 +149163,12 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// List of the possible breakpoint locations.
                 /// </summary>
-                abstract member locations:
-                    ResizeArray<Node.inspector_generated.Debugger_.BreakLocation> with get, set
+                abstract member locations: ResizeArray<Node.inspector.Debugger_.BreakLocation> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
             type GetStackTraceReturnType =
-                abstract member stackTrace: Node.inspector_generated.Runtime_.StackTrace with get, set
+                abstract member stackTrace: Node.inspector.Runtime_.StackTrace with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148913,7 +149176,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// List of search matches.
                 /// </summary>
-                abstract member result: ResizeArray<Node.inspector_generated.Debugger_.SearchMatch> with get, set
+                abstract member result: ResizeArray<Node.inspector.Debugger_.SearchMatch> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148921,9 +149184,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// New stack trace in case editing has happened while VM was stopped.
                 /// </summary>
-                abstract member callFrames:
-                    ResizeArray<Node.inspector_generated.Debugger_.CallFrame> option with get, set
-
+                abstract member callFrames: ResizeArray<Node.inspector.Debugger_.CallFrame> option with get, set
                 /// <summary>
                 /// Whether current call stack  was modified after applying the changes.
                 /// </summary>
@@ -148931,19 +149192,15 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Async stack trace, if any.
                 /// </summary>
-                abstract member asyncStackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
-
+                abstract member asyncStackTrace: Node.inspector.Runtime_.StackTrace option with get, set
                 /// <summary>
                 /// Async stack trace, if any.
                 /// </summary>
-                abstract member asyncStackTraceId:
-                    Node.inspector_generated.Runtime_.StackTraceId option with get, set
-
+                abstract member asyncStackTraceId: Node.inspector.Runtime_.StackTraceId option with get, set
                 /// <summary>
                 /// Exception details if any.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148951,19 +149208,15 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// New stack trace.
                 /// </summary>
-                abstract member callFrames:
-                    ResizeArray<Node.inspector_generated.Debugger_.CallFrame> with get, set
-
+                abstract member callFrames: ResizeArray<Node.inspector.Debugger_.CallFrame> with get, set
                 /// <summary>
                 /// Async stack trace, if any.
                 /// </summary>
-                abstract member asyncStackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
-
+                abstract member asyncStackTrace: Node.inspector.Runtime_.StackTrace option with get, set
                 /// <summary>
                 /// Async stack trace, if any.
                 /// </summary>
-                abstract member asyncStackTraceId:
-                    Node.inspector_generated.Runtime_.StackTraceId option with get, set
+                abstract member asyncStackTraceId: Node.inspector.Runtime_.StackTraceId option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148979,13 +149232,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Object wrapper for the evaluation result.
                 /// </summary>
-                abstract member result: Node.inspector_generated.Runtime_.RemoteObject with get, set
-
+                abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
                 /// <summary>
                 /// Exception details.
                 /// </summary>
-                abstract member exceptionDetails:
-                    Node.inspector_generated.Runtime_.ExceptionDetails option with get, set
+                abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148993,7 +149244,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the script parsed.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// URL or name of the script parsed (if any).
                 /// </summary>
@@ -149014,13 +149265,10 @@ recursive mode, operations are retried on failure.""")>]
                 /// Length of the last line of the script.
                 /// </summary>
                 abstract member endColumn: float with get, set
-
                 /// <summary>
                 /// Specifies script creation context.
                 /// </summary>
-                abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId with get, set
-
+                abstract member executionContextId: Node.inspector.Runtime_.ExecutionContextId with get, set
                 /// <summary>
                 /// Content hash of the script.
                 /// </summary>
@@ -149052,7 +149300,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// JavaScript top stack frame of where the script parsed event was triggered if available.
                 /// </summary>
-                abstract member stackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
+                abstract member stackTrace: Node.inspector.Runtime_.StackTrace option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149060,7 +149308,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the script parsed.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// URL or name of the script parsed (if any).
                 /// </summary>
@@ -149081,13 +149329,10 @@ recursive mode, operations are retried on failure.""")>]
                 /// Length of the last line of the script.
                 /// </summary>
                 abstract member endColumn: float with get, set
-
                 /// <summary>
                 /// Specifies script creation context.
                 /// </summary>
-                abstract member executionContextId:
-                    Node.inspector_generated.Runtime_.ExecutionContextId with get, set
-
+                abstract member executionContextId: Node.inspector.Runtime_.ExecutionContextId with get, set
                 /// <summary>
                 /// Content hash of the script.
                 /// </summary>
@@ -149115,7 +149360,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// JavaScript top stack frame of where the script parsed event was triggered if available.
                 /// </summary>
-                abstract member stackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
+                abstract member stackTrace: Node.inspector.Runtime_.StackTrace option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149123,11 +149368,11 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Breakpoint unique identifier.
                 /// </summary>
-                abstract member breakpointId: Node.inspector_generated.Debugger_.BreakpointId with get, set
+                abstract member breakpointId: Node.inspector.Debugger_.BreakpointId with get, set
                 /// <summary>
                 /// Actual breakpoint location.
                 /// </summary>
-                abstract member location: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member location: Node.inspector.Debugger_.Location with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149135,9 +149380,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Call stack the virtual machine stopped on.
                 /// </summary>
-                abstract member callFrames:
-                    ResizeArray<Node.inspector_generated.Debugger_.CallFrame> with get, set
-
+                abstract member callFrames: ResizeArray<Node.inspector.Debugger_.CallFrame> with get, set
                 /// <summary>
                 /// Pause reason.
                 /// </summary>
@@ -149153,19 +149396,15 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Async stack trace, if any.
                 /// </summary>
-                abstract member asyncStackTrace: Node.inspector_generated.Runtime_.StackTrace option with get, set
-
+                abstract member asyncStackTrace: Node.inspector.Runtime_.StackTrace option with get, set
                 /// <summary>
                 /// Async stack trace, if any.
                 /// </summary>
-                abstract member asyncStackTraceId:
-                    Node.inspector_generated.Runtime_.StackTraceId option with get, set
-
+                abstract member asyncStackTraceId: Node.inspector.Runtime_.StackTraceId option with get, set
                 /// <summary>
                 /// Just scheduled async call will have this stack trace as parent stack during async execution. This field is available only after <code>Debugger.stepInto</code> call with <code>breakOnAsynCall</code> flag.
                 /// </summary>
-                abstract member asyncCallStackTraceId:
-                    Node.inspector_generated.Runtime_.StackTraceId option with get, set
+                abstract member asyncCallStackTraceId: Node.inspector.Runtime_.StackTraceId option with get, set
 
         module Console_ =
 
@@ -149206,7 +149445,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Console message that has been added.
                 /// </summary>
-                abstract member message: Node.inspector_generated.Console_.ConsoleMessage with get, set
+                abstract member message: Node.inspector.Console_.ConsoleMessage with get, set
 
         module Profiler_ =
 
@@ -149223,7 +149462,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Function location.
                 /// </summary>
-                abstract member callFrame: Node.inspector_generated.Runtime_.CallFrame with get, set
+                abstract member callFrame: Node.inspector.Runtime_.CallFrame with get, set
                 /// <summary>
                 /// Number of samples where this node was on top of the call stack.
                 /// </summary>
@@ -149241,7 +149480,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// An array of source position ticks.
                 /// </summary>
                 abstract member positionTicks:
-                    ResizeArray<Node.inspector_generated.Profiler_.PositionTickInfo> option with get, set
+                    ResizeArray<Node.inspector.Profiler_.PositionTickInfo> option with get, set
 
             /// <summary>
             /// Profile.
@@ -149252,7 +149491,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// The list of profile nodes. First item is the root node.
                 /// </summary>
-                abstract member nodes: ResizeArray<Node.inspector_generated.Profiler_.ProfileNode> with get, set
+                abstract member nodes: ResizeArray<Node.inspector.Profiler_.ProfileNode> with get, set
                 /// <summary>
                 /// Profiling start timestamp in microseconds.
                 /// </summary>
@@ -149314,13 +149553,10 @@ recursive mode, operations are retried on failure.""")>]
                 /// JavaScript function name.
                 /// </summary>
                 abstract member functionName: string with get, set
-
                 /// <summary>
                 /// Source ranges inside the function with coverage data.
                 /// </summary>
-                abstract member ranges:
-                    ResizeArray<Node.inspector_generated.Profiler_.CoverageRange> with get, set
-
+                abstract member ranges: ResizeArray<Node.inspector.Profiler_.CoverageRange> with get, set
                 /// <summary>
                 /// Whether coverage data for this function has block granularity.
                 /// </summary>
@@ -149335,17 +149571,15 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// JavaScript script id.
                 /// </summary>
-                abstract member scriptId: Node.inspector_generated.Runtime_.ScriptId with get, set
+                abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 /// <summary>
                 /// JavaScript script name or url.
                 /// </summary>
                 abstract member url: string with get, set
-
                 /// <summary>
                 /// Functions contained in the script that has coverage data.
                 /// </summary>
-                abstract member functions:
-                    ResizeArray<Node.inspector_generated.Profiler_.FunctionCoverage> with get, set
+                abstract member functions: ResizeArray<Node.inspector.Profiler_.FunctionCoverage> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149373,7 +149607,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Recorded profile.
                 /// </summary>
-                abstract member profile: Node.inspector_generated.Profiler_.Profile with get, set
+                abstract member profile: Node.inspector.Profiler_.Profile with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149381,8 +149615,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Coverage data for the current isolate.
                 /// </summary>
-                abstract member result:
-                    ResizeArray<Node.inspector_generated.Profiler_.ScriptCoverage> with get, set
+                abstract member result: ResizeArray<Node.inspector.Profiler_.ScriptCoverage> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149390,8 +149623,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Coverage data for the current isolate.
                 /// </summary>
-                abstract member result:
-                    ResizeArray<Node.inspector_generated.Profiler_.ScriptCoverage> with get, set
+                abstract member result: ResizeArray<Node.inspector.Profiler_.ScriptCoverage> with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149400,7 +149632,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Location of console.profile().
                 /// </summary>
-                abstract member location: Node.inspector_generated.Debugger_.Location with get, set
+                abstract member location: Node.inspector.Debugger_.Location with get, set
                 /// <summary>
                 /// Profile title passed as an argument to console.profile().
                 /// </summary>
@@ -149413,8 +149645,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Location of console.profileEnd().
                 /// </summary>
-                abstract member location: Node.inspector_generated.Debugger_.Location with get, set
-                abstract member profile: Node.inspector_generated.Profiler_.Profile with get, set
+                abstract member location: Node.inspector.Debugger_.Location with get, set
+                abstract member profile: Node.inspector.Profiler_.Profile with get, set
                 /// <summary>
                 /// Profile title passed as an argument to console.profile().
                 /// </summary>
@@ -149436,7 +149668,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Function location.
                 /// </summary>
-                abstract member callFrame: Node.inspector_generated.Runtime_.CallFrame with get, set
+                abstract member callFrame: Node.inspector.Runtime_.CallFrame with get, set
                 /// <summary>
                 /// Allocations size in bytes for the node excluding children.
                 /// </summary>
@@ -149446,7 +149678,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// Child nodes.
                 /// </summary>
                 abstract member children:
-                    ResizeArray<Node.inspector_generated.HeapProfiler_.SamplingHeapProfileNode> with get, set
+                    ResizeArray<Node.inspector.HeapProfiler_.SamplingHeapProfileNode> with get, set
 
             /// <summary>
             /// Profile.
@@ -149454,7 +149686,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type SamplingHeapProfile =
-                abstract member head: Node.inspector_generated.HeapProfiler_.SamplingHeapProfileNode with get, set
+                abstract member head: Node.inspector.HeapProfiler_.SamplingHeapProfileNode with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149480,9 +149712,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type GetObjectByHeapObjectIdParameterType =
-                abstract member objectId:
-                    Node.inspector_generated.HeapProfiler_.HeapSnapshotObjectId with get, set
-
+                abstract member objectId: Node.inspector.HeapProfiler_.HeapSnapshotObjectId with get, set
                 /// <summary>
                 /// Symbolic group name that can be used to release multiple objects.
                 /// </summary>
@@ -149494,8 +149724,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Heap snapshot object id to be accessible by means of $x command line API.
                 /// </summary>
-                abstract member heapObjectId:
-                    Node.inspector_generated.HeapProfiler_.HeapSnapshotObjectId with get, set
+                abstract member heapObjectId: Node.inspector.HeapProfiler_.HeapSnapshotObjectId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149503,7 +149732,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the object to get heap object id for.
                 /// </summary>
-                abstract member objectId: Node.inspector_generated.Runtime_.RemoteObjectId with get, set
+                abstract member objectId: Node.inspector.Runtime_.RemoteObjectId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149519,7 +149748,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Evaluation result.
                 /// </summary>
-                abstract member result: Node.inspector_generated.Runtime_.RemoteObject with get, set
+                abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149528,7 +149757,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// Id of the heap snapshot object corresponding to the passed remote object id.
                 /// </summary>
                 abstract member heapSnapshotObjectId:
-                    Node.inspector_generated.HeapProfiler_.HeapSnapshotObjectId with get, set
+                    Node.inspector.HeapProfiler_.HeapSnapshotObjectId with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149536,7 +149765,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Recorded sampling heap profile.
                 /// </summary>
-                abstract member profile: Node.inspector_generated.HeapProfiler_.SamplingHeapProfile with get, set
+                abstract member profile: Node.inspector.HeapProfiler_.SamplingHeapProfile with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149544,7 +149773,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Return the sampling profile being collected.
                 /// </summary>
-                abstract member profile: Node.inspector_generated.HeapProfiler_.SamplingHeapProfile with get, set
+                abstract member profile: Node.inspector.HeapProfiler_.SamplingHeapProfile with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149589,7 +149818,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type StartParameterType =
-                abstract member traceConfig: Node.inspector_generated.NodeTracing_.TraceConfig with get, set
+                abstract member traceConfig: Node.inspector.NodeTracing_.TraceConfig with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149616,7 +149845,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type WorkerInfo =
-                abstract member workerId: Node.inspector_generated.NodeWorker_.WorkerID with get, set
+                abstract member workerId: Node.inspector.NodeWorker_.WorkerID with get, set
                 abstract member ``type``: string with get, set
                 abstract member title: string with get, set
                 abstract member url: string with get, set
@@ -149628,7 +149857,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of the session.
                 /// </summary>
-                abstract member sessionId: Node.inspector_generated.NodeWorker_.SessionID with get, set
+                abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149642,7 +149871,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type DetachParameterType =
-                abstract member sessionId: Node.inspector_generated.NodeWorker_.SessionID with get, set
+                abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149650,8 +149879,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier assigned to the session used to send/receive messages.
                 /// </summary>
-                abstract member sessionId: Node.inspector_generated.NodeWorker_.SessionID with get, set
-                abstract member workerInfo: Node.inspector_generated.NodeWorker_.WorkerInfo with get, set
+                abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
+                abstract member workerInfo: Node.inspector.NodeWorker_.WorkerInfo with get, set
                 abstract member waitingForDebugger: bool with get, set
 
             [<AllowNullLiteral>]
@@ -149660,7 +149889,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Detached session identifier.
                 /// </summary>
-                abstract member sessionId: Node.inspector_generated.NodeWorker_.SessionID with get, set
+                abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149668,367 +149897,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Identifier of a session which sends a message.
                 /// </summary>
-                abstract member sessionId: Node.inspector_generated.NodeWorker_.SessionID with get, set
+                abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
                 abstract member message: string with get, set
-
-        module Network_ =
-
-            /// <summary>
-            /// Resource type as it was perceived by the rendering engine.
-            /// </summary>
-            type ResourceType = string
-
-            /// <summary>
-            /// Unique request identifier.
-            /// </summary>
-            type RequestId = string
-
-            /// <summary>
-            /// UTC time in seconds, counted from January 1, 1970.
-            /// </summary>
-            type TimeSinceEpoch = float
-
-            /// <summary>
-            /// Monotonically increasing time in seconds since an arbitrary point in the past.
-            /// </summary>
-            type MonotonicTime = float
-
-            /// <summary>
-            /// Information about the request initiator.
-            /// </summary>
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Initiator =
-                /// <summary>
-                /// Type of this initiator.
-                /// </summary>
-                abstract member ``type``: string with get, set
-                /// <summary>
-                /// Initiator JavaScript stack trace, set for Script only.
-                /// Requires the Debugger domain to be enabled.
-                /// </summary>
-                abstract member stack: Node.inspector_generated.Runtime_.StackTrace option with get, set
-                /// <summary>
-                /// Initiator URL, set for Parser type or for Script type (when script is importing module) or for SignedExchange type.
-                /// </summary>
-                abstract member url: string option with get, set
-                /// <summary>
-                /// Initiator line number, set for Parser type or for Script type (when script is importing
-                /// module) (0-based).
-                /// </summary>
-                abstract member lineNumber: float option with get, set
-                /// <summary>
-                /// Initiator column number, set for Parser type or for Script type (when script is importing
-                /// module) (0-based).
-                /// </summary>
-                abstract member columnNumber: float option with get, set
-                /// <summary>
-                /// Set if another request triggered this request (e.g. preflight).
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId option with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        ``type``: string,
-                        ?stack: Node.inspector_generated.Runtime_.StackTrace,
-                        ?url: string,
-                        ?lineNumber: float,
-                        ?columnNumber: float,
-                        ?requestId: Node.inspector_generated.Network_.RequestId
-                    )
-                    : Initiator
-                    =
-                    nativeOnly
-
-            /// <summary>
-            /// HTTP request data.
-            /// </summary>
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Request =
-                abstract member url: string with get, set
-                abstract member ``method``: string with get, set
-                abstract member headers: Node.inspector_generated.Network_.Headers with get, set
-                abstract member hasPostData: bool with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        url: string,
-                        ``method``: string,
-                        headers: Node.inspector_generated.Network_.Headers,
-                        hasPostData: bool
-                    )
-                    : Request
-                    =
-                    nativeOnly
-
-            /// <summary>
-            /// HTTP response data.
-            /// </summary>
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Response =
-                abstract member url: string with get, set
-                abstract member status: float with get, set
-                abstract member statusText: string with get, set
-                abstract member headers: Node.inspector_generated.Network_.Headers with get, set
-                abstract member mimeType: string with get, set
-                abstract member charset: string with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        url: string,
-                        status: float,
-                        statusText: string,
-                        headers: Node.inspector_generated.Network_.Headers,
-                        mimeType: string,
-                        charset: string
-                    )
-                    : Response
-                    =
-                    nativeOnly
-
-            /// <summary>
-            /// Request / response headers as keys / values of JSON object.
-            /// </summary>
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Headers = interface end
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type LoadNetworkResourcePageResult =
-                abstract member success: bool with get, set
-                abstract member stream: Node.inspector_generated.IO_.StreamHandle option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type GetRequestPostDataParameterType =
-                /// <summary>
-                /// Identifier of the network request to get content for.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type GetResponseBodyParameterType =
-                /// <summary>
-                /// Identifier of the network request to get content for.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type StreamResourceContentParameterType =
-                /// <summary>
-                /// Identifier of the request to stream.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type LoadNetworkResourceParameterType =
-                /// <summary>
-                /// URL of the resource to get content for.
-                /// </summary>
-                abstract member url: string with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type GetRequestPostDataReturnType =
-                /// <summary>
-                /// Request body string, omitting files from multipart requests
-                /// </summary>
-                abstract member postData: string with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type GetResponseBodyReturnType =
-                /// <summary>
-                /// Response body.
-                /// </summary>
-                abstract member body: string with get, set
-                /// <summary>
-                /// True, if content was sent as base64.
-                /// </summary>
-                abstract member base64Encoded: bool with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type StreamResourceContentReturnType =
-                /// <summary>
-                /// Data that has been buffered until streaming is enabled.
-                /// </summary>
-                abstract member bufferedData: string with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type LoadNetworkResourceReturnType =
-                abstract member resource:
-                    Node.inspector_generated.Network_.LoadNetworkResourcePageResult with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type RequestWillBeSentEventDataType =
-                /// <summary>
-                /// Request identifier.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-                /// <summary>
-                /// Request data.
-                /// </summary>
-                abstract member request: Node.inspector_generated.Network_.Request with get, set
-                /// <summary>
-                /// Request initiator.
-                /// </summary>
-                abstract member initiator: Node.inspector_generated.Network_.Initiator with get, set
-                /// <summary>
-                /// Timestamp.
-                /// </summary>
-                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
-                /// <summary>
-                /// Timestamp.
-                /// </summary>
-                abstract member wallTime: Node.inspector_generated.Network_.TimeSinceEpoch with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        requestId: Node.inspector_generated.Network_.RequestId,
-                        request: Node.inspector_generated.Network_.Request,
-                        initiator: Node.inspector_generated.Network_.Initiator,
-                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                        wallTime: Node.inspector_generated.Network_.TimeSinceEpoch
-                    )
-                    : RequestWillBeSentEventDataType
-                    =
-                    nativeOnly
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type ResponseReceivedEventDataType =
-                /// <summary>
-                /// Request identifier.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-                /// <summary>
-                /// Timestamp.
-                /// </summary>
-                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
-                /// <summary>
-                /// Resource type.
-                /// </summary>
-                abstract member ``type``: Node.inspector_generated.Network_.ResourceType with get, set
-                /// <summary>
-                /// Response data.
-                /// </summary>
-                abstract member response: Node.inspector_generated.Network_.Response with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        requestId: Node.inspector_generated.Network_.RequestId,
-                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                        ``type``: Node.inspector_generated.Network_.ResourceType,
-                        response: Node.inspector_generated.Network_.Response
-                    )
-                    : ResponseReceivedEventDataType
-                    =
-                    nativeOnly
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type LoadingFailedEventDataType =
-                /// <summary>
-                /// Request identifier.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-                /// <summary>
-                /// Timestamp.
-                /// </summary>
-                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
-                /// <summary>
-                /// Resource type.
-                /// </summary>
-                abstract member ``type``: Node.inspector_generated.Network_.ResourceType with get, set
-                /// <summary>
-                /// Error message.
-                /// </summary>
-                abstract member errorText: string with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        requestId: Node.inspector_generated.Network_.RequestId,
-                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                        ``type``: Node.inspector_generated.Network_.ResourceType,
-                        errorText: string
-                    )
-                    : LoadingFailedEventDataType
-                    =
-                    nativeOnly
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type LoadingFinishedEventDataType =
-                /// <summary>
-                /// Request identifier.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-                /// <summary>
-                /// Timestamp.
-                /// </summary>
-                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        requestId: Node.inspector_generated.Network_.RequestId,
-                        timestamp: Node.inspector_generated.Network_.MonotonicTime
-                    )
-                    : LoadingFinishedEventDataType
-                    =
-                    nativeOnly
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type DataReceivedEventDataType =
-                /// <summary>
-                /// Request identifier.
-                /// </summary>
-                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
-                /// <summary>
-                /// Timestamp.
-                /// </summary>
-                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
-                /// <summary>
-                /// Data chunk length.
-                /// </summary>
-                abstract member dataLength: float with get, set
-                /// <summary>
-                /// Actual bytes received (might be less than dataLength for compressed encodings).
-                /// </summary>
-                abstract member encodedDataLength: float with get, set
-                /// <summary>
-                /// Data that was received.
-                /// </summary>
-                abstract member data: string option with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        requestId: Node.inspector_generated.Network_.RequestId,
-                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                        dataLength: float,
-                        encodedDataLength: float,
-                        ?data: string
-                    )
-                    : DataReceivedEventDataType
-                    =
-                    nativeOnly
 
         module NodeRuntime_ =
 
@@ -150046,7 +149916,7 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type TargetInfo =
-                abstract member targetId: Node.inspector_generated.Target_.TargetID with get, set
+                abstract member targetId: Node.inspector.Target_.TargetID with get, set
                 abstract member ``type``: string with get, set
                 abstract member title: string with get, set
                 abstract member url: string with get, set
@@ -150062,13 +149932,13 @@ recursive mode, operations are retried on failure.""")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type TargetCreatedEventDataType =
-                abstract member targetInfo: Node.inspector_generated.Target_.TargetInfo with get, set
+                abstract member targetInfo: Node.inspector.Target_.TargetInfo with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
             type AttachedToTargetEventDataType =
-                abstract member sessionId: Node.inspector_generated.Target_.SessionID with get, set
-                abstract member targetInfo: Node.inspector_generated.Target_.TargetInfo with get, set
+                abstract member sessionId: Node.inspector.Target_.SessionID with get, set
+                abstract member targetInfo: Node.inspector.Target_.TargetInfo with get, set
                 abstract member waitingForDebugger: bool with get, set
 
         module IO_ =
@@ -150081,7 +149951,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Handle of the stream to read.
                 /// </summary>
-                abstract member handle: Node.inspector_generated.IO_.StreamHandle with get, set
+                abstract member handle: Node.inspector.IO_.StreamHandle with get, set
                 /// <summary>
                 /// Seek to the specified offset before reading (if not specified, proceed with offset
                 /// following the last read). Some types of streams may only support sequential reads.
@@ -150098,7 +149968,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// <summary>
                 /// Handle of the stream to close.
                 /// </summary>
-                abstract member handle: Node.inspector_generated.IO_.StreamHandle with get, set
+                abstract member handle: Node.inspector.IO_.StreamHandle with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -172633,7 +172503,7 @@ Readable.from($0, $1)""")>]
 Readable.fromWeb($0, $1)""")>]
                 static member inline fromWeb
                     (
-                        readableStream: Node.stream.web.stream_SLASH_web_.ReadableStream,
+                        readableStream: Node.stream.web.ReadableStream,
                         ?options: Readable.fromWeb__.options
                     )
                     : Node.stream.Stream_.Readable
@@ -172650,7 +172520,7 @@ Readable.toWeb($0, $1)""")>]
                         streamReadable: Node.stream.Stream_.Readable,
                         ?options: Readable.toWeb__.options
                     )
-                    : Node.stream.web.stream_SLASH_web_.ReadableStream
+                    : Node.stream.web.ReadableStream
                     =
                     nativeOnly
 
@@ -177344,7 +177214,7 @@ Readable.isDisturbed($0)""")>]
 Writable.fromWeb($0, $1)""")>]
                 static member inline fromWeb
                     (
-                        writableStream: Node.stream.web.stream_SLASH_web_.WritableStream,
+                        writableStream: Node.stream.web.WritableStream,
                         ?options: Writable.fromWeb__.options
                     )
                     : Node.stream.Stream_.Writable
@@ -177358,7 +177228,7 @@ Writable.fromWeb($0, $1)""")>]
 Writable.toWeb($0)""")>]
                 static member inline toWeb
                     (streamWritable: Node.stream.Stream_.Writable)
-                    : Node.stream.web.stream_SLASH_web_.WritableStream
+                    : Node.stream.web.WritableStream
                     =
                     nativeOnly
 
@@ -181591,10 +181461,7 @@ Duplex.from($0)""")>]
                 /// </summary>
                 [<Emit("""import { Duplex } from "node:stream";
 Duplex.from($0)""")>]
-                static member inline from
-                    (src: Node.buffer.buffer_.Blob)
-                    : Node.stream.Stream_.Duplex
-                    =
+                static member inline from(src: Node.buffer.Blob) : Node.stream.Stream_.Duplex =
                     nativeOnly
 
                 /// <summary>
@@ -181716,7 +181583,7 @@ Duplex.from($0)""")>]
                     (src:
                         U6<
                             Node.stream.Stream,
-                            Node.buffer.buffer_.Blob,
+                            Node.buffer.Blob,
                             obj,
                             string,
                             Iterable<obj>,
@@ -187111,14 +186978,10 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
-                        abstract member strategy:
-                            Node.stream.web.stream_SLASH_web_.QueuingStrategy option with get, set
+                        abstract member strategy: Node.stream.web.QueuingStrategy option with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create
-                            (?strategy: Node.stream.web.stream_SLASH_web_.QueuingStrategy)
-                            : options
-                            =
+                        static member Create(?strategy: Node.stream.web.QueuingStrategy) : options =
                             nativeOnly
 
                 module iterator =
@@ -187451,14 +187314,14 @@ Duplex.fromWeb($0, $1)""")>]
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type toWeb__ =
-                    abstract member readable: Node.stream.web.stream_SLASH_web_.ReadableStream with get, set
-                    abstract member writable: Node.stream.web.stream_SLASH_web_.WritableStream with get, set
+                    abstract member readable: Node.stream.web.ReadableStream with get, set
+                    abstract member writable: Node.stream.web.WritableStream with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (
-                            readable: Node.stream.web.stream_SLASH_web_.ReadableStream,
-                            writable: Node.stream.web.stream_SLASH_web_.WritableStream
+                            readable: Node.stream.web.ReadableStream,
+                            writable: Node.stream.web.WritableStream
                         )
                         : toWeb__
                         =
@@ -187469,14 +187332,14 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type duplexStream =
-                        abstract member readable: Node.stream.web.stream_SLASH_web_.ReadableStream with get, set
-                        abstract member writable: Node.stream.web.stream_SLASH_web_.WritableStream with get, set
+                        abstract member readable: Node.stream.web.ReadableStream with get, set
+                        abstract member writable: Node.stream.web.WritableStream with get, set
 
                         [<ParamObject; Emit("$0")>]
                         static member Create
                             (
-                                readable: Node.stream.web.stream_SLASH_web_.ReadableStream,
-                                writable: Node.stream.web.stream_SLASH_web_.WritableStream
+                                readable: Node.stream.web.ReadableStream,
+                                writable: Node.stream.web.WritableStream
                             )
                             : duplexStream
                             =
@@ -187545,7 +187408,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("arrayBuffer", "node:stream/consumers")>]
                 static member arrayBuffer
-                    (stream: Node.stream.web.stream_SLASH_web_.ReadableStream)
+                    (stream: Node.stream.web.ReadableStream)
                     : JS.Promise<obj>
                     =
                     nativeOnly
@@ -187568,12 +187431,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("arrayBuffer", "node:stream/consumers")>]
                 static member arrayBuffer
-                    (stream:
-                        U3<
-                            Node.stream.web.stream_SLASH_web_.ReadableStream,
-                            Node.NodeJS.ReadableStream,
-                            obj
-                         >)
+                    (stream: U3<Node.stream.web.ReadableStream, Node.NodeJS.ReadableStream, obj>)
                     : JS.Promise<obj>
                     =
                     nativeOnly
@@ -187583,8 +187441,8 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("blob", "node:stream/consumers")>]
                 static member blob
-                    (stream: Node.stream.web.stream_SLASH_web_.ReadableStream)
-                    : JS.Promise<Node.buffer.buffer_.Blob>
+                    (stream: Node.stream.web.ReadableStream)
+                    : JS.Promise<Node.buffer.Blob>
                     =
                     nativeOnly
 
@@ -187594,7 +187452,7 @@ Duplex.fromWeb($0, $1)""")>]
                 [<Import("blob", "node:stream/consumers")>]
                 static member blob
                     (stream: Node.NodeJS.ReadableStream)
-                    : JS.Promise<Node.buffer.buffer_.Blob>
+                    : JS.Promise<Node.buffer.Blob>
                     =
                     nativeOnly
 
@@ -187602,20 +187460,15 @@ Duplex.fromWeb($0, $1)""")>]
                 /// Fulfills with a <c>Blob</c> containing the full contents of the stream.
                 /// </returns>
                 [<Import("blob", "node:stream/consumers")>]
-                static member blob(stream: obj) : JS.Promise<Node.buffer.buffer_.Blob> = nativeOnly
+                static member blob(stream: obj) : JS.Promise<Node.buffer.Blob> = nativeOnly
 
                 /// <returns>
                 /// Fulfills with a <c>Blob</c> containing the full contents of the stream.
                 /// </returns>
                 [<Import("blob", "node:stream/consumers")>]
                 static member blob
-                    (stream:
-                        U3<
-                            Node.stream.web.stream_SLASH_web_.ReadableStream,
-                            Node.NodeJS.ReadableStream,
-                            obj
-                         >)
-                    : JS.Promise<Node.buffer.buffer_.Blob>
+                    (stream: U3<Node.stream.web.ReadableStream, Node.NodeJS.ReadableStream, obj>)
+                    : JS.Promise<Node.buffer.Blob>
                     =
                     nativeOnly
 
@@ -187624,7 +187477,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("buffer", "node:stream/consumers")>]
                 static member buffer
-                    (stream: Node.stream.web.stream_SLASH_web_.ReadableStream)
+                    (stream: Node.stream.web.ReadableStream)
                     : JS.Promise<Node.NonSharedBuffer>
                     =
                     nativeOnly
@@ -187650,12 +187503,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("buffer", "node:stream/consumers")>]
                 static member buffer
-                    (stream:
-                        U3<
-                            Node.stream.web.stream_SLASH_web_.ReadableStream,
-                            Node.NodeJS.ReadableStream,
-                            obj
-                         >)
+                    (stream: U3<Node.stream.web.ReadableStream, Node.NodeJS.ReadableStream, obj>)
                     : JS.Promise<Node.NonSharedBuffer>
                     =
                     nativeOnly
@@ -187665,10 +187513,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// UTF-8 encoded string that is then passed through <c>JSON.parse()</c>.
                 /// </returns>
                 [<Import("json", "node:stream/consumers")>]
-                static member json
-                    (stream: Node.stream.web.stream_SLASH_web_.ReadableStream)
-                    : JS.Promise<obj>
-                    =
+                static member json(stream: Node.stream.web.ReadableStream) : JS.Promise<obj> =
                     nativeOnly
 
                 /// <returns>
@@ -187692,12 +187537,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("json", "node:stream/consumers")>]
                 static member json
-                    (stream:
-                        U3<
-                            Node.stream.web.stream_SLASH_web_.ReadableStream,
-                            Node.NodeJS.ReadableStream,
-                            obj
-                         >)
+                    (stream: U3<Node.stream.web.ReadableStream, Node.NodeJS.ReadableStream, obj>)
                     : JS.Promise<obj>
                     =
                     nativeOnly
@@ -187706,10 +187546,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// Fulfills with the contents of the stream parsed as a UTF-8 encoded string.
                 /// </returns>
                 [<Import("text", "node:stream/consumers")>]
-                static member text
-                    (stream: Node.stream.web.stream_SLASH_web_.ReadableStream)
-                    : JS.Promise<string>
-                    =
+                static member text(stream: Node.stream.web.ReadableStream) : JS.Promise<string> =
                     nativeOnly
 
                 /// <returns>
@@ -187730,12 +187567,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </returns>
                 [<Import("text", "node:stream/consumers")>]
                 static member text
-                    (stream:
-                        U3<
-                            Node.stream.web.stream_SLASH_web_.ReadableStream,
-                            Node.NodeJS.ReadableStream,
-                            obj
-                         >)
+                    (stream: U3<Node.stream.web.ReadableStream, Node.NodeJS.ReadableStream, obj>)
                     : JS.Promise<string>
                     =
                     nativeOnly
@@ -187943,582 +187775,59 @@ Duplex.fromWeb($0, $1)""")>]
             [<AbstractClass>]
             [<Erase>]
             type Exports =
-                [<ImportAll("stream/web")>]
-                static member stream_SLASH_web: stream_SLASH_web_.Exports = nativeOnly
-
-            module stream_SLASH_web_ =
-
-                [<AbstractClass>]
-                [<Erase>]
-                type Exports =
-                    /// <summary>
-                    /// This Streams API interface represents a readable stream of byte data.
-                    /// </summary>
-                    [<Emit("$0.ReadableStream")>]
-                    abstract member ReadableStream: Exports.ReadableStream.Type<obj>
-
-                    [<Emit("$0.ReadableStreamDefaultReader")>]
-                    abstract member ReadableStreamDefaultReader:
-                        Exports.ReadableStreamDefaultReader.Type<obj>
-
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
-                    /// </summary>
-                    [<Emit("$0.ReadableStreamBYOBReader")>]
-                    abstract member ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type
-
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest)
-                    /// </summary>
-                    [<Emit("$0.ReadableStreamBYOBRequest")>]
-                    abstract member ReadableStreamBYOBRequest:
-                        Exports.ReadableStreamBYOBRequest.Type
-
-                    [<Emit("$0.ReadableByteStreamController")>]
-                    abstract member ReadableByteStreamController:
-                        Exports.ReadableByteStreamController.Type
-
-                    [<Emit("$0.ReadableStreamDefaultController")>]
-                    abstract member ReadableStreamDefaultController:
-                        Exports.ReadableStreamDefaultController.Type
-
-                    [<Emit("$0.TransformStream")>]
-                    abstract member TransformStream: Exports.TransformStream.Type<obj, obj>
-
-                    [<Emit("$0.TransformStreamDefaultController")>]
-                    abstract member TransformStreamDefaultController:
-                        Exports.TransformStreamDefaultController.Type
-
-                    /// <summary>
-                    /// This Streams API interface provides a standard abstraction for writing
-                    /// streaming data to a destination, known as a sink. This object comes with
-                    /// built-in back pressure and queuing.
-                    /// </summary>
-                    [<Emit("$0.WritableStream")>]
-                    abstract member WritableStream: Exports.WritableStream.Type<obj>
-
-                    /// <summary>
-                    /// This Streams API interface is the object returned by
-                    /// WritableStream.getWriter() and once created locks the < writer to the
-                    /// WritableStream ensuring that no other streams can write to the underlying
-                    /// sink.
-                    /// </summary>
-                    [<Emit("$0.WritableStreamDefaultWriter")>]
-                    abstract member WritableStreamDefaultWriter:
-                        Exports.WritableStreamDefaultWriter.Type<obj>
-
-                    /// <summary>
-                    /// This Streams API interface represents a controller allowing control of a
-                    /// WritableStream's state. When constructing a WritableStream, the
-                    /// underlying sink is given a corresponding WritableStreamDefaultController
-                    /// instance to manipulate.
-                    /// </summary>
-                    [<Emit("$0.WritableStreamDefaultController")>]
-                    abstract member WritableStreamDefaultController:
-                        Exports.WritableStreamDefaultController.Type
-
-                    /// <summary>
-                    /// This Streams API interface provides a built-in byte length queuing
-                    /// strategy that can be used when constructing streams.
-                    /// </summary>
-                    [<Emit("$0.ByteLengthQueuingStrategy")>]
-                    abstract member ByteLengthQueuingStrategy:
-                        Exports.ByteLengthQueuingStrategy.Type
-
-                    /// <summary>
-                    /// This Streams API interface provides a built-in byte length queuing
-                    /// strategy that can be used when constructing streams.
-                    /// </summary>
-                    [<Emit("$0.CountQueuingStrategy")>]
-                    abstract member CountQueuingStrategy: Exports.CountQueuingStrategy.Type
-
-                    [<Emit("$0.TextEncoderStream")>]
-                    abstract member TextEncoderStream: Exports.TextEncoderStream.Type
-
-                    [<Emit("$0.TextDecoderStream")>]
-                    abstract member TextDecoderStream: Exports.TextDecoderStream.Type
-
-                    [<Emit("new $0.CompressionStream($1...)")>]
-                    abstract member CompressionStream:
-                        format: Node.stream.web.stream_SLASH_web_.CompressionFormat ->
-                            CompressionStream
-
-                    [<Emit("new $0.DecompressionStream($1...)")>]
-                    abstract member DecompressionStream:
-                        format: Node.stream.web.stream_SLASH_web_.CompressionFormat ->
-                            DecompressionStream
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableWritablePair<'R, 'W> =
-                    abstract member readable: Node.stream.web.stream_SLASH_web_.ReadableStream<'R> with get, set
-                    /// <summary>
-                    /// Provides a convenient, chainable way of piping this readable stream
-                    /// through a transform stream (or any other { writable, readable }
-                    /// pair). It simply pipes the stream into the writable side of the
-                    /// supplied pair, and returns the readable side for further use.
-                    ///
-                    /// Piping a stream will lock it for the duration of the pipe, preventing
-                    /// any other consumer from acquiring a reader.
-                    /// </summary>
-                    abstract member writable: Node.stream.web.stream_SLASH_web_.WritableStream<'W> with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            readable: Node.stream.web.stream_SLASH_web_.ReadableStream<'R>,
-                            writable: Node.stream.web.stream_SLASH_web_.WritableStream<'W>
-                        )
-                        : ReadableWritablePair<'R, 'W>
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type StreamPipeOptions =
-                    abstract member preventAbort: bool option with get, set
-                    abstract member preventCancel: bool option with get, set
-                    /// <summary>
-                    /// Pipes this readable stream to a given writable stream destination.
-                    /// The way in which the piping process behaves under various error
-                    /// conditions can be customized with a number of passed options. It
-                    /// returns a promise that fulfills when the piping process completes
-                    /// successfully, or rejects if any errors were encountered.
-                    ///
-                    /// Piping a stream will lock it for the duration of the pipe, preventing
-                    /// any other consumer from acquiring a reader.
-                    ///
-                    /// Errors and closures of the source and destination streams propagate
-                    /// as follows:
-                    ///
-                    /// An error in this source readable stream will abort destination,
-                    /// unless preventAbort is truthy. The returned promise will be rejected
-                    /// with the source's error, or with any error that occurs during
-                    /// aborting the destination.
-                    ///
-                    /// An error in destination will cancel this source readable stream,
-                    /// unless preventCancel is truthy. The returned promise will be rejected
-                    /// with the destination's error, or with any error that occurs during
-                    /// canceling the source.
-                    ///
-                    /// When this source readable stream closes, destination will be closed,
-                    /// unless preventClose is truthy. The returned promise will be fulfilled
-                    /// once this process completes, unless an error is encountered while
-                    /// closing the destination, in which case it will be rejected with that
-                    /// error.
-                    ///
-                    /// If destination starts out closed or closing, this source readable
-                    /// stream will be canceled, unless preventCancel is true. The returned
-                    /// promise will be rejected with an error indicating piping to a closed
-                    /// stream failed, or with any error that occurs during canceling the
-                    /// source.
-                    ///
-                    /// The signal option can be set to an AbortSignal to allow aborting an
-                    /// ongoing pipe operation via the corresponding AbortController. In this
-                    /// case, this source readable stream will be canceled, and destination
-                    /// aborted, unless the respective options preventCancel or preventAbort
-                    /// are set.
-                    /// </summary>
-                    abstract member preventClose: bool option with get, set
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            ?preventAbort: bool,
-                            ?preventCancel: bool,
-                            ?preventClose: bool,
-                            ?signal: Node.AbortSignal
-                        )
-                        : StreamPipeOptions
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamGenericReader =
-                    abstract member closed: JS.Promise<unit> with get
-                    abstract member cancel: ?reason: obj -> JS.Promise<unit>
-
-                type ReadableStreamController<'T> =
-                    Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultController<'T>
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamReadValueResult<'T> =
-                    abstract member ``done``: bool with get, set
-                    abstract member value: 'T with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamReadDoneResult<'T> =
-                    abstract member ``done``: bool with get, set
-                    abstract member value: 'T option with get, set
-
-                type ReadableStreamReadResult<'T> =
-                    U2<
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamReadValueResult<'T>,
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamReadDoneResult<'T>
-                     >
-
-                type ReadableByteStreamControllerCallback =
-                    delegate of
-                        controller: Node.stream.web.stream_SLASH_web_.ReadableByteStreamController ->
-                            U2<unit, obj>
-
-                type UnderlyingSinkAbortCallback = delegate of ?reason: obj -> U2<unit, obj>
-
-                type UnderlyingSinkCloseCallback = delegate of unit -> U2<unit, obj>
-
-                type UnderlyingSinkStartCallback =
-                    delegate of
-                        controller:
-                            Node.stream.web.stream_SLASH_web_.WritableStreamDefaultController ->
-                            unit
-
-                type UnderlyingSinkWriteCallback<'W> =
-                    delegate of
-                        chunk: 'W *
-                        controller:
-                            Node.stream.web.stream_SLASH_web_.WritableStreamDefaultController ->
-                            U2<unit, obj>
-
-                type UnderlyingSourceCancelCallback = delegate of ?reason: obj -> U2<unit, obj>
-
-                type UnderlyingSourcePullCallback<'R> =
-                    delegate of
-                        controller: Node.stream.web.stream_SLASH_web_.ReadableStreamController<'R> ->
-                            U2<unit, obj>
-
-                type UnderlyingSourceStartCallback<'R> =
-                    delegate of
-                        controller: Node.stream.web.stream_SLASH_web_.ReadableStreamController<'R> ->
-                            unit
-
-                type TransformerFlushCallback<'O> =
-                    delegate of
-                        controller:
-                            Node.stream.web.stream_SLASH_web_.TransformStreamDefaultController<'O> ->
-                            U2<unit, obj>
-
-                type TransformerStartCallback<'O> =
-                    delegate of
-                        controller:
-                            Node.stream.web.stream_SLASH_web_.TransformStreamDefaultController<'O> ->
-                            unit
-
-                type TransformerTransformCallback<'I, 'O> =
-                    delegate of
-                        chunk: 'I *
-                        controller:
-                            Node.stream.web.stream_SLASH_web_.TransformStreamDefaultController<'O> ->
-                            U2<unit, obj>
-
-                type TransformerCancelCallback = delegate of reason: obj -> U2<unit, obj>
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type UnderlyingByteSource =
-                    abstract member autoAllocateChunkSize: float option with get, set
-
-                    abstract member cancel:
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamErrorCallback option with get, set
-
-                    abstract member pull:
-                        Node.stream.web.stream_SLASH_web_.ReadableByteStreamControllerCallback option with get, set
-
-                    abstract member start:
-                        Node.stream.web.stream_SLASH_web_.ReadableByteStreamControllerCallback option with get, set
-
-                    abstract member ``type``: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            ``type``: string,
-                            ?autoAllocateChunkSize: float,
-                            ?cancel: Node.stream.web.stream_SLASH_web_.ReadableStreamErrorCallback,
-                            ?pull:
-                                Node.stream.web.stream_SLASH_web_.ReadableByteStreamControllerCallback,
-                            ?start:
-                                Node.stream.web.stream_SLASH_web_.ReadableByteStreamControllerCallback
-                        )
-                        : UnderlyingByteSource
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type UnderlyingSource<'R> =
-                    abstract member cancel:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSourceCancelCallback option with get, set
-
-                    abstract member pull:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSourcePullCallback<'R> option with get, set
-
-                    abstract member start:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSourceStartCallback<'R> option with get, set
-
-                    abstract member ``type``: obj option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            ?cancel:
-                                Node.stream.web.stream_SLASH_web_.UnderlyingSourceCancelCallback,
-                            ?pull:
-                                Node.stream.web.stream_SLASH_web_.UnderlyingSourcePullCallback<'R>,
-                            ?start:
-                                Node.stream.web.stream_SLASH_web_.UnderlyingSourceStartCallback<'R>,
-                            ?``type``: obj
-                        )
-                        : UnderlyingSource<'R>
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type UnderlyingSink<'W> =
-                    abstract member abort:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSinkAbortCallback option with get, set
-
-                    abstract member close:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSinkCloseCallback option with get, set
-
-                    abstract member start:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSinkStartCallback option with get, set
-
-                    abstract member ``type``: obj option with get, set
-
-                    abstract member write:
-                        Node.stream.web.stream_SLASH_web_.UnderlyingSinkWriteCallback<'W> option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            ?abort: Node.stream.web.stream_SLASH_web_.UnderlyingSinkAbortCallback,
-                            ?close: Node.stream.web.stream_SLASH_web_.UnderlyingSinkCloseCallback,
-                            ?start: Node.stream.web.stream_SLASH_web_.UnderlyingSinkStartCallback,
-                            ?``type``: obj,
-                            ?write:
-                                Node.stream.web.stream_SLASH_web_.UnderlyingSinkWriteCallback<'W>
-                        )
-                        : UnderlyingSink<'W>
-                        =
-                        nativeOnly
-
-                type ReadableStreamErrorCallback = delegate of reason: obj -> U2<unit, obj>
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamAsyncIterator<'T> =
-                    inherit Node.NodeJS.AsyncIterator<'T, obj, obj>
-
                 /// <summary>
                 /// This Streams API interface represents a readable stream of byte data.
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStream<'R> =
-                    abstract member locked: bool with get
-                    abstract member cancel: ?reason: obj -> JS.Promise<unit>
+                [<Import("ReadableStream", "node:stream/web")>]
+                static member inline ReadableStream: Exports.ReadableStream__.Type<obj> = nativeOnly
 
-                    abstract member getReader:
-                        options: ReadableStream.getReader.options ->
-                            Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBReader
-
-                    abstract member getReader:
-                        unit -> Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultReader<'R>
-
-                    abstract member getReader:
-                        ?options: Node.stream.web.stream_SLASH_web_.ReadableStreamGetReaderOptions ->
-                            Node.stream.web.stream_SLASH_web_.ReadableStreamReader<'R>
-
-                    abstract member pipeThrough<'T> :
-                        transform: Node.stream.web.stream_SLASH_web_.ReadableWritablePair<'T, 'R> *
-                        ?options: Node.stream.web.stream_SLASH_web_.StreamPipeOptions ->
-                            Node.stream.web.stream_SLASH_web_.ReadableStream<'T>
-
-                    abstract member pipeTo:
-                        destination: Node.stream.web.stream_SLASH_web_.WritableStream<'R> *
-                        ?options: Node.stream.web.stream_SLASH_web_.StreamPipeOptions ->
-                            JS.Promise<unit>
-
-                    abstract member tee:
-                        unit ->
-                            Node.stream.web.stream_SLASH_web_.ReadableStream<'R> *
-                            Node.stream.web.stream_SLASH_web_.ReadableStream<'R>
-
-                    abstract member values:
-                        ?options: ReadableStream.values.options ->
-                            Node.stream.web.stream_SLASH_web_.ReadableStreamAsyncIterator<'R>
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type ReadableStreamReaderMode = | byob
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamGetReaderOptions =
-                    /// <summary>
-                    /// Creates a ReadableStreamBYOBReader and locks the stream to the new reader.
-                    ///
-                    /// This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
-                    /// </summary>
-                    abstract member mode:
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamReaderMode option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (?mode: Node.stream.web.stream_SLASH_web_.ReadableStreamReaderMode)
-                        : ReadableStreamGetReaderOptions
-                        =
-                        nativeOnly
-
-                type ReadableStreamReader<'T> =
-                    U2<
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultReader<'T>,
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBReader
-                     >
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamDefaultReader<'R> =
-                    inherit Node.stream.web.stream_SLASH_web_.ReadableStreamGenericReader
-
-                    abstract member read:
-                        unit ->
-                            JS.Promise<
-                                Node.stream.web.stream_SLASH_web_.ReadableStreamReadResult<'R>
-                             >
-
-                    abstract member releaseLock: unit -> unit
+                [<Import("ReadableStreamDefaultReader", "node:stream/web")>]
+                static member inline ReadableStreamDefaultReader
+                    : Exports.ReadableStreamDefaultReader__.Type<obj> =
+                    nativeOnly
 
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamBYOBReader =
-                    inherit Node.stream.web.stream_SLASH_web_.ReadableStreamGenericReader
-
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/read)
-                    /// </summary>
-                    abstract member read<'T> :
-                        view: 'T * ?options: ReadableStreamBYOBReader.read.options ->
-                            JS.Promise<
-                                Node.stream.web.stream_SLASH_web_.ReadableStreamReadResult<'T>
-                             >
-
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/releaseLock)
-                    /// </summary>
-                    abstract member releaseLock: unit -> unit
+                [<Import("ReadableStreamBYOBReader", "node:stream/web")>]
+                static member inline ReadableStreamBYOBReader
+                    : Exports.ReadableStreamBYOBReader__.Type =
+                    nativeOnly
 
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest)
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamBYOBRequest =
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/view)
-                    /// </summary>
-                    abstract member view: obj option with get
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/respond)
-                    /// </summary>
-                    abstract member respond: bytesWritten: float -> unit
-                    /// <summary>
-                    /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/respondWithNewView)
-                    /// </summary>
-                    abstract member respondWithNewView: view: obj -> unit
+                [<Import("ReadableStreamBYOBRequest", "node:stream/web")>]
+                static member inline ReadableStreamBYOBRequest
+                    : Exports.ReadableStreamBYOBRequest__.Type =
+                    nativeOnly
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableByteStreamController =
-                    abstract member byobRequest:
-                        Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBRequest option with get
+                [<Import("ReadableByteStreamController", "node:stream/web")>]
+                static member inline ReadableByteStreamController
+                    : Exports.ReadableByteStreamController__.Type =
+                    nativeOnly
 
-                    abstract member desiredSize: float option with get
-                    abstract member close: unit -> unit
-                    abstract member enqueue: chunk: obj -> unit
-                    abstract member error: ?error: obj -> unit
+                [<Import("ReadableStreamDefaultController", "node:stream/web")>]
+                static member inline ReadableStreamDefaultController
+                    : Exports.ReadableStreamDefaultController__.Type =
+                    nativeOnly
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ReadableStreamDefaultController<'R> =
-                    abstract member desiredSize: float option with get
-                    abstract member close: unit -> unit
-                    abstract member enqueue: chunk: 'R -> unit
-                    abstract member error: ?e: obj -> unit
+                [<Import("TransformStream", "node:stream/web")>]
+                static member inline TransformStream: Exports.TransformStream__.Type<obj, obj> =
+                    nativeOnly
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type Transformer<'I, 'O> =
-                    abstract member flush:
-                        Node.stream.web.stream_SLASH_web_.TransformerFlushCallback<'O> option with get, set
-
-                    abstract member readableType: obj option with get, set
-
-                    abstract member start:
-                        Node.stream.web.stream_SLASH_web_.TransformerStartCallback<'O> option with get, set
-
-                    abstract member transform:
-                        Node.stream.web.stream_SLASH_web_.TransformerTransformCallback<'I, 'O> option with get, set
-
-                    abstract member cancel:
-                        Node.stream.web.stream_SLASH_web_.TransformerCancelCallback option with get, set
-
-                    abstract member writableType: obj option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            ?flush: Node.stream.web.stream_SLASH_web_.TransformerFlushCallback<'O>,
-                            ?readableType: obj,
-                            ?start: Node.stream.web.stream_SLASH_web_.TransformerStartCallback<'O>,
-                            ?transform:
-                                Node.stream.web.stream_SLASH_web_.TransformerTransformCallback<
-                                    'I,
-                                    'O
-                                 >,
-                            ?cancel: Node.stream.web.stream_SLASH_web_.TransformerCancelCallback,
-                            ?writableType: obj
-                        )
-                        : Transformer<'I, 'O>
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type TransformStream<'I, 'O> =
-                    abstract member readable: Node.stream.web.stream_SLASH_web_.ReadableStream<'O> with get
-                    abstract member writable: Node.stream.web.stream_SLASH_web_.WritableStream<'I> with get
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type TransformStreamDefaultController<'O> =
-                    abstract member desiredSize: float option with get
-                    abstract member enqueue: chunk: 'O -> unit
-                    abstract member error: ?reason: obj -> unit
-                    abstract member terminate: unit -> unit
+                [<Import("TransformStreamDefaultController", "node:stream/web")>]
+                static member inline TransformStreamDefaultController
+                    : Exports.TransformStreamDefaultController__.Type =
+                    nativeOnly
 
                 /// <summary>
                 /// This Streams API interface provides a standard abstraction for writing
                 /// streaming data to a destination, known as a sink. This object comes with
                 /// built-in back pressure and queuing.
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type WritableStream<'W> =
-                    abstract member locked: bool with get
-                    abstract member abort: ?reason: obj -> JS.Promise<unit>
-                    abstract member close: unit -> JS.Promise<unit>
-
-                    abstract member getWriter:
-                        unit -> Node.stream.web.stream_SLASH_web_.WritableStreamDefaultWriter<'W>
+                [<Import("WritableStream", "node:stream/web")>]
+                static member inline WritableStream: Exports.WritableStream__.Type<obj> = nativeOnly
 
                 /// <summary>
                 /// This Streams API interface is the object returned by
@@ -188526,16 +187835,10 @@ Duplex.fromWeb($0, $1)""")>]
                 /// WritableStream ensuring that no other streams can write to the underlying
                 /// sink.
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type WritableStreamDefaultWriter<'W> =
-                    abstract member closed: JS.Promise<unit> with get
-                    abstract member desiredSize: float option with get
-                    abstract member ready: JS.Promise<unit> with get
-                    abstract member abort: ?reason: obj -> JS.Promise<unit>
-                    abstract member close: unit -> JS.Promise<unit>
-                    abstract member releaseLock: unit -> unit
-                    abstract member write: chunk: 'W -> JS.Promise<unit>
+                [<Import("WritableStreamDefaultWriter", "node:stream/web")>]
+                static member inline WritableStreamDefaultWriter
+                    : Exports.WritableStreamDefaultWriter__.Type<obj> =
+                    nativeOnly
 
                 /// <summary>
                 /// This Streams API interface represents a controller allowing control of a
@@ -188543,429 +187846,857 @@ Duplex.fromWeb($0, $1)""")>]
                 /// underlying sink is given a corresponding WritableStreamDefaultController
                 /// instance to manipulate.
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type WritableStreamDefaultController =
-                    abstract member error: ?e: obj -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type QueuingStrategy<'T> =
-                    abstract member highWaterMark: float option with get, set
-
-                    abstract member size:
-                        Node.stream.web.stream_SLASH_web_.QueuingStrategySize<'T> option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            ?highWaterMark: float,
-                            ?size: Node.stream.web.stream_SLASH_web_.QueuingStrategySize<'T>
-                        )
-                        : QueuingStrategy<'T>
-                        =
-                        nativeOnly
-
-                type QueuingStrategySize<'T> = delegate of chunk: 'T -> float
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type QueuingStrategyInit =
-                    /// <summary>
-                    /// Creates a new ByteLengthQueuingStrategy with the provided high water
-                    /// mark.
-                    ///
-                    /// Note that the provided high water mark will not be validated ahead of
-                    /// time. Instead, if it is negative, NaN, or not a number, the resulting
-                    /// ByteLengthQueuingStrategy will cause the corresponding stream
-                    /// constructor to throw.
-                    /// </summary>
-                    abstract member highWaterMark: float with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(highWaterMark: float) : QueuingStrategyInit = nativeOnly
+                [<Import("WritableStreamDefaultController", "node:stream/web")>]
+                static member inline WritableStreamDefaultController
+                    : Exports.WritableStreamDefaultController__.Type =
+                    nativeOnly
 
                 /// <summary>
                 /// This Streams API interface provides a built-in byte length queuing
                 /// strategy that can be used when constructing streams.
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type ByteLengthQueuingStrategy =
-                    inherit Node.stream.web.stream_SLASH_web_.QueuingStrategy<obj>
-                    abstract member highWaterMark: float with get
-                    abstract member size: chunk: obj -> float
+                [<Import("ByteLengthQueuingStrategy", "node:stream/web")>]
+                static member inline ByteLengthQueuingStrategy
+                    : Exports.ByteLengthQueuingStrategy__.Type =
+                    nativeOnly
 
                 /// <summary>
                 /// This Streams API interface provides a built-in byte length queuing
                 /// strategy that can be used when constructing streams.
                 /// </summary>
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type CountQueuingStrategy =
-                    inherit Node.stream.web.stream_SLASH_web_.QueuingStrategy
-                    abstract member highWaterMark: float with get
-                    abstract member size: chunk: obj -> float
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type TextEncoderStream =
-                    /// <summary>
-                    /// Returns "utf-8".
-                    /// </summary>
-                    abstract member encoding: string with get
-
-                    abstract member readable:
-                        Node.stream.web.stream_SLASH_web_.ReadableStream<JS.Uint8Array> with get
-
-                    abstract member writable:
-                        Node.stream.web.stream_SLASH_web_.WritableStream<string> with get
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type TextDecoderOptions =
-                    abstract member fatal: bool option with get, set
-                    abstract member ignoreBOM: bool option with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(?fatal: bool, ?ignoreBOM: bool) : TextDecoderOptions =
-                        nativeOnly
-
-                type BufferSource = obj
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type TextDecoderStream =
-                    /// <summary>
-                    /// Returns encoding's name, lower cased.
-                    /// </summary>
-                    abstract member encoding: string with get
-                    /// <summary>
-                    /// Returns <c>true</c> if error mode is "fatal", and <c>false</c> otherwise.
-                    /// </summary>
-                    abstract member fatal: bool with get
-                    /// <summary>
-                    /// Returns <c>true</c> if ignore BOM flag is set, and <c>false</c> otherwise.
-                    /// </summary>
-                    abstract member ignoreBOM: bool with get
-
-                    abstract member readable:
-                        Node.stream.web.stream_SLASH_web_.ReadableStream<string> with get
-
-                    abstract member writable:
-                        Node.stream.web.stream_SLASH_web_.WritableStream<
-                            Node.stream.web.stream_SLASH_web_.BufferSource
-                         > with get
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type CompressionFormat =
-                    | brotli
-                    | deflate
-                    | ``deflate-raw``
-                    | gzip
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type CompressionStream =
-                    abstract member readable: Node.stream.web.stream_SLASH_web_.ReadableStream with get
-                    abstract member writable: Node.stream.web.stream_SLASH_web_.WritableStream with get
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type DecompressionStream =
-                    abstract member writable: Node.stream.web.stream_SLASH_web_.WritableStream with get
-                    abstract member readable: Node.stream.web.stream_SLASH_web_.ReadableStream with get
-
-                type ReadableWritablePair<'R> = ReadableWritablePair<'R, obj>
-
-                type ReadableWritablePair = ReadableWritablePair<obj, obj>
-
-                type UnderlyingSource = UnderlyingSource<obj>
-
-                type UnderlyingSink = UnderlyingSink<obj>
-
-                type ReadableStream = ReadableStream<obj>
-
-                type ReadableStreamDefaultReader = ReadableStreamDefaultReader<obj>
-
-                type ReadableStreamDefaultController = ReadableStreamDefaultController<obj>
-
-                type Transformer<'I> = Transformer<'I, obj>
-
-                type Transformer = Transformer<obj, obj>
-
-                type TransformStream<'I> = TransformStream<'I, obj>
-
-                type TransformStream = TransformStream<obj, obj>
-
-                type TransformStreamDefaultController = TransformStreamDefaultController<obj>
-
-                type WritableStream = WritableStream<obj>
-
-                type WritableStreamDefaultWriter = WritableStreamDefaultWriter<obj>
-
-                type QueuingStrategy = QueuingStrategy<obj>
-
-                type QueuingStrategySize = QueuingStrategySize<obj>
-
-                module ReadableStream =
-
-                    module getReader =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options =
-                            abstract member mode: string with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(mode: string) : options = nativeOnly
-
-                    module values =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options =
-                            abstract member preventCancel: bool option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?preventCancel: bool) : options = nativeOnly
-
-                module ReadableStreamBYOBReader =
-
-                    module read =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options =
-                            abstract member min: float option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?min: float) : options = nativeOnly
-
-                module Exports =
-
-                    module ReadableStream =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type<'R> =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ReadableStream with get, set
-
-                            abstract member from<'T> :
-                                iterable: Iterable<'T> ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStream<'T>
-
-                            abstract member from<'T> :
-                                iterable: obj ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStream<'T>
-
-                            abstract member from<'T> :
-                                iterable: U2<Iterable<'T>, obj> ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStream<'T>
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                underlyingSource:
-                                    Node.stream.web.stream_SLASH_web_.UnderlyingByteSource *
-                                ?strategy:
-                                    Node.stream.web.stream_SLASH_web_.QueuingStrategy<JS.Uint8Array> ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStream<JS.Uint8Array>
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                ?underlyingSource:
-                                    Node.stream.web.stream_SLASH_web_.UnderlyingSource<'R> *
-                                ?strategy: Node.stream.web.stream_SLASH_web_.QueuingStrategy<'R> ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStream<'R>
-
-                    module ReadableStreamDefaultReader =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type<'R> =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultReader with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                stream: Node.stream.web.stream_SLASH_web_.ReadableStream<'R> ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultReader<'R>
-
-                    module ReadableStreamBYOBReader =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBReader with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                stream: Node.stream.web.stream_SLASH_web_.ReadableStream ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBReader
-
-                    module ReadableStreamBYOBRequest =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBRequest with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                unit -> Node.stream.web.stream_SLASH_web_.ReadableStreamBYOBRequest
-
-                    module ReadableByteStreamController =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ReadableByteStreamController with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                unit ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableByteStreamController
-
-                    module ReadableStreamDefaultController =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultController with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                unit ->
-                                    Node.stream.web.stream_SLASH_web_.ReadableStreamDefaultController
-
-                    module TransformStream =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type<'I, 'O> =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.TransformStream with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                ?transformer: Node.stream.web.stream_SLASH_web_.Transformer<'I, 'O> *
-                                ?writableStrategy:
-                                    Node.stream.web.stream_SLASH_web_.QueuingStrategy<'I> *
-                                ?readableStrategy:
-                                    Node.stream.web.stream_SLASH_web_.QueuingStrategy<'O> ->
-                                    Node.stream.web.stream_SLASH_web_.TransformStream<'I, 'O>
-
-                    module TransformStreamDefaultController =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.TransformStreamDefaultController with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                unit ->
-                                    Node.stream.web.stream_SLASH_web_.TransformStreamDefaultController
-
-                    module WritableStream =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type<'W> =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.WritableStream with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                ?underlyingSink:
-                                    Node.stream.web.stream_SLASH_web_.UnderlyingSink<'W> *
-                                ?strategy: Node.stream.web.stream_SLASH_web_.QueuingStrategy<'W> ->
-                                    Node.stream.web.stream_SLASH_web_.WritableStream<'W>
-
-                    module WritableStreamDefaultWriter =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type<'W> =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.WritableStreamDefaultWriter with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                stream: Node.stream.web.stream_SLASH_web_.WritableStream<'W> ->
-                                    Node.stream.web.stream_SLASH_web_.WritableStreamDefaultWriter<'W>
-
-                    module WritableStreamDefaultController =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.WritableStreamDefaultController with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                unit ->
-                                    Node.stream.web.stream_SLASH_web_.WritableStreamDefaultController
-
-                    module ByteLengthQueuingStrategy =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.ByteLengthQueuingStrategy with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                init: Node.stream.web.stream_SLASH_web_.QueuingStrategyInit ->
-                                    Node.stream.web.stream_SLASH_web_.ByteLengthQueuingStrategy
-
-                    module CountQueuingStrategy =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.CountQueuingStrategy with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                init: Node.stream.web.stream_SLASH_web_.QueuingStrategyInit ->
-                                    Node.stream.web.stream_SLASH_web_.CountQueuingStrategy
-
-                    module TextEncoderStream =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.TextEncoderStream with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                unit -> Node.stream.web.stream_SLASH_web_.TextEncoderStream
-
-                    module TextDecoderStream =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Type =
-                            abstract member prototype:
-                                Node.stream.web.stream_SLASH_web_.TextDecoderStream with get, set
-
-                            [<EmitConstructor>]
-                            abstract member Create:
-                                ?encoding: string *
-                                ?options: Node.stream.web.stream_SLASH_web_.TextDecoderOptions ->
-                                    Node.stream.web.stream_SLASH_web_.TextDecoderStream
+                [<Import("CountQueuingStrategy", "node:stream/web")>]
+                static member inline CountQueuingStrategy: Exports.CountQueuingStrategy__.Type =
+                    nativeOnly
+
+                [<Import("TextEncoderStream", "node:stream/web")>]
+                static member inline TextEncoderStream: Exports.TextEncoderStream__.Type =
+                    nativeOnly
+
+                [<Import("TextDecoderStream", "node:stream/web")>]
+                static member inline TextDecoderStream: Exports.TextDecoderStream__.Type =
+                    nativeOnly
+
+                [<Import("CompressionStream", "node:stream/web"); EmitConstructor>]
+                static member CompressionStream
+                    (format: Node.stream.web.CompressionFormat)
+                    : CompressionStream
+                    =
+                    nativeOnly
+
+                [<Import("DecompressionStream", "node:stream/web"); EmitConstructor>]
+                static member DecompressionStream
+                    (format: Node.stream.web.CompressionFormat)
+                    : DecompressionStream
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableWritablePair<'R, 'W> =
+                abstract member readable: Node.stream.web.ReadableStream<'R> with get, set
+                /// <summary>
+                /// Provides a convenient, chainable way of piping this readable stream
+                /// through a transform stream (or any other { writable, readable }
+                /// pair). It simply pipes the stream into the writable side of the
+                /// supplied pair, and returns the readable side for further use.
+                ///
+                /// Piping a stream will lock it for the duration of the pipe, preventing
+                /// any other consumer from acquiring a reader.
+                /// </summary>
+                abstract member writable: Node.stream.web.WritableStream<'W> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        readable: Node.stream.web.ReadableStream<'R>,
+                        writable: Node.stream.web.WritableStream<'W>
+                    )
+                    : ReadableWritablePair<'R, 'W>
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type StreamPipeOptions =
+                abstract member preventAbort: bool option with get, set
+                abstract member preventCancel: bool option with get, set
+                /// <summary>
+                /// Pipes this readable stream to a given writable stream destination.
+                /// The way in which the piping process behaves under various error
+                /// conditions can be customized with a number of passed options. It
+                /// returns a promise that fulfills when the piping process completes
+                /// successfully, or rejects if any errors were encountered.
+                ///
+                /// Piping a stream will lock it for the duration of the pipe, preventing
+                /// any other consumer from acquiring a reader.
+                ///
+                /// Errors and closures of the source and destination streams propagate
+                /// as follows:
+                ///
+                /// An error in this source readable stream will abort destination,
+                /// unless preventAbort is truthy. The returned promise will be rejected
+                /// with the source's error, or with any error that occurs during
+                /// aborting the destination.
+                ///
+                /// An error in destination will cancel this source readable stream,
+                /// unless preventCancel is truthy. The returned promise will be rejected
+                /// with the destination's error, or with any error that occurs during
+                /// canceling the source.
+                ///
+                /// When this source readable stream closes, destination will be closed,
+                /// unless preventClose is truthy. The returned promise will be fulfilled
+                /// once this process completes, unless an error is encountered while
+                /// closing the destination, in which case it will be rejected with that
+                /// error.
+                ///
+                /// If destination starts out closed or closing, this source readable
+                /// stream will be canceled, unless preventCancel is true. The returned
+                /// promise will be rejected with an error indicating piping to a closed
+                /// stream failed, or with any error that occurs during canceling the
+                /// source.
+                ///
+                /// The signal option can be set to an AbortSignal to allow aborting an
+                /// ongoing pipe operation via the corresponding AbortController. In this
+                /// case, this source readable stream will be canceled, and destination
+                /// aborted, unless the respective options preventCancel or preventAbort
+                /// are set.
+                /// </summary>
+                abstract member preventClose: bool option with get, set
+                abstract member signal: Node.AbortSignal option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?preventAbort: bool,
+                        ?preventCancel: bool,
+                        ?preventClose: bool,
+                        ?signal: Node.AbortSignal
+                    )
+                    : StreamPipeOptions
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamGenericReader =
+                abstract member closed: JS.Promise<unit> with get
+                abstract member cancel: ?reason: obj -> JS.Promise<unit>
+
+            type ReadableStreamController<'T> = Node.stream.web.ReadableStreamDefaultController<'T>
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamReadValueResult<'T> =
+                abstract member ``done``: bool with get, set
+                abstract member value: 'T with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamReadDoneResult<'T> =
+                abstract member ``done``: bool with get, set
+                abstract member value: 'T option with get, set
+
+            type ReadableStreamReadResult<'T> =
+                U2<
+                    Node.stream.web.ReadableStreamReadValueResult<'T>,
+                    Node.stream.web.ReadableStreamReadDoneResult<'T>
+                 >
+
+            type ReadableByteStreamControllerCallback =
+                delegate of
+                    controller: Node.stream.web.ReadableByteStreamController -> U2<unit, obj>
+
+            type UnderlyingSinkAbortCallback = delegate of ?reason: obj -> U2<unit, obj>
+
+            type UnderlyingSinkCloseCallback = delegate of unit -> U2<unit, obj>
+
+            type UnderlyingSinkStartCallback =
+                delegate of controller: Node.stream.web.WritableStreamDefaultController -> unit
+
+            type UnderlyingSinkWriteCallback<'W> =
+                delegate of
+                    chunk: 'W * controller: Node.stream.web.WritableStreamDefaultController ->
+                        U2<unit, obj>
+
+            type UnderlyingSourceCancelCallback = delegate of ?reason: obj -> U2<unit, obj>
+
+            type UnderlyingSourcePullCallback<'R> =
+                delegate of
+                    controller: Node.stream.web.ReadableStreamController<'R> -> U2<unit, obj>
+
+            type UnderlyingSourceStartCallback<'R> =
+                delegate of controller: Node.stream.web.ReadableStreamController<'R> -> unit
+
+            type TransformerFlushCallback<'O> =
+                delegate of
+                    controller: Node.stream.web.TransformStreamDefaultController<'O> ->
+                        U2<unit, obj>
+
+            type TransformerStartCallback<'O> =
+                delegate of controller: Node.stream.web.TransformStreamDefaultController<'O> -> unit
+
+            type TransformerTransformCallback<'I, 'O> =
+                delegate of
+                    chunk: 'I * controller: Node.stream.web.TransformStreamDefaultController<'O> ->
+                        U2<unit, obj>
+
+            type TransformerCancelCallback = delegate of reason: obj -> U2<unit, obj>
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type UnderlyingByteSource =
+                abstract member autoAllocateChunkSize: float option with get, set
+                abstract member cancel: Node.stream.web.ReadableStreamErrorCallback option with get, set
+                abstract member pull: Node.stream.web.ReadableByteStreamControllerCallback option with get, set
+                abstract member start: Node.stream.web.ReadableByteStreamControllerCallback option with get, set
+                abstract member ``type``: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ``type``: string,
+                        ?autoAllocateChunkSize: float,
+                        ?cancel: Node.stream.web.ReadableStreamErrorCallback,
+                        ?pull: Node.stream.web.ReadableByteStreamControllerCallback,
+                        ?start: Node.stream.web.ReadableByteStreamControllerCallback
+                    )
+                    : UnderlyingByteSource
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type UnderlyingSource<'R> =
+                abstract member cancel: Node.stream.web.UnderlyingSourceCancelCallback option with get, set
+                abstract member pull: Node.stream.web.UnderlyingSourcePullCallback<'R> option with get, set
+                abstract member start: Node.stream.web.UnderlyingSourceStartCallback<'R> option with get, set
+                abstract member ``type``: obj option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?cancel: Node.stream.web.UnderlyingSourceCancelCallback,
+                        ?pull: Node.stream.web.UnderlyingSourcePullCallback<'R>,
+                        ?start: Node.stream.web.UnderlyingSourceStartCallback<'R>,
+                        ?``type``: obj
+                    )
+                    : UnderlyingSource<'R>
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type UnderlyingSink<'W> =
+                abstract member abort: Node.stream.web.UnderlyingSinkAbortCallback option with get, set
+                abstract member close: Node.stream.web.UnderlyingSinkCloseCallback option with get, set
+                abstract member start: Node.stream.web.UnderlyingSinkStartCallback option with get, set
+                abstract member ``type``: obj option with get, set
+                abstract member write: Node.stream.web.UnderlyingSinkWriteCallback<'W> option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?abort: Node.stream.web.UnderlyingSinkAbortCallback,
+                        ?close: Node.stream.web.UnderlyingSinkCloseCallback,
+                        ?start: Node.stream.web.UnderlyingSinkStartCallback,
+                        ?``type``: obj,
+                        ?write: Node.stream.web.UnderlyingSinkWriteCallback<'W>
+                    )
+                    : UnderlyingSink<'W>
+                    =
+                    nativeOnly
+
+            type ReadableStreamErrorCallback = delegate of reason: obj -> U2<unit, obj>
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamAsyncIterator<'T> =
+                inherit Node.NodeJS.AsyncIterator<'T, obj, obj>
+
+            /// <summary>
+            /// This Streams API interface represents a readable stream of byte data.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStream<'R> =
+                abstract member locked: bool with get
+                abstract member cancel: ?reason: obj -> JS.Promise<unit>
+
+                abstract member getReader:
+                    options: ReadableStream.getReader.options ->
+                        Node.stream.web.ReadableStreamBYOBReader
+
+                abstract member getReader: unit -> Node.stream.web.ReadableStreamDefaultReader<'R>
+
+                abstract member getReader:
+                    ?options: Node.stream.web.ReadableStreamGetReaderOptions ->
+                        Node.stream.web.ReadableStreamReader<'R>
+
+                abstract member pipeThrough<'T> :
+                    transform: Node.stream.web.ReadableWritablePair<'T, 'R> *
+                    ?options: Node.stream.web.StreamPipeOptions ->
+                        Node.stream.web.ReadableStream<'T>
+
+                abstract member pipeTo:
+                    destination: Node.stream.web.WritableStream<'R> *
+                    ?options: Node.stream.web.StreamPipeOptions ->
+                        JS.Promise<unit>
+
+                abstract member tee:
+                    unit -> Node.stream.web.ReadableStream<'R> * Node.stream.web.ReadableStream<'R>
+
+                abstract member values:
+                    ?options: ReadableStream.values.options ->
+                        Node.stream.web.ReadableStreamAsyncIterator<'R>
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type ReadableStreamReaderMode = | byob
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamGetReaderOptions =
+                /// <summary>
+                /// Creates a ReadableStreamBYOBReader and locks the stream to the new reader.
+                ///
+                /// This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
+                /// </summary>
+                abstract member mode: Node.stream.web.ReadableStreamReaderMode option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?mode: Node.stream.web.ReadableStreamReaderMode)
+                    : ReadableStreamGetReaderOptions
+                    =
+                    nativeOnly
+
+            type ReadableStreamReader<'T> =
+                U2<
+                    Node.stream.web.ReadableStreamDefaultReader<'T>,
+                    Node.stream.web.ReadableStreamBYOBReader
+                 >
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamDefaultReader<'R> =
+                inherit Node.stream.web.ReadableStreamGenericReader
+
+                abstract member read:
+                    unit -> JS.Promise<Node.stream.web.ReadableStreamReadResult<'R>>
+
+                abstract member releaseLock: unit -> unit
+
+            /// <summary>
+            /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamBYOBReader =
+                inherit Node.stream.web.ReadableStreamGenericReader
+
+                /// <summary>
+                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/read)
+                /// </summary>
+                abstract member read<'T> :
+                    view: 'T * ?options: ReadableStreamBYOBReader.read.options ->
+                        JS.Promise<Node.stream.web.ReadableStreamReadResult<'T>>
+
+                /// <summary>
+                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/releaseLock)
+                /// </summary>
+                abstract member releaseLock: unit -> unit
+
+            /// <summary>
+            /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest)
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamBYOBRequest =
+                /// <summary>
+                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/view)
+                /// </summary>
+                abstract member view: obj option with get
+                /// <summary>
+                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/respond)
+                /// </summary>
+                abstract member respond: bytesWritten: float -> unit
+                /// <summary>
+                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/respondWithNewView)
+                /// </summary>
+                abstract member respondWithNewView: view: obj -> unit
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableByteStreamController =
+                abstract member byobRequest: Node.stream.web.ReadableStreamBYOBRequest option with get
+                abstract member desiredSize: float option with get
+                abstract member close: unit -> unit
+                abstract member enqueue: chunk: obj -> unit
+                abstract member error: ?error: obj -> unit
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadableStreamDefaultController<'R> =
+                abstract member desiredSize: float option with get
+                abstract member close: unit -> unit
+                abstract member enqueue: chunk: 'R -> unit
+                abstract member error: ?e: obj -> unit
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Transformer<'I, 'O> =
+                abstract member flush: Node.stream.web.TransformerFlushCallback<'O> option with get, set
+                abstract member readableType: obj option with get, set
+                abstract member start: Node.stream.web.TransformerStartCallback<'O> option with get, set
+
+                abstract member transform:
+                    Node.stream.web.TransformerTransformCallback<'I, 'O> option with get, set
+
+                abstract member cancel: Node.stream.web.TransformerCancelCallback option with get, set
+                abstract member writableType: obj option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?flush: Node.stream.web.TransformerFlushCallback<'O>,
+                        ?readableType: obj,
+                        ?start: Node.stream.web.TransformerStartCallback<'O>,
+                        ?transform: Node.stream.web.TransformerTransformCallback<'I, 'O>,
+                        ?cancel: Node.stream.web.TransformerCancelCallback,
+                        ?writableType: obj
+                    )
+                    : Transformer<'I, 'O>
+                    =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TransformStream<'I, 'O> =
+                abstract member readable: Node.stream.web.ReadableStream<'O> with get
+                abstract member writable: Node.stream.web.WritableStream<'I> with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TransformStreamDefaultController<'O> =
+                abstract member desiredSize: float option with get
+                abstract member enqueue: chunk: 'O -> unit
+                abstract member error: ?reason: obj -> unit
+                abstract member terminate: unit -> unit
+
+            /// <summary>
+            /// This Streams API interface provides a standard abstraction for writing
+            /// streaming data to a destination, known as a sink. This object comes with
+            /// built-in back pressure and queuing.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type WritableStream<'W> =
+                abstract member locked: bool with get
+                abstract member abort: ?reason: obj -> JS.Promise<unit>
+                abstract member close: unit -> JS.Promise<unit>
+                abstract member getWriter: unit -> Node.stream.web.WritableStreamDefaultWriter<'W>
+
+            /// <summary>
+            /// This Streams API interface is the object returned by
+            /// WritableStream.getWriter() and once created locks the < writer to the
+            /// WritableStream ensuring that no other streams can write to the underlying
+            /// sink.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type WritableStreamDefaultWriter<'W> =
+                abstract member closed: JS.Promise<unit> with get
+                abstract member desiredSize: float option with get
+                abstract member ready: JS.Promise<unit> with get
+                abstract member abort: ?reason: obj -> JS.Promise<unit>
+                abstract member close: unit -> JS.Promise<unit>
+                abstract member releaseLock: unit -> unit
+                abstract member write: chunk: 'W -> JS.Promise<unit>
+
+            /// <summary>
+            /// This Streams API interface represents a controller allowing control of a
+            /// WritableStream's state. When constructing a WritableStream, the
+            /// underlying sink is given a corresponding WritableStreamDefaultController
+            /// instance to manipulate.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type WritableStreamDefaultController =
+                abstract member error: ?e: obj -> unit
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type QueuingStrategy<'T> =
+                abstract member highWaterMark: float option with get, set
+                abstract member size: Node.stream.web.QueuingStrategySize<'T> option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?highWaterMark: float, ?size: Node.stream.web.QueuingStrategySize<'T>)
+                    : QueuingStrategy<'T>
+                    =
+                    nativeOnly
+
+            type QueuingStrategySize<'T> = delegate of chunk: 'T -> float
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type QueuingStrategyInit =
+                /// <summary>
+                /// Creates a new ByteLengthQueuingStrategy with the provided high water
+                /// mark.
+                ///
+                /// Note that the provided high water mark will not be validated ahead of
+                /// time. Instead, if it is negative, NaN, or not a number, the resulting
+                /// ByteLengthQueuingStrategy will cause the corresponding stream
+                /// constructor to throw.
+                /// </summary>
+                abstract member highWaterMark: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(highWaterMark: float) : QueuingStrategyInit = nativeOnly
+
+            /// <summary>
+            /// This Streams API interface provides a built-in byte length queuing
+            /// strategy that can be used when constructing streams.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ByteLengthQueuingStrategy =
+                inherit Node.stream.web.QueuingStrategy<obj>
+                abstract member highWaterMark: float with get
+                abstract member size: chunk: obj -> float
+
+            /// <summary>
+            /// This Streams API interface provides a built-in byte length queuing
+            /// strategy that can be used when constructing streams.
+            /// </summary>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type CountQueuingStrategy =
+                inherit Node.stream.web.QueuingStrategy
+                abstract member highWaterMark: float with get
+                abstract member size: chunk: obj -> float
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TextEncoderStream =
+                /// <summary>
+                /// Returns "utf-8".
+                /// </summary>
+                abstract member encoding: string with get
+                abstract member readable: Node.stream.web.ReadableStream<JS.Uint8Array> with get
+                abstract member writable: Node.stream.web.WritableStream<string> with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TextDecoderOptions =
+                abstract member fatal: bool option with get, set
+                abstract member ignoreBOM: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?fatal: bool, ?ignoreBOM: bool) : TextDecoderOptions =
+                    nativeOnly
+
+            type BufferSource = obj
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TextDecoderStream =
+                /// <summary>
+                /// Returns encoding's name, lower cased.
+                /// </summary>
+                abstract member encoding: string with get
+                /// <summary>
+                /// Returns <c>true</c> if error mode is "fatal", and <c>false</c> otherwise.
+                /// </summary>
+                abstract member fatal: bool with get
+                /// <summary>
+                /// Returns <c>true</c> if ignore BOM flag is set, and <c>false</c> otherwise.
+                /// </summary>
+                abstract member ignoreBOM: bool with get
+                abstract member readable: Node.stream.web.ReadableStream<string> with get
+
+                abstract member writable:
+                    Node.stream.web.WritableStream<Node.stream.web.BufferSource> with get
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type CompressionFormat =
+                | brotli
+                | deflate
+                | ``deflate-raw``
+                | gzip
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type CompressionStream =
+                abstract member readable: Node.stream.web.ReadableStream with get
+                abstract member writable: Node.stream.web.WritableStream with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type DecompressionStream =
+                abstract member writable: Node.stream.web.WritableStream with get
+                abstract member readable: Node.stream.web.ReadableStream with get
+
+            type ReadableWritablePair<'R> = ReadableWritablePair<'R, obj>
+
+            type ReadableWritablePair = ReadableWritablePair<obj, obj>
+
+            type UnderlyingSource = UnderlyingSource<obj>
+
+            type UnderlyingSink = UnderlyingSink<obj>
+
+            type ReadableStream = ReadableStream<obj>
+
+            type ReadableStreamDefaultReader = ReadableStreamDefaultReader<obj>
+
+            type ReadableStreamDefaultController = ReadableStreamDefaultController<obj>
+
+            type Transformer<'I> = Transformer<'I, obj>
+
+            type Transformer = Transformer<obj, obj>
+
+            type TransformStream<'I> = TransformStream<'I, obj>
+
+            type TransformStream = TransformStream<obj, obj>
+
+            type TransformStreamDefaultController = TransformStreamDefaultController<obj>
+
+            type WritableStream = WritableStream<obj>
+
+            type WritableStreamDefaultWriter = WritableStreamDefaultWriter<obj>
+
+            type QueuingStrategy = QueuingStrategy<obj>
+
+            type QueuingStrategySize = QueuingStrategySize<obj>
+
+            module ReadableStream =
+
+                module getReader =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options =
+                        abstract member mode: string with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(mode: string) : options = nativeOnly
+
+                module values =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options =
+                        abstract member preventCancel: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?preventCancel: bool) : options = nativeOnly
+
+            module ReadableStreamBYOBReader =
+
+                module read =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options =
+                        abstract member min: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?min: float) : options = nativeOnly
+
+            module Exports =
+
+                module ReadableStream__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type<'R> =
+                        abstract member prototype: Node.stream.web.ReadableStream with get, set
+
+                        abstract member from<'T> :
+                            iterable: Iterable<'T> -> Node.stream.web.ReadableStream<'T>
+
+                        abstract member from<'T> :
+                            iterable: obj -> Node.stream.web.ReadableStream<'T>
+
+                        abstract member from<'T> :
+                            iterable: U2<Iterable<'T>, obj> -> Node.stream.web.ReadableStream<'T>
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            underlyingSource: Node.stream.web.UnderlyingByteSource *
+                            ?strategy: Node.stream.web.QueuingStrategy<JS.Uint8Array> ->
+                                Node.stream.web.ReadableStream<JS.Uint8Array>
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            ?underlyingSource: Node.stream.web.UnderlyingSource<'R> *
+                            ?strategy: Node.stream.web.QueuingStrategy<'R> ->
+                                Node.stream.web.ReadableStream<'R>
+
+                module ReadableStreamDefaultReader__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type<'R> =
+                        abstract member prototype: Node.stream.web.ReadableStreamDefaultReader with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            stream: Node.stream.web.ReadableStream<'R> ->
+                                Node.stream.web.ReadableStreamDefaultReader<'R>
+
+                module ReadableStreamBYOBReader__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.ReadableStreamBYOBReader with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            stream: Node.stream.web.ReadableStream ->
+                                Node.stream.web.ReadableStreamBYOBReader
+
+                module ReadableStreamBYOBRequest__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.ReadableStreamBYOBRequest with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> Node.stream.web.ReadableStreamBYOBRequest
+
+                module ReadableByteStreamController__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.ReadableByteStreamController with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> Node.stream.web.ReadableByteStreamController
+
+                module ReadableStreamDefaultController__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.ReadableStreamDefaultController with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            unit -> Node.stream.web.ReadableStreamDefaultController
+
+                module TransformStream__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type<'I, 'O> =
+                        abstract member prototype: Node.stream.web.TransformStream with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            ?transformer: Node.stream.web.Transformer<'I, 'O> *
+                            ?writableStrategy: Node.stream.web.QueuingStrategy<'I> *
+                            ?readableStrategy: Node.stream.web.QueuingStrategy<'O> ->
+                                Node.stream.web.TransformStream<'I, 'O>
+
+                module TransformStreamDefaultController__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.TransformStreamDefaultController with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            unit -> Node.stream.web.TransformStreamDefaultController
+
+                module WritableStream__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type<'W> =
+                        abstract member prototype: Node.stream.web.WritableStream with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            ?underlyingSink: Node.stream.web.UnderlyingSink<'W> *
+                            ?strategy: Node.stream.web.QueuingStrategy<'W> ->
+                                Node.stream.web.WritableStream<'W>
+
+                module WritableStreamDefaultWriter__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type<'W> =
+                        abstract member prototype: Node.stream.web.WritableStreamDefaultWriter with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            stream: Node.stream.web.WritableStream<'W> ->
+                                Node.stream.web.WritableStreamDefaultWriter<'W>
+
+                module WritableStreamDefaultController__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.WritableStreamDefaultController with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            unit -> Node.stream.web.WritableStreamDefaultController
+
+                module ByteLengthQueuingStrategy__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.ByteLengthQueuingStrategy with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            init: Node.stream.web.QueuingStrategyInit ->
+                                Node.stream.web.ByteLengthQueuingStrategy
+
+                module CountQueuingStrategy__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.CountQueuingStrategy with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            init: Node.stream.web.QueuingStrategyInit ->
+                                Node.stream.web.CountQueuingStrategy
+
+                module TextEncoderStream__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.TextEncoderStream with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create: unit -> Node.stream.web.TextEncoderStream
+
+                module TextDecoderStream__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Type =
+                        abstract member prototype: Node.stream.web.TextDecoderStream with get, set
+
+                        [<EmitConstructor>]
+                        abstract member Create:
+                            ?encoding: string * ?options: Node.stream.web.TextDecoderOptions ->
+                                Node.stream.web.TextDecoderStream
 
         type StreamOptions<'T> = Stream_.StreamOptions<'T>
 
@@ -189544,25 +189275,6 @@ Duplex.fromWeb($0, $1)""")>]
             [<ImportDefault("node:test")>]
             [<Emit("$0.mock")>]
             static member inline mock: Node.test.test_.MockTracker = nativeOnly
-
-            /// <summary>
-            /// The <c>node:test/reporters</c> module exposes the builtin-reporters for <c>node:test</c>.
-            /// To access it:
-            ///
-            /// <code lang="js">
-            /// import test from 'node:test/reporters';
-            /// </code>
-            ///
-            /// This module is only available under the <c>node:</c> scheme. The following will not
-            /// work:
-            ///
-            /// <code lang="js">
-            /// import test from 'node:test/reporters';
-            /// </code>
-            /// </summary>
-            [<ImportAll("node:test/reporters")>]
-            static member ``node:test_SLASH_reporters``: ``node:test_SLASH_reporters_``.Exports =
-                nativeOnly
 
         module test_ =
 
@@ -197725,7 +197437,7 @@ Duplex.fromWeb($0, $1)""")>]
         [<Interface>]
         type FunctionPropertyNames<'T> = interface end
 
-        module ``node:test_SLASH_reporters_`` =
+        module reporters =
 
             [<AbstractClass>]
             [<Erase>]
@@ -197735,45 +197447,45 @@ Duplex.fromWeb($0, $1)""")>]
                 /// where each passing test is represented by a <c>.</c>,
                 /// and each failing test is represented by a <c>X</c>.
                 /// </summary>
-                [<Emit("$0.dot($1...)")>]
-                abstract member dot:
-                    source: Node.test.``node:test_SLASH_reporters_``.TestEventGenerator -> obj
+                [<Import("dot", "node:test/reporters")>]
+                static member dot(source: Node.test.reporters.TestEventGenerator) : obj = nativeOnly
 
                 /// <summary>
                 /// The <c>tap</c> reporter outputs the test results in the [TAP](https://testanything.org/) format.
                 /// </summary>
-                [<Emit("$0.tap($1...)")>]
-                abstract member tap:
-                    source: Node.test.``node:test_SLASH_reporters_``.TestEventGenerator -> obj
+                [<Import("tap", "node:test/reporters")>]
+                static member tap(source: Node.test.reporters.TestEventGenerator) : obj = nativeOnly
 
                 /// <summary>
                 /// The <c>spec</c> reporter outputs the test results in a human-readable format.
                 /// </summary>
-                [<Emit("$0.spec")>]
-                abstract member spec:
-                    Node.test.``node:test_SLASH_reporters_``.ReporterConstructorWrapper<
-                        Node.test.``node:test_SLASH_reporters_``.SpecReporter
-                     >
+                [<Import("spec", "node:test/reporters")>]
+                static member inline spec
+                    : Node.test.reporters.ReporterConstructorWrapper<
+                          Node.test.reporters.SpecReporter
+                       > =
+                    nativeOnly
 
                 /// <summary>
                 /// The <c>junit</c> reporter outputs test results in a jUnit XML format.
                 /// </summary>
-                [<Emit("$0.junit($1...)")>]
-                abstract member junit:
-                    source: Node.test.``node:test_SLASH_reporters_``.TestEventGenerator -> obj
+                [<Import("junit", "node:test/reporters")>]
+                static member junit(source: Node.test.reporters.TestEventGenerator) : obj =
+                    nativeOnly
 
                 /// <summary>
                 /// The <c>lcov</c> reporter outputs test coverage when used with the
                 /// [<c>--experimental-test-coverage</c>](https://nodejs.org/docs/latest-v22.x/api/cli.html#--experimental-test-coverage) flag.
                 /// </summary>
-                [<Emit("$0.lcov")>]
-                abstract member lcov: Node.test.``node:test_SLASH_reporters_``.LcovReporter
+                [<Import("lcov", "node:test/reporters")>]
+                static member inline lcov: Node.test.reporters.LcovReporter = nativeOnly
 
-                [<Emit("new $0.SpecReporter($1...)")>]
-                abstract member SpecReporter: unit -> SpecReporter
+                [<Import("SpecReporter", "node:test/reporters"); EmitConstructor>]
+                static member SpecReporter() : SpecReporter = nativeOnly
 
-                [<Emit("new $0.LcovReporter($1...)")>]
-                abstract member LcovReporter: ?opts: Exports.LcovReporter.opts -> LcovReporter
+                [<Import("LcovReporter", "node:test/reporters"); EmitConstructor>]
+                static member LcovReporter(?opts: Exports.LcovReporter.opts) : LcovReporter =
+                    nativeOnly
 
             [<RequireQualifiedAccess>]
             [<TypeScriptTaggedUnion("type", CaseRules.None)>]
@@ -204713,8 +204425,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("""import { URL } from "node:url";
 URL.createObjectURL($0)""")>]
-            static member inline createObjectURL(blob: Node.buffer.buffer_.Blob) : string =
-                nativeOnly
+            static member inline createObjectURL(blob: Node.buffer.Blob) : string = nativeOnly
 
             /// <summary>
             /// Removes the stored <c>Blob</c> identified by the given ID. Attempting to revoke a
@@ -207747,9 +207458,6 @@ URL.parse($0, $1)""")>]
             [<ImportAll("node:util")>]
             static member promisify_: promisify_.Exports = nativeOnly
 
-            [<ImportAll("util/types")>]
-            static member util_SLASH_types: util_SLASH_types_.Exports = nativeOnly
-
         [<AllowNullLiteral>]
         [<Interface>]
         type InspectOptions =
@@ -208494,7 +208202,7 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member values: unit -> Node.NodeJS.Iterator<string>
 
-        module util_SLASH_types_ =
+        module types =
 
             [<AbstractClass>]
             [<Erase>]
@@ -208510,8 +208218,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isAnyArrayBuffer(new SharedArrayBuffer());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isAnyArrayBuffer($1...)")>]
-                abstract member isAnyArrayBuffer: ``object``: obj -> bool
+                [<Import("isAnyArrayBuffer", "node:util/types")>]
+                static member isAnyArrayBuffer(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is an <c>arguments</c> object.
@@ -208522,8 +208230,8 @@ URL.parse($0, $1)""")>]
                 /// }
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isArgumentsObject($1...)")>]
-                abstract member isArgumentsObject: ``object``: obj -> bool
+                [<Import("isArgumentsObject", "node:util/types")>]
+                static member isArgumentsObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>ArrayBuffer</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) instance.
@@ -208535,8 +208243,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isArrayBuffer(new SharedArrayBuffer());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isArrayBuffer($1...)")>]
-                abstract member isArrayBuffer: ``object``: obj -> bool
+                [<Import("isArrayBuffer", "node:util/types")>]
+                static member isArrayBuffer(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is an instance of one of the [<c>ArrayBuffer</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) views, such as typed
@@ -208550,8 +208258,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isArrayBufferView(new ArrayBuffer());  // false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isArrayBufferView($1...)")>]
-                abstract member isArrayBufferView: ``object``: obj -> bool
+                [<Import("isArrayBufferView", "node:util/types")>]
+                static member isArrayBufferView(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is an [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
@@ -208564,8 +208272,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isAsyncFunction(async function foo() {});  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isAsyncFunction($1...)")>]
-                abstract member isAsyncFunction: ``object``: obj -> bool
+                [<Import("isAsyncFunction", "node:util/types")>]
+                static member isAsyncFunction(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a <c>BigInt64Array</c> instance.
@@ -208575,8 +208283,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isBigInt64Array(new BigUint64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isBigInt64Array($1...)")>]
-                abstract member isBigInt64Array: value: obj -> bool
+                [<Import("isBigInt64Array", "node:util/types")>]
+                static member isBigInt64Array(value: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a BigInt object, e.g. created
@@ -208588,8 +208296,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isBigIntObject(123);  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isBigIntObject($1...)")>]
-                abstract member isBigIntObject: ``object``: obj -> bool
+                [<Import("isBigIntObject", "node:util/types")>]
+                static member isBigIntObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a <c>BigUint64Array</c> instance.
@@ -208599,8 +208307,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isBigUint64Array(new BigUint64Array());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isBigUint64Array($1...)")>]
-                abstract member isBigUint64Array: value: obj -> bool
+                [<Import("isBigUint64Array", "node:util/types")>]
+                static member isBigUint64Array(value: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a boolean object, e.g. created
@@ -208615,8 +208323,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isBooleanObject(Boolean(true));  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isBooleanObject($1...)")>]
-                abstract member isBooleanObject: ``object``: obj -> bool
+                [<Import("isBooleanObject", "node:util/types")>]
+                static member isBooleanObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is any boxed primitive object, e.g. created
@@ -208632,8 +208340,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isBoxedPrimitive(Object(BigInt(5))); // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isBoxedPrimitive($1...)")>]
-                abstract member isBoxedPrimitive: ``object``: obj -> bool
+                [<Import("isBoxedPrimitive", "node:util/types")>]
+                static member isBoxedPrimitive(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>DataView</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView) instance.
@@ -208646,8 +208354,8 @@ URL.parse($0, $1)""")>]
                 ///
                 /// See also [<c>ArrayBuffer.isView()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/isView).
                 /// </summary>
-                [<Emit("$0.isDataView($1...)")>]
-                abstract member isDataView: ``object``: obj -> bool
+                [<Import("isDataView", "node:util/types")>]
+                static member isDataView(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Date</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance.
@@ -208656,8 +208364,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isDate(new Date());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isDate($1...)")>]
-                abstract member isDate: ``object``: obj -> bool
+                [<Import("isDate", "node:util/types")>]
+                static member isDate(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a native <c>External</c> value.
@@ -208700,8 +208408,8 @@ URL.parse($0, $1)""")>]
                 /// For further information on <c>napi_create_external</c>, refer to
                 /// [<c>napi_create_external()</c>](https://nodejs.org/docs/latest-v22.x/api/n-api.html#napi_create_external).
                 /// </summary>
-                [<Emit("$0.isExternal($1...)")>]
-                abstract member isExternal: ``object``: obj -> bool
+                [<Import("isExternal", "node:util/types")>]
+                static member isExternal(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in <c>Float16Array</c> instance.
@@ -208712,8 +208420,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isFloat16Array(new Float32Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isFloat16Array($1...)")>]
-                abstract member isFloat16Array: ``object``: obj -> bool
+                [<Import("isFloat16Array", "node:util/types")>]
+                static member isFloat16Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Float32Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) instance.
@@ -208724,8 +208432,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isFloat32Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isFloat32Array($1...)")>]
-                abstract member isFloat32Array: ``object``: obj -> bool
+                [<Import("isFloat32Array", "node:util/types")>]
+                static member isFloat32Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Float64Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array) instance.
@@ -208736,8 +208444,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isFloat64Array(new Float64Array());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isFloat64Array($1...)")>]
-                abstract member isFloat64Array: ``object``: obj -> bool
+                [<Import("isFloat64Array", "node:util/types")>]
+                static member isFloat64Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a generator function.
@@ -208750,8 +208458,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isGeneratorFunction(function* foo() {});  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isGeneratorFunction($1...)")>]
-                abstract member isGeneratorFunction: ``object``: obj -> bool
+                [<Import("isGeneratorFunction", "node:util/types")>]
+                static member isGeneratorFunction(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a generator object as returned from a
@@ -208766,8 +208474,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isGeneratorObject(generator);  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isGeneratorObject($1...)")>]
-                abstract member isGeneratorObject: ``object``: obj -> bool
+                [<Import("isGeneratorObject", "node:util/types")>]
+                static member isGeneratorObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Int8Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array) instance.
@@ -208778,8 +208486,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isInt8Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isInt8Array($1...)")>]
-                abstract member isInt8Array: ``object``: obj -> bool
+                [<Import("isInt8Array", "node:util/types")>]
+                static member isInt8Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Int16Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array) instance.
@@ -208790,8 +208498,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isInt16Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isInt16Array($1...)")>]
-                abstract member isInt16Array: ``object``: obj -> bool
+                [<Import("isInt16Array", "node:util/types")>]
+                static member isInt16Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Int32Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array) instance.
@@ -208802,8 +208510,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isInt32Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isInt32Array($1...)")>]
-                abstract member isInt32Array: ``object``: obj -> bool
+                [<Import("isInt32Array", "node:util/types")>]
+                static member isInt32Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Map</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) instance.
@@ -208812,8 +208520,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isMap(new Map());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isMap($1...)")>]
-                abstract member isMap<'T> : ``object``: 'T -> bool
+                [<Import("isMap", "node:util/types")>]
+                static member isMap<'T>(``object``: 'T) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Map</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) instance.
@@ -208822,8 +208530,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isMap(new Map());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isMap($1...)")>]
-                abstract member isMap<'T> : ``object``: obj -> bool
+                [<Import("isMap", "node:util/types")>]
+                static member isMap<'T>(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Map</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) instance.
@@ -208832,8 +208540,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isMap(new Map());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isMap($1...)")>]
-                abstract member isMap<'T> : ``object``: U2<'T, obj> -> bool
+                [<Import("isMap", "node:util/types")>]
+                static member isMap<'T>(``object``: U2<'T, obj>) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is an iterator returned for a built-in [<c>Map</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) instance.
@@ -208846,8 +208554,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isMapIterator(map[Symbol.iterator]());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isMapIterator($1...)")>]
-                abstract member isMapIterator: ``object``: obj -> bool
+                [<Import("isMapIterator", "node:util/types")>]
+                static member isMapIterator(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is an instance of a [Module Namespace Object](https://tc39.github.io/ecma262/#sec-module-namespace-exotic-objects).
@@ -208858,8 +208566,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isModuleNamespaceObject(ns);  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isModuleNamespaceObject($1...)")>]
-                abstract member isModuleNamespaceObject: value: obj -> bool
+                [<Import("isModuleNamespaceObject", "node:util/types")>]
+                static member isModuleNamespaceObject(value: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value was returned by the constructor of a
@@ -208903,8 +208611,8 @@ URL.parse($0, $1)""")>]
                 /// console.log(myError instanceof Error); // true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isNativeError($1...)")>]
-                abstract member isNativeError: ``object``: obj -> bool
+                [<Import("isNativeError", "node:util/types")>]
+                static member isNativeError(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a number object, e.g. created
@@ -208915,8 +208623,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isNumberObject(new Number(0));   // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isNumberObject($1...)")>]
-                abstract member isNumberObject: ``object``: obj -> bool
+                [<Import("isNumberObject", "node:util/types")>]
+                static member isNumberObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Promise</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
@@ -208925,8 +208633,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isPromise(Promise.resolve(42));  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isPromise($1...)")>]
-                abstract member isPromise: ``object``: obj -> bool
+                [<Import("isPromise", "node:util/types")>]
+                static member isPromise(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a [<c>Proxy</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) instance.
@@ -208938,8 +208646,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isProxy(proxy);  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isProxy($1...)")>]
-                abstract member isProxy: ``object``: obj -> bool
+                [<Import("isProxy", "node:util/types")>]
+                static member isProxy(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a regular expression object.
@@ -208949,8 +208657,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isRegExp(new RegExp('abc'));  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isRegExp($1...)")>]
-                abstract member isRegExp: ``object``: obj -> bool
+                [<Import("isRegExp", "node:util/types")>]
+                static member isRegExp(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Set</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) instance.
@@ -208959,8 +208667,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isSet(new Set());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isSet($1...)")>]
-                abstract member isSet<'T> : ``object``: 'T -> bool
+                [<Import("isSet", "node:util/types")>]
+                static member isSet<'T>(``object``: 'T) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Set</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) instance.
@@ -208969,8 +208677,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isSet(new Set());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isSet($1...)")>]
-                abstract member isSet<'T> : ``object``: obj -> bool
+                [<Import("isSet", "node:util/types")>]
+                static member isSet<'T>(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Set</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) instance.
@@ -208979,8 +208687,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isSet(new Set());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isSet($1...)")>]
-                abstract member isSet<'T> : ``object``: U2<'T, obj> -> bool
+                [<Import("isSet", "node:util/types")>]
+                static member isSet<'T>(``object``: U2<'T, obj>) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is an iterator returned for a built-in [<c>Set</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) instance.
@@ -208993,8 +208701,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isSetIterator(set[Symbol.iterator]());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isSetIterator($1...)")>]
-                abstract member isSetIterator: ``object``: obj -> bool
+                [<Import("isSetIterator", "node:util/types")>]
+                static member isSetIterator(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>SharedArrayBuffer</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer) instance.
@@ -209006,8 +208714,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isSharedArrayBuffer(new SharedArrayBuffer());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isSharedArrayBuffer($1...)")>]
-                abstract member isSharedArrayBuffer: ``object``: obj -> bool
+                [<Import("isSharedArrayBuffer", "node:util/types")>]
+                static member isSharedArrayBuffer(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a string object, e.g. created
@@ -209018,8 +208726,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isStringObject(new String('foo'));   // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isStringObject($1...)")>]
-                abstract member isStringObject: ``object``: obj -> bool
+                [<Import("isStringObject", "node:util/types")>]
+                static member isStringObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a symbol object, created
@@ -209031,8 +208739,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isSymbolObject(Object(symbol));   // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isSymbolObject($1...)")>]
-                abstract member isSymbolObject: ``object``: obj -> bool
+                [<Import("isSymbolObject", "node:util/types")>]
+                static member isSymbolObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>TypedArray</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) instance.
@@ -209045,8 +208753,8 @@ URL.parse($0, $1)""")>]
                 ///
                 /// See also [<c>ArrayBuffer.isView()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/isView).
                 /// </summary>
-                [<Emit("$0.isTypedArray($1...)")>]
-                abstract member isTypedArray: ``object``: obj -> bool
+                [<Import("isTypedArray", "node:util/types")>]
+                static member isTypedArray(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Uint8Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) instance.
@@ -209057,8 +208765,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isUint8Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isUint8Array($1...)")>]
-                abstract member isUint8Array: ``object``: obj -> bool
+                [<Import("isUint8Array", "node:util/types")>]
+                static member isUint8Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Uint8ClampedArray</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray) instance.
@@ -209069,8 +208777,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isUint8ClampedArray(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isUint8ClampedArray($1...)")>]
-                abstract member isUint8ClampedArray: ``object``: obj -> bool
+                [<Import("isUint8ClampedArray", "node:util/types")>]
+                static member isUint8ClampedArray(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Uint16Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array) instance.
@@ -209081,8 +208789,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isUint16Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isUint16Array($1...)")>]
-                abstract member isUint16Array: ``object``: obj -> bool
+                [<Import("isUint16Array", "node:util/types")>]
+                static member isUint16Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>Uint32Array</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array) instance.
@@ -209093,8 +208801,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isUint32Array(new Float64Array());  // Returns false
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isUint32Array($1...)")>]
-                abstract member isUint32Array: ``object``: obj -> bool
+                [<Import("isUint32Array", "node:util/types")>]
+                static member isUint32Array(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>WeakMap</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) instance.
@@ -209103,8 +208811,8 @@ URL.parse($0, $1)""")>]
                 /// util.types.isWeakMap(new WeakMap());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isWeakMap($1...)")>]
-                abstract member isWeakMap: ``object``: obj -> bool
+                [<Import("isWeakMap", "node:util/types")>]
+                static member isWeakMap(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if the value is a built-in [<c>WeakSet</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet) instance.
@@ -209113,20 +208821,20 @@ URL.parse($0, $1)""")>]
                 /// util.types.isWeakSet(new WeakSet());  // Returns true
                 /// </code>
                 /// </summary>
-                [<Emit("$0.isWeakSet($1...)")>]
-                abstract member isWeakSet: ``object``: obj -> bool
+                [<Import("isWeakSet", "node:util/types")>]
+                static member isWeakSet(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if <c>value</c> is a <c>KeyObject</c>, <c>false</c> otherwise.
                 /// </summary>
-                [<Emit("$0.isKeyObject($1...)")>]
-                abstract member isKeyObject: ``object``: obj -> bool
+                [<Import("isKeyObject", "node:util/types")>]
+                static member isKeyObject(``object``: obj) : bool = nativeOnly
 
                 /// <summary>
                 /// Returns <c>true</c> if <c>value</c> is a <c>CryptoKey</c>, <c>false</c> otherwise.
                 /// </summary>
-                [<Emit("$0.isCryptoKey($1...)")>]
-                abstract member isCryptoKey: ``object``: obj -> bool
+                [<Import("isCryptoKey", "node:util/types")>]
+                static member isCryptoKey(``object``: obj) : bool = nativeOnly
 
         type PreciseTokenForOptions<'O> = PreciseTokenForOptions<string, 'O>
 
@@ -214083,9 +213791,9 @@ URL.parse($0, $1)""")>]
                 Node.worker_threads.MessagePort,
                 Node.AbortSignal,
                 Node.fs.promises.FileHandle,
-                Node.stream.web.stream_SLASH_web_.ReadableStream,
-                Node.stream.web.stream_SLASH_web_.WritableStream,
-                Node.stream.web.stream_SLASH_web_.TransformStream
+                Node.stream.web.ReadableStream,
+                Node.stream.web.WritableStream,
+                Node.stream.web.TransformStream
              >
 
         [<Obsolete("""Use `import { Transferable } from "node:worker_threads"` instead.""")>]
@@ -224165,7 +223873,7 @@ module UndiciTypes =
                 abstract member body: obj option with get
                 abstract member bodyUsed: bool with get
                 abstract member arrayBuffer: unit -> JS.Promise<obj>
-                abstract member blob: unit -> JS.Promise<Node.buffer.buffer_.Blob>
+                abstract member blob: unit -> JS.Promise<Node.buffer.Blob>
                 abstract member bytes: unit -> JS.Promise<JS.Uint8Array>
                 abstract member formData: unit -> JS.Promise<obj>
                 abstract member json: unit -> JS.Promise<obj>
@@ -225050,7 +224758,7 @@ module UndiciTypes =
         type BodyInit =
             U7<
                 obj,
-                Node.buffer.buffer_.Blob,
+                Node.buffer.Blob,
                 UndiciTypes.formdata.FormData,
                 Iterable<JS.Uint8Array>,
                 Node.NodeJS.ArrayBufferView,
@@ -225061,10 +224769,10 @@ module UndiciTypes =
         [<AllowNullLiteral>]
         [<Interface>]
         type BodyMixin =
-            abstract member body: Node.stream.web.stream_SLASH_web_.ReadableStream option with get
+            abstract member body: Node.stream.web.ReadableStream option with get
             abstract member bodyUsed: bool with get
             abstract member arrayBuffer: (unit -> JS.Promise<obj>) with get
-            abstract member blob: (unit -> JS.Promise<Node.buffer.buffer_.Blob>) with get
+            abstract member blob: (unit -> JS.Promise<Node.buffer.Blob>) with get
 
             /// <example>
             /// <c></c><c>js
@@ -225356,7 +225064,7 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
         [<AllowNullLiteral>]
         [<Interface>]
         type File =
-            inherit Node.buffer.buffer_.Blob
+            inherit Node.buffer.Blob
             /// <summary>
             /// Name of the file referenced by the File object.
             /// </summary>
@@ -225388,10 +225096,10 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
         [<Interface>]
         type FileReader =
             abstract member __proto__: FileReader.__proto__ with get, set
-            abstract member readAsArrayBuffer: blob: Node.buffer.buffer_.Blob -> unit
-            abstract member readAsBinaryString: blob: Node.buffer.buffer_.Blob -> unit
-            abstract member readAsText: blob: Node.buffer.buffer_.Blob * ?encoding: string -> unit
-            abstract member readAsDataURL: blob: Node.buffer.buffer_.Blob -> unit
+            abstract member readAsArrayBuffer: blob: Node.buffer.Blob -> unit
+            abstract member readAsBinaryString: blob: Node.buffer.Blob -> unit
+            abstract member readAsText: blob: Node.buffer.Blob * ?encoding: string -> unit
+            abstract member readAsDataURL: blob: Node.buffer.Blob -> unit
             abstract member abort: unit -> unit
             abstract member EMPTY: obj with get
             abstract member LOADING: obj with get
@@ -227202,7 +226910,7 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             /// Consumes and returns the body as a Blob
             /// https://fetch.spec.whatwg.org/#dom-body-blob
             /// </summary>
-            abstract member blob: unit -> JS.Promise<Node.buffer.buffer_.Blob>
+            abstract member blob: unit -> JS.Promise<Node.buffer.Blob>
             /// <summary>
             /// Consumes and returns the body as an Uint8Array
             /// https://fetch.spec.whatwg.org/#dom-body-bytes
@@ -227673,8 +227381,8 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member close: ?code: float * ?reason: string -> unit
             abstract member send: data: string -> unit
             abstract member send: data: obj -> unit
-            abstract member send: data: Node.buffer.buffer_.Blob -> unit
-            abstract member send: data: U3<string, obj, Node.buffer.buffer_.Blob> -> unit
+            abstract member send: data: Node.buffer.Blob -> unit
+            abstract member send: data: U3<string, obj, Node.buffer.Blob> -> unit
             abstract member CLOSED: float with get
             abstract member CLOSING: float with get
             abstract member CONNECTING: float with get
