@@ -3975,13 +3975,6 @@ module private ParamObjectCandidate =
                    [])
         | _ -> []
 
-    let rec private heritageClauses (glueType: GlueType) =
-        match glueType with
-        | GlueType.Interface info -> info.HeritageClauses
-        | GlueType.ClassDeclaration info -> info.HeritageClauses
-        | GlueType.ExportDefault innerType -> heritageClauses innerType
-        | _ -> []
-
     let tryResolveMembers (typeMemory: GlueType list) (info: GlueInterface) =
         let tryFindInterface (fullName: string) =
             typeMemory
@@ -4131,14 +4124,6 @@ module private ParamObjectCandidate =
                 |> List.contains info.FullName
             )
 
-        let isInherited =
-            typeMemory
-            |> List.exists (fun glueType ->
-                heritageClauses glueType
-                |> List.collect typeReferenceFullNames
-                |> List.contains info.FullName
-            )
-
         // The declarations of a merged interface are generated as one interface
         let isDeclaredOnce =
             typeMemory
@@ -4156,7 +4141,6 @@ module private ParamObjectCandidate =
         && info.TypeParameters.IsEmpty
         && isUsedAsArgument
         && not isUsedAsOutput
-        && not isInherited
         && isDeclaredOnce
 
 // `inherit obj` or `inherit JS.Uint8Array` is invalid, those base types are not interfaces

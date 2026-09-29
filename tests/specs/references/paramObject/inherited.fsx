@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type BaseOptions =
     abstract member debug: bool option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?debug: bool) : BaseOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

@@ -21696,6 +21696,13 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             abstract member requireManualDestroy: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?triggerAsyncId: float, ?requireManualDestroy: bool)
+                : AsyncResourceOptions
+                =
+                nativeOnly
+
         /// <summary>
         /// The class <c>AsyncResource</c> is designed to be extended by the embedder's async
         /// resources. Using this, users can easily trigger the lifetime events of their
@@ -29473,6 +29480,28 @@ AsyncLocalStorage.snapshot()""")>]
             inherit Node.child_process.CommonSpawnOptions
             abstract member detached: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?argv0: string,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?shell: U2<bool, string>,
+                    ?windowsVerbatimArguments: bool,
+                    ?detached: bool
+                )
+                : SpawnOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type SpawnOptionsWithoutStdio =
@@ -29561,6 +29590,171 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member maxBuffer: float option with get, set
             abstract member killSignal: U2<Node.NodeJS.Signals, float> option with get, set
             abstract member encoding: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    killSignal: Node.NodeJS.Signals,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    killSignal: float,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    killSignal: Node.NodeJS.Signals,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    killSignal: float,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    killSignal: Node.NodeJS.Signals,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    killSignal: float,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -30014,6 +30208,26 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member signal: Node.AbortSignal option with get, set
             abstract member encoding: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?windowsVerbatimArguments: bool,
+                    ?shell: U2<bool, string>,
+                    ?signal: Node.AbortSignal,
+                    ?encoding: string
+                )
+                : ExecFileOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ExecFileOptionsWithStringEncoding =
@@ -30424,6 +30638,30 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member maxBuffer: float option with get, set
             abstract member encoding: SpawnSyncOptions.encoding option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?argv0: string,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?shell: U2<bool, string>,
+                    ?windowsVerbatimArguments: bool,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?maxBuffer: float,
+                    ?encoding: SpawnSyncOptions.encoding
+                )
+                : SpawnSyncOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type SpawnSyncOptionsWithStringEncoding =
@@ -30518,6 +30756,26 @@ AsyncLocalStorage.snapshot()""")>]
             inherit Node.child_process.CommonExecOptions
             abstract member shell: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?encoding: ExecSyncOptions.encoding,
+                    ?shell: string
+                )
+                : ExecSyncOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ExecSyncOptionsWithStringEncoding =
@@ -30575,6 +30833,26 @@ AsyncLocalStorage.snapshot()""")>]
         type ExecFileSyncOptions =
             inherit Node.child_process.CommonExecOptions
             abstract member shell: U2<bool, string> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?encoding: ExecFileSyncOptions.encoding,
+                    ?shell: U2<bool, string>
+                )
+                : ExecFileSyncOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -30785,6 +31063,44 @@ AsyncLocalStorage.snapshot()""")>]
                 | buffer
 
         module CommonExecOptions =
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type encoding =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
+                | buffer
+
+        module ExecSyncOptions =
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type encoding =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
+                | buffer
+
+        module ExecFileSyncOptions =
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -45977,6 +46293,82 @@ KeyObject.from($0)""")>]
             abstract member passphrase: U2<string, Node.Buffer> option with get, set
             abstract member encoding: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: string,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PrivateKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: string,
+                    passphrase: string,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PrivateKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: string,
+                    passphrase: Node.Buffer,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PrivateKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.Buffer,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PrivateKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.Buffer,
+                    passphrase: string,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PrivateKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.Buffer,
+                    passphrase: Node.Buffer,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PrivateKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type PublicKeyInput =
@@ -45985,11 +46377,39 @@ KeyObject.from($0)""")>]
             abstract member ``type``: PublicKeyInput.``type`` option with get, set
             abstract member encoding: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: string,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PublicKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PublicKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.Buffer,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: PublicKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PublicKeyInput
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type JsonWebKeyInput =
             abstract member key: Node.crypto.JsonWebKey with get, set
             abstract member format: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(key: Node.crypto.JsonWebKey, format: string) : JsonWebKeyInput =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -47947,6 +48367,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </summary>
             abstract member paramEncoding: ECKeyPairKeyObjectOptions.paramEncoding option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (namedCurve: string, ?paramEncoding: ECKeyPairKeyObjectOptions.paramEncoding)
+                : ECKeyPairKeyObjectOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type RSAKeyPairKeyObjectOptions =
@@ -48609,6 +49036,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member rem: Node.crypto.LargeNumberLike option with get, set
             abstract member safe: bool option with get, set
             abstract member bigint: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?add: Node.crypto.LargeNumberLike,
+                    ?rem: Node.crypto.LargeNumberLike,
+                    ?safe: bool,
+                    ?bigint: bool
+                )
+                : GeneratePrimeOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -58662,6 +59101,19 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             [<Obsolete("Please use `order` option")>]
             abstract member verbatim: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?family: LookupOptions.family,
+                    ?hints: float,
+                    ?all: bool,
+                    ?order: LookupOptions.order,
+                    ?verbatim: bool
+                )
+                : LookupOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type LookupOneOptions =
@@ -58772,6 +59224,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         [<Interface>]
         type ResolveOptions =
             abstract member ttl: bool with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(ttl: bool) : ResolveOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -60586,6 +61041,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </summary>
             abstract member captureRejections: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(?captureRejections: bool) : EventEmitterOptions = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type StaticEventEmitterOptions =
@@ -60593,6 +61051,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// Can be used to cancel awaiting events.
             /// </summary>
             abstract member signal: Node.AbortSignal option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?signal: Node.AbortSignal) : StaticEventEmitterOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -61920,6 +62381,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                 /// </summary>
                 abstract member signal: Node.AbortSignal option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?signal: Node.AbortSignal) : Abortable = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -87374,6 +87838,13 @@ recursive mode, operations are retried on failure.""")>]
             abstract member length: float option with get, set
             abstract member position: Node.fs.ReadPosition option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?offset: float, ?length: float, ?position: Node.fs.ReadPosition)
+                : ReadOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ReadOptionsWithBuffer<'T> =
@@ -88349,6 +88820,18 @@ recursive mode, operations are retried on failure.""")>]
             abstract member persistent: bool option with get, set
             abstract member ``recursive``: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?encoding: WatchOptions.encoding,
+                    ?persistent: bool,
+                    ?``recursive``: bool
+                )
+                : WatchOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type WatchOptionsWithBufferEncoding =
@@ -89075,6 +89558,9 @@ recursive mode, operations are retried on failure.""")>]
         [<Interface>]
         type StatOptions =
             abstract member bigint: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?bigint: bool) : StatOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -98068,6 +98554,20 @@ recursive mode, operations are retried on failure.""")>]
             abstract member maxQueue: float option with get, set
             abstract member overflow: WatchOptions.overflow option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?encoding: WatchOptions.encoding_1,
+                    ?persistent: bool,
+                    ?``recursive``: bool,
+                    ?maxQueue: float,
+                    ?overflow: WatchOptions.overflow
+                )
+                : WatchOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type WatchOptionsWithBufferEncoding =
@@ -98277,6 +98777,23 @@ recursive mode, operations are retried on failure.""")>]
             type overflow =
                 | ignore
                 | throw
+
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type encoding_1 =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
+                | buffer
 
         module WatchOptionsWithBufferEncoding =
 
@@ -107351,6 +107868,18 @@ recursive mode, operations are retried on failure.""")>]
             abstract member waitForTrailers: bool option with get, set
             abstract member offset: float option with get, set
             abstract member length: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?statCheck: ServerStreamFileResponseOptions.statCheck,
+                    ?waitForTrailers: bool,
+                    ?offset: float,
+                    ?length: float
+                )
+                : ServerStreamFileResponseOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -120743,6 +121272,29 @@ recursive mode, operations are retried on failure.""")>]
             /// Value may be either <c>'http:'</c> or <c>'https:'</c>.
             /// </summary>
             abstract member protocol: ClientSessionOptions.protocol option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?maxDeflateDynamicTableSize: float,
+                    ?maxSettings: float,
+                    ?maxSessionMemory: float,
+                    ?maxHeaderListPairs: float,
+                    ?maxOutstandingPings: float,
+                    ?maxSendHeaderBlockLength: float,
+                    ?paddingStrategy: float,
+                    ?peerMaxConcurrentStreams: float,
+                    ?settings: Node.http2.Settings,
+                    ?remoteCustomSettings: ResizeArray<float>,
+                    ?unknownProtocolTimeout: float,
+                    ?strictFieldWhitespaceValidation: bool,
+                    ?maxReservedRemoteStreams: float,
+                    ?createConnection: ClientSessionOptions.createConnection,
+                    ?protocol: ClientSessionOptions.protocol
+                )
+                : ClientSessionOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -145886,6 +146438,20 @@ recursive mode, operations are retried on failure.""")>]
             abstract member writable: bool option with get, set
             abstract member signal: Node.AbortSignal option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?fd: float,
+                    ?allowHalfOpen: bool,
+                    ?onread: Node.net.OnReadOpts,
+                    ?readable: bool,
+                    ?writable: bool,
+                    ?signal: Node.AbortSignal
+                )
+                : SocketConstructorOpts
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type OnReadOpts =
@@ -149080,6 +149646,21 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             abstract member blockList: Node.net.BlockList option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?allowHalfOpen: bool,
+                    ?pauseOnConnect: bool,
+                    ?noDelay: bool,
+                    ?keepAlive: bool,
+                    ?keepAliveInitialDelay: float,
+                    ?highWaterMark: float,
+                    ?blockList: Node.net.BlockList
+                )
+                : ServerOpts
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type DropArgument =
@@ -151618,6 +152199,9 @@ SocketAddress.parse($0)""")>]
         [<Interface>]
         type UserInfoOptions =
             abstract member encoding: UserInfoOptions.encoding option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?encoding: UserInfoOptions.encoding) : UserInfoOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -164190,6 +164774,13 @@ the userland-provided Punycode.js module instead.""")>]
             /// <c>function</c> must be invoked with exactly <c>function.length</c> arguments.
             /// </summary>
             abstract member varargs: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?deterministic: bool, ?directOnly: bool, ?useBigIntArguments: bool, ?varargs: bool)
+                : FunctionOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -180312,6 +180903,13 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member readable: bool option with get, set
                 abstract member writable: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?signal: Node.AbortSignal, ?error: bool, ?readable: bool, ?writable: bool)
+                    : FinishedOptions
+                    =
+                    nativeOnly
+
             module finished =
 
                 [<AbstractClass>]
@@ -187323,6 +187921,9 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </summary>
                 abstract member times: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(?times: float) : MockFunctionOptions = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type MockMethodOptions =
@@ -191273,6 +191874,63 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             abstract member pskIdentityHint: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?ALPNCallback: (TLSSocketOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?SNICallback: TlsOptions.SNICallback,
+                    ?rejectUnauthorized: bool,
+                    ?allowHalfOpen: bool,
+                    ?pauseOnConnect: bool,
+                    ?noDelay: bool,
+                    ?keepAlive: bool,
+                    ?keepAliveInitialDelay: float,
+                    ?highWaterMark: float,
+                    ?blockList: Node.net.BlockList,
+                    ?handshakeTimeout: float,
+                    ?sessionTimeout: float,
+                    ?ticketKeys: Node.Buffer,
+                    ?pskCallback: TlsOptions.pskCallback,
+                    ?pskIdentityHint: string
+                )
+                : TlsOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type PSKCallbackNegotation =
@@ -191317,6 +191975,64 @@ Duplex.fromWeb($0, $1)""")>]
             /// </returns>
             abstract member pskCallback:
                 (string option -> Node.tls.PSKCallbackNegotation option) option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?ALPNCallback: (TLSSocketOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?ticketKeys: Node.Buffer,
+                    ?sessionTimeout: float,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?SNICallback: ConnectionOptions.SNICallback,
+                    ?rejectUnauthorized: bool,
+                    ?host: string,
+                    ?port: float,
+                    ?path: string,
+                    ?socket: Node.stream.Stream_.Duplex,
+                    ?checkServerIdentity: ConnectionOptions.checkServerIdentity,
+                    ?servername: string,
+                    ?session: Node.Buffer,
+                    ?minDHSize: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?timeout: float,
+                    ?pskCallback: (string option -> Node.tls.PSKCallbackNegotation option)
+                )
+                : ConnectionOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// Accepts encrypted connections using TLS or SSL.
@@ -193048,6 +193764,47 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             abstract member sessionTimeout: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?ALPNCallback: (TLSSocketOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?ticketKeys: Node.Buffer,
+                    ?sessionTimeout: float
+                )
+                : SecureContextOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type SecureContext =
@@ -193104,10 +193861,24 @@ Duplex.fromWeb($0, $1)""")>]
                     socket: Node.tls.TLSSocket * identity: string ->
                         Node.NodeJS.ArrayBufferView option
 
+            type SNICallback =
+                delegate of servername: string * cb: TlsOptions.SNICallback.cb -> unit
+
+            module SNICallback =
+
+                type cb = delegate of err: Exception option * ?ctx: Node.tls.SecureContext -> unit
+
         module ConnectionOptions =
 
             type checkServerIdentity =
                 delegate of hostname: string * cert: Node.tls.PeerCertificate -> Exception option
+
+            type SNICallback =
+                delegate of servername: string * cb: ConnectionOptions.SNICallback.cb -> unit
+
+            module SNICallback =
+
+                type cb = delegate of err: Exception option * ?ctx: Node.tls.SecureContext -> unit
 
         module Server =
 
@@ -202383,6 +203154,20 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member breakOnSigint: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool
+                )
+                : RunningScriptOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type RunningScriptInNewContextOptions =
@@ -203596,6 +204381,10 @@ URL.parse($0, $1)""")>]
             abstract member cancelable: bool option with get, set
             abstract member composed: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(?bubbles: bool, ?cancelable: bool, ?composed: bool) : EventInit =
+                nativeOnly
+
         type EventListener = delegate of evt: Node.web_globals_events.Event -> unit
 
         [<AllowNullLiteral>]
@@ -203609,6 +204398,9 @@ URL.parse($0, $1)""")>]
         [<Interface>]
         type EventListenerOptions =
             abstract member capture: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?capture: bool) : EventListenerOptions = nativeOnly
 
         type _EventTarget = obj
 
@@ -211310,6 +212102,13 @@ module UndiciTypes =
             abstract member ignoreMethod: bool option with get, set
             abstract member ignoreVary: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?ignoreSearch: bool, ?ignoreMethod: bool, ?ignoreVary: bool)
+                : CacheQueryOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type MultiCacheQueryOptions =
@@ -211510,6 +212309,110 @@ module UndiciTypes =
                 abstract member autoSelectFamilyAttemptTimeout: float option with get, set
                 abstract member allowH2: bool option with get, set
                 abstract member maxConcurrentStreams: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
+                        ?maxHeaderSize: float,
+                        ?headersTimeout: float,
+                        ?socketTimeout: obj,
+                        ?requestTimeout: obj,
+                        ?connectTimeout: float,
+                        ?bodyTimeout: float,
+                        ?idleTimeout: obj,
+                        ?keepAlive: obj,
+                        ?keepAliveTimeout: float,
+                        ?maxKeepAliveTimeout: obj,
+                        ?keepAliveMaxTimeout: float,
+                        ?keepAliveTimeoutThreshold: float,
+                        ?socketPath: string,
+                        ?pipelining: float,
+                        ?tls: obj,
+                        ?strictContentLength: bool,
+                        ?maxCachedSessions: float,
+                        ?maxRedirections: float,
+                        ?maxRequestsPerClient: float,
+                        ?localAddress: string,
+                        ?maxResponseSize: float,
+                        ?autoSelectFamily: bool,
+                        ?autoSelectFamilyAttemptTimeout: float,
+                        ?allowH2: bool,
+                        ?maxConcurrentStreams: float
+                    )
+                    : Options
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        connect: UndiciTypes.connector.buildConnector_.BuildOptions,
+                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
+                        ?maxHeaderSize: float,
+                        ?headersTimeout: float,
+                        ?socketTimeout: obj,
+                        ?requestTimeout: obj,
+                        ?connectTimeout: float,
+                        ?bodyTimeout: float,
+                        ?idleTimeout: obj,
+                        ?keepAlive: obj,
+                        ?keepAliveTimeout: float,
+                        ?maxKeepAliveTimeout: obj,
+                        ?keepAliveMaxTimeout: float,
+                        ?keepAliveTimeoutThreshold: float,
+                        ?socketPath: string,
+                        ?pipelining: float,
+                        ?tls: obj,
+                        ?strictContentLength: bool,
+                        ?maxCachedSessions: float,
+                        ?maxRedirections: float,
+                        ?maxRequestsPerClient: float,
+                        ?localAddress: string,
+                        ?maxResponseSize: float,
+                        ?autoSelectFamily: bool,
+                        ?autoSelectFamilyAttemptTimeout: float,
+                        ?allowH2: bool,
+                        ?maxConcurrentStreams: float
+                    )
+                    : Options
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        connect: UndiciTypes.connector.buildConnector_.connector,
+                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
+                        ?maxHeaderSize: float,
+                        ?headersTimeout: float,
+                        ?socketTimeout: obj,
+                        ?requestTimeout: obj,
+                        ?connectTimeout: float,
+                        ?bodyTimeout: float,
+                        ?idleTimeout: obj,
+                        ?keepAlive: obj,
+                        ?keepAliveTimeout: float,
+                        ?maxKeepAliveTimeout: obj,
+                        ?keepAliveMaxTimeout: float,
+                        ?keepAliveTimeoutThreshold: float,
+                        ?socketPath: string,
+                        ?pipelining: float,
+                        ?tls: obj,
+                        ?strictContentLength: bool,
+                        ?maxCachedSessions: float,
+                        ?maxRedirections: float,
+                        ?maxRequestsPerClient: float,
+                        ?localAddress: string,
+                        ?maxResponseSize: float,
+                        ?autoSelectFamily: bool,
+                        ?autoSelectFamilyAttemptTimeout: float,
+                        ?allowH2: bool,
+                        ?maxConcurrentStreams: float
+                    )
+                    : Options
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -213396,6 +214299,40 @@ module UndiciTypes =
                 /// </summary>
                 abstract member expectContinue: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
+                        ?origin: U2<string, Node.url.URL>,
+                        ?body:
+                            U5<
+                                string,
+                                Node.Buffer,
+                                JS.Uint8Array,
+                                Node.stream.Stream_.Readable,
+                                UndiciTypes.formdata.FormData
+                             >,
+                        ?headers:
+                            U3<
+                                UndiciTypes.header.IncomingHttpHeaders,
+                                ResizeArray<string>,
+                                Iterable<string * U2<string, ResizeArray<string>> option>
+                             >,
+                        ?query: obj,
+                        ?idempotent: bool,
+                        ?blocking: bool,
+                        ?upgrade: U2<bool, string>,
+                        ?headersTimeout: float,
+                        ?bodyTimeout: float,
+                        ?reset: bool,
+                        ?throwOnError: bool,
+                        ?expectContinue: bool
+                    )
+                    : DispatchOptions
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ConnectOptions =
@@ -213482,6 +214419,47 @@ module UndiciTypes =
                 /// Default: <c>64 KiB</c>
                 /// </summary>
                 abstract member highWaterMark: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
+                        ?origin: U2<string, Node.url.URL>,
+                        ?body:
+                            U5<
+                                string,
+                                Node.Buffer,
+                                JS.Uint8Array,
+                                Node.stream.Stream_.Readable,
+                                UndiciTypes.formdata.FormData
+                             >,
+                        ?headers:
+                            U3<
+                                UndiciTypes.header.IncomingHttpHeaders,
+                                ResizeArray<string>,
+                                Iterable<string * U2<string, ResizeArray<string>> option>
+                             >,
+                        ?query: obj,
+                        ?idempotent: bool,
+                        ?blocking: bool,
+                        ?upgrade: U2<bool, string>,
+                        ?headersTimeout: float,
+                        ?bodyTimeout: float,
+                        ?reset: bool,
+                        ?throwOnError: bool,
+                        ?expectContinue: bool,
+                        ?opaque: obj,
+                        ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?onInfo: (RequestOptions.onInfo.info -> unit),
+                        ?responseHeader: string,
+                        ?highWaterMark: float
+                    )
+                    : RequestOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -215954,6 +216932,20 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 /// </summary>
                 abstract member query: obj option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: U3<string, RegExp, (string -> bool)>,
+                        ?``method``: U3<string, RegExp, (string -> bool)>,
+                        ?body: U3<string, RegExp, (string -> bool)>,
+                        ?headers:
+                            U2<Options.headers.U2.Case1, (Options.headers.U2.Case2.headers -> bool)>,
+                        ?query: obj
+                    )
+                    : Options
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type MockDispatch<'TData, 'TError> =
@@ -215978,6 +216970,16 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             type MockResponseOptions =
                 abstract member headers: UndiciTypes.header.IncomingHttpHeaders option with get, set
                 abstract member trailers: MockResponseOptions.trailers option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?headers: UndiciTypes.header.IncomingHttpHeaders,
+                        ?trailers: MockResponseOptions.trailers
+                    )
+                    : MockResponseOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -216377,6 +217379,9 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
         [<Interface>]
         type EventListenerOptions =
             abstract member capture: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?capture: bool) : EventListenerOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]

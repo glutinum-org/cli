@@ -8219,6 +8219,17 @@ module Web =
         abstract member channelCountMode: Web.ChannelCountMode option with get, set
         abstract member channelInterpretation: Web.ChannelInterpretation option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation
+            )
+            : AudioNodeOptions
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AudioProcessingEventInit =
@@ -8469,6 +8480,10 @@ module Web =
         abstract member endings: Web.EndingType option with get, set
         abstract member ``type``: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?endings: Web.EndingType, ?``type``: string) : BlobPropertyBag =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CSSContainerCondition =
@@ -8522,6 +8537,13 @@ module Web =
         abstract member ignoreMethod: bool option with get, set
         abstract member ignoreSearch: bool option with get, set
         abstract member ignoreVary: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?ignoreMethod: bool, ?ignoreSearch: bool, ?ignoreVary: bool)
+            : CacheQueryOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8949,6 +8971,26 @@ module Web =
         abstract member m22: float option with get, set
         abstract member m41: float option with get, set
         abstract member m42: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?a: float,
+                ?b: float,
+                ?c: float,
+                ?d: float,
+                ?e: float,
+                ?f: float,
+                ?m11: float,
+                ?m12: float,
+                ?m21: float,
+                ?m22: float,
+                ?m41: float,
+                ?m42: float
+            )
+            : DOMMatrix2DInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9432,10 +9474,17 @@ module Web =
         abstract member cancelable: bool option with get, set
         abstract member composed: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?bubbles: bool, ?cancelable: bool, ?composed: bool) : EventInit =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type EventListenerOptions =
         abstract member capture: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?capture: bool) : EventListenerOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10237,6 +10286,13 @@ module Web =
         abstract member offset: Web.GPUSize64 option with get, set
         abstract member rowsPerImage: Web.GPUSize32 option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bytesPerRow: Web.GPUSize32, ?offset: Web.GPUSize64, ?rowsPerImage: Web.GPUSize32)
+            : GPUTexelCopyBufferLayout
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUTexelCopyTextureInfo =
@@ -10244,6 +10300,18 @@ module Web =
         abstract member mipLevel: Web.GPUIntegerCoordinate option with get, set
         abstract member origin: Web.GPUOrigin3D option with get, set
         abstract member texture: Web.GPUTexture with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate,
+                ?origin: Web.GPUOrigin3D
+            )
+            : GPUTexelCopyTextureInfo
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11011,6 +11079,85 @@ module Web =
         abstract member iterationComposite: Web.IterationCompositeOperation option with get, set
         abstract member pseudoElement: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string
+            )
+            : KeyframeEffectOptions
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: float,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string
+            )
+            : KeyframeEffectOptions
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: Web.CSSNumericValue,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string
+            )
+            : KeyframeEffectOptions
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: string,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string
+            )
+            : KeyframeEffectOptions
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type LockInfo =
@@ -11463,6 +11610,43 @@ module Web =
         abstract member screenX: float option with get, set
         abstract member screenY: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool,
+                ?button: float,
+                ?buttons: float,
+                ?clientX: float,
+                ?clientY: float,
+                ?movementX: float,
+                ?movementY: float,
+                ?relatedTarget: Web.EventTarget,
+                ?screenX: float,
+                ?screenY: float
+            )
+            : MouseEventInit
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MultiCacheQueryOptions =
@@ -11619,6 +11803,9 @@ module Web =
     [<Interface>]
     type NavigationOptions =
         abstract member info: obj option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?info: obj) : NavigationOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12049,6 +12236,13 @@ module Web =
     type PaymentRequestUpdateEventInit =
         inherit Web.EventInit
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : PaymentRequestUpdateEventInit
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PaymentShippingOption =
@@ -12142,6 +12336,9 @@ module Web =
     [<Interface>]
     type PeriodicWaveConstraints =
         abstract member disableNormalization: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?disableNormalization: bool) : PeriodicWaveConstraints = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13739,6 +13936,9 @@ module Web =
     type ShowPopoverOptions =
         abstract member source: Web.HTMLElement option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?source: Web.HTMLElement) : ShowPopoverOptions = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SpeechRecognitionErrorEventInit =
@@ -13811,6 +14011,22 @@ module Web =
         abstract member elapsedTime: float option with get, set
         abstract member name: string option with get, set
         abstract member utterance: Web.SpeechSynthesisUtterance with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                utterance: Web.SpeechSynthesisUtterance,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?charIndex: float,
+                ?charLength: float,
+                ?elapsedTime: float,
+                ?name: string
+            )
+            : SpeechSynthesisEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13931,6 +14147,13 @@ module Web =
     [<Interface>]
     type StructuredSerializeOptions =
         abstract member transfer: ResizeArray<Web.Transferable> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?transfer: ResizeArray<Web.Transferable>)
+            : StructuredSerializeOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14182,6 +14405,20 @@ module Web =
 
         [<Obsolete>]
         abstract member which: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float
+            )
+            : UIEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -26401,6 +26638,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Credential/type)
         /// </summary>
         abstract member ``type``: string with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(id: string, ``type``: string) : Credential = nativeOnly
 
     /// <summary>
     /// The **<c>CredentialsContainer</c>** interface of the Credential Management API exposes methods to request credentials and notify the user agent when events such as successful sign in or sign out happen. This interface is accessible from Navigator.credentials.
