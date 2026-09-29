@@ -109574,16 +109574,11 @@ module Web =
     module HTMLElement =
 
         [<RequireQualifiedAccess>]
-        [<Erase(CaseRules.None)>]
+        [<StringEnum(CaseRules.None)>]
         type hidden =
+            | [<CompiledValue(true)>] True
+            | [<CompiledValue(false)>] False
             | ``until-found``
-            | Case1 of bool
-
-            [<Emit("$0")>]
-            static member op_Implicit(value: bool) : hidden = nativeOnly
-
-            [<Emit("$0")>]
-            static member op_ErasedCast(value: bool) : hidden = nativeOnly
 
     module HTMLIFrameElement =
 

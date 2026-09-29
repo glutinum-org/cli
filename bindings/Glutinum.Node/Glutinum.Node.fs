@@ -15836,16 +15836,11 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         module ConsoleConstructorOptions =
 
             [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
+            [<StringEnum(CaseRules.None)>]
             type colorMode =
+                | [<CompiledValue(true)>] True
+                | [<CompiledValue(false)>] False
                 | auto
-                | Case1 of bool
-
-                [<Emit("$0")>]
-                static member op_Implicit(value: bool) : colorMode = nativeOnly
-
-                [<Emit("$0")>]
-                static member op_ErasedCast(value: bool) : colorMode = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -199641,17 +199636,12 @@ URL.parse($0, $1)""")>]
         module InspectOptions =
 
             [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
+            [<StringEnum(CaseRules.None)>]
             type getters =
                 | get
                 | set
-                | Case1 of bool
-
-                [<Emit("$0")>]
-                static member op_Implicit(value: bool) : getters = nativeOnly
-
-                [<Emit("$0")>]
-                static member op_ErasedCast(value: bool) : getters = nativeOnly
+                | [<CompiledValue(true)>] True
+                | [<CompiledValue(false)>] False
 
             module sorted =
 

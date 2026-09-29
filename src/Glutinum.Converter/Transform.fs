@@ -6750,9 +6750,33 @@ let private tryOptimizeUnionType
         | GlueType.Literal _ -> true
         | _ -> false
 
+    /// `boolean | "auto"` has two values, an enum case each, where `bool` would be a payload
+    let expandBooleanCases (cases: GlueType list) =
+        let hasStringLiteral =
+            cases
+            |> List.exists (
+                function
+                | GlueType.Literal(GlueLiteral.String _) -> true
+                | _ -> false
+            )
+
+        if hasStringLiteral then
+            cases
+            |> List.collect (
+                function
+                | GlueType.Primitive GluePrimitive.Bool ->
+                    [
+                        GlueType.Literal(GlueLiteral.Bool true)
+                        GlueType.Literal(GlueLiteral.Bool false)
+                    ]
+                | case -> [ case ]
+            )
+        else
+            cases
+
     // `Signals | number` keeps `Signals` as a case, only a union made of literals is one enum
     let flattenCases (cases: GlueType list) : GlueType list =
-        let withAliases = flattenCasesWith true cases
+        let withAliases = flattenCasesWith true cases |> expandBooleanCases
 
         if withAliases |> List.forall isLiteral then
             withAliases
