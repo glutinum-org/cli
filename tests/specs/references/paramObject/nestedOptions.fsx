@@ -22,6 +22,8 @@ type ChartOptions =
 [<Interface>]
 type AxisOptions =
     abstract member min: float option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?min: float) : AxisOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

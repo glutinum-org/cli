@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type PresentationOptions =
     abstract member title: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (title: string) : PresentationOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

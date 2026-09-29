@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Box<'_DOLLAR_T> =
     abstract member value: '_DOLLAR_T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: '_DOLLAR_T) : Box<'_DOLLAR_T> = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

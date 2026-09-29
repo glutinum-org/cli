@@ -17,6 +17,8 @@ type Exports =
 [<Interface>]
 type Options<'DateType> =
     abstract member ``in``: 'DateType option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?``in``: 'DateType) : Options<'DateType> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

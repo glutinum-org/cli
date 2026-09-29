@@ -7815,6 +7815,9 @@ module Web =
     type AacEncoderConfig =
         abstract member format: Web.AacBitstreamFormat option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?format: Web.AacBitstreamFormat) : AacEncoderConfig = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AddEventListenerOptions =
@@ -7843,6 +7846,24 @@ module Web =
         abstract member recipient: string option with get, set
         abstract member region: string option with get, set
         abstract member sortingCode: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?addressLine: string,
+                ?city: string,
+                ?country: string,
+                ?dependentLocality: string,
+                ?organization: string,
+                ?phone: string,
+                ?postalCode: string,
+                ?recipient: string,
+                ?region: string,
+                ?sortingCode: string
+            )
+            : AddressErrors
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8296,6 +8317,22 @@ module Web =
         abstract member minPinLength: bool option with get, set
         abstract member prf: Web.AuthenticationExtensionsPRFInputs option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?appid: string,
+                ?credProps: bool,
+                ?credentialProtectionPolicy: string,
+                ?enforceCredentialProtectionPolicy: bool,
+                ?hmacCreateSecret: bool,
+                ?largeBlob: Web.AuthenticationExtensionsLargeBlobInputs,
+                ?minPinLength: bool,
+                ?prf: Web.AuthenticationExtensionsPRFInputs
+            )
+            : AuthenticationExtensionsClientInputs
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsClientInputsJSON =
@@ -8303,6 +8340,18 @@ module Web =
         abstract member credProps: bool option with get, set
         abstract member largeBlob: Web.AuthenticationExtensionsLargeBlobInputsJSON option with get, set
         abstract member prf: Web.AuthenticationExtensionsPRFInputsJSON option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?appid: string,
+                ?credProps: bool,
+                ?largeBlob: Web.AuthenticationExtensionsLargeBlobInputsJSON,
+                ?prf: Web.AuthenticationExtensionsPRFInputsJSON
+            )
+            : AuthenticationExtensionsClientInputsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8328,12 +8377,26 @@ module Web =
         abstract member support: string option with get, set
         abstract member write: Web.BufferSource option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?read: bool, ?support: string, ?write: Web.BufferSource)
+            : AuthenticationExtensionsLargeBlobInputs
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsLargeBlobInputsJSON =
         abstract member read: bool option with get, set
         abstract member support: string option with get, set
         abstract member write: Web.Base64URLString option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?read: bool, ?support: string, ?write: Web.Base64URLString)
+            : AuthenticationExtensionsLargeBlobInputsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8355,6 +8418,16 @@ module Web =
         abstract member eval: Web.AuthenticationExtensionsPRFValues option with get, set
         abstract member evalByCredential: AuthenticationExtensionsPRFInputs.evalByCredential option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?eval: Web.AuthenticationExtensionsPRFValues,
+                ?evalByCredential: AuthenticationExtensionsPRFInputs.evalByCredential
+            )
+            : AuthenticationExtensionsPRFInputs
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsPRFInputsJSON =
@@ -8362,6 +8435,16 @@ module Web =
 
         abstract member evalByCredential:
             AuthenticationExtensionsPRFInputsJSON.evalByCredential option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?eval: Web.AuthenticationExtensionsPRFValuesJSON,
+                ?evalByCredential: AuthenticationExtensionsPRFInputsJSON.evalByCredential
+            )
+            : AuthenticationExtensionsPRFInputsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8381,11 +8464,25 @@ module Web =
         abstract member first: Web.BufferSource with get, set
         abstract member second: Web.BufferSource option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (first: Web.BufferSource, ?second: Web.BufferSource)
+            : AuthenticationExtensionsPRFValues
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsPRFValuesJSON =
         abstract member first: Web.Base64URLString with get, set
         abstract member second: Web.Base64URLString option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (first: Web.Base64URLString, ?second: Web.Base64URLString)
+            : AuthenticationExtensionsPRFValuesJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8423,10 +8520,25 @@ module Web =
         abstract member residentKey: Web.ResidentKeyRequirement option with get, set
         abstract member userVerification: Web.UserVerificationRequirement option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?authenticatorAttachment: Web.AuthenticatorAttachment,
+                ?requireResidentKey: bool,
+                ?residentKey: Web.ResidentKeyRequirement,
+                ?userVerification: Web.UserVerificationRequirement
+            )
+            : AuthenticatorSelectionCriteria
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AvcEncoderConfig =
         abstract member format: Web.AvcBitstreamFormat option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?format: Web.AvcBitstreamFormat) : AvcEncoderConfig = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8956,6 +9068,13 @@ module Web =
         inherit Web.EventInit
         abstract member detail: 'T option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?detail: 'T)
+            : CustomEventInit<'T>
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type DOMMatrix2DInit =
@@ -9109,6 +9228,10 @@ module Web =
         abstract member y: float option with get, set
         abstract member z: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?x: float, ?y: float, ?z: float) : DeviceMotionEventAccelerationInit =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type DeviceMotionEventInit =
@@ -9139,6 +9262,13 @@ module Web =
         abstract member alpha: float option with get, set
         abstract member beta: float option with get, set
         abstract member gamma: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?alpha: float, ?beta: float, ?gamma: float)
+            : DeviceMotionEventRotationRateInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9697,6 +9827,13 @@ module Web =
         abstract member binding: Web.GPUIndex32 with get, set
         abstract member resource: Web.GPUBindingResource with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (binding: Web.GPUIndex32, resource: Web.GPUBindingResource)
+            : GPUBindGroupEntry
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUBindGroupLayoutDescriptor =
@@ -9721,6 +9858,21 @@ module Web =
         abstract member texture: Web.GPUTextureBindingLayout option with get, set
         abstract member visibility: Web.GPUShaderStageFlags with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                binding: Web.GPUIndex32,
+                visibility: Web.GPUShaderStageFlags,
+                ?buffer: Web.GPUBufferBindingLayout,
+                ?externalTexture: Web.GPUExternalTextureBindingLayout,
+                ?sampler: Web.GPUSamplerBindingLayout,
+                ?storageTexture: Web.GPUStorageTextureBindingLayout,
+                ?texture: Web.GPUTextureBindingLayout
+            )
+            : GPUBindGroupLayoutEntry
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUBlendComponent =
@@ -9728,11 +9880,29 @@ module Web =
         abstract member operation: Web.GPUBlendOperation option with get, set
         abstract member srcFactor: Web.GPUBlendFactor option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?dstFactor: Web.GPUBlendFactor,
+                ?operation: Web.GPUBlendOperation,
+                ?srcFactor: Web.GPUBlendFactor
+            )
+            : GPUBlendComponent
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUBlendState =
         abstract member alpha: Web.GPUBlendComponent with get, set
         abstract member color: Web.GPUBlendComponent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (alpha: Web.GPUBlendComponent, color: Web.GPUBlendComponent)
+            : GPUBlendState
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9747,6 +9917,17 @@ module Web =
         abstract member hasDynamicOffset: bool option with get, set
         abstract member minBindingSize: Web.GPUSize64 option with get, set
         abstract member ``type``: Web.GPUBufferBindingType option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?hasDynamicOffset: bool,
+                ?minBindingSize: Web.GPUSize64,
+                ?``type``: Web.GPUBufferBindingType
+            )
+            : GPUBufferBindingLayout
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9784,6 +9965,10 @@ module Web =
     type GPUCanvasToneMapping =
         abstract member mode: Web.GPUCanvasToneMappingMode option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?mode: Web.GPUCanvasToneMappingMode) : GPUCanvasToneMapping =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUColorDict =
@@ -9798,6 +9983,17 @@ module Web =
         abstract member blend: Web.GPUBlendState option with get, set
         abstract member format: Web.GPUTextureFormat with get, set
         abstract member writeMask: Web.GPUColorWriteFlags option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                format: Web.GPUTextureFormat,
+                ?blend: Web.GPUBlendState,
+                ?writeMask: Web.GPUColorWriteFlags
+            )
+            : GPUColorTargetState
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9834,6 +10030,17 @@ module Web =
         abstract member beginningOfPassWriteIndex: Web.GPUSize32 option with get, set
         abstract member endOfPassWriteIndex: Web.GPUSize32 option with get, set
         abstract member querySet: Web.GPUQuerySet with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                querySet: Web.GPUQuerySet,
+                ?beginningOfPassWriteIndex: Web.GPUSize32,
+                ?endOfPassWriteIndex: Web.GPUSize32
+            )
+            : GPUComputePassTimestampWrites
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9904,6 +10111,24 @@ module Web =
         abstract member stencilReadMask: Web.GPUStencilValue option with get, set
         abstract member stencilWriteMask: Web.GPUStencilValue option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                format: Web.GPUTextureFormat,
+                ?depthBias: Web.GPUDepthBias,
+                ?depthBiasClamp: float,
+                ?depthBiasSlopeScale: float,
+                ?depthCompare: Web.GPUCompareFunction,
+                ?depthWriteEnabled: bool,
+                ?stencilBack: Web.GPUStencilFaceState,
+                ?stencilFront: Web.GPUStencilFaceState,
+                ?stencilReadMask: Web.GPUStencilValue,
+                ?stencilWriteMask: Web.GPUStencilValue
+            )
+            : GPUDepthStencilState
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUDeviceDescriptor =
@@ -9962,12 +10187,31 @@ module Web =
         inherit Web.GPUProgrammableStage
         abstract member targets: ResizeArray<Web.GPUColorTargetState option> with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ``module``: Web.GPUShaderModule,
+                targets: ResizeArray<Web.GPUColorTargetState option>,
+                ?constants: GPUFragmentState.constants,
+                ?entryPoint: string
+            )
+            : GPUFragmentState
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUMultisampleState =
         abstract member alphaToCoverageEnabled: bool option with get, set
         abstract member count: Web.GPUSize32 option with get, set
         abstract member mask: Web.GPUSampleMask option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?alphaToCoverageEnabled: bool, ?count: Web.GPUSize32, ?mask: Web.GPUSampleMask)
+            : GPUMultisampleState
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10028,12 +10272,36 @@ module Web =
         abstract member topology: Web.GPUPrimitiveTopology option with get, set
         abstract member unclippedDepth: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?cullMode: Web.GPUCullMode,
+                ?frontFace: Web.GPUFrontFace,
+                ?stripIndexFormat: Web.GPUIndexFormat,
+                ?topology: Web.GPUPrimitiveTopology,
+                ?unclippedDepth: bool
+            )
+            : GPUPrimitiveState
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUProgrammableStage =
         abstract member constants: GPUProgrammableStage.constants option with get, set
         abstract member entryPoint: string option with get, set
         abstract member ``module``: Web.GPUShaderModule with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ``module``: Web.GPUShaderModule,
+                ?constants: GPUProgrammableStage.constants,
+                ?entryPoint: string
+            )
+            : GPUProgrammableStage
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10053,6 +10321,9 @@ module Web =
     [<Interface>]
     type GPUQueueDescriptor =
         inherit Web.GPUObjectDescriptorBase
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?label: string) : GPUQueueDescriptor = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10093,6 +10364,88 @@ module Web =
         abstract member storeOp: Web.GPUStoreOp with get, set
         abstract member view: U2<Web.GPUTexture, Web.GPUTextureView> with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loadOp: Web.GPULoadOp,
+                storeOp: Web.GPUStoreOp,
+                view: Web.GPUTexture,
+                ?clearValue: Web.GPUColor,
+                ?depthSlice: Web.GPUIntegerCoordinate
+            )
+            : GPURenderPassColorAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loadOp: Web.GPULoadOp,
+                storeOp: Web.GPUStoreOp,
+                view: Web.GPUTexture,
+                resolveTarget: Web.GPUTexture,
+                ?clearValue: Web.GPUColor,
+                ?depthSlice: Web.GPUIntegerCoordinate
+            )
+            : GPURenderPassColorAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loadOp: Web.GPULoadOp,
+                storeOp: Web.GPUStoreOp,
+                view: Web.GPUTexture,
+                resolveTarget: Web.GPUTextureView,
+                ?clearValue: Web.GPUColor,
+                ?depthSlice: Web.GPUIntegerCoordinate
+            )
+            : GPURenderPassColorAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loadOp: Web.GPULoadOp,
+                storeOp: Web.GPUStoreOp,
+                view: Web.GPUTextureView,
+                ?clearValue: Web.GPUColor,
+                ?depthSlice: Web.GPUIntegerCoordinate
+            )
+            : GPURenderPassColorAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loadOp: Web.GPULoadOp,
+                storeOp: Web.GPUStoreOp,
+                view: Web.GPUTextureView,
+                resolveTarget: Web.GPUTexture,
+                ?clearValue: Web.GPUColor,
+                ?depthSlice: Web.GPUIntegerCoordinate
+            )
+            : GPURenderPassColorAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loadOp: Web.GPULoadOp,
+                storeOp: Web.GPUStoreOp,
+                view: Web.GPUTextureView,
+                resolveTarget: Web.GPUTextureView,
+                ?clearValue: Web.GPUColor,
+                ?depthSlice: Web.GPUIntegerCoordinate
+            )
+            : GPURenderPassColorAttachment
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPURenderPassDepthStencilAttachment =
@@ -10105,6 +10458,40 @@ module Web =
         abstract member stencilReadOnly: bool option with get, set
         abstract member stencilStoreOp: Web.GPUStoreOp option with get, set
         abstract member view: U2<Web.GPUTexture, Web.GPUTextureView> with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                view: Web.GPUTexture,
+                ?depthClearValue: float,
+                ?depthLoadOp: Web.GPULoadOp,
+                ?depthReadOnly: bool,
+                ?depthStoreOp: Web.GPUStoreOp,
+                ?stencilClearValue: Web.GPUStencilValue,
+                ?stencilLoadOp: Web.GPULoadOp,
+                ?stencilReadOnly: bool,
+                ?stencilStoreOp: Web.GPUStoreOp
+            )
+            : GPURenderPassDepthStencilAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                view: Web.GPUTextureView,
+                ?depthClearValue: float,
+                ?depthLoadOp: Web.GPULoadOp,
+                ?depthReadOnly: bool,
+                ?depthStoreOp: Web.GPUStoreOp,
+                ?stencilClearValue: Web.GPUStencilValue,
+                ?stencilLoadOp: Web.GPULoadOp,
+                ?stencilReadOnly: bool,
+                ?stencilStoreOp: Web.GPUStoreOp
+            )
+            : GPURenderPassDepthStencilAttachment
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10144,6 +10531,17 @@ module Web =
         abstract member beginningOfPassWriteIndex: Web.GPUSize32 option with get, set
         abstract member endOfPassWriteIndex: Web.GPUSize32 option with get, set
         abstract member querySet: Web.GPUQuerySet with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                querySet: Web.GPUQuerySet,
+                ?beginningOfPassWriteIndex: Web.GPUSize32,
+                ?endOfPassWriteIndex: Web.GPUSize32
+            )
+            : GPURenderPassTimestampWrites
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10203,6 +10601,10 @@ module Web =
     type GPUSamplerBindingLayout =
         abstract member ``type``: Web.GPUSamplerBindingType option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?``type``: Web.GPUSamplerBindingType) : GPUSamplerBindingLayout =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUSamplerDescriptor =
@@ -10254,12 +10656,35 @@ module Web =
         abstract member failOp: Web.GPUStencilOperation option with get, set
         abstract member passOp: Web.GPUStencilOperation option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?compare: Web.GPUCompareFunction,
+                ?depthFailOp: Web.GPUStencilOperation,
+                ?failOp: Web.GPUStencilOperation,
+                ?passOp: Web.GPUStencilOperation
+            )
+            : GPUStencilFaceState
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUStorageTextureBindingLayout =
         abstract member access: Web.GPUStorageTextureAccess option with get, set
         abstract member format: Web.GPUTextureFormat with get, set
         abstract member viewDimension: Web.GPUTextureViewDimension option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                format: Web.GPUTextureFormat,
+                ?access: Web.GPUStorageTextureAccess,
+                ?viewDimension: Web.GPUTextureViewDimension
+            )
+            : GPUStorageTextureBindingLayout
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10319,6 +10744,17 @@ module Web =
         abstract member multisampled: bool option with get, set
         abstract member sampleType: Web.GPUTextureSampleType option with get, set
         abstract member viewDimension: Web.GPUTextureViewDimension option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?multisampled: bool,
+                ?sampleType: Web.GPUTextureSampleType,
+                ?viewDimension: Web.GPUTextureViewDimension
+            )
+            : GPUTextureBindingLayout
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10398,6 +10834,13 @@ module Web =
         abstract member offset: Web.GPUSize64 with get, set
         abstract member shaderLocation: Web.GPUIndex32 with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (format: Web.GPUVertexFormat, offset: Web.GPUSize64, shaderLocation: Web.GPUIndex32)
+            : GPUVertexAttribute
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUVertexBufferLayout =
@@ -10405,11 +10848,34 @@ module Web =
         abstract member attributes: ResizeArray<Web.GPUVertexAttribute> with get, set
         abstract member stepMode: Web.GPUVertexStepMode option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                arrayStride: Web.GPUSize64,
+                attributes: ResizeArray<Web.GPUVertexAttribute>,
+                ?stepMode: Web.GPUVertexStepMode
+            )
+            : GPUVertexBufferLayout
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUVertexState =
         inherit Web.GPUProgrammableStage
         abstract member buffers: ResizeArray<Web.GPUVertexBufferLayout option> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ``module``: Web.GPUShaderModule,
+                ?constants: GPUVertexState.constants,
+                ?entryPoint: string,
+                ?buffers: ResizeArray<Web.GPUVertexBufferLayout option>
+            )
+            : GPUVertexState
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10963,10 +11429,16 @@ module Web =
     type KeyAlgorithm =
         abstract member name: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string) : KeyAlgorithm = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type KeySystemTrackConfiguration =
         abstract member robustness: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?robustness: string) : KeySystemTrackConfiguration = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11250,6 +11722,21 @@ module Web =
         abstract member sessionTypes: ResizeArray<string> option with get, set
         abstract member video: Web.KeySystemTrackConfiguration option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                keySystem: string,
+                ?audio: Web.KeySystemTrackConfiguration,
+                ?distinctiveIdentifier: Web.MediaKeysRequirement,
+                ?initDataType: string,
+                ?persistentState: Web.MediaKeysRequirement,
+                ?sessionTypes: ResizeArray<string>,
+                ?video: Web.KeySystemTrackConfiguration
+            )
+            : MediaCapabilitiesKeySystemConfiguration
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaConfiguration =
@@ -11327,6 +11814,10 @@ module Web =
         abstract member sizes: string option with get, set
         abstract member src: string with get, set
         abstract member ``type``: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(src: string, ?sizes: string, ?``type``: string) : MediaImage =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11539,6 +12030,29 @@ module Web =
         abstract member sampleSize: Web.ConstrainULong option with get, set
         abstract member width: Web.ConstrainULong option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?aspectRatio: Web.ConstrainDouble,
+                ?autoGainControl: Web.ConstrainBoolean,
+                ?backgroundBlur: Web.ConstrainBoolean,
+                ?channelCount: Web.ConstrainULong,
+                ?deviceId: Web.ConstrainDOMString,
+                ?displaySurface: Web.ConstrainDOMString,
+                ?echoCancellation: Web.ConstrainBooleanOrDOMString,
+                ?facingMode: Web.ConstrainDOMString,
+                ?frameRate: Web.ConstrainDouble,
+                ?groupId: Web.ConstrainDOMString,
+                ?height: Web.ConstrainULong,
+                ?noiseSuppression: Web.ConstrainBoolean,
+                ?sampleRate: Web.ConstrainULong,
+                ?sampleSize: Web.ConstrainULong,
+                ?width: Web.ConstrainULong
+            )
+            : MediaTrackConstraintSet
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaTrackConstraints =
@@ -11595,6 +12109,22 @@ module Web =
         abstract member origin: string option with get, set
         abstract member ports: ResizeArray<Web.MessagePort> option with get, set
         abstract member source: Web.MessageEventSource option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?data: 'T,
+                ?lastEventId: string,
+                ?origin: string,
+                ?ports: ResizeArray<Web.MessagePort>,
+                ?source: Web.MessageEventSource
+            )
+            : MessageEventInit<'T>
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11972,6 +12502,20 @@ module Web =
         abstract member usedtx: bool option with get, set
         abstract member useinbandfec: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?complexity: float,
+                ?format: Web.OpusBitstreamFormat,
+                ?frameDuration: float,
+                ?packetlossperc: float,
+                ?usedtx: bool,
+                ?useinbandfec: bool
+            )
+            : OpusEncoderConfig
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type OscillatorOptions =
@@ -12111,11 +12655,18 @@ module Web =
         abstract member name: string option with get, set
         abstract member phone: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?email: string, ?name: string, ?phone: string) : PayerErrors =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PaymentCurrencyAmount =
         abstract member currency: string with get, set
         abstract member value: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(currency: string, value: string) : PaymentCurrencyAmount = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12182,6 +12733,13 @@ module Web =
         abstract member amount: Web.PaymentCurrencyAmount with get, set
         abstract member label: string with get, set
         abstract member pending: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (amount: Web.PaymentCurrencyAmount, label: string, ?pending: bool)
+            : PaymentItem
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12418,6 +12976,9 @@ module Web =
         abstract member offset: float with get, set
         abstract member stride: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(offset: float, stride: float) : PlaneLayout = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PointerEventInit =
@@ -12621,6 +13182,23 @@ module Web =
         abstract member timeout: float option with get, set
         abstract member user: Web.PublicKeyCredentialUserEntity with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                challenge: Web.BufferSource,
+                pubKeyCredParams: ResizeArray<Web.PublicKeyCredentialParameters>,
+                rp: Web.PublicKeyCredentialRpEntity,
+                user: Web.PublicKeyCredentialUserEntity,
+                ?attestation: Web.AttestationConveyancePreference,
+                ?authenticatorSelection: Web.AuthenticatorSelectionCriteria,
+                ?excludeCredentials: ResizeArray<Web.PublicKeyCredentialDescriptor>,
+                ?extensions: Web.AuthenticationExtensionsClientInputs,
+                ?timeout: float
+            )
+            : PublicKeyCredentialCreationOptions
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialCreationOptionsJSON =
@@ -12663,12 +13241,30 @@ module Web =
         abstract member transports: ResizeArray<Web.AuthenticatorTransport> option with get, set
         abstract member ``type``: Web.PublicKeyCredentialType with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: Web.BufferSource,
+                ``type``: Web.PublicKeyCredentialType,
+                ?transports: ResizeArray<Web.AuthenticatorTransport>
+            )
+            : PublicKeyCredentialDescriptor
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialDescriptorJSON =
         abstract member id: Web.Base64URLString with get, set
         abstract member transports: ResizeArray<string> option with get, set
         abstract member ``type``: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (id: Web.Base64URLString, ``type``: string, ?transports: ResizeArray<string>)
+            : PublicKeyCredentialDescriptorJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12681,6 +13277,13 @@ module Web =
         abstract member alg: Web.COSEAlgorithmIdentifier with get, set
         abstract member ``type``: Web.PublicKeyCredentialType with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (alg: Web.COSEAlgorithmIdentifier, ``type``: Web.PublicKeyCredentialType)
+            : PublicKeyCredentialParameters
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialRequestOptions =
@@ -12690,6 +13293,20 @@ module Web =
         abstract member rpId: string option with get, set
         abstract member timeout: float option with get, set
         abstract member userVerification: Web.UserVerificationRequirement option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                challenge: Web.BufferSource,
+                ?allowCredentials: ResizeArray<Web.PublicKeyCredentialDescriptor>,
+                ?extensions: Web.AuthenticationExtensionsClientInputs,
+                ?rpId: string,
+                ?timeout: float,
+                ?userVerification: Web.UserVerificationRequirement
+            )
+            : PublicKeyCredentialRequestOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12723,6 +13340,9 @@ module Web =
         inherit Web.PublicKeyCredentialEntity
         abstract member id: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, ?id: string) : PublicKeyCredentialRpEntity = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialUserEntity =
@@ -12730,12 +13350,26 @@ module Web =
         abstract member displayName: string with get, set
         abstract member id: Web.BufferSource with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, displayName: string, id: Web.BufferSource)
+            : PublicKeyCredentialUserEntity
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialUserEntityJSON =
         abstract member displayName: string with get, set
         abstract member id: Web.Base64URLString with get, set
         abstract member name: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (displayName: string, id: Web.Base64URLString, name: string)
+            : PublicKeyCredentialUserEntityJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12772,6 +13406,13 @@ module Web =
     type QueuingStrategy<'T> =
         abstract member highWaterMark: float option with get, set
         abstract member size: Web.QueuingStrategySize<'T> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?highWaterMark: float, ?size: Web.QueuingStrategySize<'T>)
+            : QueuingStrategy<'T>
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12967,6 +13608,17 @@ module Web =
         abstract member credential: string option with get, set
         abstract member urls: U2<string, ResizeArray<string>> with get, set
         abstract member username: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(urls: string, ?credential: string, ?username: string) : RTCIceServer =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (urls: ResizeArray<string>, ?credential: string, ?username: string)
+            : RTCIceServer
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13202,6 +13854,21 @@ module Web =
         abstract member priority: Web.RTCPriorityType option with get, set
         abstract member scaleResolutionDownBy: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?rid: string,
+                ?active: bool,
+                ?maxBitrate: float,
+                ?maxFramerate: float,
+                ?networkPriority: Web.RTCPriorityType,
+                ?priority: Web.RTCPriorityType,
+                ?scaleResolutionDownBy: float
+            )
+            : RTCRtpEncodingParameters
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpHeaderExtensionCapability =
@@ -13394,6 +14061,13 @@ module Web =
         /// Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
         /// </summary>
         abstract member writable: Web.WritableStream<'W> with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (readable: Web.ReadableStream<'R>, writable: Web.WritableStream<'W>)
+            : ReadableWritablePair<'R, 'W>
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13616,6 +14290,9 @@ module Web =
         abstract member r: string option with get, set
         abstract member t: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?d: string, ?r: string, ?t: string) : RsaOtherPrimesInfo = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RsaPssParams =
@@ -13830,6 +14507,17 @@ module Web =
         abstract member bluetoothServiceClassId: Web.BluetoothServiceUUID option with get, set
         abstract member usbProductId: float option with get, set
         abstract member usbVendorId: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bluetoothServiceClassId: Web.BluetoothServiceUUID,
+                ?usbProductId: float,
+                ?usbVendorId: float
+            )
+            : SerialPortFilter
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14173,6 +14861,9 @@ module Web =
     type SvcOutputMetadata =
         abstract member temporalLayerId: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?temporalLayerId: float) : SvcOutputMetadata = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type TaskControllerInit =
@@ -14236,6 +14927,13 @@ module Web =
     type TimelineRangeOffset =
         abstract member offset: Web.CSSNumericValue option with get, set
         abstract member rangeName: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?offset: Web.CSSNumericValue, ?rangeName: string)
+            : TimelineRangeOffset
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14372,6 +15070,19 @@ module Web =
         abstract member transform: Web.TransformerTransformCallback<'I, 'O> option with get, set
         abstract member writableType: obj option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?flush: Web.TransformerFlushCallback<'O>,
+                ?readableType: obj,
+                ?start: Web.TransformerStartCallback<'O>,
+                ?transform: Web.TransformerTransformCallback<'I, 'O>,
+                ?writableType: obj
+            )
+            : Transformer<'I, 'O>
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type TransitionEventInit =
@@ -14496,6 +15207,18 @@ module Web =
         abstract member start: (Web.ReadableStreamDefaultController<'R> -> unit) option with get, set
         abstract member ``type``: obj option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?cancel: Web.UnderlyingSourceCancelCallback,
+                ?pull: (Web.ReadableStreamDefaultController<'R> -> U2<unit, obj>),
+                ?start: (Web.ReadableStreamDefaultController<'R> -> unit),
+                ?``type``: obj
+            )
+            : UnderlyingDefaultSource<'R>
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type UnderlyingSink<'W> =
@@ -14505,6 +15228,19 @@ module Web =
         abstract member ``type``: obj option with get, set
         abstract member write: Web.UnderlyingSinkWriteCallback<'W> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?abort: Web.UnderlyingSinkAbortCallback,
+                ?close: Web.UnderlyingSinkCloseCallback,
+                ?start: Web.UnderlyingSinkStartCallback,
+                ?``type``: obj,
+                ?write: Web.UnderlyingSinkWriteCallback<'W>
+            )
+            : UnderlyingSink<'W>
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type UnderlyingSource<'R> =
@@ -14513,6 +15249,19 @@ module Web =
         abstract member pull: Web.UnderlyingSourcePullCallback<'R> option with get, set
         abstract member start: Web.UnderlyingSourceStartCallback<'R> option with get, set
         abstract member ``type``: Web.ReadableStreamType option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?autoAllocateChunkSize: float,
+                ?cancel: Web.UnderlyingSourceCancelCallback,
+                ?pull: Web.UnderlyingSourcePullCallback<'R>,
+                ?start: Web.UnderlyingSourceStartCallback<'R>,
+                ?``type``: Web.ReadableStreamType
+            )
+            : UnderlyingSource<'R>
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14687,6 +15436,9 @@ module Web =
     [<Interface>]
     type VideoEncoderEncodeOptionsForAvc =
         abstract member quantizer: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?quantizer: float) : VideoEncoderEncodeOptionsForAvc = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14968,6 +15720,10 @@ module Web =
     type WebTransportHash =
         abstract member algorithm: string with get, set
         abstract member value: Web.BufferSource with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(algorithm: string, value: Web.BufferSource) : WebTransportHash =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -34081,6 +34837,9 @@ module Web =
         /// </summary>
         abstract member message: string with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(message: string) : GPUError = nativeOnly
+
     /// <summary>
     /// The **<c>GPUExternalTexture</c>** interface of the WebGPU API represents a wrapper object containing an HTMLVideoElement snapshot that can be used as a texture in GPU rendering operations.
     /// Available only in secure contexts.
@@ -34911,6 +35670,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadButton/value)
         /// </summary>
         abstract member value: float with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(pressed: bool, touched: bool, value: float) : GamepadButton =
+            nativeOnly
 
     /// <summary>
     /// The **<c>GamepadEvent</c>** interface of the Gamepad API contains references to gamepads connected to the system, which is what the gamepad events gamepadconnected and gamepaddisconnected are fired in response to.
@@ -104933,6 +105696,9 @@ module Web =
             abstract member ``mutable``: bool option with get, set
             abstract member value: 'T with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(value: 'T, ?``mutable``: bool) : GlobalDescriptor<'T> = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type MemoryDescriptor =
@@ -109637,7 +110403,23 @@ module Web =
             [<EmitIndexer>]
             abstract member Item: key: string -> Web.GPUSize64 option with get, set
 
+    module GPUFragmentState =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type constants =
+            [<EmitIndexer>]
+            abstract member Item: key: string -> Web.GPUPipelineConstantValue with get, set
+
     module GPUProgrammableStage =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type constants =
+            [<EmitIndexer>]
+            abstract member Item: key: string -> Web.GPUPipelineConstantValue with get, set
+
+    module GPUVertexState =
 
         [<AllowNullLiteral>]
         [<Interface>]

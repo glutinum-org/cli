@@ -4011,7 +4011,9 @@ module private ParamObjectCandidate =
 
                     | GlueType.UtilityType(GlueUtilityType.Omit members) -> Some members
 
-                    | GlueType.TypeReference typeReference when typeReference.TypeArguments.IsEmpty ->
+                    // `ReadableOptions<T> extends StreamOptions<T>` passes its own parameter on,
+                    // the members of the base name it the same way
+                    | GlueType.TypeReference typeReference ->
                         tryFindInterface typeReference.FullName |> Option.bind (resolve visited)
 
                     | _ -> None
@@ -4087,6 +4089,66 @@ module private ParamObjectCandidate =
 
         collect glueType
 
+    let private argumentReachable = HashSet<string>()
+
+    let rec private propertyTypeReferences (glueType: GlueType) =
+        match glueType with
+        | GlueType.TypeReference typeReference ->
+            typeReference.FullName
+            :: (typeReference.TypeArguments |> List.collect propertyTypeReferences)
+        | GlueType.Union(GlueTypeUnion cases) -> cases |> List.collect propertyTypeReferences
+        | GlueType.Array innerType
+        | GlueType.ReadOnly innerType
+        | GlueType.OptionalType innerType -> propertyTypeReferences innerType
+        | GlueType.TupleType elements -> elements |> List.collect propertyTypeReferences
+        | _ -> []
+
+    /// `WorkerOptions.resourceLimits` is the only place `ResourceLimits` appears: a declaration
+    /// reached through the properties of a param object is built by the same caller
+    let reset (typeMemory: GlueType list) =
+        argumentReachable.Clear()
+
+        let optionBags = Dictionary<string, GlueInterface>()
+
+        for glueType in typeMemory do
+            match glueType with
+            | GlueType.Interface info when
+                not info.Members.IsEmpty
+                && info.Members
+                   |> List.forall (
+                       function
+                       | GlueMember.Property _ -> true
+                       | _ -> false
+                   )
+                ->
+                optionBags.[info.FullName] <- info
+            | _ -> ()
+
+        for glueType in typeMemory do
+            for parameter in parameters glueType do
+                for fullName in typeReferenceFullNames parameter.Type do
+                    argumentReachable.Add fullName |> ignore
+
+            for fullName in constrainedParameterFullNames glueType do
+                argumentReachable.Add fullName |> ignore
+
+        let mutable changed = true
+
+        while changed do
+            changed <- false
+
+            for fullName in List.ofSeq argumentReachable do
+                match optionBags.TryGetValue fullName with
+                | true, info ->
+                    for glueMember in info.Members do
+                        match glueMember with
+                        | GlueMember.Property property ->
+                            for referenced in propertyTypeReferences property.Type do
+                                if argumentReachable.Add referenced then
+                                    changed <- true
+                        | _ -> ()
+                | _ -> ()
+
     let isCandidate (typeMemory: GlueType list) (info: GlueInterface) =
         let members = tryResolveMembers typeMemory info
 
@@ -4102,15 +4164,18 @@ module private ParamObjectCandidate =
                    )
             | None -> false
 
-        let isUsedAsArgument =
-            typeMemory
-            |> List.exists (fun glueType ->
-                parameters glueType
-                |> List.exists (fun parameter ->
-                    typeReferenceFullNames parameter.Type |> List.contains info.FullName
-                )
-                || constrainedParameterFullNames glueType |> List.contains info.FullName
-            )
+        // A type parameter no member names can only be given explicitly at the call site
+        let typeParametersAreInferable =
+            let mentioned =
+                members
+                |> Option.defaultValue info.Members
+                |> List.collect memberTypeParameterNames
+                |> Set.ofList
+
+            info.TypeParameters
+            |> List.forall (fun typeParameter -> mentioned.Contains typeParameter.Name)
+
+        let isUsedAsArgument = argumentReachable.Contains info.FullName
 
         let isUsedAsOutput =
             typeMemory
@@ -4138,7 +4203,7 @@ module private ParamObjectCandidate =
             |> fun count -> count <= 1
 
         hasOnlyProperties
-        && info.TypeParameters.IsEmpty
+        && typeParametersAreInferable
         && isUsedAsArgument
         && not isUsedAsOutput
         && isDeclaredOnce
@@ -8847,6 +8912,7 @@ let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: Gl
     let typeLiteralsMemory = TypeLiteralsMemory()
     KeyOfMaps.reset typeMemory
     Conditionals.reset typeMemory
+    ParamObjectCandidate.reset typeMemory
 
     {
         FSharpAST =
