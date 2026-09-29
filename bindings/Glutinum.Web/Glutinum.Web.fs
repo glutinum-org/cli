@@ -90735,7 +90735,7 @@ module Web =
         abstract member generateKey:
             algorithm: SubtleCrypto.generateKey.algorithm *
             extractable: bool *
-            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages> ->
+            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages.Item> ->
                 JS.Promise<Web.CryptoKeyPair>
 
         /// <summary>
@@ -90746,7 +90746,7 @@ module Web =
         abstract member generateKey:
             algorithm: SubtleCrypto.generateKey.algorithm_1 *
             extractable: bool *
-            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages_1> ->
+            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages.Item_1> ->
                 JS.Promise<Web.CryptoKeyPair>
 
         /// <summary>
@@ -111021,12 +111021,6 @@ module Web =
                     =
                     nativeOnly
 
-            [<RequireQualifiedAccess>]
-            [<StringEnum(CaseRules.None)>]
-            type keyUsages =
-                | sign
-                | verify
-
             module algorithm =
 
                 module Cases =
@@ -111047,6 +111041,20 @@ module Web =
                         [<ParamObject; Emit("$0")>]
                         static member Create(name: string) : Case1_1 = nativeOnly
 
+            module keyUsages =
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type Item =
+                    | sign
+                    | verify
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type Item_1 =
+                    | deriveBits
+                    | deriveKey
+
             [<RequireQualifiedAccess>]
             [<Erase(CaseRules.None)>]
             type algorithm_1 =
@@ -111066,12 +111074,6 @@ module Web =
                     : algorithm_1
                     =
                     nativeOnly
-
-            [<RequireQualifiedAccess>]
-            [<StringEnum(CaseRules.None)>]
-            type keyUsages_1 =
-                | deriveBits
-                | deriveKey
 
         module importKey =
 

@@ -877,11 +877,25 @@ module UtilityType =
                 withoutForeignTypeParameters reader defaults members
             else
                 members
-        |> (if keepListedKeys then
-                GlueUtilityType.Pick
+        |> fun members ->
+            // `Pick<Locale, LocaleFields>` names its keys through a type parameter, the members
+            // it stands for are only known once the parameter is bound
+            let hasUnboundKeys =
+                match keysToOmitType.flags with
+                | HasTypeFlags Ts.TypeFlags.TypeParameter
+                | HasTypeFlags Ts.TypeFlags.Index
+                | HasTypeFlags Ts.TypeFlags.IndexedAccess -> true
+                | _ -> false
+
+            if hasUnboundKeys then
+                GlueType.Primitive GluePrimitive.Any
             else
-                GlueUtilityType.Omit)
-        |> GlueType.UtilityType
+                members
+                |> (if keepListedKeys then
+                        GlueUtilityType.Pick
+                    else
+                        GlueUtilityType.Omit)
+                |> GlueType.UtilityType
 
     let readOmit (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         readOmitOrPick reader typeReferenceNode false

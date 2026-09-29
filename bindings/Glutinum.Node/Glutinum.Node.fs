@@ -14889,7 +14889,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<Emit("$0.listeners('workerMessage')")>]
             abstract member listeners_workerMessage:
-                unit -> ResizeArray<Process.listeners_workerMessage>
+                unit -> ResizeArray<Process.listeners_workerMessage.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -15142,8 +15142,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 delegate of
                     file: string * ?args: ResizeArray<string> * ?env: Node.NodeJS.ProcessEnv -> obj
 
-            type listeners_workerMessage = delegate of value: obj * source: float -> unit
-
             module finalization =
 
                 type register<'T> =
@@ -15180,6 +15178,10 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             module prependOnceListener_workerMessage =
 
                 type listener = delegate of value: obj * source: float -> unit
+
+            module listeners_workerMessage =
+
+                type Item = delegate of value: obj * source: float -> unit
 
         /// <summary>
         /// This object is created internally and is returned from <c>setImmediate()</c>. It
@@ -164437,8 +164439,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
         module Exports =
 
-            type listeners__ = delegate of value: obj * source: float -> unit
-
             module stdout__ =
 
                 [<AllowNullLiteral>]
@@ -164561,6 +164561,10 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             module prependOnceListener__ =
 
                 type listener = delegate of value: obj * source: float -> unit
+
+            module listeners__ =
+
+                type Item = delegate of value: obj * source: float -> unit
 
     module punycode =
 
@@ -170991,7 +170995,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// </returns>
             abstract member all:
                 [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue[] ->
-                    ResizeArray<StatementSync.all>
+                    ResizeArray<StatementSync.all.Item>
 
             /// <summary>
             /// This method executes a prepared statement and returns all results as an array of
@@ -171002,7 +171006,7 @@ the userland-provided Punycode.js module instead.""")>]
             abstract member all:
                 namedParameters: StatementSync.all.namedParameters *
                 [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue[] ->
-                    ResizeArray<StatementSync.all>
+                    ResizeArray<StatementSync.all.Item>
 
             /// <summary>
             /// This method is used to retrieve information about the columns returned by the
@@ -171269,12 +171273,6 @@ the userland-provided Punycode.js module instead.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type all =
-                [<EmitIndexer>]
-                abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
             type get =
                 [<EmitIndexer>]
                 abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
@@ -171286,6 +171284,12 @@ the userland-provided Punycode.js module instead.""")>]
                 abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
 
             module all =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Item =
+                    [<EmitIndexer>]
+                    abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -223140,7 +223144,8 @@ module UndiciTypes =
             /// </code>
             /// </summary>
             [<Emit("$0.listeners('connect')")>]
-            abstract member listeners_connect: unit -> ResizeArray<Dispatcher.listeners_connect>
+            abstract member listeners_connect:
+                unit -> ResizeArray<Dispatcher.listeners_connect.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -223155,7 +223160,7 @@ module UndiciTypes =
             /// </summary>
             [<Emit("$0.listeners('disconnect')")>]
             abstract member listeners_disconnect:
-                unit -> ResizeArray<Dispatcher.listeners_disconnect>
+                unit -> ResizeArray<Dispatcher.listeners_disconnect.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -223170,7 +223175,7 @@ module UndiciTypes =
             /// </summary>
             [<Emit("$0.listeners('connectionError')")>]
             abstract member listeners_connectionError:
-                unit -> ResizeArray<Dispatcher.listeners_connectionError>
+                unit -> ResizeArray<Dispatcher.listeners_connectionError.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -223217,7 +223222,7 @@ module UndiciTypes =
             /// </summary>
             [<Emit("$0.rawListeners('connect')")>]
             abstract member rawListeners_connect:
-                unit -> ResizeArray<Dispatcher.rawListeners_connect>
+                unit -> ResizeArray<Dispatcher.rawListeners_connect.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>,
@@ -223250,7 +223255,7 @@ module UndiciTypes =
             /// </summary>
             [<Emit("$0.rawListeners('disconnect')")>]
             abstract member rawListeners_disconnect:
-                unit -> ResizeArray<Dispatcher.rawListeners_disconnect>
+                unit -> ResizeArray<Dispatcher.rawListeners_disconnect.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>,
@@ -223283,7 +223288,7 @@ module UndiciTypes =
             /// </summary>
             [<Emit("$0.rawListeners('connectionError')")>]
             abstract member rawListeners_connectionError:
-                unit -> ResizeArray<Dispatcher.rawListeners_connectionError>
+                unit -> ResizeArray<Dispatcher.rawListeners_connectionError.Item>
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>,
@@ -224261,44 +224266,6 @@ module UndiciTypes =
 
         module Dispatcher =
 
-            type listeners_connect =
-                delegate of
-                    origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> ->
-                        unit
-
-            type listeners_disconnect =
-                delegate of
-                    origin: Node.url.URL *
-                    targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
-                    error: UndiciTypes.errors.Errors_.UndiciError ->
-                        unit
-
-            type listeners_connectionError =
-                delegate of
-                    origin: Node.url.URL *
-                    targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
-                    error: UndiciTypes.errors.Errors_.UndiciError ->
-                        unit
-
-            type rawListeners_connect =
-                delegate of
-                    origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> ->
-                        unit
-
-            type rawListeners_disconnect =
-                delegate of
-                    origin: Node.url.URL *
-                    targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
-                    error: UndiciTypes.errors.Errors_.UndiciError ->
-                        unit
-
-            type rawListeners_connectionError =
-                delegate of
-                    origin: Node.url.URL *
-                    targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
-                    error: UndiciTypes.errors.Errors_.UndiciError ->
-                        unit
-
             module connect =
 
                 type callback =
@@ -224504,6 +224471,58 @@ module UndiciTypes =
             module prependOnceListener_connectionError =
 
                 type callback =
+                    delegate of
+                        origin: Node.url.URL *
+                        targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
+                        error: UndiciTypes.errors.Errors_.UndiciError ->
+                            unit
+
+            module listeners_connect =
+
+                type Item =
+                    delegate of
+                        origin: Node.url.URL *
+                        targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> ->
+                            unit
+
+            module listeners_disconnect =
+
+                type Item =
+                    delegate of
+                        origin: Node.url.URL *
+                        targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
+                        error: UndiciTypes.errors.Errors_.UndiciError ->
+                            unit
+
+            module listeners_connectionError =
+
+                type Item =
+                    delegate of
+                        origin: Node.url.URL *
+                        targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
+                        error: UndiciTypes.errors.Errors_.UndiciError ->
+                            unit
+
+            module rawListeners_connect =
+
+                type Item =
+                    delegate of
+                        origin: Node.url.URL *
+                        targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> ->
+                            unit
+
+            module rawListeners_disconnect =
+
+                type Item =
+                    delegate of
+                        origin: Node.url.URL *
+                        targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
+                        error: UndiciTypes.errors.Errors_.UndiciError ->
+                            unit
+
+            module rawListeners_connectionError =
+
+                type Item =
                     delegate of
                         origin: Node.url.URL *
                         targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> *
