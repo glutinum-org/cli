@@ -775,6 +775,9 @@ module UtilityType =
         | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
         | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
 
+        // `Exclude<DeepPartial<Options<TType>>, ...>`: the branch depends on the type arguments
+        | HasTypeFlags Ts.TypeFlags.Conditional -> GlueType.Primitive GluePrimitive.Any
+
         | _ ->
             Report.readerError (
                 "Exclude",
@@ -1153,6 +1156,15 @@ module UtilityType =
         let keysToOmitType =
             typeReferenceNode.typeArguments.Value[1] |> reader.checker.getTypeFromTypeNode
 
+        // `Pick<Locale, LocaleFields>` names its keys through a type parameter, the members
+        // it stands for are only known once the parameter is bound
+        let hasUnboundKeys =
+            match keysToOmitType.flags with
+            | HasTypeFlags Ts.TypeFlags.TypeParameter
+            | HasTypeFlags Ts.TypeFlags.Index
+            | HasTypeFlags Ts.TypeFlags.IndexedAccess -> true
+            | _ -> false
+
         let tryReadValueOfKeys (typ: Ts.Type) =
             match typ with
             | Type.StringLiteral.String value -> Some value
@@ -1164,6 +1176,7 @@ module UtilityType =
 
         let keysToOmit =
             match keysToOmitType.flags with
+            | _ when hasUnboundKeys -> Seq.empty
             | HasTypeFlags Ts.TypeFlags.Any when typeReferenceNode.pos < 0 ->
                 literalKeysOf typeReferenceNode.typeArguments.Value[1] |> Seq.ofList
             | _ ->
@@ -1252,15 +1265,6 @@ module UtilityType =
             else
                 members
         |> fun members ->
-            // `Pick<Locale, LocaleFields>` names its keys through a type parameter, the members
-            // it stands for are only known once the parameter is bound
-            let hasUnboundKeys =
-                match keysToOmitType.flags with
-                | HasTypeFlags Ts.TypeFlags.TypeParameter
-                | HasTypeFlags Ts.TypeFlags.Index
-                | HasTypeFlags Ts.TypeFlags.IndexedAccess -> true
-                | _ -> false
-
             if hasUnboundKeys then
                 GlueType.Primitive GluePrimitive.Any
             else
@@ -1689,7 +1693,11 @@ let private readThisType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : G
         : GlueThisType)
         |> GlueType.ThisType
 
-let private readIntersectionType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+let private readIntersectionConstituents
+    (reader: ITypeScriptReader)
+    (typeNode: Ts.TypeNode)
+    : GlueType
+    =
     let checker = reader.checker
 
     let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode
@@ -1874,6 +1882,21 @@ let private readIntersectionType (reader: ITypeScriptReader) (typeNode: Ts.TypeN
             )
 
         GlueType.IntersectionType(members @ callSignatures @ indexSignatures)
+
+/// `DateArg<Date> & {}` is `DateArg<Date>`, the empty type literal only bars `null`
+let private readIntersectionType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let isEmptyTypeLiteral (constituent: Ts.TypeNode) =
+        constituent.kind = Ts.SyntaxKind.TypeLiteral
+        && (constituent :?> Ts.TypeLiteralNode).members.Count = 0
+
+    let constituents =
+        (typeNode :?> Ts.IntersectionTypeNode).types
+        |> Seq.filter (not << isEmptyTypeLiteral)
+        |> Seq.toList
+
+    match constituents with
+    | [ single ] -> reader.ReadTypeNode single
+    | _ -> readIntersectionConstituents reader typeNode
 
 let private readExpressionWithTypeArguments
     (reader: ITypeScriptReader)
