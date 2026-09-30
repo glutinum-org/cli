@@ -247,6 +247,15 @@ module private Dynamic =
 
     let inline prop (o: obj) (key: string) : obj = emitJsExpr (o, key) "$0[$1]"
 
+    /// The property when it is neither `null` nor `undefined`
+    let tryProp (o: obj) (key: string) : obj option =
+        let value = prop o key
+
+        if isNullish value then
+            None
+        else
+            Some value
+
     let inline objEntries (o: obj) : (string * obj)[] = emitJsExpr o "Object.entries($0)"
 
     let inline objValues (o: obj) : obj[] = emitJsExpr o "Object.values($0)"
@@ -263,51 +272,49 @@ module private Dynamic =
 /// The package resolution logic, ported from `js/resolve.js`
 module Resolve =
 
-    let findNodeModules (host: Host) (cwd: string) : string option =
-        let mutable dir = host.path.resolve [| cwd |]
-        let mutable result = None
-        let mutable go = true
+    /// The first directory, from `start` up to the root, `tryDir` accepts
+    let rec private walkUp (host: Host) (start: string) (tryDir: string -> 'T option) : 'T option =
+        match tryDir start with
+        | Some found -> Some found
+        | None ->
+            let parent = host.path.dirname start
 
-        while go do
-            let candidate = host.path.join [| dir; "node_modules" |]
-
-            if host.fs.directoryExists candidate then
-                result <- Some candidate
-                go <- false
+            if parent = start then
+                None
             else
-                let parent = host.path.dirname dir
+                walkUp host parent tryDir
 
-                if parent = dir then
-                    go <- false
+    let findNodeModules (host: Host) (cwd: string) : string option =
+        walkUp
+            host
+            (host.path.resolve [| cwd |])
+            (fun dir ->
+                let candidate = host.path.join [| dir; "node_modules" |]
+
+                if host.fs.directoryExists candidate then
+                    Some candidate
                 else
-                    dir <- parent
-
-        result
+                    None
+            )
 
     let findPackageDir (host: Host) (file: string) : string option =
-        let mutable dir = host.path.dirname (host.path.resolve [| file |])
-        let mutable result = None
-        let mutable go = true
+        walkUp
+            host
+            (host.path.dirname (host.path.resolve [| file |]))
+            (fun dir ->
+                let packageJsonPath = host.path.join [| dir; "package.json" |]
 
-        while go do
-            let packageJsonPath = host.path.join [| dir; "package.json" |]
-
-            // `dist/esm/package.json` files only holding `{ "type": "module" }` do not delimit a package
-            if
-                host.fs.fileExists packageJsonPath
-                && not (isNullish (prop (JS.JSON.parse (host.fs.readFile packageJsonPath)) "name"))
-            then
-                result <- Some(host.fs.realPath dir)
-                go <- false
-            else
-                let parent = host.path.dirname dir
-
-                if parent = dir then
-                    go <- false
+                // `dist/esm/package.json` files only holding `{ "type": "module" }` do not delimit a package
+                if
+                    host.fs.fileExists packageJsonPath
+                    && not (
+                        isNullish (prop (JS.JSON.parse (host.fs.readFile packageJsonPath)) "name")
+                    )
+                then
+                    Some(host.fs.realPath dir)
                 else
-                    dir <- parent
-
-        result
+                    None
+            )
 
     let private collectExportsTypes (exportsField: obj) : (string * string) list =
         let result = ResizeArray<string * string>()
@@ -381,16 +388,7 @@ module Resolve =
         [| at 0; at 1; at 2 |]
 
     let private compareVersions (a: int[]) (b: int[]) : int =
-        let mutable result = 0
-        let mutable i = 0
-
-        while i < 3 && result = 0 do
-            if a[i] <> b[i] then
-                result <- a[i] - b[i]
-
-            i <- i + 1
-
-        result
+        Array.map2 (-) a b |> Array.tryFind ((<>) 0) |> Option.defaultValue 0
 
     let private satisfiesComparator (version: int[]) (comparator: string) : bool =
         let m = Regex.Match(comparator, @"^(>=|<=|>|<|=|\^|~)?\s*(.+)$")
@@ -467,37 +465,36 @@ module Resolve =
             | None -> file
             | Some paths ->
                 let normalized = Regex.Replace(file, @"^\./", "")
-                let mutable found = None
 
-                for (pattern, targets) in objEntries paths do
-                    if found.IsNone then
-                        let split = pattern.Split('*')
-                        let prefix = split[0]
+                objEntries paths
+                |> Array.tryPick (fun (pattern, targets) ->
+                    let split = pattern.Split('*')
+                    let prefix = split[0]
 
-                        let suffix =
-                            if split.Length > 1 then
-                                split[1]
-                            else
-                                ""
+                    let suffix =
+                        if split.Length > 1 then
+                            split[1]
+                        else
+                            ""
 
-                        let targets: string[] = unbox targets
+                    let targets: string[] = unbox targets
 
-                        if
-                            normalized.StartsWith prefix
-                            && normalized.EndsWith suffix
-                            && targets.Length > 0
-                        then
-                            let captured =
-                                normalized.Substring(
-                                    prefix.Length,
-                                    normalized.Length - suffix.Length - prefix.Length
-                                )
+                    if
+                        normalized.StartsWith prefix
+                        && normalized.EndsWith suffix
+                        && targets.Length > 0
+                    then
+                        let captured =
+                            normalized.Substring(
+                                prefix.Length,
+                                normalized.Length - suffix.Length - prefix.Length
+                            )
 
-                            found <- Some(targets[0].Replace("*", captured))
-
-                match found with
-                | Some f -> f
-                | None -> file
+                        Some(targets[0].Replace("*", captured))
+                    else
+                        None
+                )
+                |> Option.defaultValue file
 
     let describePackage (host: Host) (packageDir: string) : PackageDescription option =
         let packageJsonPath = host.path.join [| packageDir; "package.json" |]
@@ -508,28 +505,26 @@ module Resolve =
             let pkg = JS.JSON.parse (host.fs.readFile packageJsonPath)
 
             let name: string =
-                match prop pkg "name" with
-                | n when not (isNullish n) -> unbox n
-                | _ -> host.path.basename packageDir
+                tryProp pkg "name"
+                |> Option.map unbox
+                |> Option.defaultValue (host.path.basename packageDir)
 
             // `@types/foo` describes the `foo` package, `@types/scope__foo` the `@scope/foo` one
-            let mutable runtimeName = name
+            let runtimeName =
+                if name.StartsWith "@types/" then
+                    let typed = name.Substring("@types/".Length)
 
-            if name.StartsWith "@types/" then
-                let typed = name.Substring("@types/".Length)
-
-                runtimeName <-
                     if typed.Contains "__" then
                         "@" + typed.Replace("__", "/")
                     else
                         typed
+                else
+                    name
 
             let candidates = ResizeArray<string * string>()
 
             let typesField =
-                match prop pkg "types" with
-                | n when not (isNullish n) -> n
-                | _ -> prop pkg "typings"
+                tryProp pkg "types" |> Option.defaultWith (fun () -> prop pkg "typings")
 
             // With an `exports` map, TypeScript resolves the package to its `.` entry, not to `types`
             candidates.AddRange(collectExportsTypes (prop pkg "exports"))
@@ -630,12 +625,17 @@ module Resolve =
     let resolveInput (host: Host) (input: string) : ResolvedInput =
         let asPath = host.path.resolve [| host.cwd; input |]
 
+        let notFound () =
+            failwith
+                $"Could not find '{input}': it is neither a declaration file, a package directory, nor a package installed in node_modules."
+
         if declarationFile.IsMatch input && host.fs.fileExists asPath then
             resolvedFile asPath
         elif host.fs.directoryExists asPath then
             resolvedPackage (host.fs.realPath asPath)
         else
             match findNodeModules host host.cwd with
+            | None -> notFound ()
             | Some nodeModules ->
                 // `date-fns/locale` is a subpath of `date-fns`, generated with the package
                 let segments = input.Split('/')
@@ -650,34 +650,31 @@ module Resolve =
                     host.path.join
                         [| "@types"; replaceFirst (Regex.Replace(packageName, "^@", "")) "/" "__" |]
 
-                let mutable withoutDeclaration = None
-                let mutable result = None
-
                 // A package without declaration files (`ws`) is described by its `@types` package
-                for candidate in [ packageName; typesPackage ] do
-                    if result.IsNone then
-                        let packageDir =
-                            host.fs.realPath (host.path.join [| nodeModules; candidate |])
+                let installed =
+                    [ packageName; typesPackage ]
+                    |> List.map (fun candidate ->
+                        candidate, host.fs.realPath (host.path.join [| nodeModules; candidate |])
+                    )
+                    |> List.filter (fun (_, packageDir) ->
+                        host.fs.fileExists (host.path.join [| packageDir; "package.json" |])
+                    )
 
-                        if host.fs.fileExists (host.path.join [| packageDir; "package.json" |]) then
-                            if (describePackage host packageDir).IsSome then
-                                result <- Some(resolvedPackage packageDir)
-                            elif withoutDeclaration.IsNone then
-                                withoutDeclaration <- Some candidate
+                let resolved =
+                    installed
+                    |> List.tryPick (fun (_, packageDir) ->
+                        if (describePackage host packageDir).IsSome then
+                            Some(resolvedPackage packageDir)
+                        else
+                            None
+                    )
 
-                match result with
-                | Some resolved -> resolved
-                | None ->
-                    match withoutDeclaration with
-                    | Some _ ->
-                        failwith
-                            $"'{withoutDeclaration.Value}' ships no type declaration, install '{typesPackage}' and generate that instead."
-                    | None ->
-                        failwith
-                            $"Could not find '{input}': it is neither a declaration file, a package directory, nor a package installed in node_modules."
-            | None ->
-                failwith
-                    $"Could not find '{input}': it is neither a declaration file, a package directory, nor a package installed in node_modules."
+                match resolved, installed with
+                | Some resolved, _ -> resolved
+                | None, (withoutDeclaration, _) :: _ ->
+                    failwith
+                        $"'{withoutDeclaration}' ships no type declaration, install '{typesPackage}' and generate that instead."
+                | None, [] -> notFound ()
 
     let listInstalledPackages (host: Host) : string[] =
         match findNodeModules host host.cwd with
@@ -724,7 +721,7 @@ module Npm =
         abstract member json: unit -> JS.Promise<obj>
         abstract member text: unit -> JS.Promise<string>
 
-    type FetchFn = string -> JS.Promise<Response>
+    type private FetchFn = string -> JS.Promise<Response>
 
     [<Emit("globalThis.fetch")>]
     let private globalFetch: FetchFn = jsNative
@@ -763,21 +760,17 @@ module Npm =
         : JS.Promise<InstalledPackage>
         =
         let fetchImpl: FetchFn =
-            match prop options "fetch" with
-            | f when not (isNullish f) -> unbox f
-            | _ -> globalFetch
+            tryProp options "fetch" |> Option.map unbox |> Option.defaultValue globalFetch
 
         let onProgress: string -> unit =
-            match prop options "onProgress" with
-            | f when not (isNullish f) -> unbox f
-            | _ -> ignore
+            tryProp options "onProgress" |> Option.map unbox |> Option.defaultValue ignore
 
         // `@types/node` describes the runtime, it is not needed to generate a package
         let skip =
             Collections.Generic.HashSet<string>(
-                match prop options "skip" with
-                | s when not (isNullish s) -> unbox<string[]> s :> seq<string>
-                | _ -> [ "@types/node" ] :> seq<string>
+                tryProp options "skip"
+                |> Option.map (unbox<string[]> >> Seq.ofArray)
+                |> Option.defaultValue (Seq.singleton "@types/node")
             )
 
         let installed = Collections.Generic.Dictionary<string, InstalledPackage>()
@@ -788,24 +781,26 @@ module Npm =
                 return ()
             }
 
-        let getJson (url: string) : JS.Promise<obj> =
+        let fetchOk (url: string) : JS.Promise<Response> =
             promise {
                 let! response = fetchImpl url
 
                 if not response.ok then
                     return failwith $"{url}: {response.status}"
                 else
-                    return! response.json ()
+                    return response
+            }
+
+        let getJson (url: string) : JS.Promise<obj> =
+            promise {
+                let! response = fetchOk url
+                return! response.json ()
             }
 
         let getText (url: string) : JS.Promise<string> =
             promise {
-                let! response = fetchImpl url
-
-                if not response.ok then
-                    return failwith $"{url}: {response.status}"
-                else
-                    return! response.text ()
+                let! response = fetchOk url
+                return! response.text ()
             }
 
         let rec install (name: string) (range: string) : JS.Promise<InstalledPackage option> =
@@ -907,18 +902,13 @@ module Npm =
                                     ()
 
                             let dependencies =
-                                match prop packageJson "dependencies" with
-                                | d when not (isNullish d) -> d
-                                | _ -> createObj []
+                                tryProp packageJson "dependencies"
+                                |> Option.defaultWith (fun () -> createObj [])
 
                             for (dependency, dependencyRange) in objEntries dependencies do
                                 do! ignoreP (install dependency (unbox<string> dependencyRange))
 
-                            return
-                                (if installed.ContainsKey name then
-                                     Some installed[name]
-                                 else
-                                     None)
+                            return Some installed[name]
             }
 
         promise {
@@ -992,11 +982,17 @@ module Bootstrap =
             match Resolve.findPackageDir host fileName with
             | None -> false
             | Some dir ->
-                if not (runtimeNames.ContainsKey dir) then
-                    runtimeNames[dir] <-
-                        (Resolve.describePackage host dir |> Option.map (fun d -> d.runtimeName))
+                let runtimeName =
+                    match runtimeNames.TryGetValue dir with
+                    | true, runtimeName -> runtimeName
+                    | false, _ ->
+                        let runtimeName =
+                            Resolve.describePackage host dir |> Option.map _.runtimeName
 
-                match runtimeNames[dir] with
+                        runtimeNames[dir] <- runtimeName
+                        runtimeName
+
+                match runtimeName with
                 | Some runtimeName -> Array.contains runtimeName excludedRuntimeNames
                 | None -> false
 
@@ -1022,9 +1018,7 @@ module Bootstrap =
                     seen.Add fileName |> ignore
 
                     let imports: obj[] =
-                        match sourceFile?imports with
-                        | i when not (isNullish i) -> unbox i
-                        | _ -> [||]
+                        tryProp sourceFile "imports" |> Option.map unbox |> Option.defaultValue [||]
 
                     for usage in imports do
                         let resolvedFileName: string =

@@ -17,18 +17,9 @@ let rec private readUnionTypeCases
     // If the type are TypeReference, of different literal types, generate an erased Fable union type
     // If otherwise, not supported?
 
-    let rec removeParenthesizedType (node: Ts.Node) =
-        if ts.isParenthesizedTypeNode node then
-            let parenthesizedTypeNode = node :?> Ts.ParenthesizedTypeNode
-
-            removeParenthesizedType parenthesizedTypeNode.``type``
-        else
-            node
-
     unionTypeNode.types
     |> Seq.toList
-    // Remove the ParenthesizedType
-    |> List.map removeParenthesizedType
+    |> List.map (fun node -> removeParenthesizedType node :> Ts.Node)
     |> List.choose (fun node ->
         if ts.isLiteralTypeNode node then
             let literalTypeNode = node :?> Ts.LiteralTypeNode
@@ -128,13 +119,10 @@ let rec private readUnionTypeCases
             match node.kind with
             | Ts.SyntaxKind.UnionType ->
                 let unionTypeNode = node :?> Ts.UnionTypeNode
-                // Unwrap union
                 let (GlueTypeUnion cases) = readUnionTypeCases reader unionTypeNode
 
                 Some cases
-            | _ ->
-                // Capture simple types like string, number, real type, etc.
-                reader.ReadTypeNode(node :?> Ts.TypeNode) |> List.singleton |> Some
+            | _ -> reader.ReadTypeNode(node :?> Ts.TypeNode) |> List.singleton |> Some
     )
     |> List.concat
     |> GlueTypeUnion

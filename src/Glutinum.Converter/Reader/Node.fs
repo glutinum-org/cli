@@ -4,7 +4,6 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open Glutinum.Converter.Reader.Utils
 open TypeScript
-open Fable.Core
 
 let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     match node.kind with
@@ -27,23 +26,9 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
     | Ts.SyntaxKind.ExportAssignment -> reader.ReadExportAssignment(node :?> Ts.ExportAssignment)
 
-    | Ts.SyntaxKind.ImportDeclaration ->
-        // Avoid writing a warning in the console for now
-        // Should be handled in the future
-        GlueType.Discard
+    | Ts.SyntaxKind.ImportDeclaration -> GlueType.Discard
 
-    | Ts.SyntaxKind.TypeLiteral ->
-        let typeLiteralNode = node :?> Ts.TypeLiteralNode
-
-        let members =
-            typeLiteralNode.members |> Seq.toList |> List.map reader.ReadDeclaration
-
-        ({
-            Members = members
-            Id = typeLiteralId typeLiteralNode
-        }
-        : GlueTypeLiteral)
-        |> GlueType.TypeLiteral
+    | Ts.SyntaxKind.TypeLiteral -> reader.ReadTypeNode(node :?> Ts.TypeNode)
 
     // `export { X }` resolved from another module, the declaration of `X` is the node to read
     | Ts.SyntaxKind.ExportSpecifier ->

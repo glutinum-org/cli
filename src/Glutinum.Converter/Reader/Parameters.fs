@@ -51,9 +51,7 @@ let readParameters
                 let typ = reader.checker.getTypeFromTypeNode typeNode
 
                 if isTupleType typ then
-                    let flags =
-                        Ts.NodeBuilderFlags.NoTruncation
-                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+                    let flags = typeNodeBuilderFlags
 
                     match reader.checker.typeToTypeNode (typ, None, Some flags) with
                     | Some tupleNode when tupleNode.kind = Ts.SyntaxKind.TupleType ->

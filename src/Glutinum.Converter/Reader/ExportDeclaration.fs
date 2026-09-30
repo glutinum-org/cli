@@ -3,23 +3,8 @@ module Glutinum.Converter.Reader.ExportDeclaration
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
-open Fable.Core
 open Fable.Core.JsInterop
 open Glutinum.Converter.Reader.Utils
-
-let private tryResolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
-    match symbol.flags with
-    | HasSymbolFlags Ts.SymbolFlags.Alias ->
-        try
-            let aliased = checker.getAliasedSymbol symbol
-
-            if isNull (box aliased) then
-                None
-            else
-                Some aliased
-        with _ ->
-            None
-    | _ -> Some symbol
 
 let private readReExport
     (reader: ITypeScriptReader)
@@ -29,7 +14,7 @@ let private readReExport
     (symbol: Ts.Symbol)
     : GlueType list
     =
-    match tryResolveAlias reader.checker symbol with
+    match resolveAlias reader.checker symbol with
     | None -> []
     | Some target ->
         match target.declarations with
@@ -67,11 +52,20 @@ let private readReExport
                     )
                 )
                 // Merged interfaces are declared several times, one alias is enough
-                |> List.distinctBy (fun glueType ->
-                    match glueType with
-                    | GlueType.ReExport { Declaration = GlueType.Interface _ } -> "interface"
-                    | _ -> System.Guid.NewGuid().ToString()
-                )
+                |> List.fold
+                    (fun (kept, hasInterface) glueType ->
+                        match glueType with
+                        | GlueType.ReExport { Declaration = GlueType.Interface _ } when
+                            hasInterface
+                            ->
+                            kept, true
+                        | GlueType.ReExport { Declaration = GlueType.Interface _ } ->
+                            glueType :: kept, true
+                        | _ -> glueType :: kept, hasInterface
+                    )
+                    ([], false)
+                |> fst
+                |> List.rev
         | _ -> []
 
 let readExportDeclaration

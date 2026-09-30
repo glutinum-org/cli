@@ -299,10 +299,6 @@ type GlueTypeReference =
 
 type GlueTypeUnion = GlueTypeUnion of GlueType list
 
-[<RequireQualifiedAccess>]
-type ExcludedMember = Literal of GlueLiteral
-// | Function
-
 type GlueFunctionType =
     {
         Documentation: GlueComment list

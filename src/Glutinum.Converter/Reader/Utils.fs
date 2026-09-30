@@ -1,8 +1,8 @@
 module Glutinum.Converter.Reader.Utils
 
+open Fable.Core.JS
 open TypeScript
 open Glutinum.Converter.GlueAST
-open Fable.Core.JS
 open Fable.Core.JsInterop
 open Glutinum.Converter.Reader.Types
 
@@ -11,6 +11,36 @@ let (|HasTypeFlags|_|) (flag: Ts.TypeFlags) (flags: Ts.TypeFlags) =
         Some()
     else
         None
+
+/// The flags `typeToTypeNode` is called with
+let typeNodeBuilderFlags =
+    Ts.NodeBuilderFlags.NoTruncation
+    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+/// The primitive a type resolves to by its flags, `obj` for the others
+let primitiveOfFlags (typ: Ts.Type) =
+    match typ.flags with
+    | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
+    | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
+    | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
+    | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
+    | HasTypeFlags Ts.TypeFlags.Void -> GlueType.Primitive GluePrimitive.Unit
+    | _ -> GlueType.Primitive GluePrimitive.Any
+
+let rec removeParenthesizedType (node: Ts.TypeNode) =
+    match node.kind with
+    | Ts.SyntaxKind.ParenthesizedType ->
+        removeParenthesizedType (node :?> Ts.ParenthesizedTypeNode).``type``
+    | _ -> node
+
+/// Read with `item` among the ones in progress, so that a declaration reaching itself is detected
+let withInProgress (inProgress: ResizeArray<'T>) (item: 'T) (read: unit -> 'R) : 'R =
+    inProgress.Add item
+
+    try
+        read ()
+    finally
+        inProgress.RemoveAt(inProgress.Count - 1)
 
 let (|HasSymbolFlags|_|) (flag: Ts.SymbolFlags) (flags: Ts.SymbolFlags) =
     if int flags &&& int flag <> 0 then
@@ -29,11 +59,9 @@ let private isNumericString (text: string) =
 
 let private tryReadNumericLiteral (text: string) =
     if isNumericString text then
-        // First, try to parse as an integer
         match System.Int32.TryParse text with
         | (true, i) -> GlueLiteral.Int i |> Some
         | _ ->
-            // If it fails, try to parse as a float
             match System.Double.TryParse text with
             | (true, f) -> GlueLiteral.Float f |> Some
             | _ -> None
@@ -88,14 +116,12 @@ let tryReadLiteral (checker: Ts.TypeChecker) (expression: Ts.Node) =
                 GlueLiteral.Int(unbox<int> value) |> Some
             else
                 GlueLiteral.Float value |> Some
-        | _ ->
-            // Fallback to parsing the source text directly
-            tryReadNumericLiteral text
+        | _ -> tryReadNumericLiteral text
 
-/// Nodes synthesized by <c>typeToTypeNode</c> have no source text
 /// An `Identifier` and a `StringLiteral` both carry the name in `text`
 let moduleExportNameText (name: Ts.ModuleExportName) : string = (unbox<Ts.Identifier> name).text
 
+/// Nodes synthesized by <c>typeToTypeNode</c> have no source text
 let identifierText (node: Ts.Node) : string =
     if isNull node?text then
         node.getText ()
@@ -446,7 +472,6 @@ let resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
             None
     | _ -> Some symbol
 
-/// Name of the declaration behind an `import { X as Y }` alias, `None` for a non-renamed symbol
 /// `Omit<LabelOption, "rotate">` where `interface LabelOption<T = Params>`: `T` is `Params`
 let defaultTypeArguments
     (reader: ITypeScriptReader)
@@ -514,6 +539,7 @@ let declaredName (symbol: Ts.Symbol) =
                 Some(identifierText name)
     )
 
+/// Name of the declaration behind an `import { X as Y }` alias, `None` for a non-renamed symbol
 let importedName (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
     match symbol.flags with
     | HasSymbolFlags Ts.SymbolFlags.Alias ->
@@ -686,11 +712,9 @@ let promotedAmbientModule (sourceFile: Ts.SourceFile) : Ts.ModuleDeclaration opt
             |> List.map (fun statement -> statement :?> Ts.ModuleDeclaration)
 
         let fileName =
-            System.Text.RegularExpressions.Regex.Replace(
-                (String.normalizePath sourceFile.fileName).Split('/') |> Seq.last,
-                "\\.d\\.[cm]?ts$",
-                ""
-            )
+            (String.normalizePath sourceFile.fileName).Split('/')
+            |> Seq.last
+            |> String.withoutDeclarationExtension
 
         // `declare module "node:http"` holds the declarations, `declare module "http"` re-exports them
         let moduleName (moduleDeclaration: Ts.ModuleDeclaration) =
@@ -1024,3 +1048,8 @@ module Type =
                 else
                     Float(unbox<float> literalType.value)
             | _ -> Other
+
+/// `private x` and `#x` are both private, an F# interface has no such member
+let isPrivateMember (modifiers: Ts.NodeArray<Ts.ModifierLike> option) (name: Ts.Identifier) =
+    ModifierUtil.HasModifier(modifiers, Ts.SyntaxKind.PrivateKeyword)
+    || name.kind = Ts.SyntaxKind.PrivateIdentifier

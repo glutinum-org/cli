@@ -32,9 +32,13 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
     // A dictionary would only store the last declaration
     let typeMemory = ResizeArray<GlueType>()
 
+    let inProgress = ReadInProgress.Create()
+
     interface ITypeScriptReader with
 
         override _.checker: Ts.TypeChecker = checker
+
+        member _.InProgress = inProgress
 
         member _.Warnings = warnings
 
@@ -74,7 +78,7 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
 
         member this.ReadNode(node: Ts.Node) : GlueType =
             let typ = readNode this node
-            typeMemory.Add(typ) // Store the type in memory for later use
+            typeMemory.Add(typ)
             typ
 
         member this.ReadTypeAliasDeclaration

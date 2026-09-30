@@ -3,10 +3,9 @@ module Glutinum.Converter.Reader.EnumDeclaration
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open Glutinum.Converter.Reader.Utils
+open Fable.Core.JS
 open TypeScript
 open Fable.Core
-open Fable.Core.JS
-open Fable.Core.JsInterop
 
 let private readEnumMembers
     (checker: Ts.TypeChecker)

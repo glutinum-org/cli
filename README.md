@@ -119,6 +119,20 @@ From a macro view, it does the following:
 2. Transform the GlueAST to FsharpAST
 3. Print the F# code from FsharpAST
 
+#### Layout
+
+| Path | Content |
+| --- | --- |
+| `Reader/` | One reader per TypeScript node kind. `Reader/Types.fs` declares `ITypeScriptReader`, the interface the readers call each other through, and `Reader/TypeScriptReader.fs` implements it. `Read.fs` reads a file or the files of the packages. |
+| `GlueAST.fs`, `FsharpAST.fs` | The two ASTs. `FSharpType.mapChildren` and `FSharpType.children` walk the child types of an F# type, every traversal of the F# AST builds on them. |
+| `Transformer/` | The parts of the transform which do not call `transformType`: the comment transform, the type parameter and heritage helpers, the analyses of the type memory (`ParamObjectCandidate`, `Conditionals`, `KeyOfMaps`, `UnionOverloads`, `AnyFunctionOverloads`, `CallableProperties`), the enum transform, and `Context.fs` with `TransformContext`, the scope every transform function receives. |
+| `Transform.fs` | The recursive core: `transformType`, the members, the exports, the declarations. The entry point is `Transform.applyWith`. |
+| `Merge.fs`, `Abbreviations.fs`, `FreeTypeParameters.fs`, `DelegateExtensions.fs` | The passes over the F# AST run after the transform, in this order. |
+| `Printer.fs` | The F# AST to text. |
+| `Hosting.fs`, `Packages.fs`, `Generate.fs` | Package resolution, the program creation, and the entry points of the CLI and of the web app. |
+
+The state of a run is explicit. The reader keeps the declarations it is reading in `ITypeScriptReader.InProgress`. The transform builds a `TransformState` from the type memory once, in `Transform.applyWith`, and reaches it as `context.State`. `Merge.Aliases` is computed from the transform output and given to the passes needing it. No module holds a mutable value between two runs.
+
 #### GlueAST
 
 GlueAST philosophy is to follow the TypeScript AST naming convention as much as possible. Its goal is to provide an easier to use AST than the TypeScript one thanks to F# type system (mainly thanks to discriminated unions).

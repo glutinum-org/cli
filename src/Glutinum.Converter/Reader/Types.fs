@@ -3,7 +3,6 @@ module Glutinum.Converter.Reader.Types
 open Fable.Core
 open TypeScript
 open Glutinum.Converter.GlueAST
-open System.Collections.Generic
 
 type PackageInfo =
     {
@@ -50,6 +49,12 @@ type ExternalPackage =
         LibFilePrefixes: string list
     }
 
+/// `date-fns`, `v1.2` and `my lib` are F# module names
+let private moduleNameOfSegment (segment: string) =
+    segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
+    |> String.concat "_"
+    |> Naming.sanitizeTypeName
+
 /// `node:fs` when the program declares that alias of `fs`, the specifier Node documents
 let ambientSpecifier (ambientModuleNames: Collections.Set<string>) (name: string) =
     if not (name.StartsWith "node:") && ambientModuleNames.Contains("node:" + name) then
@@ -85,11 +90,7 @@ type PackageContext =
         withoutPrefix.Split('/')
         |> Array.toList
         |> List.filter (fun segment -> segment <> "" && segment <> "*")
-        |> List.map (fun segment ->
-            segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
-            |> String.concat "_"
-            |> Naming.sanitizeTypeName
-        )
+        |> List.map moduleNameOfSegment
 
     member this.TryFindPackage(fileName: string) =
         let fileName = String.normalizePath fileName
@@ -202,8 +203,7 @@ type PackageContext =
             let segments =
                 match List.rev segments with
                 | last :: rest ->
-                    let withoutExtension =
-                        System.Text.RegularExpressions.Regex.Replace(last, "\\.d\\.[cm]?ts$", "")
+                    let withoutExtension = String.withoutDeclarationExtension last
 
                     let isSubpathEntry =
                         package.SubpathEntries |> List.exists (fun (file, _) -> file = fileName)
@@ -219,13 +219,7 @@ type PackageContext =
 
             // `fs/promises.d.ts` is the nested module `fs.promises`, spelled as the package
             // spells it
-            segments
-            |> List.map (fun segment ->
-                segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
-                |> String.concat "_"
-                |> Naming.sanitizeTypeName
-            )
-            |> String.concat "."
+            segments |> List.map moduleNameOfSegment |> String.concat "."
 
     /// The F# modules of `declare module "util/types"` under the module of its file `util`
     member this.NestedAmbientModuleSegments
@@ -293,12 +287,7 @@ type PackageContext =
                     | None ->
                         let relativePath = fileName.Substring(package.Dir.Length)
 
-                        let withoutExtension =
-                            System.Text.RegularExpressions.Regex.Replace(
-                                relativePath,
-                                "\\.d\\.[cm]?ts$",
-                                ""
-                            )
+                        let withoutExtension = String.withoutDeclarationExtension relativePath
 
                         package.RuntimeName + "/" + withoutExtension + ".js"
 
@@ -371,9 +360,30 @@ type PackageContext =
             (byName, bySymbol)
             ||> Map.fold (fun acc name specifier -> Map.add name specifier acc)
 
+/// The declarations being read, so that one reaching itself through its members is detected
+type ReadInProgress =
+    {
+        Intersections: ResizeArray<Ts.Type>
+        Expansions: ResizeArray<Ts.Type>
+        Partials: ResizeArray<Ts.Type>
+        KeyOfDeclarations: ResizeArray<Ts.Node>
+        TypeQueryDeclarations: ResizeArray<Ts.Node>
+    }
+
+    static member Create() =
+        {
+            Intersections = ResizeArray()
+            Expansions = ResizeArray()
+            Partials = ResizeArray()
+            KeyOfDeclarations = ResizeArray()
+            TypeQueryDeclarations = ResizeArray()
+        }
+
 [<Mangle>]
 type ITypeScriptReader =
     abstract checker: Ts.TypeChecker with get
+
+    abstract InProgress: ReadInProgress with get
 
     /// Set in package mode only
     abstract PackageContext: PackageContext option with get

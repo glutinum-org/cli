@@ -4,36 +4,29 @@ open Fable.Core
 open Glutinum.Converter.FSharpAST
 open System.Collections.Generic
 
-/// <summary>
-/// If a type is declared twice, merge them into one.
-///
-/// This can happens because TypeScript allows multiple declarations of the same type.
-///
-/// Example:
-///
-/// <code lang="typescript">
-/// interface A {
-///    a: string;
-/// }
-///
-/// interface A {
-///   b: number;
-/// }
-/// </code>
-/// </summary>
-/// <param name="fsharpTypes"></param>
-/// <returns>
-/// A new list of types with the duplicates merged.
-/// </returns>
-/// The parameterless type aliases of the output by their full path, an overload taking
-/// `PlusToken` is the one taking `MinusToken` when both alias the same type
-let private aliasTargets = Dictionary<string, FSharpType>()
+/// The type aliases of the output, two references are the same type when they alias the same one
+type Aliases =
+    {
+        /// The parameterless aliases by their full path, an overload taking `PlusToken` is the
+        /// one taking `MinusToken` when both alias the same type
+        Targets: Map<string, FSharpType>
+        /// The generic aliases by their full path and arity: `RequestHandler<obj>` is
+        /// `RequestHandler<obj, obj, obj, ParsedQs, obj>` once its defaults are applied
+        Generic: Map<string, string list * FSharpType>
+    }
 
-/// The generic aliases by their full path and arity: `RequestHandler<obj>` is
-/// `RequestHandler<obj, obj, obj, ParsedQs, obj>` once its defaults are applied
-let private genericAliasTargets = Dictionary<string, string list * FSharpType>()
+    static member Empty =
+        {
+            Targets = Map.empty
+            Generic = Map.empty
+        }
 
-let rec private collectAliases (path: string list) (types: FSharpType list) =
+let rec private collectAliases
+    (aliasTargets: Dictionary<string, FSharpType>)
+    (genericAliasTargets: Dictionary<string, string list * FSharpType>)
+    (path: string list)
+    (types: FSharpType list)
+    =
     for typ in types do
         match typ with
         | FSharpType.TypeAlias {
@@ -87,70 +80,51 @@ let rec private collectAliases (path: string list) (types: FSharpType list) =
             if not (genericAliasTargets.ContainsKey(name + "`" + arity)) then
                 genericAliasTargets.[name + "`" + arity] <- (names, target)
         | FSharpType.Module moduleInfo ->
-            collectAliases (path @ [ moduleInfo.Name ]) moduleInfo.Types
+            collectAliases
+                aliasTargets
+                genericAliasTargets
+                (path @ [ moduleInfo.Name ])
+                moduleInfo.Types
         | _ -> ()
 
-let rec private substitute (substitutions: Map<string, FSharpType>) (typ: FSharpType) : FSharpType =
-    let substitute = substitute substitutions
+/// The aliases the types declare
+let aliasesOf (types: FSharpType list) : Aliases =
+    let aliasTargets = Dictionary<string, FSharpType>()
+    let genericAliasTargets = Dictionary<string, string list * FSharpType>()
+    collectAliases aliasTargets genericAliasTargets [] types
 
+    {
+        Targets = aliasTargets |> Seq.map (fun (KeyValue(key, value)) -> key, value) |> Map.ofSeq
+        Generic =
+            genericAliasTargets
+            |> Seq.map (fun (KeyValue(key, value)) -> key, value)
+            |> Map.ofSeq
+    }
+
+let rec private substitute (substitutions: Map<string, FSharpType>) (typ: FSharpType) : FSharpType =
     match typ with
     | FSharpType.TypeParameter name ->
         match Map.tryFind name substitutions with
         | Some typ -> typ
         | None -> typ
-    | FSharpType.TypeReference typeReference ->
-        { typeReference with
-            TypeArguments = typeReference.TypeArguments |> List.map substitute
-        }
-        |> FSharpType.TypeReference
-    | FSharpType.Option typ -> FSharpType.Option(substitute typ)
-    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(substitute typ)
-    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
-        FSharpType.JSApi(FSharpJSApi.ReadonlyArray(substitute typ))
-    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map substitute)
-    | FSharpType.Function functionType ->
-        { functionType with
-            Parameters =
-                functionType.Parameters
-                |> List.map (fun parameter ->
-                    { parameter with
-                        Type = substitute parameter.Type
-                    }
-                )
-            ReturnType = substitute functionType.ReturnType
-        }
-        |> FSharpType.Function
-    | FSharpType.Union unionInfo ->
-        { unionInfo with
-            Cases =
-                unionInfo.Cases
-                |> List.map (
-                    function
-                    | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(substitute typ)
-                    | FSharpUnionCase.Field(name, typ) ->
-                        FSharpUnionCase.Field(name, substitute typ)
-                    | case -> case
-                )
-        }
-        |> FSharpType.Union
-    | typ -> typ
+    | typ -> FSharpType.mapChildren (substitute substitutions) typ
 
-let private tryGenericAliasTarget (typeReference: FSharpTypeReference) : FSharpType option =
+let private tryGenericAliasTarget
+    (aliases: Aliases)
+    (typeReference: FSharpTypeReference)
+    : FSharpType option
+    =
     let arity = "`" + string typeReference.TypeArguments.Length
 
     let key =
         String.concat "." (typeReference.ModulePath @ [ typeReference.Name ]) + arity
 
     let found =
-        if genericAliasTargets.ContainsKey key then
-            Some genericAliasTargets.[key]
-        elif
-            typeReference.ModulePath.IsEmpty
-            && genericAliasTargets.ContainsKey(typeReference.Name + arity)
-        then
-            Some genericAliasTargets.[typeReference.Name + arity]
-        else
-            None
+        match aliases.Generic.TryFind key with
+        | Some found -> Some found
+        | None when typeReference.ModulePath.IsEmpty ->
+            aliases.Generic.TryFind(typeReference.Name + arity)
+        | None -> None
 
     found
     |> Option.map (fun (names, target) ->
@@ -158,32 +132,31 @@ let private tryGenericAliasTarget (typeReference: FSharpTypeReference) : FSharpT
         substitute substitutions target
     )
 
-// Two references to the same type differ by their `FullName` (`SyntaxKind.A` vs `SyntaxKind.B`)
-let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
-    let signatureType = signatureTypeAt (depth + 1)
-
-    match typ with
-    | FSharpType.TypeReference typeReference when
-        depth < 8
-        && typeReference.TypeArguments.IsEmpty
-        && (aliasTargets.ContainsKey(
-               String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
-            )
-            || (typeReference.ModulePath.IsEmpty && aliasTargets.ContainsKey typeReference.Name))
-        ->
+/// The type a reference to an alias stands for, a reference from the alias' own module has no
+/// module path
+let private tryAliasTarget (aliases: Aliases) (typeReference: FSharpTypeReference) =
+    if not typeReference.TypeArguments.IsEmpty then
+        tryGenericAliasTarget aliases typeReference
+    else
         let fullPath = String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
 
-        (if aliasTargets.ContainsKey fullPath then
-             aliasTargets.[fullPath]
-         else
-             aliasTargets.[typeReference.Name])
-        |> signatureType
-    | FSharpType.TypeReference typeReference when
-        depth < 8
-        && not typeReference.TypeArguments.IsEmpty
-        && (tryGenericAliasTarget typeReference).IsSome
-        ->
-        (tryGenericAliasTarget typeReference).Value |> signatureType
+        match aliases.Targets.TryFind fullPath with
+        | Some target -> Some target
+        | None when typeReference.ModulePath.IsEmpty -> aliases.Targets.TryFind typeReference.Name
+        | None -> None
+
+let private (|AliasTarget|_|) (aliases: Aliases) (typ: FSharpType) =
+    match typ with
+    | FSharpType.TypeReference typeReference -> tryAliasTarget aliases typeReference
+    | _ -> None
+
+// Two references to the same type differ by their `FullName` (`SyntaxKind.A` vs `SyntaxKind.B`)
+let rec private signatureTypeAt (aliases: Aliases) (depth: int) (typ: FSharpType) : FSharpType =
+    let signatureType = signatureTypeAt aliases (depth + 1)
+
+    match typ with
+    // An alias of an alias is followed up to a depth, a cycle would not end
+    | AliasTarget aliases target when depth < 8 -> signatureType target
     // `T[]` is `FSharpType.ResizeArray`, `Array<T>` a reference to it
     | FSharpType.TypeReference {
                                    Name = "ResizeArray"
@@ -202,24 +175,7 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
             Type = FSharpType.Discard
         }
         |> FSharpType.TypeReference
-    | FSharpType.Option typ -> FSharpType.Option(signatureType typ)
-    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(signatureType typ)
-    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
-        FSharpType.JSApi(FSharpJSApi.ReadonlyArray(signatureType typ))
-    | FSharpType.Union unionInfo ->
-        { unionInfo with
-            Cases =
-                unionInfo.Cases
-                |> List.map (
-                    function
-                    | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(signatureType typ)
-                    | FSharpUnionCase.Field(name, typ) ->
-                        FSharpUnionCase.Field(name, signatureType typ)
-                    | case -> case
-                )
-        }
-        |> FSharpType.Union
-    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map signatureType)
+    // The member a parameter came from is not part of the signature
     | FSharpType.Function functionType ->
         { functionType with
             Parameters =
@@ -235,9 +191,9 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
         |> FSharpType.Function
     // `any` and `object` are both `obj`
     | FSharpType.Primitive FSharpPrimitive.Null -> FSharpType.Object
-    | typ -> typ
+    | typ -> FSharpType.mapChildren signatureType typ
 
-let signatureType (typ: FSharpType) : FSharpType = signatureTypeAt 0 typ
+let signatureType (aliases: Aliases) (typ: FSharpType) : FSharpType = signatureTypeAt aliases 0 typ
 
 // `path: 'R * 'S` and `path: 'Rb * 'S` are the same overload for F#
 let rec private canonicalTypeParameters
@@ -258,52 +214,23 @@ let rec private canonicalTypeParameters
             let canonicalName = $"T{names.Count}"
             names.[name] <- canonicalName
             FSharpType.TypeParameter canonicalName
-    | FSharpType.TypeReference typeReference ->
-        { typeReference with
-            TypeArguments = typeReference.TypeArguments |> List.map canonical
-        }
-        |> FSharpType.TypeReference
-    | FSharpType.Option typ -> FSharpType.Option(canonical typ)
-    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(canonical typ)
-    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
-        FSharpType.JSApi(FSharpJSApi.ReadonlyArray(canonical typ))
-    | FSharpType.Union unionInfo ->
-        { unionInfo with
-            Cases =
-                unionInfo.Cases
-                |> List.map (
-                    function
-                    | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(canonical typ)
-                    | FSharpUnionCase.Field(name, typ) -> FSharpUnionCase.Field(name, canonical typ)
-                    | case -> case
-                )
-        }
-        |> FSharpType.Union
-    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map canonical)
-    | FSharpType.Function functionType ->
-        { functionType with
-            Parameters =
-                functionType.Parameters
-                |> List.map (fun parameter ->
-                    { parameter with
-                        Type = canonical parameter.Type
-                    }
-                )
-            ReturnType = canonical functionType.ReturnType
-        }
-        |> FSharpType.Function
-    | typ -> typ
+    | typ -> FSharpType.mapChildren canonical typ
 
-let parametersSignatureWith (erased: Set<string>) (parameters: FSharpParameter list) =
+let parametersSignatureWith
+    (aliases: Aliases)
+    (erased: Set<string>)
+    (parameters: FSharpParameter list)
+    =
     let names = Dictionary<string, string>()
 
     parameters
     |> List.map (fun parameter ->
-        signatureType parameter.Type |> canonicalTypeParameters erased names, parameter.IsOptional
+        signatureType aliases parameter.Type |> canonicalTypeParameters erased names,
+        parameter.IsOptional
     )
 
-let parametersSignature (parameters: FSharpParameter list) =
-    parametersSignatureWith Set.empty parameters
+let parametersSignature (aliases: Aliases) (parameters: FSharpParameter list) =
+    parametersSignatureWith aliases Set.empty parameters
 
 // `querySelector<'E>(string)` and `querySelector(string)` are two overloads, `get<'R>(path: 'R)`
 // and `get(path: 'R)` are the same one
@@ -314,25 +241,7 @@ let private distinguishableTypeParameters
     let rec namesOf (typ: FSharpType) =
         match typ with
         | FSharpType.TypeParameter name -> [ name ]
-        | FSharpType.TypeReference typeReference ->
-            typeReference.TypeArguments |> List.collect namesOf
-        | FSharpType.Option typ
-        | FSharpType.ResizeArray typ
-        | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) -> namesOf typ
-        | FSharpType.Union unionInfo ->
-            unionInfo.Cases
-            |> List.collect (
-                function
-                | FSharpUnionCase.Typed typ
-                | FSharpUnionCase.Field(_, typ) -> namesOf typ
-                | _ -> []
-            )
-        | FSharpType.Tuple types -> types |> List.collect namesOf
-        | FSharpType.Function functionType ->
-            namesOf functionType.ReturnType
-            @ (functionType.Parameters
-               |> List.collect (fun parameter -> namesOf parameter.Type))
-        | _ -> []
+        | typ -> FSharpType.children typ |> List.collect namesOf
 
     let mentioned =
         parameters |> List.collect (fun parameter -> namesOf parameter.Type) |> set
@@ -362,13 +271,15 @@ let private withoutOption (typ: FSharpType) =
     | typ -> typ
 
 let private signatureKey
+    (aliases: Aliases)
     (typeParameters: FSharpTypeParameter list)
     (parameters: FSharpParameter list)
     =
     let erased = ownTypeParameterNames typeParameters
 
     distinguishableTypeParameters typeParameters parameters,
-    parametersSignatureWith erased parameters |> List.map (fst >> withoutOption)
+    parametersSignatureWith aliases erased parameters
+    |> List.map (fst >> withoutOption)
 
 /// Overloads only differing by their parameter names are the same member for F#
 /// `jsPDF(?options)` and `jsPDF(?orientation, ?unit)`: F# can't pick one for `jsPDF ()`,
@@ -453,21 +364,25 @@ let private withParameterlessOverloads (members: FSharpMember list) : FSharpMemb
 
 /// `log(value, ?prefix)` takes every call `log(value, ?prefix, ?time)` takes, F# can't choose
 /// between them when the trailing parameters are left out
-let private withoutSubsumedOverloads (members: FSharpMember list) : FSharpMember list =
+let private withoutSubsumedOverloads
+    (aliases: Aliases)
+    (members: FSharpMember list)
+    : FSharpMember list
+    =
     let signatureOf (fsharpMember: FSharpMember) =
         match fsharpMember with
         | FSharpMember.Method info ->
             Some(
                 (info.Name, true, info.IsStatic),
                 info.TypeParameters,
-                parametersSignature info.Parameters,
+                parametersSignature aliases info.Parameters,
                 info.Type
             )
         | FSharpMember.StaticMember info ->
             Some(
                 (info.Name, false, true),
                 info.TypeParameters,
-                parametersSignature info.Parameters,
+                parametersSignature aliases info.Parameters,
                 info.Type
             )
         | FSharpMember.Property _ -> None
@@ -498,8 +413,8 @@ let private withoutSubsumedOverloads (members: FSharpMember list) : FSharpMember
         | _ -> true
     )
 
-let distinctBySignature (members: FSharpMember list) : FSharpMember list =
-    let members = withoutSubsumedOverloads members |> withParameterlessOverloads
+let distinctBySignature (aliases: Aliases) (members: FSharpMember list) : FSharpMember list =
+    let members = withoutSubsumedOverloads aliases members |> withParameterlessOverloads
 
     let methodNames =
         members
@@ -522,12 +437,12 @@ let distinctBySignature (members: FSharpMember list) : FSharpMember list =
     |> List.groupBy (
         function
         | FSharpMember.Method info ->
-            let arity, signature = signatureKey info.TypeParameters info.Parameters
+            let arity, signature = signatureKey aliases info.TypeParameters info.Parameters
             Choice1Of3(info.Name, arity, signature)
         | FSharpMember.Property info ->
-            Choice2Of3(info.Name, parametersSignature info.Parameters |> List.map fst)
+            Choice2Of3(info.Name, parametersSignature aliases info.Parameters |> List.map fst)
         | FSharpMember.StaticMember info ->
-            let arity, signature = signatureKey info.TypeParameters info.Parameters
+            let arity, signature = signatureKey aliases info.TypeParameters info.Parameters
             Choice3Of3(info.Name, arity, signature)
     )
     |> List.map (fun (_, group) ->
@@ -542,16 +457,16 @@ let distinctBySignature (members: FSharpMember list) : FSharpMember list =
         group |> List.maxBy optionalCount
     )
 
-let private mergeTypes (types: FSharpType list) =
+let private mergeTypes (aliases: Aliases) (types: FSharpType list) =
     let indexes = Dictionary<string, int>()
-    let aliases = HashSet<string>()
+    let seenAliases = HashSet<string>()
     let result = ResizeArray<FSharpType>()
 
     for typ in types do
         match typ with
         // A merged interface and class with a default type parameter both generate the arity alias
         | FSharpType.TypeAlias aliasInfo ->
-            if aliases.Add($"{aliasInfo.Name}/{aliasInfo.TypeParameters.Length}") then
+            if seenAliases.Add($"{aliasInfo.Name}/{aliasInfo.TypeParameters.Length}") then
                 result.Add(typ)
 
         | FSharpType.Interface interfaceInfo ->
@@ -565,7 +480,7 @@ let private mergeTypes (types: FSharpType list) =
                         { existingInterfaceInfo with
                             Members =
                                 existingInterfaceInfo.Members @ interfaceInfo.Members
-                                |> distinctBySignature
+                                |> distinctBySignature aliases
                             Inheritance =
                                 existingInterfaceInfo.Inheritance @ interfaceInfo.Inheritance
                                 |> List.distinct
@@ -594,24 +509,23 @@ let private mergeTypes (types: FSharpType list) =
 
         // The interface re-exported as a class is the same class
         | FSharpType.Class classInfo ->
-            if aliases.Add($"class/{classInfo.Name}") then
+            if seenAliases.Add($"class/{classInfo.Name}") then
                 result.Add(typ)
 
         | _ -> result.Add(typ)
 
     result |> List.ofSeq
 
-let rec private mergeModules (types: FSharpType list) =
+let rec private mergeModules (aliases: Aliases) (types: FSharpType list) =
     let indexes = Dictionary<string, int>()
     let result = ResizeArray<FSharpType>()
 
     for typ in types do
         match typ with
         | FSharpType.Module moduleInfo ->
-            // Handle submodules
             let newModuleInfo =
                 { moduleInfo with
-                    Types = moduleInfo.Types |> mergeTypes |> mergeModules
+                    Types = moduleInfo.Types |> mergeTypes aliases |> mergeModules aliases
                 }
 
             if indexes.ContainsKey(moduleInfo.Name) then
@@ -624,8 +538,8 @@ let rec private mergeModules (types: FSharpType list) =
                         { existingModuleInfo with
                             Types =
                                 existingModuleInfo.Types @ newModuleInfo.Types
-                                |> mergeTypes
-                                |> mergeModules
+                                |> mergeTypes aliases
+                                |> mergeModules aliases
                         }
 
                     result.[index] <- FSharpType.Module merged
@@ -650,14 +564,14 @@ let rec private dropEmptyModules (types: FSharpType list) =
         | _ -> Some typ
     )
 
-let rec private distinctMembers (types: FSharpType list) =
+let rec private distinctMembers (aliases: Aliases) (types: FSharpType list) =
     types
     |> List.map (fun typ ->
         match typ with
         | FSharpType.Interface interfaceInfo ->
             FSharpType.Interface
                 { interfaceInfo with
-                    Members = distinctBySignature interfaceInfo.Members
+                    Members = distinctBySignature aliases interfaceInfo.Members
                 }
         // The constructors made of the cases of a union can be the same through a type alias
         | FSharpType.Class classInfo ->
@@ -666,19 +580,19 @@ let rec private distinctMembers (types: FSharpType list) =
                     SecondaryConstructors =
                         classInfo.SecondaryConstructors
                         |> List.distinctBy (fun constructorInfo ->
-                            parametersSignature constructorInfo.Parameters
+                            parametersSignature aliases constructorInfo.Parameters
                         )
                 }
         | FSharpType.Module moduleInfo ->
             FSharpType.Module
                 { moduleInfo with
-                    Types = distinctMembers moduleInfo.Types
+                    Types = distinctMembers aliases moduleInfo.Types
                 }
         | _ -> typ
     )
 
 /// TypeScript resolves a call to the first declaration it matches
-let rec disambiguateOverloads (types: FSharpType list) : FSharpType list =
+let rec disambiguateOverloads (aliases: Aliases) (types: FSharpType list) : FSharpType list =
     let requiredKey (fsharpMember: FSharpMember) =
         let key
             (name: string)
@@ -695,7 +609,7 @@ let rec disambiguateOverloads (types: FSharpType list) : FSharpType list =
                     typeParameters,
                     parameters
                     |> List.filter (fun parameter -> not parameter.IsOptional)
-                    |> parametersSignature
+                    |> parametersSignature aliases
                 )
 
         match fsharpMember with
@@ -766,14 +680,37 @@ let rec disambiguateOverloads (types: FSharpType list) : FSharpType list =
         | FSharpType.Module moduleInfo ->
             FSharpType.Module
                 { moduleInfo with
-                    Types = disambiguateOverloads moduleInfo.Types
+                    Types = disambiguateOverloads aliases moduleInfo.Types
                 }
         | typ -> typ
     )
 
-let apply (types: FSharpType list) =
-    aliasTargets.Clear()
-    genericAliasTargets.Clear()
-    collectAliases [] types
+/// <summary>
+/// If a type is declared twice, merge them into one.
+///
+/// This can happens because TypeScript allows multiple declarations of the same type.
+///
+/// Example:
+///
+/// <code lang="typescript">
+/// interface A {
+///    a: string;
+/// }
+///
+/// interface A {
+///   b: number;
+/// }
+/// </code>
+/// </summary>
+/// <param name="fsharpTypes"></param>
+/// <returns>
+/// A new list of types with the duplicates merged.
+/// </returns>
+let applyWith (aliases: Aliases) (types: FSharpType list) =
+    types
+    |> mergeTypes aliases
+    |> mergeModules aliases
+    |> dropEmptyModules
+    |> distinctMembers aliases
 
-    types |> mergeTypes |> mergeModules |> dropEmptyModules |> distinctMembers
+let apply (types: FSharpType list) = applyWith (aliasesOf types) types

@@ -4,7 +4,6 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Utils
 open Glutinum.Converter.Reader.Types
 open TypeScript
-open Fable.Core
 open Fable.Core.JsInterop
 
 /// The constraints of a method stay implicit in F#, only the defaults make an overload and
@@ -116,11 +115,6 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let propertyDeclaration = declaration :?> Ts.PropertyDeclaration
         let name = unbox<Ts.Identifier> propertyDeclaration.name
 
-        let hasPrivateModifier =
-            ModifierUtil.HasModifier(propertyDeclaration.modifiers, Ts.SyntaxKind.PrivateKeyword)
-
-        let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
-
         ({
             Name = identifierText name
             Documentation = reader.ReadDocumentationFromNode name
@@ -129,7 +123,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
             IsStatic =
                 ModifierUtil.HasModifier(propertyDeclaration.modifiers, Ts.SyntaxKind.StaticKeyword)
             Accessor = ModifierUtil.GetAccessor propertyDeclaration.modifiers
-            IsPrivate = hasPrivateModifier || isPrivateIdentifier
+            IsPrivate = isPrivateMember propertyDeclaration.modifiers name
         }
         : GlueProperty)
         |> GlueMember.Property
@@ -137,11 +131,6 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
     | Ts.SyntaxKind.GetAccessor ->
         let getAccessorDeclaration = declaration :?> Ts.GetAccessorDeclaration
         let name = unbox<Ts.Identifier> getAccessorDeclaration.name
-
-        let hasPrivateModifier =
-            ModifierUtil.HasModifier(getAccessorDeclaration.modifiers, Ts.SyntaxKind.PrivateKeyword)
-
-        let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
         ({
             Name = identifierText name
@@ -152,7 +141,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
                     getAccessorDeclaration.modifiers,
                     Ts.SyntaxKind.StaticKeyword
                 )
-            IsPrivate = hasPrivateModifier || isPrivateIdentifier
+            IsPrivate = isPrivateMember getAccessorDeclaration.modifiers name
         }
         : GlueGetAccessor)
         |> GlueMember.GetAccessor
@@ -160,11 +149,6 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
     | Ts.SyntaxKind.SetAccessor ->
         let setAccessorDeclaration = declaration :?> Ts.SetAccessorDeclaration
         let name = unbox<Ts.Identifier> setAccessorDeclaration.name
-
-        let hasPrivateModifier =
-            ModifierUtil.HasModifier(setAccessorDeclaration.modifiers, Ts.SyntaxKind.PrivateKeyword)
-
-        let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
         ({
             Name = identifierText name
@@ -175,7 +159,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
                     setAccessorDeclaration.modifiers,
                     Ts.SyntaxKind.StaticKeyword
                 )
-            IsPrivate = hasPrivateModifier || isPrivateIdentifier
+            IsPrivate = isPrivateMember setAccessorDeclaration.modifiers name
         }
         : GlueSetAccessor)
         |> GlueMember.SetAccessor

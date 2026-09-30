@@ -12,9 +12,6 @@ open Glutinum.Converter.Reader.Utils
 /// Re-exported so consumers keep referring to them as `Packages.<Type>`
 type Host = Hosting.Host
 type InMemoryHost = Hosting.InMemoryHost
-type ResolvedInput = Hosting.ResolvedInput
-type SubpathEntry = Hosting.SubpathEntry
-type PackageDescription = Hosting.PackageDescription
 type InstalledPackage = Hosting.InstalledPackage
 
 type GenerationResult =
@@ -37,30 +34,6 @@ let installPackage
     : JS.Promise<InstalledPackage>
     =
     Hosting.Npm.installPackage fileSystem spec options
-
-let private resolveInput (host: Host, input: string) : ResolvedInput =
-    Hosting.Resolve.resolveInput host input
-
-let private describePackage (host: Host, packageDir: string) : PackageDescription =
-    Hosting.Resolve.describePackage host packageDir |> Option.toObj
-
-let private findPackageDir (host: Host, file: string) : string =
-    Hosting.Resolve.findPackageDir host file |> Option.toObj
-
-let private listInstalledPackages (host: Host) : string[] =
-    Hosting.Resolve.listInstalledPackages host
-
-let private createProgramFromFiles
-    (host: Host, entryFiles: string[], options: {| withoutDomLib: bool; noLib: bool |})
-    : Ts.Program
-    =
-    Hosting.Bootstrap.createProgramFromFiles host entryFiles options.withoutDomLib options.noLib
-
-let private reachableFiles
-    (host: Host, program: Ts.Program, entryFiles: string[], excludedRuntimeNames: string[])
-    : string[]
-    =
-    Hosting.Bootstrap.reachableFiles host program entryFiles excludedRuntimeNames
 
 /// The packages standing in for the DOM lib of TypeScript
 let private domLibReplacements = set [ "@types/web"; "@typescript/lib-dom" ]
@@ -406,18 +379,19 @@ let private builtInExternalPackageNames =
 let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) : GenerationResult =
     let targetDirs =
         match inputs with
-        | [] -> listInstalledPackages host |> Array.toList
+        | [] -> Resolve.listInstalledPackages host |> Array.toList
         | inputs ->
             inputs
             |> List.map (fun input ->
-                let resolved = resolveInput (host, input)
+                let resolved = Resolve.resolveInput host input
 
                 match resolved.kind with
                 | "package" -> resolved.packageDir
                 | _ ->
-                    match findPackageDir (host, resolved.file) with
-                    | null -> failwith $"Could not find the package of {resolved.file}"
-                    | packageDir -> packageDir
+                    Resolve.findPackageDir host resolved.file
+                    |> Option.defaultWith (fun () ->
+                        failwith $"Could not find the package of {resolved.file}"
+                    )
             )
             // `date-fns date-fns/locale` is one package
             |> List.distinct
@@ -425,9 +399,10 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
     let targets =
         targetDirs
         |> List.map (fun dir ->
-            match describePackage (host, dir) with
-            | null -> failwith $"Could not find a declaration file for the package in {dir}"
-            | description -> description
+            Resolve.describePackage host dir
+            |> Option.defaultWith (fun () ->
+                failwith $"Could not find a declaration file for the package in {dir}"
+            )
         )
 
     let entryFiles =
@@ -441,36 +416,21 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
         targets |> List.exists (fun target -> domLibReplacements.Contains target.name)
 
     let program =
-        createProgramFromFiles (
-            host,
-            entryFiles,
-            {|
-                withoutDomLib = withoutDomLib
-                noLib = options.NoLib
-            |}
-        )
+        Bootstrap.createProgramFromFiles host entryFiles withoutDomLib options.NoLib
 
     let checker = program.getTypeChecker ()
 
-    let targetDirs =
+    let targetDirSet =
         targets |> List.map (fun target -> String.normalizePath target.dir) |> set
 
     let describeReachable (excludedRuntimeNames: string list) =
-        reachableFiles (host, program, entryFiles, List.toArray excludedRuntimeNames)
+        Bootstrap.reachableFiles host program entryFiles (List.toArray excludedRuntimeNames)
         |> Array.toList
         |> List.filter (fun fileName -> not (isTypeScriptLibFile fileName))
-        |> List.choose (fun fileName ->
-            match findPackageDir (host, fileName) with
-            | null -> None
-            | dir -> Some(String.normalizePath dir)
-        )
+        |> List.choose (Resolve.findPackageDir host >> Option.map String.normalizePath)
         |> List.distinct
-        |> List.filter (fun dir -> not (targetDirs.Contains dir))
-        |> List.choose (fun dir ->
-            match describePackage (host, dir) with
-            | null -> None
-            | description -> Some description
-        )
+        |> List.filter (fun dir -> not (targetDirSet.Contains dir))
+        |> List.choose (Resolve.describePackage host)
 
     let externalPackageNames =
         [
@@ -588,17 +548,7 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
             ReExportedNames = reExportedNames program checker hasExportsMap package
             DefaultExportNames = defaultExportNames
             AmbientModuleFiles = ambientModuleFiles
-            ReExportedFiles =
-                symbols
-                |> Map.toList
-                |> List.fold
-                    (fun acc ((file, _), subpath) ->
-                        if Map.containsKey file acc then
-                            acc
-                        else
-                            Map.add file subpath acc
-                    )
-                    Map.empty
+            ReExportedFiles = reExportedFiles
         }
 
     let packageContext: Reader.Types.PackageContext =

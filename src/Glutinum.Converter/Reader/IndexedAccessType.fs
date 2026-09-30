@@ -39,9 +39,7 @@ let readIndexedAccessType
 
             match typ.flags with
             | HasTypeFlags Ts.TypeFlags.Union ->
-                let flags =
-                    Ts.NodeBuilderFlags.NoTruncation
-                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+                let flags = typeNodeBuilderFlags
 
                 match tryTypeToTypeNode typ flags with
                 | Some typeNode when typeNode.kind = Ts.SyntaxKind.UnionType ->
@@ -57,8 +55,6 @@ let readIndexedAccessType
             let typeOperatorNode = declaration.indexType :?> Ts.TypeOperatorNode
             reader.ReadTypeOperatorNode typeOperatorNode |> withIndexType
 
-    | Ts.SyntaxKind.NumberKeyword -> reader.ReadTypeNode idxNodeType |> withIndexType
-
     // `Foo["bar"]` is the type of the property, resolved by the checker
     // A node synthesized by `typeToTypeNode` can't be given to the checker
     | Ts.SyntaxKind.LiteralType when node.pos >= 0 ->
@@ -66,9 +62,7 @@ let readIndexedAccessType
         let objectType = checker.getTypeAtLocation (declaration.objectType :?> Ts.Node)
         let key: string = (idxNodeType :?> Ts.LiteralTypeNode).literal?text
 
-        let flags =
-            Ts.NodeBuilderFlags.NoTruncation
-            ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+        let flags = typeNodeBuilderFlags
 
         match checker.getPropertyOfType (objectType, key) with
         | Some property ->

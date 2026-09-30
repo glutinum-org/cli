@@ -3,9 +3,7 @@ module Glutinum.Converter.Reader.TypeNode
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
-open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Core.JS
 open Glutinum.Converter.Reader.Utils
 
 type private IntersectionTypePropertyResult =
@@ -22,9 +20,7 @@ let private readPropertyWithoutDeclaration
     =
     let typ = reader.checker.getTypeOfSymbol property
 
-    let flags =
-        Ts.NodeBuilderFlags.NoTruncation
-        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+    let flags = typeNodeBuilderFlags
 
     match reader.checker.typeToTypeNode (typ, None, Some flags) with
     | Some typeNode ->
@@ -83,9 +79,7 @@ let private readInstantiatedMember
     if not isInstantiated then
         declaredMember
     else
-        let flags =
-            Ts.NodeBuilderFlags.NoTruncation
-            ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+        let flags = typeNodeBuilderFlags
 
         // A node synthesized by `typeToTypeNode` can't be given back to the checker
         let enclosingDeclaration =
@@ -122,14 +116,12 @@ let private readInstantiatedMember
                     }
             | declaredMember, _ -> declaredMember
 
-let private intersectionsInProgress = ResizeArray<Ts.Type>()
-
-/// A conditional type the checker can't resolve without its type arguments
 let private isLibraryName (reader: ITypeScriptReader) (name: string) =
     match reader.PackageContext with
     | Some packageContext -> packageContext.IsLibraryName name
     | None -> false
 
+/// A conditional type the checker can't resolve without its type arguments
 let private isDeferredConditional (typ: Ts.Type) =
     match typ.flags with
     | HasTypeFlags Ts.TypeFlags.Conditional -> true
@@ -234,7 +226,6 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
         GlueType.Primitive GluePrimitive.Any
 
     | HasTypeFlags Ts.TypeFlags.Object ->
-        // Try to find the declaration of the type, to get more information about it
         match typ.symbol.declarations with
         | Some declarations when declarations.Count > 0 ->
             let declaration = declarations.[0]
@@ -259,22 +250,15 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
             // A reference keeps the module path of the declaration, its inlined declaration would not
             | Ts.SyntaxKind.InterfaceDeclaration
             | Ts.SyntaxKind.TypeAliasDeclaration ->
-                let flags =
-                    Ts.NodeBuilderFlags.NoTruncation
-                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+                let flags = typeNodeBuilderFlags
 
                 match reader.checker.typeToTypeNode (typ, None, Some flags) with
                 | Some typeNode -> reader.ReadTypeNode typeNode
                 | None -> reader.ReadNode declaration
             | _ -> reader.ReadNode declaration
 
-        | None -> GlueType.Primitive GluePrimitive.Any
-    | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
-    | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
-    | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
-    | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
-    | HasTypeFlags Ts.TypeFlags.Void -> GlueType.Primitive GluePrimitive.Unit
-    | _ -> GlueType.Primitive GluePrimitive.Any
+        | _ -> GlueType.Primitive GluePrimitive.Any
+    | _ -> primitiveOfFlags typ
 
 module UtilityType =
     let readExclude (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
@@ -397,11 +381,7 @@ module UtilityType =
 
             GlueType.Primitive GluePrimitive.Any
 
-    /// <summary></summary>
-    /// <param name="reader"></param>
-    /// <param name="contextNode">Node used to report errors</param>
-    /// <param name="typ">Type to read the members from</param>
-    /// <returns></returns>
+    /// The members of the type from their declarations, `contextNode` locates the errors
     let private readMembers (reader: ITypeScriptReader) (contextNode: Ts.Node) (typ: Ts.Type) =
 
         typ
@@ -429,8 +409,6 @@ module UtilityType =
     /// so it is generated as a concrete interface instead of an unusable
     /// reference to the (generic) utility.
     /// </summary>
-    let private expansionsInProgress = ResizeArray<Ts.Type>()
-
     let tryExpandAnonymousObjectApplication
         (reader: ITypeScriptReader)
         (typeReferenceNode: Ts.TypeReferenceNode)
@@ -474,7 +452,7 @@ module UtilityType =
                 | None -> false
 
             let isInProgress =
-                expansionsInProgress
+                reader.InProgress.Expansions
                 |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, typ))
 
             // `ProxiedObject<P>` of `P extends Array<Node>`: the members of a mapped type applied
@@ -499,9 +477,7 @@ module UtilityType =
             | HasTypeFlags Ts.TypeFlags.Object when
                 (isTupleType typ || (isArrayLike && not isNamedDeclaration)) && not isInProgress
                 ->
-                let flags =
-                    Ts.NodeBuilderFlags.NoTruncation
-                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+                let flags = typeNodeBuilderFlags
 
                 reader.checker.typeToTypeNode (typ, None, Some flags)
                 |> Option.map reader.ReadTypeNode
@@ -509,13 +485,11 @@ module UtilityType =
             | HasTypeFlags Ts.TypeFlags.Object when
                 not isNamedDeclaration && not isInProgress && not isGenericMapped
                 ->
-                expansionsInProgress.Add typ
-
                 let members =
-                    try
-                        readMembers reader typeReferenceNode typ
-                    finally
-                        expansionsInProgress.RemoveAt(expansionsInProgress.Count - 1)
+                    withInProgress
+                        reader.InProgress.Expansions
+                        typ
+                        (fun () -> readMembers reader typeReferenceNode typ)
 
                 if members.IsEmpty then
                     None
@@ -528,8 +502,6 @@ module UtilityType =
             | HasTypeFlags Ts.TypeFlags.Boolean when isTypeAliasApplication ->
                 readTypeUsingFlags reader typ |> Some
             | _ -> None
-
-    let private partialsBeingRead = ResizeArray<Ts.Type>()
 
     /// A node synthesized by `typeToTypeNode` is unknown to the checker, its identifier still
     /// carries the symbol: the declared type stands in, `defaultTypeArguments` binds its parameters
@@ -589,21 +561,18 @@ module UtilityType =
             | Some context -> declaredAbove context
             | None -> []
 
+        let signatureMentions (returnType: GlueType) (parameters: GlueParameter list) =
+            GlueSubstitution.mentionedTypeParameters returnType
+            @ (parameters
+               |> List.collect (fun parameter ->
+                   GlueSubstitution.mentionedTypeParameters parameter.Type
+               ))
+
         let mentioned (glueMember: GlueMember) =
             match glueMember with
             | GlueMember.Property property -> GlueSubstitution.mentionedTypeParameters property.Type
-            | GlueMember.Method method ->
-                GlueSubstitution.mentionedTypeParameters method.Type
-                @ (method.Parameters
-                   |> List.collect (fun parameter ->
-                       GlueSubstitution.mentionedTypeParameters parameter.Type
-                   ))
-            | GlueMember.MethodSignature method ->
-                GlueSubstitution.mentionedTypeParameters method.Type
-                @ (method.Parameters
-                   |> List.collect (fun parameter ->
-                       GlueSubstitution.mentionedTypeParameters parameter.Type
-                   ))
+            | GlueMember.Method method -> signatureMentions method.Type method.Parameters
+            | GlueMember.MethodSignature method -> signatureMentions method.Type method.Parameters
             | _ -> []
 
         let foreign =
@@ -624,7 +593,10 @@ module UtilityType =
     let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let baseType = baseTypeOf reader typeReferenceNode.typeArguments.Value[0]
 
-        if partialsBeingRead |> Seq.exists (fun typ -> obj.ReferenceEquals(typ, baseType)) then
+        if
+            reader.InProgress.Partials
+            |> Seq.exists (fun typ -> obj.ReferenceEquals(typ, baseType))
+        then
             Report.readerError (
                 "Partial",
                 "Recursive Partial is not supported, defaulting to obj",
@@ -634,76 +606,74 @@ module UtilityType =
 
             GlueType.Primitive GluePrimitive.Any
         else
-            partialsBeingRead.Add baseType
+            withInProgress
+                reader.InProgress.Partials
+                baseType
+                (fun () ->
+                    // `Partial<[x: number, order?: Order]>` is the tuple with optional elements
+                    if isTupleType baseType then
+                        let flags = typeNodeBuilderFlags
 
-            try
-                // `Partial<[x: number, order?: Order]>` is the tuple with optional elements
-                if isTupleType baseType then
-                    let flags =
-                        Ts.NodeBuilderFlags.NoTruncation
-                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+                        reader.checker.typeToTypeNode (
+                            reader.checker.getTypeFromTypeNode typeReferenceNode,
+                            None,
+                            Some flags
+                        )
+                        |> reader.ReadTypeNode
+                    else
 
-                    reader.checker.typeToTypeNode (
-                        reader.checker.getTypeFromTypeNode typeReferenceNode,
-                        None,
-                        Some flags
-                    )
-                    |> reader.ReadTypeNode
-                else
+                        let baseNode = typeReferenceNode.typeArguments.Value[0]
 
-                    let baseNode = typeReferenceNode.typeArguments.Value[0]
+                        let members =
+                            match baseType.flags with
+                            // `Partial<any>`
+                            | HasTypeFlags Ts.TypeFlags.Any when
+                                baseNode.kind = Ts.SyntaxKind.AnyKeyword
+                                ->
+                                []
+                            // `Partial<{ padding: number }>` written by `typeToTypeNode`
+                            | HasTypeFlags Ts.TypeFlags.Any when
+                                baseNode.pos < 0 && baseNode.kind = Ts.SyntaxKind.TypeLiteral
+                                ->
+                                match reader.ReadTypeNode baseNode with
+                                | GlueType.TypeLiteral typeLiteral -> typeLiteral.Members
+                                | _ -> []
+                            | HasTypeFlags Ts.TypeFlags.Any ->
+                                Report.readerError (
+                                    "partial inner type",
+                                    "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
+                                    typeReferenceNode
+                                )
+                                |> reader.Warnings.Add
 
-                    let members =
-                        match baseType.flags with
-                        // `Partial<any>`
-                        | HasTypeFlags Ts.TypeFlags.Any when
-                            baseNode.kind = Ts.SyntaxKind.AnyKeyword
-                            ->
-                            []
-                        // `Partial<{ padding: number }>` written by `typeToTypeNode`
-                        | HasTypeFlags Ts.TypeFlags.Any when
-                            baseNode.pos < 0 && baseNode.kind = Ts.SyntaxKind.TypeLiteral
-                            ->
-                            match reader.ReadTypeNode baseNode with
-                            | GlueType.TypeLiteral typeLiteral -> typeLiteral.Members
-                            | _ -> []
-                        | HasTypeFlags Ts.TypeFlags.Any ->
-                            Report.readerError (
-                                "partial inner type",
-                                "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
-                                typeReferenceNode
-                            )
-                            |> reader.Warnings.Add
+                                []
 
-                            []
+                            | _ -> baseType |> readMembers reader typeReferenceNode
 
-                        | _ -> baseType |> readMembers reader typeReferenceNode
+                        let defaults =
+                            defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
 
-                    let defaults =
-                        defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
+                        let members =
+                            members
+                            |> List.map (GlueSubstitution.substituteMember defaults)
+                            |> fun members ->
+                                if typeReferenceNode.pos < 0 then
+                                    withoutForeignTypeParameters reader defaults members
+                                else
+                                    members
 
-                    let members =
-                        members
-                        |> List.map (GlueSubstitution.substituteMember defaults)
-                        |> fun members ->
-                            if typeReferenceNode.pos < 0 then
-                                withoutForeignTypeParameters reader defaults members
-                            else
-                                members
-
-                    ({
-                        Documentation = []
-                        FullName = getFullNameOrEmpty reader.checker typeReferenceNode
-                        Name = entityNameText !!typeReferenceNode.typeName
-                        Members = members
-                        TypeParameters = []
-                        HeritageClauses = []
-                    }
-                    : GlueInterface)
-                    |> GlueUtilityType.Partial
-                    |> GlueType.UtilityType
-            finally
-                partialsBeingRead.RemoveAt(partialsBeingRead.Count - 1)
+                        ({
+                            Documentation = []
+                            FullName = getFullNameOrEmpty reader.checker typeReferenceNode
+                            Name = entityNameText !!typeReferenceNode.typeName
+                            Members = members
+                            TypeParameters = []
+                            HeritageClauses = []
+                        }
+                        : GlueInterface)
+                        |> GlueUtilityType.Partial
+                        |> GlueType.UtilityType
+                )
 
     let readRecord (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typeArguments = readTypeArguments reader typeReferenceNode
@@ -958,6 +928,729 @@ module UtilityType =
 
         | _ -> GlueType.Primitive GluePrimitive.Any
 
+let private readTypeReference (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let checker = reader.checker
+
+    let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
+
+    let symbolOpt = symbolAtLocation checker !!typeReferenceNode.typeName
+
+    // `IfDefaultsTrue<true, A, B>`: the checker resolves a conditional alias applied to concrete arguments
+    let tryReadResolvedConditional () =
+        let isConditionalAlias =
+            match symbolOpt |> Option.bind (resolveAlias checker) with
+            | Some symbol ->
+                match symbol.declarations with
+                | Some declarations when declarations.Count > 0 ->
+                    let declaration = declarations.[0]
+
+                    declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
+                    && (declaration :?> Ts.TypeAliasDeclaration).``type``.kind =
+                        Ts.SyntaxKind.ConditionalType
+                | _ -> false
+            | None -> false
+
+        if typeReferenceNode.pos < 0 || not isConditionalAlias then
+            None
+        else
+            let typ = checker.getTypeFromTypeNode typeReferenceNode
+
+            let isUnknown =
+                match typ.flags with
+                | HasTypeFlags Ts.TypeFlags.Any
+                | HasTypeFlags Ts.TypeFlags.Never -> true
+                | _ -> false
+
+            if isDeferredConditional typ || isUnknown then
+                None
+            else
+                let flags = typeNodeBuilderFlags
+
+                checker.typeToTypeNode (typ, Some(typeReferenceNode :> Ts.Node), Some flags)
+                |> Option.map reader.ReadTypeNode
+
+    let readTypeReference (isStandardLibrary: bool) =
+
+        let isTypeParameter =
+            match symbolOpt with
+            | Some symbol ->
+                match symbol.flags with
+                | HasSymbolFlags Ts.SymbolFlags.TypeParameter -> true
+                | _ -> false
+            | None -> false
+
+        if isTypeParameter then
+            symbolOpt.Value.name |> GlueType.TypeParameter
+        else
+
+            match
+                UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
+                |> Option.orElseWith tryReadResolvedConditional
+            with
+            | Some glueType -> glueType
+            | None ->
+                let isQualified = typeReferenceNode.typeName?kind = Ts.SyntaxKind.QualifiedName
+
+                // The namespaces of a qualified name are part of the module path
+                let writtenName () =
+                    if isQualified then
+                        (unbox<Ts.QualifiedName> typeReferenceNode.typeName).right.text
+                    else
+                        identifierText !!typeReferenceNode.typeName
+
+                let name =
+                    match symbolOpt with
+                    | Some symbol ->
+                        importedName checker symbol
+                        |> Option.orElse (
+                            symbol.valueDeclaration
+                            |> Option.map (fun valueDeclaration ->
+                                // If the type reference an enum member,
+                                // we need to find the name of the Enum type, not the name of the member
+                                match valueDeclaration.kind with
+                                | Ts.SyntaxKind.EnumMember ->
+                                    valueDeclaration?symbol?parent?getName()
+                                | Ts.SyntaxKind.EnumDeclaration when isQualified -> symbol.name
+                                | _ -> writtenName ()
+                            )
+                        )
+                        |> Option.defaultValue (writtenName ())
+                    | None -> writtenName ()
+
+                // A name TypeScript itself can't resolve has no declaration to generate
+                let isUnresolved =
+                    reader.PackageContext.IsSome && symbolOpt.IsNone && typeReferenceNode.pos >= 0
+
+                let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
+
+                // `InferIssue<ReturnType<TReference>>`: the checker elides a type too deep
+                // to write out as `...`, neither it nor the application taking it is usable
+                let isElided =
+                    name = "..."
+                    || (
+                        match typeReferenceNode.typeArguments with
+                        | Some typeArguments ->
+                            typeArguments
+                            |> Seq.exists (fun typeArgument ->
+                                typeArgument.kind = Ts.SyntaxKind.TypeReference
+                                && typeArgument?typeName?escapedText = "..."
+                            )
+                        | None -> false
+                    )
+
+                if
+                    isElided
+                    || isUnresolved
+                    || (isExternal && not (knownExternalTypeNames.Contains name))
+                then
+                    GlueType.Primitive GluePrimitive.Any
+                else
+                    ({
+                        Name =
+                            if name.Contains "." then
+                                name
+                            else
+                                Naming.sanitizeTypeName name
+                        FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
+                        ModulePath =
+                            if isLibraryName reader name then
+                                []
+                            else
+                                modulePathForSymbol
+                                    checker
+                                    reader.PackageContext
+                                    isQualified
+                                    symbolOpt
+                        TypeArguments =
+                            // `MessageEvent<T>` of the DOM lib merged with a non-generic
+                            // `interface MessageEvent` of a package: the arguments of the
+                            // declaration read are kept
+                            readTypeArguments reader typeReferenceNode
+                            |> truncateToDeclaredArity reader symbolOpt
+                        // `Uint8Array` from `lib.es2015` is mapped like the `lib.es5` types
+                        IsStandardLibrary =
+                            isStandardLibrary || isExternal || isLibraryName reader name
+                    })
+                    |> GlueType.TypeReference
+
+    // `Uppercase<"abc">`: the literals the checker resolves an intrinsic type to, else `string`
+    let readIntrinsicString () =
+        let rec literals (typ: Ts.Type) : GlueType list option =
+            match typ.flags with
+            | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                match typ with
+                | Type.StringLiteral.String value ->
+                    Some [ GlueLiteral.String value |> GlueType.Literal ]
+                | Type.StringLiteral.Other -> None
+            | HasTypeFlags Ts.TypeFlags.Union ->
+                (typ :?> Ts.UnionType).types
+                |> Seq.toList
+                |> List.map literals
+                |> List.fold
+                    (fun acc cases ->
+                        match acc, cases with
+                        | Some acc, Some cases -> Some(acc @ cases)
+                        | _ -> None
+                    )
+                    (Some [])
+            | _ -> None
+
+        if typeReferenceNode.pos < 0 then
+            GlueType.Primitive GluePrimitive.String
+        else
+            match literals (checker.getTypeFromTypeNode typeReferenceNode) with
+            | Some [ single ] -> single
+            | Some(_ :: _ as cases) -> cases |> GlueTypeUnion |> GlueType.Union
+            | _ -> GlueType.Primitive GluePrimitive.String
+
+    // `NoInfer<T>` only changes the inference of `T`, its intrinsic symbol has no declaration
+    let isNoInfer =
+        entityNameText !!typeReferenceNode.typeName = "NoInfer"
+        && typeReferenceNode.typeArguments.IsSome
+        && (symbolOpt |> Option.bind (fun symbol -> symbol.declarations) |> Option.isNone
+            || isFromEs5Lib symbolOpt)
+
+    if isNoInfer then
+        reader.ReadTypeNode typeReferenceNode.typeArguments.Value.[0]
+    elif isFromEs5Lib symbolOpt then
+        match getFullNameOrEmpty checker (!!typeReferenceNode.typeName) with
+        | "Exclude" -> UtilityType.readExclude reader typeReferenceNode
+        | "Uppercase"
+        | "Lowercase"
+        | "Capitalize"
+        | "Uncapitalize" -> readIntrinsicString ()
+        | "Partial" -> UtilityType.readPartial reader typeReferenceNode
+        | "Record" -> UtilityType.readRecord reader typeReferenceNode
+        | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
+        | "ThisParameterType" -> UtilityType.readThisParameterType reader typeReferenceNode
+        // The checker resolves the mapped type, the reader stands in for a synthesized node
+        | "Omit" ->
+            UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
+            |> Option.defaultWith (fun () -> UtilityType.readOmit reader typeReferenceNode)
+        | "Pick" ->
+            UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
+            |> Option.defaultWith (fun () -> UtilityType.readPick reader typeReferenceNode)
+        | "Readonly" -> UtilityType.readReadonly reader typeReferenceNode
+        | _ -> readTypeReference true
+    else
+        readTypeReference (isFromEsLib symbolOpt)
+
+let private readFunctionType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
+
+    let typeParameters =
+        // The delegate generated for the function needs the type parameters of the
+        // enclosing declarations too (e.g. the class of a method taking a callback)
+        let rec collectEnclosing (node: Ts.Node) (acc: Ts.TypeParameterDeclaration list) =
+            if isNull node then
+                acc
+            // `FacetConfig<Input, Output>` expanded by the checker: the members have no parent
+            elif
+                isNull node.parent
+                && node.pos < 0
+                && reader.SyntheticContext.IsSome
+                && not (obj.ReferenceEquals(node, reader.SyntheticContext.Value))
+            then
+                collectEnclosing reader.SyntheticContext.Value acc
+            // A function type used as a constraint is read while reading the type parameters
+            elif node.kind = Ts.SyntaxKind.TypeParameter then
+                []
+            else
+                let ownTypeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
+                    node?typeParameters
+
+                let acc =
+                    match ownTypeParameters with
+                    | Some ownTypeParameters -> acc @ Seq.toList ownTypeParameters
+                    | None -> acc
+
+                collectEnclosing node.parent acc
+
+        // `static define<Input, Output>` of `class Facet<Input, Output>`: the innermost wins
+        match
+            collectEnclosing functionTypeNode []
+            |> List.distinctBy (fun typeParameter -> identifierText typeParameter.name)
+        with
+        | [] -> []
+        | typParameters ->
+            reader.ReadTypeParameters(Some(ts.factory.createNodeArray (ResizeArray typParameters)))
+
+    {
+        Documentation = reader.ReadDocumentationFromNode typeNode
+        Type = reader.ReadTypeNode functionTypeNode.``type``
+        TypeParameters = typeParameters
+        OwnTypeParameterNames =
+            match functionTypeNode.typeParameters with
+            | Some own ->
+                own
+                |> Seq.map (fun typeParameter -> identifierText typeParameter.name)
+                |> Seq.toList
+            | None -> []
+        Parameters = reader.ReadParameters functionTypeNode.parameters
+    }
+    |> GlueType.FunctionType
+
+/// `import("./file").Foo<T>`, produced by `typeToTypeNode` for a type not imported in the current file
+let private readImportType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let checker = reader.checker
+
+    let importTypeNode = typeNode :?> Ts.ImportTypeNode
+
+    let unresolvedModule =
+        // A node synthesized by `typeToTypeNode` has no position to resolve its module from
+        if importTypeNode.pos < 0 then
+            None
+        else
+            match importTypeNode.argument.kind with
+            | Ts.SyntaxKind.LiteralType ->
+                let literal = (importTypeNode.argument :?> Ts.LiteralTypeNode).literal
+
+                if (symbolAtLocation checker !!literal).IsSome then
+                    None
+                else
+                    Some(!!literal?text: string)
+            | _ -> None
+
+    match unresolvedModule, importTypeNode.qualifier with
+    // `import("three").WebGLRenderer` of a package that is not installed
+    | Some moduleName, _ ->
+        let warning =
+            $"'%s{moduleName}' is not installed, the types imported from it are generated as 'obj'"
+
+        if not (reader.Warnings.Contains warning) then
+            reader.Warnings.Add warning
+
+        GlueType.Primitive GluePrimitive.Any
+    // `typeof import("./file").fn` is the type of the value
+    | None, Some qualifier when importTypeNode.isTypeOf ->
+        ts.factory.createTypeQueryNode (unbox<Ts.Identifier> qualifier)
+        |> reader.ReadTypeNode
+    | None, Some qualifier ->
+        ts.factory.createTypeReferenceNode (
+            unbox<Ts.Identifier> qualifier,
+            ?typeArguments = unbox<ResizeArray<Ts.TypeNode> option> importTypeNode.typeArguments
+        )
+        |> reader.ReadTypeNode
+    // `typeof import("./file")`, the module object
+    | None, None -> GlueType.Primitive GluePrimitive.Any
+
+let private readThisType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let checker = reader.checker
+
+    let thisTypeNode = typeNode :?> Ts.ThisTypeNode
+
+    // Probably a naive implementation but hopefully it will cover
+    // most of the cases
+    // We can't use the reader to get the fulltype because we would end
+    // up in a infinite loop
+    let typ = checker.getTypeAtLocation thisTypeNode
+
+    // An erroneous type has no symbol
+    let declarations =
+        if isNull (box typ.symbol) then
+            None
+        else
+            typ.symbol.declarations
+
+    let typParameters =
+        match declarations with
+        | Some declarations ->
+            // The interface merged with a namespace, or augmented by another module,
+            // declares its type parameters on one of its declarations
+            declarations
+            |> Seq.choose (fun declaration ->
+                match declaration.kind with
+                | Ts.SyntaxKind.ClassDeclaration
+                | Ts.SyntaxKind.InterfaceDeclaration ->
+                    let classDeclaration = declaration :?> Ts.InterfaceDeclaration
+
+                    classDeclaration.typeParameters
+                | _ -> None
+            )
+            |> Seq.sortByDescending (fun typeParameters -> typeParameters.Count)
+            |> Seq.tryHead
+            |> Option.map (Some >> reader.ReadTypeParameters)
+            |> Option.defaultValue []
+        | None -> []
+
+    if isNull (box typ.symbol) then
+        GlueType.Primitive GluePrimitive.Any
+    else
+
+        ({
+            Name = declaredName typ.symbol |> Option.defaultValue typ.symbol.name
+            TypeParameters = typParameters
+        }
+        : GlueThisType)
+        |> GlueType.ThisType
+
+let private readIntersectionType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let checker = reader.checker
+
+    let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode
+
+    let unionOrIntersectionType =
+        checker.getTypeAtLocation intersectionTypeNode :?> Ts.UnionOrIntersectionType
+
+    reader.InProgress.Intersections.Add unionOrIntersectionType
+
+    use _guard =
+        { new System.IDisposable with
+            member _.Dispose() =
+                reader.InProgress.Intersections.RemoveAt(reader.InProgress.Intersections.Count - 1)
+        }
+
+    let properties =
+        let computedProperties =
+            if unionOrIntersectionType.isUnion () then
+                unionOrIntersectionType.types
+                |> Seq.toList
+                |> List.map (checker.getPropertiesOfType >> Seq.toList)
+                |> List.concat
+                |> List.distinct
+
+            else
+                match unionOrIntersectionType.getProperties () |> Seq.toList with
+                // `DeepPartial<Registry[T]> & Properties<T>`: the checker gives up on the
+                // deferred part, the members of the others are still known
+                | [] when (unbox<Ts.Node> intersectionTypeNode).pos >= 0 ->
+                    intersectionTypeNode.types
+                    |> Seq.toList
+                    |> List.collect (fun constituent ->
+                        checker.getTypeAtLocation (constituent :> Ts.Node)
+                        |> checker.getPropertiesOfType
+                        |> Seq.toList
+                    )
+                    |> List.distinctBy (fun property -> property.name)
+                | properties -> properties
+
+        computedProperties
+        |> List.choose (fun property ->
+            match property.declarations with
+            | Some declarations ->
+                if declarations.Count = 1 then
+                    Some(Single(property, declarations.[0]))
+                // `type` declared by the dataset options of every chart type: the checker
+                // knows the type of the merged property
+                elif
+                    declarations
+                    |> Seq.forall (fun declaration ->
+                        declaration.kind = Ts.SyntaxKind.PropertySignature
+                        || declaration.kind = Ts.SyntaxKind.PropertyDeclaration
+                    )
+                then
+                    Some(WithoutDeclaration property)
+                else
+                    Some ForceAny
+            | None -> Some(WithoutDeclaration property)
+        )
+
+    // `{ new (...args: any[]): any } & typeof Class` describes the class itself, reading its
+    // members would end up in an infinite loop
+    let intersectsATypeQuery =
+        intersectionTypeNode.types
+        |> Seq.exists (fun constituent -> constituent.kind = Ts.SyntaxKind.TypeQuery)
+
+    // An interface inheriting every constituent keeps their overloads, flattening the members
+    // into one type does not, so it is only worth it when a constituent can't be inherited
+    let everyConstituentIsAReference =
+        intersectionTypeNode.types
+        |> Seq.forall (fun constituent -> constituent.kind = Ts.SyntaxKind.TypeReference)
+
+    // We can't create a contract for some of the properties
+    // they would eiher end-up in a infinite loop or they are don't
+    // have a equivalent in F#
+    let hasUnsupportedProperties =
+        intersectsATypeQuery
+        || properties
+           |> List.exists (fun property ->
+               match property with
+               | ForceAny -> true
+               | WithoutDeclaration _ -> false
+               | Single(_, declaration) ->
+                   everyConstituentIsAReference
+                   && declaration.kind = Ts.SyntaxKind.MethodDeclaration
+           )
+
+    // `IRouterHandler<T> & ((...handlers: Handler[]) => T)`: the intersection is callable
+    let callSignatures =
+        if unionOrIntersectionType.isUnion () then
+            []
+        else
+            checker.getSignaturesOfType (unionOrIntersectionType, Ts.SignatureKind.Call)
+            |> Seq.toList
+            |> List.choose (fun signature ->
+                // The signature of `IRouterHandler<this>` is the declared one with `T` substituted
+                let flags = typeNodeBuilderFlags
+
+                let synthesized: Ts.Node option =
+                    checker?signatureToSignatureDeclaration (
+                        signature,
+                        Ts.SyntaxKind.CallSignature,
+                        typeNode,
+                        flags
+                    )
+
+                match synthesized with
+                | Some declaration ->
+                    // The type parameters of the signature enclose the callbacks of its
+                    // parameters, the intersection encloses the signature
+                    declaration?parent <- typeNode
+                    let previousContext = reader.SyntheticContext
+                    reader.SyntheticContext <- Some declaration
+
+                    try
+                        Some(reader.ReadDeclaration(declaration :?> Ts.Declaration))
+                    finally
+                        reader.SyntheticContext <- previousContext
+                | None -> None
+            )
+
+    if hasUnsupportedProperties then
+        // F# has no intersection, an interface can still inherit each constituent
+        let references =
+            intersectionTypeNode.types
+            |> Seq.toList
+            |> List.map (fun constituent ->
+                if constituent.kind = Ts.SyntaxKind.TypeReference then
+                    reader.ReadTypeNode constituent
+                else
+                    GlueType.Discard
+            )
+
+        let isReference =
+            function
+            | GlueType.TypeReference _ -> true
+            | _ -> false
+
+        let literalMembers =
+            intersectionTypeNode.types
+            |> Seq.toList
+            |> List.collect (fun constituent ->
+                if constituent.kind = Ts.SyntaxKind.TypeLiteral then
+                    match reader.ReadTypeNode constituent with
+                    | GlueType.TypeLiteral typeLiteral -> typeLiteral.Members
+                    | _ -> []
+                else
+                    []
+            )
+
+        let inheritable =
+            references |> List.filter (fun reference -> not (reference = GlueType.Discard))
+
+        if not inheritable.IsEmpty && inheritable |> List.forall isReference then
+            GlueType.IntersectionOfReferences(inheritable, literalMembers)
+        else
+            GlueType.Primitive GluePrimitive.Any
+    else
+        let members =
+            properties
+            |> List.choose (
+                function
+                | Single(property, declaration) ->
+                    Some(readInstantiatedMember reader typeNode property declaration)
+                | WithoutDeclaration property ->
+                    readPropertyWithoutDeclaration reader typeNode property
+                | ForceAny -> failwith "Should not happen here"
+            )
+
+        // `getProperties` leaves the index signatures out, the type literals declare them
+        let indexSignatures =
+            intersectionTypeNode.types
+            |> Seq.toList
+            |> List.collect (fun constituent ->
+                if constituent.kind = Ts.SyntaxKind.TypeLiteral then
+                    (constituent :?> Ts.TypeLiteralNode).members
+                    |> Seq.toList
+                    |> List.filter (fun element -> element.kind = Ts.SyntaxKind.IndexSignature)
+                    |> List.map reader.ReadDeclaration
+                else
+                    []
+            )
+
+        GlueType.IntersectionType(members @ callSignatures @ indexSignatures)
+
+let private readExpressionWithTypeArguments
+    (reader: ITypeScriptReader)
+    (typeNode: Ts.TypeNode)
+    : GlueType
+    =
+    let checker = reader.checker
+
+    let expression = typeNode :?> Ts.ExpressionWithTypeArguments
+
+    let typ = checker.getTypeFromTypeNode expression
+
+    // Getting the type from the expression seems more robust for getting a Symbol resolved
+    // than using:
+    //
+    // let symbolOpt = checker.getSymbolAtLocation (expression.expression)
+    let symbolOpt =
+        // Alias symbol give us better result for utility types like Omit, Partial, etc...
+        typ.aliasSymbol
+        // If not available, we fallback to the symbol of the type
+        |> Option.orElse (
+            if isNull (box typ.symbol) then
+                None
+            else
+                Some typ.symbol
+        )
+        // An erroneous type (`Uint8Array<T>` with an older lib) has no symbol, its name has
+        |> Option.orElse (checker.getSymbolAtLocation expression.expression)
+
+    // Specialize the utility types we know how to resolve so they work in
+    // heritage clauses too (e.g. `interface Y extends Omit<X, "a">`). The
+    // node is structurally compatible with a `TypeReferenceNode` for the
+    // properties the reader needs (`typeArguments`).
+    let isFromEs5 = isFromEs5Lib symbolOpt
+
+    match isFromEs5, getFullNameOrEmpty checker expression.expression with
+    | true, "Omit" -> UtilityType.readOmit reader (unbox<Ts.TypeReferenceNode> expression)
+    | true, "Pick" -> UtilityType.readPick reader (unbox<Ts.TypeReferenceNode> expression)
+    | _ ->
+        let isQualified =
+            expression.expression.kind = Ts.SyntaxKind.PropertyAccessExpression
+
+        // The module path is computed from the resolved symbol, so the name must be its name too
+        let name =
+            match symbolOpt with
+            // `export default class DatasetController` is the `default` symbol
+            | Some symbol when symbol.name = "default" ->
+                declaredName symbol |> Option.defaultValue symbol.name
+            | Some symbol when not isFromEs5 -> symbol.name
+            | _ ->
+                if isQualified then
+                    (unbox<Ts.PropertyAccessExpression> expression.expression).name?text
+                else
+                    expression.expression.getText ()
+
+        let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
+
+        // `extends ReturnType<...>` resolves to an anonymous type, it has no declaration to inherit
+        let isAnonymous =
+            match symbolOpt with
+            | Some symbol -> symbol.name = "__type" || symbol.name = "__object"
+            | None -> false
+
+        // An external base type can't be inherited, `inherit obj` is invalid, `Partial` is
+        // expanded by the transform
+        if
+            isAnonymous
+            || (isExternal
+                && not (knownExternalTypeNames.Contains name)
+                && not (isFromEs5 && name = "Partial"))
+        then
+            GlueType.Discard
+        else
+            ({
+                Name =
+                    if name.Contains "." then
+                        name
+                    else
+                        Naming.sanitizeTypeName name
+                // The name of the declaration, not of an import alias
+                FullName =
+                    match symbolOpt |> Option.bind (resolveAlias checker) with
+                    | Some symbol -> checker.getFullyQualifiedName symbol
+                    | None -> getFullNameOrEmpty checker expression.expression
+                ModulePath =
+                    if isLibraryName reader name then
+                        []
+                    else
+                        modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
+                TypeArguments =
+                    match readTypeArguments reader expression with
+                    | [] ->
+                        resolvedBaseTypeArguments checker expression
+                        |> List.map (fun argument ->
+                            let flags = typeNodeBuilderFlags
+
+                            checker.typeToTypeNode (argument, None, Some flags)
+                            |> reader.ReadTypeNode
+                        )
+                    | typeArguments -> typeArguments
+                IsStandardLibrary = isFromEs5 || isExternal || isLibraryName reader name
+            })
+            |> GlueType.TypeReference
+
+let private readConditionalType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let checker = reader.checker
+
+    let conditionalTypeNode = typeNode :?> Ts.ConditionalTypeNode
+
+    let typ = checker.getTypeAtLocation conditionalTypeNode
+
+    // The branch depends on the type arguments, the transform resolves it with the defaults
+    if isDeferredConditional typ then
+        let warningsCount = reader.Warnings.Count
+
+        let inferred =
+            inferTypeNodes conditionalTypeNode.extendsType
+            |> List.map (fun inferTypeNode ->
+                inferTypeNode.typeParameter.name.getText (),
+                inferredConstraint reader inferTypeNode
+            )
+            |> Microsoft.FSharp.Collections.Map.ofList
+
+        let conditionalType =
+            ({
+                CheckType = reader.ReadTypeNode conditionalTypeNode.checkType
+                ExtendsType = reader.ReadTypeNode conditionalTypeNode.extendsType
+                TrueType =
+                    reader.ReadTypeNode conditionalTypeNode.trueType
+                    |> GlueSubstitution.substitute inferred
+                FalseType = reader.ReadTypeNode conditionalTypeNode.falseType
+            }
+            : GlueConditionalType)
+
+        // A branch with `infer` is not read, without a warning
+        if reader.Warnings.Count > warningsCount then
+            reader.Warnings.RemoveRange(warningsCount, reader.Warnings.Count - warningsCount)
+            GlueType.Primitive GluePrimitive.Any
+        else
+            GlueType.ConditionalType conditionalType
+    else
+
+        // If we resolved the type to Any, we fallback to the generic type
+        // This is because in F#, we can write
+        // type ReturnType<'T> = obj
+        // because 'T is not used in the type
+        // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
+        // usage by inlining the logic here and make it more specific
+        match readTypeUsingFlags reader typ with
+        | GlueType.Primitive GluePrimitive.Any -> reader.ReadTypeNode conditionalTypeNode.checkType
+        | forward -> forward
+
+let private readTemplateLiteralType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+    let checker = reader.checker
+
+    let templateLiteralTypeNode = typeNode :?> Ts.TemplateLiteralTypeNode
+
+    // Ask the type checker to resolve the template literal type.
+    // When the template is made of finite parts (e.g. unions of string
+    // literals), TypeScript expands it into a union of string literals
+    // that we can represent as a StringEnum.
+    // Otherwise (e.g. `section-${string}`) the type stays a template
+    // literal / string and we fallback to `string`.
+    let typ = checker.getTypeAtLocation templateLiteralTypeNode
+
+    let rec readResolvedLiterals (typ: Ts.Type) : GlueType list =
+        match typ.flags with
+        | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+            match typ with
+            | Type.StringLiteral.String value -> [ GlueLiteral.String value |> GlueType.Literal ]
+            | Type.StringLiteral.Other -> []
+        | HasTypeFlags Ts.TypeFlags.Union ->
+            (typ :?> Ts.UnionType).types |> Seq.toList |> List.collect readResolvedLiterals
+        | _ -> []
+
+    match readResolvedLiterals typ with
+    // The type checker couldn't resolve the template to a finite set of
+    // string literals, so we fallback to a plain `string`.
+    | [] -> GlueType.TemplateLiteral
+    | [ single ] -> single
+    | cases -> cases |> GlueTypeUnion |> GlueType.Union
+
 let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
     let checker = reader.checker
 
@@ -971,214 +1664,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
     | Ts.SyntaxKind.UndefinedKeyword -> GlueType.Primitive GluePrimitive.Undefined
     | Ts.SyntaxKind.UnionType -> reader.ReadUnionTypeNode(typeNode :?> Ts.UnionTypeNode)
 
-    | Ts.SyntaxKind.TypeReference ->
-        let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
-
-        let symbolOpt = symbolAtLocation checker !!typeReferenceNode.typeName
-
-        // `IfDefaultsTrue<true, A, B>`: the checker resolves a conditional alias applied to concrete arguments
-        let tryReadResolvedConditional () =
-            let isConditionalAlias =
-                match symbolOpt |> Option.bind (resolveAlias checker) with
-                | Some symbol ->
-                    match symbol.declarations with
-                    | Some declarations when declarations.Count > 0 ->
-                        let declaration = declarations.[0]
-
-                        declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
-                        && (declaration :?> Ts.TypeAliasDeclaration).``type``.kind =
-                            Ts.SyntaxKind.ConditionalType
-                    | _ -> false
-                | None -> false
-
-            if typeReferenceNode.pos < 0 || not isConditionalAlias then
-                None
-            else
-                let typ = checker.getTypeFromTypeNode typeReferenceNode
-
-                let isUnknown =
-                    match typ.flags with
-                    | HasTypeFlags Ts.TypeFlags.Any
-                    | HasTypeFlags Ts.TypeFlags.Never -> true
-                    | _ -> false
-
-                if isDeferredConditional typ || isUnknown then
-                    None
-                else
-                    let flags =
-                        Ts.NodeBuilderFlags.NoTruncation
-                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
-
-                    checker.typeToTypeNode (typ, Some(typeReferenceNode :> Ts.Node), Some flags)
-                    |> Option.map reader.ReadTypeNode
-
-        let readTypeReference (isStandardLibrary: bool) =
-
-            let isTypeParameter =
-                match symbolOpt with
-                | Some symbol ->
-                    match symbol.flags with
-                    | HasSymbolFlags Ts.SymbolFlags.TypeParameter -> true
-                    | _ -> false
-                | None -> false
-
-            if isTypeParameter then
-                symbolOpt.Value.name |> GlueType.TypeParameter
-            else
-
-                match
-                    UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
-                    |> Option.orElseWith tryReadResolvedConditional
-                with
-                | Some glueType -> glueType
-                | None ->
-                    let isQualified = typeReferenceNode.typeName?kind = Ts.SyntaxKind.QualifiedName
-
-                    // The namespaces of a qualified name are part of the module path
-                    let writtenName () =
-                        if isQualified then
-                            (unbox<Ts.QualifiedName> typeReferenceNode.typeName).right.text
-                        else
-                            identifierText !!typeReferenceNode.typeName
-
-                    let name =
-                        match symbolOpt with
-                        | Some symbol ->
-                            importedName checker symbol
-                            |> Option.orElse (
-                                symbol.valueDeclaration
-                                |> Option.map (fun valueDeclaration ->
-                                    // If the type reference an enum member,
-                                    // we need to find the name of the Enum type, not the name of the member
-                                    match valueDeclaration.kind with
-                                    | Ts.SyntaxKind.EnumMember ->
-                                        valueDeclaration?symbol?parent?getName()
-                                    | Ts.SyntaxKind.EnumDeclaration when isQualified -> symbol.name
-                                    | _ -> writtenName ()
-                                )
-                            )
-                            |> Option.defaultValue (writtenName ())
-                        | None -> writtenName ()
-
-                    // A name TypeScript itself can't resolve has no declaration to generate
-                    let isUnresolved =
-                        reader.PackageContext.IsSome
-                        && symbolOpt.IsNone
-                        && typeReferenceNode.pos >= 0
-
-                    let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
-
-                    // `InferIssue<ReturnType<TReference>>`: the checker elides a type too deep
-                    // to write out as `...`, neither it nor the application taking it is usable
-                    let isElided =
-                        name = "..."
-                        || (
-                            match typeReferenceNode.typeArguments with
-                            | Some typeArguments ->
-                                typeArguments
-                                |> Seq.exists (fun typeArgument ->
-                                    typeArgument.kind = Ts.SyntaxKind.TypeReference
-                                    && typeArgument?typeName?escapedText = "..."
-                                )
-                            | None -> false
-                        )
-
-                    if
-                        isElided
-                        || isUnresolved
-                        || (isExternal && not (knownExternalTypeNames.Contains name))
-                    then
-                        GlueType.Primitive GluePrimitive.Any
-                    else
-                        ({
-                            Name =
-                                if name.Contains "." then
-                                    name
-                                else
-                                    Naming.sanitizeTypeName name
-                            FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
-                            ModulePath =
-                                if isLibraryName reader name then
-                                    []
-                                else
-                                    modulePathForSymbol
-                                        checker
-                                        reader.PackageContext
-                                        isQualified
-                                        symbolOpt
-                            TypeArguments =
-                                // `MessageEvent<T>` of the DOM lib merged with a non-generic
-                                // `interface MessageEvent` of a package: the arguments of the
-                                // declaration read are kept
-                                readTypeArguments reader typeReferenceNode
-                                |> truncateToDeclaredArity reader symbolOpt
-                            // `Uint8Array` from `lib.es2015` is mapped like the `lib.es5` types
-                            IsStandardLibrary =
-                                isStandardLibrary || isExternal || isLibraryName reader name
-                        })
-                        |> GlueType.TypeReference
-
-        // `Uppercase<"abc">`: the literals the checker resolves an intrinsic type to, else `string`
-        let readIntrinsicString () =
-            let rec literals (typ: Ts.Type) : GlueType list option =
-                match typ.flags with
-                | HasTypeFlags Ts.TypeFlags.StringLiteral ->
-                    match typ with
-                    | Type.StringLiteral.String value ->
-                        Some [ GlueLiteral.String value |> GlueType.Literal ]
-                    | Type.StringLiteral.Other -> None
-                | HasTypeFlags Ts.TypeFlags.Union ->
-                    (typ :?> Ts.UnionType).types
-                    |> Seq.toList
-                    |> List.map literals
-                    |> List.fold
-                        (fun acc cases ->
-                            match acc, cases with
-                            | Some acc, Some cases -> Some(acc @ cases)
-                            | _ -> None
-                        )
-                        (Some [])
-                | _ -> None
-
-            if typeReferenceNode.pos < 0 then
-                GlueType.Primitive GluePrimitive.String
-            else
-                match literals (checker.getTypeFromTypeNode typeReferenceNode) with
-                | Some [ single ] -> single
-                | Some(_ :: _ as cases) -> cases |> GlueTypeUnion |> GlueType.Union
-                | _ -> GlueType.Primitive GluePrimitive.String
-
-        // `NoInfer<T>` only changes the inference of `T`, its intrinsic symbol has no declaration
-        let isNoInfer =
-            entityNameText !!typeReferenceNode.typeName = "NoInfer"
-            && typeReferenceNode.typeArguments.IsSome
-            && (symbolOpt |> Option.bind (fun symbol -> symbol.declarations) |> Option.isNone
-                || isFromEs5Lib symbolOpt)
-
-        if isNoInfer then
-            reader.ReadTypeNode typeReferenceNode.typeArguments.Value.[0]
-        elif isFromEs5Lib symbolOpt then
-            match getFullNameOrEmpty checker (!!typeReferenceNode.typeName) with
-            | "Exclude" -> UtilityType.readExclude reader typeReferenceNode
-            | "Uppercase"
-            | "Lowercase"
-            | "Capitalize"
-            | "Uncapitalize" -> readIntrinsicString ()
-            | "Partial" -> UtilityType.readPartial reader typeReferenceNode
-            | "Record" -> UtilityType.readRecord reader typeReferenceNode
-            | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
-            | "ThisParameterType" -> UtilityType.readThisParameterType reader typeReferenceNode
-            // The checker resolves the mapped type, the reader stands in for a synthesized node
-            | "Omit" ->
-                UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
-                |> Option.defaultWith (fun () -> UtilityType.readOmit reader typeReferenceNode)
-            | "Pick" ->
-                UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
-                |> Option.defaultWith (fun () -> UtilityType.readPick reader typeReferenceNode)
-            | "Readonly" -> UtilityType.readReadonly reader typeReferenceNode
-            | _ -> readTypeReference true
-        else
-            readTypeReference (isFromEsLib symbolOpt)
+    | Ts.SyntaxKind.TypeReference -> readTypeReference reader typeNode
 
     | Ts.SyntaxKind.ArrayType ->
         let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode
@@ -1193,62 +1679,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         | Some _ -> GlueType.Primitive GluePrimitive.Unit
         | None -> GlueType.Primitive GluePrimitive.Bool
 
-    | Ts.SyntaxKind.FunctionType ->
-        let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
-
-        let typeParameters =
-            // The delegate generated for the function needs the type parameters of the
-            // enclosing declarations too (e.g. the class of a method taking a callback)
-            let rec collectEnclosing (node: Ts.Node) (acc: Ts.TypeParameterDeclaration list) =
-                if isNull node then
-                    acc
-                // `FacetConfig<Input, Output>` expanded by the checker: the members have no parent
-                elif
-                    isNull node.parent
-                    && node.pos < 0
-                    && reader.SyntheticContext.IsSome
-                    && not (obj.ReferenceEquals(node, reader.SyntheticContext.Value))
-                then
-                    collectEnclosing reader.SyntheticContext.Value acc
-                // A function type used as a constraint is read while reading the type parameters
-                elif node.kind = Ts.SyntaxKind.TypeParameter then
-                    []
-                else
-                    let ownTypeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
-                        node?typeParameters
-
-                    let acc =
-                        match ownTypeParameters with
-                        | Some ownTypeParameters -> acc @ Seq.toList ownTypeParameters
-                        | None -> acc
-
-                    collectEnclosing node.parent acc
-
-            // `static define<Input, Output>` of `class Facet<Input, Output>`: the innermost wins
-            match
-                collectEnclosing functionTypeNode []
-                |> List.distinctBy (fun typeParameter -> identifierText typeParameter.name)
-            with
-            | [] -> []
-            | typParameters ->
-                reader.ReadTypeParameters(
-                    Some(ts.factory.createNodeArray (ResizeArray typParameters))
-                )
-
-        {
-            Documentation = reader.ReadDocumentationFromNode typeNode
-            Type = reader.ReadTypeNode functionTypeNode.``type``
-            TypeParameters = typeParameters
-            OwnTypeParameterNames =
-                match functionTypeNode.typeParameters with
-                | Some own ->
-                    own
-                    |> Seq.map (fun typeParameter -> identifierText typeParameter.name)
-                    |> Seq.toList
-                | None -> []
-            Parameters = reader.ReadParameters functionTypeNode.parameters
-        }
-        |> GlueType.FunctionType
+    | Ts.SyntaxKind.FunctionType -> readFunctionType reader typeNode
 
     | Ts.SyntaxKind.TypeQuery ->
         let typeQueryNode = typeNode :?> Ts.TypeQueryNode
@@ -1256,47 +1687,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
     | Ts.SyntaxKind.MappedType -> reader.ReadMappedTypeNode(typeNode :?> Ts.MappedTypeNode)
 
-    // `import("./file").Foo<T>`, produced by `typeToTypeNode` for a type not imported in the current file
-    | Ts.SyntaxKind.ImportType ->
-        let importTypeNode = typeNode :?> Ts.ImportTypeNode
-
-        let unresolvedModule =
-            // A node synthesized by `typeToTypeNode` has no position to resolve its module from
-            if importTypeNode.pos < 0 then
-                None
-            else
-                match importTypeNode.argument.kind with
-                | Ts.SyntaxKind.LiteralType ->
-                    let literal = (importTypeNode.argument :?> Ts.LiteralTypeNode).literal
-
-                    if (symbolAtLocation checker !!literal).IsSome then
-                        None
-                    else
-                        Some(!!literal?text: string)
-                | _ -> None
-
-        match unresolvedModule, importTypeNode.qualifier with
-        // `import("three").WebGLRenderer` of a package that is not installed
-        | Some moduleName, _ ->
-            let warning =
-                $"'%s{moduleName}' is not installed, the types imported from it are generated as 'obj'"
-
-            if not (reader.Warnings.Contains warning) then
-                reader.Warnings.Add warning
-
-            GlueType.Primitive GluePrimitive.Any
-        // `typeof import("./file").fn` is the type of the value
-        | None, Some qualifier when importTypeNode.isTypeOf ->
-            ts.factory.createTypeQueryNode (unbox<Ts.Identifier> qualifier)
-            |> reader.ReadTypeNode
-        | None, Some qualifier ->
-            ts.factory.createTypeReferenceNode (
-                unbox<Ts.Identifier> qualifier,
-                ?typeArguments = unbox<ResizeArray<Ts.TypeNode> option> importTypeNode.typeArguments
-            )
-            |> reader.ReadTypeNode
-        // `typeof import("./file")`, the module object
-        | None, None -> GlueType.Primitive GluePrimitive.Any
+    | Ts.SyntaxKind.ImportType -> readImportType reader typeNode
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
@@ -1313,51 +1704,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             )
             |> failwith
 
-    | Ts.SyntaxKind.ThisType ->
-        let thisTypeNode = typeNode :?> Ts.ThisTypeNode
-
-        // Probably a naive implementation but hopefully it will cover
-        // most of the cases
-        // We can't use the reader to get the fulltype because we would end
-        // up in a infinite loop
-        let typ = checker.getTypeAtLocation thisTypeNode
-
-        let typParameters =
-            match
-                (if isNull (box typ.symbol) then
-                     None
-                 else
-                     typ.symbol.declarations)
-            with
-            | Some declarations ->
-                // The interface merged with a namespace, or augmented by another module,
-                // declares its type parameters on one of its declarations
-                declarations
-                |> Seq.choose (fun declaration ->
-                    match declaration.kind with
-                    | Ts.SyntaxKind.ClassDeclaration
-                    | Ts.SyntaxKind.InterfaceDeclaration ->
-                        let classDeclaration = declaration :?> Ts.InterfaceDeclaration
-
-                        classDeclaration.typeParameters
-                    | _ -> None
-                )
-                |> Seq.sortByDescending (fun typeParameters -> typeParameters.Count)
-                |> Seq.tryHead
-                |> Option.map (Some >> reader.ReadTypeParameters)
-                |> Option.defaultValue []
-            | None -> []
-
-        if isNull (box typ.symbol) then
-            GlueType.Primitive GluePrimitive.Any
-        else
-
-            ({
-                Name = declaredName typ.symbol |> Option.defaultValue typ.symbol.name
-                TypeParameters = typParameters
-            }
-            : GlueThisType)
-            |> GlueType.ThisType
+    | Ts.SyntaxKind.ThisType -> readThisType reader typeNode
 
     | Ts.SyntaxKind.TupleType ->
         let tupleTypeNode = typeNode :?> Ts.TupleTypeNode
@@ -1388,7 +1735,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
     // `class ProgressEvent { __proto__: Event & ProgressEvent }` reads itself forever
     | Ts.SyntaxKind.IntersectionType when
-        intersectionsInProgress
+        reader.InProgress.Intersections
         |> Seq.exists (fun inProgress ->
             obj.ReferenceEquals(inProgress, checker.getTypeAtLocation typeNode)
         )
@@ -1407,190 +1754,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         | [ single ] -> reader.ReadTypeNode single
         | _ -> GlueType.Primitive GluePrimitive.Any
 
-    | Ts.SyntaxKind.IntersectionType ->
-        let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode
-        // Make TypeScript resolve the type for us
-        let unionOrIntersectionType =
-            checker.getTypeAtLocation intersectionTypeNode :?> Ts.UnionOrIntersectionType
-
-        intersectionsInProgress.Add unionOrIntersectionType
-
-        use _guard =
-            { new System.IDisposable with
-                member _.Dispose() =
-                    intersectionsInProgress.RemoveAt(intersectionsInProgress.Count - 1)
-            }
-
-        let properties =
-            let computedProperties =
-                // If we detect an union type, we need to extract the properties from the inner types
-                if unionOrIntersectionType.isUnion () then
-                    unionOrIntersectionType.types
-                    |> Seq.toList
-                    |> List.map (checker.getPropertiesOfType >> Seq.toList)
-                    |> List.concat
-                    // Remove duplicates
-                    |> List.distinct
-
-                else
-                    match unionOrIntersectionType.getProperties () |> Seq.toList with
-                    // `DeepPartial<Registry[T]> & Properties<T>`: the checker gives up on the
-                    // deferred part, the members of the others are still known
-                    | [] when (unbox<Ts.Node> intersectionTypeNode).pos >= 0 ->
-                        intersectionTypeNode.types
-                        |> Seq.toList
-                        |> List.collect (fun constituent ->
-                            checker.getTypeAtLocation (constituent :> Ts.Node)
-                            |> checker.getPropertiesOfType
-                            |> Seq.toList
-                        )
-                        |> List.distinctBy (fun property -> property.name)
-                    | properties -> properties
-
-            computedProperties
-            |> List.choose (fun property ->
-                match property.declarations with
-                | Some declarations ->
-                    if declarations.Count = 1 then
-                        Some(Single(property, declarations.[0]))
-                    // `type` declared by the dataset options of every chart type: the checker
-                    // knows the type of the merged property
-                    elif
-                        declarations
-                        |> Seq.forall (fun declaration ->
-                            declaration.kind = Ts.SyntaxKind.PropertySignature
-                            || declaration.kind = Ts.SyntaxKind.PropertyDeclaration
-                        )
-                    then
-                        Some(WithoutDeclaration property)
-                    else
-                        Some ForceAny
-                | None -> Some(WithoutDeclaration property)
-            )
-
-        // `{ new (...args: any[]): any } & typeof Class` describes the class itself, reading its
-        // members would end up in an infinite loop
-        let intersectsATypeQuery =
-            intersectionTypeNode.types
-            |> Seq.exists (fun constituent -> constituent.kind = Ts.SyntaxKind.TypeQuery)
-
-        // An interface inheriting every constituent keeps their overloads, flattening the members
-        // into one type does not, so it is only worth it when a constituent can't be inherited
-        let everyConstituentIsAReference =
-            intersectionTypeNode.types
-            |> Seq.forall (fun constituent -> constituent.kind = Ts.SyntaxKind.TypeReference)
-
-        // We can't create a contract for some of the properties
-        // they would eiher end-up in a infinite loop or they are don't
-        // have a equivalent in F#
-        let hasUnsupportedProperties =
-            intersectsATypeQuery
-            || properties
-               |> List.exists (fun property ->
-                   match property with
-                   | ForceAny -> true // Force to generate obj
-                   | WithoutDeclaration _ -> false
-                   | Single(_, declaration) ->
-                       everyConstituentIsAReference
-                       && declaration.kind = Ts.SyntaxKind.MethodDeclaration
-               )
-
-        // `IRouterHandler<T> & ((...handlers: Handler[]) => T)`: the intersection is callable
-        let callSignatures =
-            if unionOrIntersectionType.isUnion () then
-                []
-            else
-                checker.getSignaturesOfType (unionOrIntersectionType, Ts.SignatureKind.Call)
-                |> Seq.toList
-                |> List.choose (fun signature ->
-                    // The signature of `IRouterHandler<this>` is the declared one with `T` substituted
-                    let flags =
-                        Ts.NodeBuilderFlags.NoTruncation
-                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
-
-                    let synthesized: Ts.Node option =
-                        checker?signatureToSignatureDeclaration (
-                            signature,
-                            Ts.SyntaxKind.CallSignature,
-                            typeNode,
-                            flags
-                        )
-
-                    match synthesized with
-                    | Some declaration ->
-                        // The type parameters of the signature enclose the callbacks of its
-                        // parameters, the intersection encloses the signature
-                        declaration?parent <- typeNode
-                        let previousContext = reader.SyntheticContext
-                        reader.SyntheticContext <- Some declaration
-
-                        try
-                            Some(reader.ReadDeclaration(declaration :?> Ts.Declaration))
-                        finally
-                            reader.SyntheticContext <- previousContext
-                    | None -> None
-                )
-
-        if hasUnsupportedProperties then
-            // F# has no intersection, an interface can still inherit each constituent
-            let references =
-                intersectionTypeNode.types
-                |> Seq.toList
-                |> List.map (fun constituent ->
-                    if constituent.kind = Ts.SyntaxKind.TypeReference then
-                        reader.ReadTypeNode constituent
-                    else
-                        GlueType.Discard
-                )
-
-            let isReference =
-                function
-                | GlueType.TypeReference _ -> true
-                | _ -> false
-
-            let literalMembers =
-                intersectionTypeNode.types
-                |> Seq.toList
-                |> List.collect (fun constituent ->
-                    if constituent.kind = Ts.SyntaxKind.TypeLiteral then
-                        match reader.ReadTypeNode constituent with
-                        | GlueType.TypeLiteral typeLiteral -> typeLiteral.Members
-                        | _ -> []
-                    else
-                        []
-                )
-
-            let inheritable =
-                references |> List.filter (fun reference -> not (reference = GlueType.Discard))
-
-            if not inheritable.IsEmpty && inheritable |> List.forall isReference then
-                GlueType.IntersectionOfReferences(inheritable, literalMembers)
-            else
-                GlueType.Primitive GluePrimitive.Any
-        else
-            (properties
-             |> List.choose (
-                 function
-                 | Single(property, declaration) ->
-                     Some(readInstantiatedMember reader typeNode property declaration)
-                 | WithoutDeclaration property ->
-                     readPropertyWithoutDeclaration reader typeNode property
-                 | ForceAny -> failwith "Sould not happen here"
-             ))
-            @ callSignatures
-            // `getProperties` leaves the index signatures out, the type literals declare them
-            @ (intersectionTypeNode.types
-               |> Seq.toList
-               |> List.collect (fun constituent ->
-                   if constituent.kind = Ts.SyntaxKind.TypeLiteral then
-                       (constituent :?> Ts.TypeLiteralNode).members
-                       |> Seq.toList
-                       |> List.filter (fun element -> element.kind = Ts.SyntaxKind.IndexSignature)
-                       |> List.map reader.ReadDeclaration
-                   else
-                       []
-               ))
-            |> GlueType.IntersectionType
+    | Ts.SyntaxKind.IntersectionType -> readIntersectionType reader typeNode
 
     | Ts.SyntaxKind.TypeLiteral ->
         let typeLiteralNode = typeNode :?> Ts.TypeLiteralNode
@@ -1631,181 +1795,13 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
     | Ts.SyntaxKind.BigIntKeyword -> GlueType.Primitive GluePrimitive.BigInt
 
-    | Ts.SyntaxKind.ExpressionWithTypeArguments ->
-        let expression = typeNode :?> Ts.ExpressionWithTypeArguments
-
-        let typ = checker.getTypeFromTypeNode expression
-
-        // Getting the type from the expression seems more robust for getting a Symbol resolved
-        // than using:
-        //
-        // let symbolOpt = checker.getSymbolAtLocation (expression.expression)
-        let symbolOpt =
-            // Alias symbol give us better result for utility types like Omit, Partial, etc...
-            typ.aliasSymbol
-            // If not available, we fallback to the symbol of the type
-            |> Option.orElse (
-                if isNull (box typ.symbol) then
-                    None
-                else
-                    Some typ.symbol
-            )
-            // An erroneous type (`Uint8Array<T>` with an older lib) has no symbol, its name has
-            |> Option.orElse (checker.getSymbolAtLocation expression.expression)
-
-        // Specialize the utility types we know how to resolve so they work in
-        // heritage clauses too (e.g. `interface Y extends Omit<X, "a">`). The
-        // node is structurally compatible with a `TypeReferenceNode` for the
-        // properties the reader needs (`typeArguments`).
-        match isFromEs5Lib symbolOpt, getFullNameOrEmpty checker expression.expression with
-        | true, "Omit" -> UtilityType.readOmit reader (unbox<Ts.TypeReferenceNode> expression)
-        | true, "Pick" -> UtilityType.readPick reader (unbox<Ts.TypeReferenceNode> expression)
-        | _ ->
-            let isQualified =
-                expression.expression.kind = Ts.SyntaxKind.PropertyAccessExpression
-
-            // The module path is computed from the resolved symbol, so the name must be its name too
-            let name =
-                match symbolOpt with
-                // `export default class DatasetController` is the `default` symbol
-                | Some symbol when symbol.name = "default" ->
-                    declaredName symbol |> Option.defaultValue symbol.name
-                | Some symbol when not (isFromEs5Lib symbolOpt) -> symbol.name
-                | _ ->
-                    if isQualified then
-                        (unbox<Ts.PropertyAccessExpression> expression.expression).name?text
-                    else
-                        expression.expression.getText ()
-
-            let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
-
-            // `extends ReturnType<...>` resolves to an anonymous type, it has no declaration to inherit
-            let isAnonymous =
-                match symbolOpt with
-                | Some symbol -> symbol.name = "__type" || symbol.name = "__object"
-                | None -> false
-
-            // An external base type can't be inherited, `inherit obj` is invalid, `Partial` is
-            // expanded by the transform
-            if
-                isAnonymous
-                || (isExternal
-                    && not (knownExternalTypeNames.Contains name)
-                    && not (isFromEs5Lib symbolOpt && name = "Partial"))
-            then
-                GlueType.Discard
-            else
-                ({
-                    Name =
-                        if name.Contains "." then
-                            name
-                        else
-                            Naming.sanitizeTypeName name
-                    // The name of the declaration, not of an import alias
-                    FullName =
-                        match symbolOpt |> Option.bind (resolveAlias checker) with
-                        | Some symbol -> checker.getFullyQualifiedName symbol
-                        | None -> getFullNameOrEmpty checker expression.expression
-                    ModulePath =
-                        if isLibraryName reader name then
-                            []
-                        else
-                            modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
-                    TypeArguments =
-                        match readTypeArguments reader expression with
-                        | [] ->
-                            resolvedBaseTypeArguments checker expression
-                            |> List.map (fun argument ->
-                                let flags =
-                                    Ts.NodeBuilderFlags.NoTruncation
-                                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
-
-                                checker.typeToTypeNode (argument, None, Some flags)
-                                |> reader.ReadTypeNode
-                            )
-                        | typeArguments -> typeArguments
-                    IsStandardLibrary =
-                        isFromEs5Lib symbolOpt || isExternal || isLibraryName reader name
-                })
-                |> GlueType.TypeReference
+    | Ts.SyntaxKind.ExpressionWithTypeArguments -> readExpressionWithTypeArguments reader typeNode
 
     | Ts.SyntaxKind.InferType -> inferredConstraint reader (typeNode :?> Ts.InferTypeNode)
 
-    | Ts.SyntaxKind.ConditionalType ->
-        let conditionalTypeNode = typeNode :?> Ts.ConditionalTypeNode
+    | Ts.SyntaxKind.ConditionalType -> readConditionalType reader typeNode
 
-        let typ = checker.getTypeAtLocation conditionalTypeNode
-
-        // The branch depends on the type arguments, the transform resolves it with the defaults
-        if isDeferredConditional typ then
-            let warningsCount = reader.Warnings.Count
-
-            let inferred =
-                inferTypeNodes conditionalTypeNode.extendsType
-                |> List.map (fun inferTypeNode ->
-                    inferTypeNode.typeParameter.name.getText (),
-                    inferredConstraint reader inferTypeNode
-                )
-                |> Microsoft.FSharp.Collections.Map.ofList
-
-            let conditionalType =
-                ({
-                    CheckType = reader.ReadTypeNode conditionalTypeNode.checkType
-                    ExtendsType = reader.ReadTypeNode conditionalTypeNode.extendsType
-                    TrueType =
-                        reader.ReadTypeNode conditionalTypeNode.trueType
-                        |> GlueSubstitution.substitute inferred
-                    FalseType = reader.ReadTypeNode conditionalTypeNode.falseType
-                }
-                : GlueConditionalType)
-
-            // A branch with `infer` is not read, without a warning
-            if reader.Warnings.Count > warningsCount then
-                reader.Warnings.RemoveRange(warningsCount, reader.Warnings.Count - warningsCount)
-                GlueType.Primitive GluePrimitive.Any
-            else
-                GlueType.ConditionalType conditionalType
-        else
-
-            // If we resolved the type to Any, we fallback to the generic type
-            // This is because in F#, we can write
-            // type ReturnType<'T> = obj
-            // because 'T is not used in the type
-            // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
-            // usage by inlining the logic here and make it more specific
-            match readTypeUsingFlags reader typ with
-            | GlueType.Primitive GluePrimitive.Any ->
-                reader.ReadTypeNode conditionalTypeNode.checkType
-            | forward -> forward
-
-    | Ts.SyntaxKind.TemplateLiteralType ->
-        let templateLiteralTypeNode = typeNode :?> Ts.TemplateLiteralTypeNode
-
-        // Ask the type checker to resolve the template literal type.
-        // When the template is made of finite parts (e.g. unions of string
-        // literals), TypeScript expands it into a union of string literals
-        // that we can represent as a StringEnum.
-        // Otherwise (e.g. `section-${string}`) the type stays a template
-        // literal / string and we fallback to `string`.
-        let typ = checker.getTypeAtLocation templateLiteralTypeNode
-
-        let rec readResolvedLiterals (typ: Ts.Type) : GlueType list =
-            match typ.flags with
-            | HasTypeFlags Ts.TypeFlags.StringLiteral ->
-                match typ with
-                | Type.StringLiteral.String value ->
-                    [ GlueLiteral.String value |> GlueType.Literal ]
-                | Type.StringLiteral.Other -> []
-            | HasTypeFlags Ts.TypeFlags.Union ->
-                (typ :?> Ts.UnionType).types |> Seq.toList |> List.collect readResolvedLiterals
-            | _ -> []
-
-        match readResolvedLiterals typ with
-        // The type checker couldn't resolve the template to a finite set of
-        // string literals, so we fallback to a plain `string`.
-        | [] -> GlueType.TemplateLiteral
-        | [ single ] -> single
-        | cases -> cases |> GlueTypeUnion |> GlueType.Union
+    | Ts.SyntaxKind.TemplateLiteralType -> readTemplateLiteralType reader typeNode
 
     | Ts.SyntaxKind.IndexedAccessType ->
         let indexedAccessType = typeNode :?> Ts.IndexedAccessType

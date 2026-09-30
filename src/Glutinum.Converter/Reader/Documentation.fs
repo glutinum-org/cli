@@ -103,33 +103,16 @@ let private readDocumentation
                 readTagComment index tag |> Option.map GlueComment.Throws
 
             | Ts.SyntaxKind.JSDocTag ->
+                let textTag (make: string -> GlueComment) =
+                    tag.comment
+                    |> Option.map (fun comment ->
+                        textOfComment comment |> Option.defaultValue "" |> make
+                    )
+
                 match tag.tagName.getText () with
-                | "remarks" ->
-                    match tag.comment with
-                    | Some comment ->
-                        textOfComment comment
-                        |> Option.defaultValue ""
-                        |> GlueComment.Remarks
-                        |> Some
-                    | None -> None
-
-                | "defaultValue" ->
-                    match tag.comment with
-                    | Some comment ->
-                        textOfComment comment
-                        |> Option.defaultValue ""
-                        |> GlueComment.DefaultValue
-                        |> Some
-                    | None -> None
-
-                | "example" ->
-                    match tag.comment with
-                    | Some comment ->
-                        textOfComment comment
-                        |> Option.defaultValue ""
-                        |> GlueComment.Example
-                        |> Some
-                    | None -> None
+                | "remarks" -> textTag GlueComment.Remarks
+                | "defaultValue" -> textTag GlueComment.DefaultValue
+                | "example" -> textTag GlueComment.Example
 
                 | "typeParam" ->
                     match tag.comment with

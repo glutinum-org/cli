@@ -113,35 +113,9 @@ let apply (types: FSharpType list) : FSharpType list =
                             TypeParameters = arguments
                         }
                         |> FSharpType.Mapped
-                | FSharpType.Union unionInfo ->
-                    { unionInfo with
-                        Cases =
-                            unionInfo.Cases
-                            |> List.map (
-                                function
-                                | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(cut typ)
-                                | FSharpUnionCase.Field(name, typ) ->
-                                    FSharpUnionCase.Field(name, cut typ)
-                                | case -> case
-                            )
-                    }
-                    |> FSharpType.Union
-                | FSharpType.Option typ -> FSharpType.Option(cut typ)
-                | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(cut typ)
-                | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map cut)
-                | FSharpType.Function functionInfo ->
-                    { functionInfo with
-                        Parameters =
-                            functionInfo.Parameters
-                            |> List.map (fun parameter ->
-                                { parameter with
-                                    Type = cut parameter.Type
-                                }
-                            )
-                        ReturnType = cut functionInfo.ReturnType
-                    }
-                    |> FSharpType.Function
-                | _ -> typ
+                // `ReadonlyArray<T>` is a type of `Glutinum.Types`, not an abbreviation of the file
+                | FSharpType.JSApi _ -> typ
+                | typ -> FSharpType.mapChildren cut typ
 
             let cutType = cut aliasInfo.Type
 

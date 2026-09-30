@@ -7,8 +7,6 @@ open Fable.Core.JsInterop
 open Glutinum.Converter.Reader.Utils
 open FsToolkit.ErrorHandling
 
-let private declarationsInProgress = ResizeArray<Ts.Node>()
-
 let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNode) =
 
     let checker = reader.checker
@@ -240,18 +238,17 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                                 let typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
                                     node?typeParameters
 
-                                let acc =
-                                    match typeParameters with
-                                    | Some typeParameters ->
-                                        acc
-                                        @ (typeParameters
-                                           |> Seq.toList
-                                           |> List.map (fun typeParameter ->
-                                               identifierText typeParameter.name
-                                           ))
-                                    | None -> acc
+                                let names =
+                                    typeParameters
+                                    |> Option.map (
+                                        Seq.toList
+                                        >> List.map (fun typeParameter ->
+                                            identifierText typeParameter.name
+                                        )
+                                    )
+                                    |> Option.defaultValue []
 
-                                collect node.parent acc
+                                collect node.parent (acc @ names)
 
                         collect (typeQueryNode :> Ts.Node) [] |> set
 
@@ -293,26 +290,14 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                 | _ when isFromEs5Lib (Some symbol) || isFromEsLib (Some symbol) ->
                     GlueType.Primitive GluePrimitive.Any
                 | _ ->
-                    if declarationsInProgress.Contains declaration then
+                    if reader.InProgress.TypeQueryDeclarations.Contains declaration then
                         GlueType.Primitive GluePrimitive.Any
                     else
-                        declarationsInProgress.Add declaration
-
-                        try
-                            reader.ReadNode declaration
-                        finally
-                            declarationsInProgress.RemoveAt(declarationsInProgress.Count - 1)
+                        withInProgress
+                            reader.InProgress.TypeQueryDeclarations
+                            declaration
+                            (fun () -> reader.ReadNode declaration)
 
             | _ -> GlueType.Primitive GluePrimitive.Any
 
-    | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
-
-    | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
-
-    | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
-
-    | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
-
-    | HasTypeFlags Ts.TypeFlags.Void -> GlueType.Primitive GluePrimitive.Unit
-
-    | _ -> GlueType.Primitive GluePrimitive.Any
+    | _ -> primitiveOfFlags typ

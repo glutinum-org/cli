@@ -4,16 +4,9 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
-
-let rec private removeParenthesizedType (node: Ts.TypeNode) =
-    match node.kind with
-    | Ts.SyntaxKind.ParenthesizedType ->
-        removeParenthesizedType (node :?> Ts.ParenthesizedTypeNode).``type``
-    | _ -> node
+open Glutinum.Converter.Reader.Utils
 
 // `class ChartView { call(name: keyof ChartView) }`: the keys of a declaration being read
-let private declarationsInProgress = ResizeArray<Ts.Node>()
-
 let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode) =
 
     match node.operator with
@@ -48,20 +41,14 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
                     // The keys of a type parameter are known once it is substituted
                     if declaration.kind = Ts.SyntaxKind.TypeParameter then
                         GlueType.KeyOf(GlueType.TypeParameter symbol.name)
-                    elif declarationsInProgress.Contains declaration then
+                    elif reader.InProgress.KeyOfDeclarations.Contains declaration then
                         GlueType.KeyOf GlueType.Discard
                     else
-                        declarationsInProgress.Add declaration
-
-                        try
-                            reader.ReadNode declaration |> GlueType.KeyOf
-                        finally
-                            declarationsInProgress.RemoveAt(declarationsInProgress.Count - 1)
-                | Some _ ->
-                    Report.readerError ("type operator (keyof)", "Missing declarations", node)
-                    |> failwith
-
-                | None ->
+                        withInProgress
+                            reader.InProgress.KeyOfDeclarations
+                            declaration
+                            (fun () -> reader.ReadNode declaration |> GlueType.KeyOf)
+                | _ ->
                     Report.readerError ("type operator (keyof)", "Missing declarations", node)
                     |> failwith
 

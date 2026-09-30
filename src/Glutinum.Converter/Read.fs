@@ -1,24 +1,10 @@
-module rec Glutinum.Converter.Read
+module Glutinum.Converter.Read
 
 open TypeScript
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open Glutinum.Converter.Reader.TypeScriptReader
 open Glutinum.Converter.Reader.Utils
-open Fable.Core.JsInterop
-
-let readSourceFile (checker: Ts.TypeChecker) (sourceFile: option<Ts.SourceFile>) =
-    let reader: ITypeScriptReader = TypeScriptReader(checker)
-
-    {|
-        GlueAST = readStatements reader sourceFile.Value
-        // The module the file is made of, when it is one
-        ImportSpecifier =
-            promotedAmbientModule sourceFile.Value
-            |> Option.map (ambientModuleSpecifier (ambientModuleNames checker))
-        Warnings = reader.Warnings
-        TypeMemory = reader.TypeMemory |> List.ofSeq
-    |}
 
 /// A file without import or export, and not made of an ambient module: its declarations are globals
 let private isScript (sourceFile: Ts.SourceFile) =
@@ -176,6 +162,19 @@ let private readStatements (reader: ITypeScriptReader) (sourceFile: Ts.SourceFil
         | _ -> [ reader.ReadNode statement ]
     )
     |> dropShadowedReExports
+
+let readSourceFile (checker: Ts.TypeChecker) (sourceFile: option<Ts.SourceFile>) =
+    let reader: ITypeScriptReader = TypeScriptReader(checker)
+
+    {|
+        GlueAST = readStatements reader sourceFile.Value
+        // The module the file is made of, when it is one
+        ImportSpecifier =
+            promotedAmbientModule sourceFile.Value
+            |> Option.map (ambientModuleSpecifier (ambientModuleNames checker))
+        Warnings = reader.Warnings
+        TypeMemory = reader.TypeMemory |> List.ofSeq
+    |}
 
 /// The ambient modules a script declares beside its own: `declare module "util/types"` is the
 /// module `types` nested in `util`, `declare module "node:util"` is `util` itself

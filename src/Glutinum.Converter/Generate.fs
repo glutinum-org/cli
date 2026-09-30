@@ -1,15 +1,10 @@
-module rec Glutinum.Converter.Generate
+module Glutinum.Converter.Generate
 
-open Fable.Core
 open TypeScript
-open Fable.Core.JsInterop
 open Glutinum.Converter
 
 let createProgramForCLI (fileName: string) (source: string) : Ts.Program =
     Hosting.Bootstrap.createProgramForCLI fileName source
-
-let generateBindingFile (filePath: string) =
-    generateBindingFileWith "Glutinum" filePath
 
 /// Generate the binding of a single declaration file as the module <c>moduleName</c>
 let generateBindingFileWith (moduleName: string) (filePath: string) =
@@ -30,7 +25,6 @@ let generateBindingFileWith (moduleName: string) (filePath: string) =
 
     let readerResult = Read.readSourceFile checker sourceFile
 
-    // Log reader warnings
     for warning in readerResult.Warnings do
         Log.warn warning
 
@@ -40,7 +34,6 @@ let generateBindingFileWith (moduleName: string) (filePath: string) =
             readerResult.TypeMemory
             readerResult.GlueAST
 
-    // Log transform warnings and errors
     for reporter in transformResult.Warnings do
         Log.warn reporter
 
@@ -51,12 +44,8 @@ let generateBindingFileWith (moduleName: string) (filePath: string) =
 
     printer.ToString()
 
-/// <summary>
-/// Generate a single binding file for the packages, and the packages they depend on.
-/// An empty list generates every package installed in the nearest <c>node_modules</c>.
-/// </summary>
-let generatePackagesWith (host: Hosting.Host) (inputs: string list) =
-    generatePackagesWithOptions Packages.defaultOptions host inputs
+let generateBindingFile (filePath: string) =
+    generateBindingFileWith "Glutinum" filePath
 
 let generatePackagesWithOptions
     (options: Packages.GenerateOptions)
@@ -73,12 +62,19 @@ let generatePackagesWithOptions
 
     result.FSharpCode
 
-/// The packages installed on the disk, from the current directory
-let generatePackages (inputs: string list) =
-    generatePackagesFromDisk Packages.defaultOptions inputs
+/// <summary>
+/// Generate a single binding file for the packages, and the packages they depend on.
+/// An empty list generates every package installed in the nearest <c>node_modules</c>.
+/// </summary>
+let generatePackagesWith (host: Hosting.Host) (inputs: string list) =
+    generatePackagesWithOptions Packages.defaultOptions host inputs
 
 let generatePackagesFromDisk (options: Packages.GenerateOptions) (inputs: string list) =
     generatePackagesWithOptions
         options
         (Hosting.createNodeHost (Glutinum.Node.Exports.``process``.cwd ()))
         inputs
+
+/// The packages installed on the disk, from the current directory
+let generatePackages (inputs: string list) =
+    generatePackagesFromDisk Packages.defaultOptions inputs

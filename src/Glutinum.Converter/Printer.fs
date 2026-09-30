@@ -1,7 +1,6 @@
 module Glutinum.Converter.Printer
 
 open System
-open Glutinum.Chalk
 open Glutinum.Converter.FSharpAST
 open Fable.Core
 open System.Text.RegularExpressions
@@ -9,7 +8,7 @@ open System.Text.RegularExpressions
 type Printer() =
     let buffer = new Text.StringBuilder()
     let mutable indentationLevel = 0
-    let indentationText = "    " // 4 spaces
+    let indentationText = "    "
 
     member __.Indent = indentationLevel <- indentationLevel + 1
 
@@ -17,20 +16,12 @@ type Printer() =
         // Safety measure so we don't have negative indentation space
         indentationLevel <- System.Math.Max(indentationLevel - 1, 0)
 
-    /// <summary>Write the provided text prefixed with indentation</summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
+    /// Write the text prefixed with the indentation
     member __.Write(text: string) =
         buffer.Append(String.replicate indentationLevel indentationText + text)
         |> ignore
 
-    /// <summary>
-    /// Write the provided text directly in the buffer
-    ///
-    /// Useful when you don't want to prefix the text with indentation
-    /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
+    /// Write the text without indentation
     member __.WriteInline(text: string) = buffer.Append(text) |> ignore
 
     member __.NewLine = buffer.AppendLine() |> ignore
@@ -41,15 +32,6 @@ type Printer() =
 
     member val ImportSpecifier = Naming.MODULE_PLACEHOLDER with get, set
 
-module Naming =
-    let (|Digit|_|) (digit: string) =
-        if String.IsNullOrWhiteSpace digit then
-            None
-        elif Char.IsDigit(digit, 0) then
-            Some digit
-        else
-            None
-
 let private sanitizeEnumCaseName (name: string) =
     let name =
         name
@@ -57,11 +39,11 @@ let private sanitizeEnumCaseName (name: string) =
         |> String.removeDoubleQuote
         |> String.capitalizeFirstLetter
 
-    match name with
-    | Naming.Digit _ ->
-        // F# enums cannot start with a digit, so we escape it with backticks
+    // F# enums cannot start with a digit, so we escape it with backticks
+    if not (String.IsNullOrWhiteSpace name) && Char.IsDigit(name, 0) then
         $"``{name}``"
-    | _ -> name
+    else
+        name
 
 let private hasParamArrayAttribute (attributes: FSharpAttribute list) =
     attributes
@@ -80,6 +62,14 @@ let private caseRulesToText (caseRules: CaseRules) =
     | CaseRules.KebabCase -> "CaseRules.KebabCase"
     | _ -> failwith "Unsupported case rules: %A{caseRules}"
 
+let private escapeStringLiteral (text: string) =
+    text
+        .Replace("\\", "\\\\")
+        .Replace("\"", "\\\"")
+        .Replace("\r", "\\r")
+        .Replace("\n", "\\n")
+        .Replace("\t", "\\t")
+
 let private attributeToText (fsharpAttribute: FSharpAttribute) =
     match fsharpAttribute with
     | FSharpAttribute.Text text -> $"[<%s{text}>]"
@@ -91,16 +81,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EraseWithCaseRules caseRules -> $"[<Erase({caseRulesToText caseRules})>]"
     | FSharpAttribute.TypeScriptTaggedUnion(tagName, caseRules) ->
         $"[<TypeScriptTaggedUnion(\"{tagName}\", {caseRulesToText caseRules})>]"
-    | FSharpAttribute.CompiledName name ->
-        let name =
-            name
-                .Replace("\\", "\\\\")
-                .Replace("\"", "\\\"")
-                .Replace("\r", "\\r")
-                .Replace("\n", "\\n")
-                .Replace("\t", "\\t")
-
-        $"[<CompiledName(\"{name}\")>]"
+    | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{escapeStringLiteral name}\")>]"
     | FSharpAttribute.CompiledValue value ->
         let valueText =
             match value with
@@ -134,15 +115,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
             // ``` of a markdown fence opens a quoted identifier, a triple quoted string
             // does not protect it
             if message.Contains "``" || message.Contains "\"\"\"" then
-                let escaped =
-                    message
-                        .Replace("\\", "\\\\")
-                        .Replace("\"", "\\\"")
-                        .Replace("\r", "\\r")
-                        .Replace("\n", "\\n")
-                        .Replace("\t", "\\t")
-
-                $"[<Obsolete(\"%s{escaped}\")>]"
+                $"[<Obsolete(\"%s{escapeStringLiteral message}\")>]"
             elif message.Contains "\n" || message.Contains "\"" then
                 $"[<Obsolete(\"\"\"%s{message}\"\"\")>]"
             else
@@ -152,41 +125,24 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EmitMacroInvoke methodName -> $"[<Emit(\"$0.{methodName}($1...)\")>]"
     | FSharpAttribute.EmitMacroProperty propertyName -> $"[<Emit(\"$0.{propertyName}\")>]"
 
-let private printInlineAttribute (printer: Printer) (fsharpAttribute: FSharpAttribute) =
-    printer.WriteInline(attributeToText fsharpAttribute)
-    printer.WriteInline(" ")
+/// `[<CompiledName("UP")>][<CompiledValue(1)>]` merged as `[<CompiledName("UP"); CompiledValue(1)>]`
+let private compactAttributesText (fsharpAttributes: FSharpAttribute list) =
+    fsharpAttributes
+    |> List.map attributeToText
+    |> String.concat ""
+    |> String.replace ">][<" "; "
 
 let private printInlineAttributes (printer: Printer) (fsharpAttributes: FSharpAttribute list) =
-    if fsharpAttributes.Length > 0 then
-        let attributesText =
-            fsharpAttributes
-            |> List.map attributeToText
-            // Merge attributes:
-            // [<CompiledName("UP")>][<CompiledValue(1)>]
-            // becomes
-            // [<CompiledName("UP"); CompiledValue(1)>]
-            |> String.concat ""
-            |> String.replace ">][<" "; "
-
-        printer.WriteInline(attributesText)
+    if not fsharpAttributes.IsEmpty then
+        printer.WriteInline(compactAttributesText fsharpAttributes)
         printer.WriteInline(" ")
 
 let private printCompactAttributesAndNewLine
     (printer: Printer)
     (fsharpAttributes: FSharpAttribute list)
     =
-    if fsharpAttributes.Length > 0 then
-        let attributesText =
-            fsharpAttributes
-            |> List.map attributeToText
-            // Merge attributes:
-            // [<CompiledName("UP")>][<CompiledValue(1)>]
-            // becomes
-            // [<CompiledName("UP"); CompiledValue(1)>]
-            |> String.concat ""
-            |> String.replace ">][<" "; "
-
-        printer.Write(attributesText)
+    if not fsharpAttributes.IsEmpty then
+        printer.Write(compactAttributesText fsharpAttributes)
         printer.NewLine
 
 let private printAttributes (printer: Printer) (fsharpAttributes: FSharpAttribute list) =
@@ -200,20 +156,20 @@ let rec printTypeParametersDeclaration
     (printer: Printer)
     (typeParameters: FSharpTypeParameter list)
     =
-    let innterPrinter = new Printer()
+    let innerPrinter = new Printer()
 
     if not typeParameters.IsEmpty then
-        innterPrinter.WriteInline("<")
+        innerPrinter.WriteInline("<")
 
         typeParameters
         |> List.iteri (fun index typeParameter ->
             if index <> 0 then
-                innterPrinter.WriteInline(", ")
+                innerPrinter.WriteInline(", ")
 
             match typeParameter with
-            | FSharpTypeParameter.FSharpType _ -> innterPrinter.WriteInline $"'T{index}"
+            | FSharpTypeParameter.FSharpType _ -> innerPrinter.WriteInline $"'T{index}"
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
-                innterPrinter.WriteInline $"'{Naming.sanitizeTypeParameterName typeParameter.Name}"
+                innerPrinter.WriteInline $"'{Naming.sanitizeTypeParameterName typeParameter.Name}"
         )
 
         // Print the constraints only if we are in the initial declaration.
@@ -232,23 +188,23 @@ let rec printTypeParametersDeclaration
             match typeParameter.Constraint with
             | Some constraint_ ->
                 if index = 0 then
-                    innterPrinter.WriteInline(" when ")
+                    innerPrinter.WriteInline(" when ")
                 else
-                    innterPrinter.WriteInline(" and ")
+                    innerPrinter.WriteInline(" and ")
 
-                innterPrinter.WriteInline($"'{typeParameter.Name}")
-                innterPrinter.WriteInline(" :> ")
-                innterPrinter.WriteInline(printType constraint_)
+                innerPrinter.WriteInline($"'{typeParameter.Name}")
+                innerPrinter.WriteInline(" :> ")
+                innerPrinter.WriteInline(printType constraint_)
             | None -> ()
         )
 
         // `Foo<Bar>>:` would be lexed as an operator
-        if innterPrinter.ToStringWithoutTrailNewLine().EndsWith(">") then
-            innterPrinter.WriteInline(" ")
+        if innerPrinter.ToStringWithoutTrailNewLine().EndsWith(">") then
+            innerPrinter.WriteInline(" ")
 
-        innterPrinter.WriteInline(">")
+        innerPrinter.WriteInline(">")
 
-        innterPrinter.ToStringWithoutTrailNewLine() |> printer.WriteInline
+        innerPrinter.ToStringWithoutTrailNewLine() |> printer.WriteInline
 
 and printTypeNameWithTypeParameters (name: string) (typeParameters: FSharpTypeParameter list) =
     let printer = new Printer()
@@ -386,21 +342,18 @@ and printType (fsharpType: FSharpType) =
 
 module FSharpAccessibility =
 
-    let print (printer: Printer) (accessibility: FSharpAccessibility) =
+    // Public is an empty string, written so that the indentation matches the other ones
+    let private text (accessibility: FSharpAccessibility) =
         match accessibility with
-        // We print an empty string for public like that the indentation
-        // matches the other accessibilities
-        | FSharpAccessibility.Public -> printer.Write("")
-        | FSharpAccessibility.Private -> printer.Write("private ")
-        | FSharpAccessibility.Protected -> printer.Write("protected ")
+        | FSharpAccessibility.Public -> ""
+        | FSharpAccessibility.Private -> "private "
+        | FSharpAccessibility.Protected -> "protected "
+
+    let print (printer: Printer) (accessibility: FSharpAccessibility) =
+        printer.Write(text accessibility)
 
     let printInline (printer: Printer) (accessibility: FSharpAccessibility) =
-        match accessibility with
-        // We print an empty string for public like that the indentation
-        // matches the other accessibilities
-        | FSharpAccessibility.Public -> printer.WriteInline("")
-        | FSharpAccessibility.Private -> printer.WriteInline("private ")
-        | FSharpAccessibility.Protected -> printer.WriteInline("protected ")
+        printer.WriteInline(text accessibility)
 
 // Comment adaptation should be moved in the transform phase
 let private codeInline (line: string) =
@@ -494,7 +447,6 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
             | FSharpXmlDoc.Example _ -> false
         )
 
-    // Print the summary first
     let summaryLines =
         summary
         |> List.map (fun element ->
@@ -507,7 +459,6 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
         |> List.removeConsecutiveEmptyLines
         |> List.trimEmptyLines
 
-    // Only generate the summary if there is content
     if summaryLines |> List.forall String.IsNullOrWhiteSpace |> not then
         summaryLines |> String.concat "\n" |> printBlockTag printer "summary" []
 
@@ -537,28 +488,239 @@ let private printParameterType (typ: FSharpType) =
     | FSharpType.Tuple _ -> $"({printType typ})"
     | _ -> printType typ
 
+/// The parameters with their attributes, `?` for an optional one and `[]` for a param array
+let private printParameterList
+    (printer: Printer)
+    (separator: string)
+    (parameters: FSharpParameter list)
+    =
+    parameters
+    |> List.iteri (fun index p ->
+        if index <> 0 then
+            printer.WriteInline(separator)
+
+        printInlineAttributes printer p.Attributes
+
+        if p.IsOptional then
+            printer.WriteInline("?")
+
+        printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
+
+        if hasParamArrayAttribute p.Attributes then
+            printer.WriteInline(" []")
+    )
+
 let printParameters (printer: Printer) (parameters: FSharpParameter list) =
-    if parameters.Length = 0 then
+    if parameters.IsEmpty then
         printer.WriteInline("unit")
     else
-        parameters
+        printParameterList printer " * " parameters
+
+let private accessorSuffix (accessor: FSharpAccessor) =
+    match accessor with
+    | FSharpAccessor.ReadOnly -> " with get"
+    | FSharpAccessor.WriteOnly -> " with set"
+    | FSharpAccessor.ReadWrite -> " with get, set"
+
+let private printInterfaceMethod (printer: Printer) (methodInfo: FSharpMemberInfo) =
+    printXmlDoc printer methodInfo.XmlDoc
+    printCompactAttributesAndNewLine printer methodInfo.Attributes
+
+    if methodInfo.IsStatic then
+        printer.Write("static ")
+    else
+        printer.Write("abstract ")
+
+    printer.WriteInline($"member {methodInfo.Name}")
+
+    printTypeParametersDeclaration printer methodInfo.TypeParameters
+
+    if methodInfo.IsStatic then
+        printer.WriteInline(" ")
+
+        if methodInfo.Parameters.IsEmpty then
+            printer.WriteInline("()")
+        else
+            printer.WriteInline("(")
+            printParameterList printer ", " methodInfo.Parameters
+            printer.WriteInline(")")
+    else
+        printer.WriteInline(": ")
+
+        printParameters printer methodInfo.Parameters
+
+    if methodInfo.IsStatic then
+        printer.WriteInline(" : ")
+    else
+        printer.WriteInline(" -> ")
+
+    printer.WriteInline(printType methodInfo.Type)
+
+    if methodInfo.IsStatic then
+        printer.WriteInline(" = nativeOnly")
+
+    printer.NewLine
+
+let private printInterfaceProperty
+    (printer: Printer)
+    (interfaceInfo: FSharpInterface)
+    (propertyInfo: FSharpMemberInfo)
+    =
+    printXmlDoc printer propertyInfo.XmlDoc
+    printAttributes printer propertyInfo.Attributes
+
+    if propertyInfo.IsStatic then
+        // A property backed by imported code is emitted with an `[<Emit>]` attribute
+        // (`{{=$0}}` reads for the getter, assigns for the setter) rather than an
+        // `emitJsExpr` body, so the binding stays a pure interop assembly
+        match propertyInfo.Body with
+        | FSharpMemberInfoBody.NativeOnly -> ()
+        | FSharpMemberInfoBody.JavaScriptStaticProperty ->
+            let macro =
+                "import { "
+                + interfaceInfo.OriginalName
+                + " } from \""
+                + printer.ImportSpecifier
+                + "\";\n"
+                + interfaceInfo.OriginalName
+                + "."
+                + propertyInfo.OriginalName
+                + "{{=$0}}"
+
+            printer.Write($"[<Emit(\"\"\"{macro}\"\"\")>]")
+
+            printer.NewLine
+
+        printer.Write($"static member inline ")
+
+        FSharpAccessibility.printInline printer propertyInfo.Accessibility
+
+        printer.WriteInline($"{propertyInfo.Name}")
+
+        let printGetter () =
+            printer.Indent
+
+            printer.Write($"with get () : {printType propertyInfo.Type} =")
+
+            printer.NewLine
+            printer.Indent
+
+            printer.Write("nativeOnly")
+
+            printer.Unindent
+            printer.Unindent
+
+        let printerSetter (useAndKeyword: bool) =
+            printer.Indent
+
+            if useAndKeyword then
+                printer.Write "and "
+            else
+                printer.Write "with "
+
+            printer.WriteInline($"set (value: {printType propertyInfo.Type}) =")
+
+            printer.NewLine
+            printer.Indent
+
+            printer.Write("nativeOnly")
+
+            printer.Unindent
+            printer.Unindent
+
+        match propertyInfo.Accessor with
+        | None ->
+            printer.WriteInline($": {printType propertyInfo.Type}")
+            printer.WriteInline(" = nativeOnly")
+        | Some accessor ->
+            printer.NewLine
+
+            match accessor with
+            | FSharpAccessor.ReadOnly -> printGetter ()
+            | FSharpAccessor.WriteOnly ->
+                // I don't think this is possible in TypeScript but let's support it
+                // to not crash the code generator
+                printerSetter false
+            | FSharpAccessor.ReadWrite ->
+                printGetter ()
+                printer.NewLine
+                printerSetter true
+
+    else
+        printer.Write($"abstract member {propertyInfo.Name}")
+
+        propertyInfo.Parameters
         |> List.iteri (fun index p ->
-            if index <> 0 then
-                printer.WriteInline(" * ")
+            if index = 0 then
+                printer.WriteInline(": ")
+            else
+                printer.WriteInline(" -> ")
 
-            printInlineAttributes printer p.Attributes
+            let option =
+                if p.IsOptional then
+                    " option"
+                else
+                    ""
 
-            if p.IsOptional then
-                printer.WriteInline("?")
-
-            printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
-
-            if hasParamArrayAttribute p.Attributes then
-                printer.WriteInline(" []")
+            printer.WriteInline($"{p.Name}: {printParameterType p.Type}{option}")
         )
 
-let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
+        if propertyInfo.Parameters.Length > 0 then
+            printer.WriteInline(" -> ")
+        else
+            printer.WriteInline(": ")
 
+        printer.WriteInline($"{printType propertyInfo.Type}")
+
+        if propertyInfo.IsOptional then
+            printer.WriteInline(" option")
+
+        propertyInfo.Accessor
+        |> Option.map accessorSuffix
+        |> Option.iter printer.WriteInline
+
+    printer.NewLine
+
+let private printInterfaceStaticMember
+    (printer: Printer)
+    (interfaceInfo: FSharpInterface)
+    (staticMemberInfo: FSharpStaticMemberInfo)
+    =
+    printXmlDoc printer staticMemberInfo.XmlDoc
+    printCompactAttributesAndNewLine printer staticMemberInfo.Attributes
+
+    let macroArguments =
+        staticMemberInfo.Parameters
+        |> List.mapi (fun index _ -> $"$%i{index}")
+        |> String.concat ", "
+
+    // Emitted as an `[<Emit>]` attribute rather than an `emitJsExpr` body so the binding
+    // stays a pure interop assembly Fable can consume from its DLL without the F# source
+    printer.Write
+        $"[<Emit(\"\"\"import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
+%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\")>]"
+
+    printer.NewLine
+
+    printer.Write($"static member inline {staticMemberInfo.Name} ")
+
+    printTypeParametersDeclaration printer staticMemberInfo.TypeParameters
+
+    if staticMemberInfo.Parameters.IsEmpty then
+        printer.WriteInline("() : ")
+        printer.WriteInline(printType staticMemberInfo.Type)
+        printer.WriteInline(" = nativeOnly")
+        printer.NewLine
+
+    else
+        printer.WriteInline("(")
+        printParameterList printer ", " staticMemberInfo.Parameters
+        printer.WriteInline("): ")
+        printer.WriteInline(printType staticMemberInfo.Type)
+        printer.WriteInline(" = nativeOnly")
+        printer.NewLine
+
+let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printXmlDoc printer interfaceInfo.XmlDoc
     printAttributes printer interfaceInfo.Attributes
     printer.Write($"type {interfaceInfo.Name}")
@@ -577,236 +739,11 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     interfaceInfo.Members
     |> List.iter (
         function
-        // TODO: Rewrite the code below to share more code
-        // Right now there are a lots of duplication and special rules
-        // Can these rules be represented in the AST to simplify the code?
-        | FSharpMember.Method methodInfo ->
-            printXmlDoc printer methodInfo.XmlDoc
-            printCompactAttributesAndNewLine printer methodInfo.Attributes
-
-            if methodInfo.IsStatic then
-                printer.Write("static ")
-            else
-                printer.Write("abstract ")
-
-            printer.WriteInline($"member {methodInfo.Name}")
-
-            printTypeParametersDeclaration printer methodInfo.TypeParameters
-
-            if methodInfo.IsStatic then
-                printer.WriteInline(" ")
-                // Special case for functions with no parameters
-                if methodInfo.Parameters.Length = 0 then
-                    printer.WriteInline("()")
-                else
-                    printer.WriteInline("(")
-
-                    methodInfo.Parameters
-                    |> List.iteri (fun index p ->
-                        if index <> 0 then
-                            printer.WriteInline(", ")
-
-                        printInlineAttributes printer p.Attributes
-
-                        if p.IsOptional then
-                            printer.WriteInline("?")
-
-                        printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
-
-                        if hasParamArrayAttribute p.Attributes then
-                            printer.WriteInline(" []")
-                    )
-
-                    printer.WriteInline(")")
-            else
-                printer.WriteInline(": ")
-
-                printParameters printer methodInfo.Parameters
-
-            if methodInfo.IsStatic then
-                printer.WriteInline(" : ")
-            else
-                printer.WriteInline(" -> ")
-
-            printer.WriteInline(printType methodInfo.Type)
-
-            if methodInfo.IsStatic then
-                printer.WriteInline(" = nativeOnly")
-
-            printer.NewLine
-
+        | FSharpMember.Method methodInfo -> printInterfaceMethod printer methodInfo
         | FSharpMember.Property propertyInfo ->
-
-            printXmlDoc printer propertyInfo.XmlDoc
-            printAttributes printer propertyInfo.Attributes
-
-            if propertyInfo.IsStatic then
-                // A property backed by imported code is emitted with an `[<Emit>]` attribute
-                // (`{{=$0}}` reads for the getter, assigns for the setter) rather than an
-                // `emitJsExpr` body, so the binding stays a pure interop assembly
-                match propertyInfo.Body with
-                | FSharpMemberInfoBody.NativeOnly -> ()
-                | FSharpMemberInfoBody.JavaScriptStaticProperty ->
-                    let macro =
-                        "import { "
-                        + interfaceInfo.OriginalName
-                        + " } from \""
-                        + printer.ImportSpecifier
-                        + "\";\n"
-                        + interfaceInfo.OriginalName
-                        + "."
-                        + propertyInfo.OriginalName
-                        + "{{=$0}}"
-
-                    printer.Write($"[<Emit(\"\"\"{macro}\"\"\")>]")
-
-                    printer.NewLine
-
-                printer.Write($"static member inline ")
-
-                FSharpAccessibility.printInline printer propertyInfo.Accessibility
-
-                printer.WriteInline($"{propertyInfo.Name}")
-
-                let printGetter () =
-                    printer.Indent
-
-                    printer.Write($"with get () : {printType propertyInfo.Type} =")
-
-                    printer.NewLine
-                    printer.Indent
-
-                    printer.Write("nativeOnly")
-
-                    printer.Unindent
-                    printer.Unindent
-
-                let printerSetter (useAndKeyword: bool) =
-                    printer.Indent
-
-                    if useAndKeyword then
-                        printer.Write "and "
-                    else
-                        printer.Write "with "
-
-                    printer.WriteInline($"set (value: {printType propertyInfo.Type}) =")
-
-                    printer.NewLine
-                    printer.Indent
-
-                    printer.Write("nativeOnly")
-
-                    printer.Unindent
-                    printer.Unindent
-
-                match propertyInfo.Accessor with
-                | None ->
-                    printer.WriteInline($": {printType propertyInfo.Type}")
-                    printer.WriteInline(" = nativeOnly")
-                | Some accessor ->
-                    printer.NewLine
-
-                    match accessor with
-                    | FSharpAccessor.ReadOnly -> printGetter ()
-                    | FSharpAccessor.WriteOnly ->
-                        // I don't think this is possible in TypeScript but let's support it
-                        // to not crash the code generator
-                        printerSetter false
-                    | FSharpAccessor.ReadWrite ->
-                        printGetter ()
-                        printer.NewLine
-                        printerSetter true
-
-            else
-                printer.Write($"abstract member {propertyInfo.Name}")
-
-                propertyInfo.Parameters
-                |> List.iteri (fun index p ->
-                    if index = 0 then
-                        printer.WriteInline(": ")
-                    else
-                        printer.WriteInline(" -> ")
-
-                    let option =
-                        if p.IsOptional then
-                            " option"
-                        else
-                            ""
-
-                    printer.WriteInline($"{p.Name}: {printParameterType p.Type}{option}")
-                )
-
-                if propertyInfo.Parameters.Length > 0 then
-                    printer.WriteInline(" -> ")
-                else
-                    printer.WriteInline(": ")
-
-                printer.WriteInline($"{printType propertyInfo.Type}")
-
-                if propertyInfo.IsOptional then
-                    printer.WriteInline(" option")
-
-                propertyInfo.Accessor
-                |> Option.map (
-                    function
-                    | FSharpAccessor.ReadOnly -> " with get"
-                    | FSharpAccessor.WriteOnly -> " with set"
-                    | FSharpAccessor.ReadWrite -> " with get, set"
-                )
-                |> Option.iter printer.WriteInline
-
-            printer.NewLine
-
+            printInterfaceProperty printer interfaceInfo propertyInfo
         | FSharpMember.StaticMember staticMemberInfo ->
-            printXmlDoc printer staticMemberInfo.XmlDoc
-            printCompactAttributesAndNewLine printer staticMemberInfo.Attributes
-
-            let macroArguments =
-                staticMemberInfo.Parameters
-                |> List.mapi (fun index _ -> $"$%i{index}")
-                |> String.concat ", "
-
-            // Emitted as an `[<Emit>]` attribute rather than an `emitJsExpr` body so the binding
-            // stays a pure interop assembly Fable can consume from its DLL without the F# source
-            printer.Write
-                $"[<Emit(\"\"\"import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
-%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\")>]"
-
-            printer.NewLine
-
-            printer.Write($"static member inline {staticMemberInfo.Name} ")
-
-            printTypeParametersDeclaration printer staticMemberInfo.TypeParameters
-
-            if staticMemberInfo.Parameters.IsEmpty then
-                printer.WriteInline("() : ")
-                printer.WriteInline(printType staticMemberInfo.Type)
-                printer.WriteInline(" = nativeOnly")
-                printer.NewLine
-
-            else
-                printer.WriteInline("(")
-
-                staticMemberInfo.Parameters
-                |> List.iteri (fun index p ->
-                    if index <> 0 then
-                        printer.WriteInline(", ")
-
-                    printInlineAttributes printer p.Attributes
-
-                    if p.IsOptional then
-                        printer.WriteInline("?")
-
-                    printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
-
-                    if hasParamArrayAttribute p.Attributes then
-                        printer.WriteInline(" []")
-                )
-
-                printer.WriteInline("): ")
-                printer.WriteInline(printType staticMemberInfo.Type)
-                printer.WriteInline(" = nativeOnly")
-                printer.NewLine
+            printInterfaceStaticMember printer interfaceInfo staticMemberInfo
     )
 
     if interfaceInfo.Members.IsEmpty && interfaceInfo.Inheritance.IsEmpty then
@@ -906,12 +843,7 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
             printer.WriteInline(" = nativeOnly")
 
             explicitField.Accessor
-            |> Option.map (
-                function
-                | FSharpAccessor.ReadOnly -> " with get"
-                | FSharpAccessor.WriteOnly -> " with set"
-                | FSharpAccessor.ReadWrite -> " with get, set"
-            )
+            |> Option.map accessorSuffix
             |> Option.iter printer.WriteInline
 
             printer.NewLine
@@ -920,8 +852,7 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
     printer.Unindent
 
 let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
-    printer.Write("[<RequireQualifiedAccess>]")
-    printer.NewLine
+    printAttributes printer [ FSharpAttribute.RequireQualifiedAccess ]
 
     printer.Write($"type {enumInfo.Name} =")
     printer.NewLine
@@ -1018,96 +949,167 @@ let private printDelegate (printer: Printer) (delegateInfo: FSharpDelegate) =
     printer.NewLine
     printer.Unindent
 
+let private printUnion (printer: Printer) (unionInfo: FSharpUnion) =
+    printAttributes printer unionInfo.Attributes
+
+    printer.Write(
+        $"type {printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters} ="
+    )
+
+    printer.NewLine
+    printer.Indent
+
+    unionInfo.Cases
+    |> List.iter (fun enumCaseInfo ->
+        printer.Write($"""| """)
+
+        match enumCaseInfo with
+        | FSharpUnionCase.Named enumCaseInfo ->
+            printInlineAttributes printer enumCaseInfo.Attributes
+
+            printer.WriteInline(enumCaseInfo.Name)
+        | FSharpUnionCase.Typed typ ->
+            printer.WriteInline(printType typ)
+            printer.NewLine
+        | FSharpUnionCase.Field(name, typ) -> printer.WriteInline($"{name} of {printType typ}")
+        | FSharpUnionCase.NamedFields(caseInfo, fields) ->
+            printInlineAttributes printer caseInfo.Attributes
+
+            printer.WriteInline(caseInfo.Name)
+
+            if not fields.IsEmpty then
+                let fieldsText =
+                    fields
+                    |> List.map (fun (name, typ) -> $"{name}: {printType typ}")
+                    |> String.concat " * "
+
+                printer.WriteInline($" of {fieldsText}")
+
+        printer.NewLine
+    )
+
+    unionInfo.Constants
+    |> List.iter (fun constant ->
+        printer.Write(
+            $"static member inline {constant.Name}: {unionInfo.Name} = {unionInfo.Name}.{constant.Case} {constant.Value}"
+        )
+
+        printer.NewLine
+    )
+
+    let isErased =
+        unionInfo.Attributes
+        |> List.exists (
+            function
+            | FSharpAttribute.Erase
+            | FSharpAttribute.EraseWithCaseRules _ -> true
+            | _ -> false
+        )
+
+    if isErased then
+        let returnType =
+            printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters
+
+        unionInfo.Cases
+        |> List.choose (
+            function
+            | FSharpUnionCase.Field(_, typ) -> Some(printType typ)
+            | _ -> None
+        )
+        // An overload per distinct type, two cases can share one
+        |> List.distinct
+        |> List.iter (fun caseType ->
+            for name in [ "op_Implicit"; "op_ErasedCast" ] do
+                printer.NewLine
+                printer.Write("[<Emit(\"$0\")>]")
+                printer.NewLine
+
+                printer.Write(
+                    $"static member {name}(value: {caseType}) : {returnType} = nativeOnly"
+                )
+
+                printer.NewLine
+        )
+
+    printer.Unindent
+
+let private printSingleErasedCaseUnion
+    (printer: Printer)
+    (erasedCaseUnionInfo: FSharpSingleErasedCaseUnion)
+    =
+    printXmlDoc printer erasedCaseUnionInfo.XmlDoc
+
+    printAttributes printer (FSharpAttribute.Erase :: erasedCaseUnionInfo.Attributes)
+
+    printer.Write($"type {erasedCaseUnionInfo.Name}")
+
+    printTypeParametersDeclaration printer [ erasedCaseUnionInfo.TypeParameter ]
+
+    printer.WriteInline(" =")
+
+    printer.NewLine
+    printer.Indent
+
+    printer.Write($"| %s{erasedCaseUnionInfo.Name} of ")
+
+    match erasedCaseUnionInfo.TypeParameter with
+    | FSharpTypeParameter.FSharpType erasedType -> printer.WriteInline(printType erasedType)
+    | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+        printer.WriteInline($"'%s{typeParameter.Name}")
+
+    printer.NewLine
+    printer.NewLine
+    printer.Write("member inline this.Value =")
+    printer.NewLine
+    printer.Indent
+    printer.Write($"let (%s{erasedCaseUnionInfo.Name} output) = this")
+    printer.NewLine
+    printer.Write("output")
+    printer.NewLine
+    printer.Unindent
+    printer.Unindent
+
+let private printTypeExtension (printer: Printer) (extensionInfo: FSharpTypeExtension) =
+    printAttributes printer [ FSharpAttribute.AutoOpen ]
+    printer.Write($"module {extensionInfo.ModuleName} =")
+    printer.NewLine
+    printer.Indent
+    printer.NewLine
+
+    printer.Write(
+        $"type {printTypeNameWithTypeParameters extensionInfo.TargetName extensionInfo.TypeParameters} with"
+    )
+
+    printer.NewLine
+    printer.Indent
+
+    for extensionMember in extensionInfo.Members do
+        let parameters =
+            extensionMember.Parameters
+            |> List.map (fun parameter -> $"{parameter.Name}: {printParameterType parameter.Type}")
+            |> String.concat ", "
+
+        let arguments = extensionMember.Parameters |> List.map _.Name |> String.concat ", "
+
+        printer.Write(
+            $"member inline this.{extensionMember.Name}({parameters}) : {printType extensionMember.ReturnType} ="
+        )
+
+        printer.NewLine
+        printer.Indent
+        printer.Write($"this.{extensionMember.Name}.Invoke({arguments})")
+        printer.NewLine
+        printer.Unindent
+
+    printer.Unindent
+    printer.Unindent
+
 let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
-    match fsharpTypes with
-    | fsharpType :: tail ->
+    for fsharpType in fsharpTypes do
         printer.NewLine
 
         match fsharpType with
-        | FSharpType.Union unionInfo ->
-            printAttributes printer unionInfo.Attributes
-
-            printer.Write(
-                $"type {printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters} ="
-            )
-
-            printer.NewLine
-            printer.Indent
-
-            unionInfo.Cases
-            |> List.iter (fun enumCaseInfo ->
-                printer.Write($"""| """)
-
-                match enumCaseInfo with
-                | FSharpUnionCase.Named enumCaseInfo ->
-                    printInlineAttributes printer enumCaseInfo.Attributes
-
-                    printer.WriteInline(enumCaseInfo.Name)
-                | FSharpUnionCase.Typed typ ->
-                    printer.WriteInline(printType typ)
-                    printer.NewLine
-                | FSharpUnionCase.Field(name, typ) ->
-                    printer.WriteInline($"{name} of {printType typ}")
-                | FSharpUnionCase.NamedFields(caseInfo, fields) ->
-                    printInlineAttributes printer caseInfo.Attributes
-
-                    printer.WriteInline(caseInfo.Name)
-
-                    if not fields.IsEmpty then
-                        let fieldsText =
-                            fields
-                            |> List.map (fun (name, typ) -> $"{name}: {printType typ}")
-                            |> String.concat " * "
-
-                        printer.WriteInline($" of {fieldsText}")
-
-                printer.NewLine
-            )
-
-            unionInfo.Constants
-            |> List.iter (fun constant ->
-                printer.Write(
-                    $"static member inline {constant.Name}: {unionInfo.Name} = {unionInfo.Name}.{constant.Case} {constant.Value}"
-                )
-
-                printer.NewLine
-            )
-
-            let isErased =
-                unionInfo.Attributes
-                |> List.exists (
-                    function
-                    | FSharpAttribute.Erase
-                    | FSharpAttribute.EraseWithCaseRules _ -> true
-                    | _ -> false
-                )
-
-            if isErased then
-                let returnType =
-                    printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters
-
-                unionInfo.Cases
-                |> List.choose (
-                    function
-                    | FSharpUnionCase.Field(_, typ) -> Some(printType typ)
-                    | _ -> None
-                )
-                // An overload per distinct type, two cases can share one
-                |> List.distinct
-                |> List.iter (fun caseType ->
-                    for name in [ "op_Implicit"; "op_ErasedCast" ] do
-                        printer.NewLine
-                        printer.Write("[<Emit(\"$0\")>]")
-                        printer.NewLine
-
-                        printer.Write(
-                            $"static member {name}(value: {caseType}) : {returnType} = nativeOnly"
-                        )
-
-                        printer.NewLine
-                )
-
-            printer.Unindent
+        | FSharpType.Union unionInfo -> printUnion printer unionInfo
 
         | FSharpType.Enum enumInfo -> printEnum printer enumInfo
 
@@ -1137,85 +1139,14 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
 
             printer.ImportSpecifier <- parentImportSpecifier
 
-        // TODO: Make print return the tail
-        // Allowing module to eat they content and be able to unindent?
-        // print printer tail
-
-        // printer.Unindent
-
         | FSharpType.TypeAlias aliasInfo -> printTypeAlias printer aliasInfo
         | FSharpType.Class classInfo -> printClass printer classInfo
         | FSharpType.SingleErasedCaseUnion erasedCaseUnionInfo ->
-            printXmlDoc printer erasedCaseUnionInfo.XmlDoc
-
-            printAttributes printer (FSharpAttribute.Erase :: erasedCaseUnionInfo.Attributes)
-
-            printer.Write($"type {erasedCaseUnionInfo.Name}")
-
-            printTypeParametersDeclaration printer [ erasedCaseUnionInfo.TypeParameter ]
-
-            printer.WriteInline(" =")
-
-            printer.NewLine
-            printer.Indent
-
-            printer.Write($"| %s{erasedCaseUnionInfo.Name} of ")
-
-            match erasedCaseUnionInfo.TypeParameter with
-            | FSharpTypeParameter.FSharpType erasedType -> printer.WriteInline(printType erasedType)
-            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
-                printer.WriteInline($"'%s{typeParameter.Name}")
-
-            printer.NewLine
-            printer.NewLine
-            printer.Write("member inline this.Value =")
-            printer.NewLine
-            printer.Indent
-            printer.Write($"let (%s{erasedCaseUnionInfo.Name} output) = this")
-            printer.NewLine
-            printer.Write("output")
-            printer.NewLine
-            printer.Unindent
-            printer.Unindent
+            printSingleErasedCaseUnion printer erasedCaseUnionInfo
 
         | FSharpType.Delegate delegateInfo -> printDelegate printer delegateInfo
 
-        | FSharpType.TypeExtension extensionInfo ->
-            printAttributes printer [ FSharpAttribute.AutoOpen ]
-            printer.Write($"module {extensionInfo.ModuleName} =")
-            printer.NewLine
-            printer.Indent
-            printer.NewLine
-
-            printer.Write(
-                $"type {printTypeNameWithTypeParameters extensionInfo.TargetName extensionInfo.TypeParameters} with"
-            )
-
-            printer.NewLine
-            printer.Indent
-
-            for extensionMember in extensionInfo.Members do
-                let parameters =
-                    extensionMember.Parameters
-                    |> List.map (fun parameter ->
-                        $"{parameter.Name}: {printParameterType parameter.Type}"
-                    )
-                    |> String.concat ", "
-
-                let arguments = extensionMember.Parameters |> List.map _.Name |> String.concat ", "
-
-                printer.Write(
-                    $"member inline this.{extensionMember.Name}({parameters}) : {printType extensionMember.ReturnType} ="
-                )
-
-                printer.NewLine
-                printer.Indent
-                printer.Write($"this.{extensionMember.Name}.Invoke({arguments})")
-                printer.NewLine
-                printer.Unindent
-
-            printer.Unindent
-            printer.Unindent
+        | FSharpType.TypeExtension extensionInfo -> printTypeExtension printer extensionInfo
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _
@@ -1229,10 +1160,6 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.Function _
         | FSharpType.Tuple _
         | FSharpType.ThisType _ -> ()
-
-        print printer tail
-
-    | [] -> ()
 
 /// <summary>
 /// Print the binding, telling which of the <c>externalBindings</c> (<c>Web</c>, <c>Node</c>)
@@ -1252,25 +1179,17 @@ let printFileWith
         print bodyPrinter transformResult.FSharpAST
         bodyPrinter.ToString()
 
-    let outFile =
-        {
-            Name = namespace_
-            Opens = [ "Fable.Core"; "Fable.Core.JsInterop"; "System" ]
-        }
-
     if isPackage then
-        printer.Write($"namespace rec {outFile.Name}")
+        printer.Write($"namespace rec {namespace_}")
     else
-        printer.Write($"module rec {outFile.Name}")
+        printer.Write($"module rec {namespace_}")
 
     printer.NewLine
     printer.NewLine
 
-    outFile.Opens
-    |> List.iter (fun o ->
-        printer.Write($"open {o}")
+    for open_ in [ "Fable.Core"; "Fable.Core.JsInterop"; "System" ] do
+        printer.Write($"open {open_}")
         printer.NewLine
-    )
 
     // `Glutinum.Types` is generated too, it can't open itself
     if

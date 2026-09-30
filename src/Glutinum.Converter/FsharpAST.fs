@@ -24,19 +24,6 @@ type FSharpLiteral =
     | Bool of bool
     | Null
 
-    member this.ToText() =
-        match this with
-        | String value -> value
-        | Int value -> string value
-        | Float value -> string value
-        | Bool value -> string value
-        | Null -> "null"
-
-// [<RequireQualifiedAccess>]
-// type FSharpEnumCaseValue =
-//     | Int of int
-//     | Float of float
-
 type FSharpEnumCase = { Name: string; Value: FSharpLiteral }
 
 [<RequireQualifiedAccess>]
@@ -100,12 +87,6 @@ type FSharpUnionCase =
     /// </summary>
     | NamedFields of info: FSharpUnionCaseNamed * fields: (string * FSharpType) list
 
-[<RequireQualifiedAccess>]
-type FSharpUnionType =
-    | String
-    | Numeric
-    | Unknown
-
 /// `static member inline A: Mixed = Mixed.String "a"`
 type FSharpUnionConstant =
     {
@@ -144,12 +125,6 @@ type FSharpAccessibility =
     | Public
     | Private
     | Protected
-
-    member this.Text =
-        match this with
-        | Public -> "public"
-        | Private -> "private"
-        | Protected -> "protected"
 
 [<RequireQualifiedAccess>]
 type FSharpAttribute =
@@ -311,20 +286,6 @@ type FSharpConstructor =
         Accessibility: FSharpAccessibility
     }
 
-    static member EmptyPublic =
-        {
-            Parameters = []
-            Attributes = []
-            Accessibility = FSharpAccessibility.Public
-        }
-
-    static member EmptyPrivate =
-        {
-            Parameters = []
-            Attributes = []
-            Accessibility = FSharpAccessibility.Private
-        }
-
 type FSharpClass =
     {
         Attributes: FSharpAttribute list
@@ -380,12 +341,6 @@ type FSharpTypeAlias =
         Type: FSharpType
         TypeParameters: FSharpTypeParameter list
     }
-
-// type FSharpClass =
-//     {
-//         Name : string
-//         Members : FSharpMember list
-//     }
 
 type FSharpTypeReference =
     {
@@ -461,25 +416,12 @@ type FSharpType =
     //         v
     | SingleErasedCaseUnion of FSharpSingleErasedCaseUnion
     | Option of FSharpType
-    // Create ErasedUnion type to make a difference between standard F# union
-    // and Fable U2, U3, etc. types.
-    // It is also possible that a third type of union exist which are
-    // specialized ErasedUnion types.
-    // To avoid using U2, U3, etc. types, but insteand things like:
-    // [<Erased>]
-    // type ConfigType =
-    //     | String of string
-    //     | Numeric of float
-    // Allowing for a more natural syntax, as you know what each cases expects
-    // compared to U2, U3, etc. for which you have to look at the type definition.
-    // | ErasedUnion of FSharpUnion
     | Module of FSharpModule
     | Interface of FSharpInterface
     | Unsupported of Ts.SyntaxKind
     | Mapped of FSharpMapped
     | Primitive of FSharpPrimitive
     | TypeAlias of FSharpTypeAlias
-    // | Class of FSharpClass
     | Discard
     | TypeReference of FSharpTypeReference
     | Tuple of FSharpType list
@@ -493,4 +435,64 @@ type FSharpType =
     | Delegate of FSharpDelegate
     | TypeExtension of FSharpTypeExtension
 
-type FSharpOutFile = { Name: string; Opens: string list }
+/// The child types a traversal descends into: the arguments of a reference, the element of an
+/// option, an array or a tuple, the cases of a union and the signature of a function
+module FSharpType =
+
+    let mapChildren (f: FSharpType -> FSharpType) (typ: FSharpType) : FSharpType =
+        match typ with
+        | FSharpType.TypeReference typeReference ->
+            { typeReference with
+                TypeArguments = typeReference.TypeArguments |> List.map f
+            }
+            |> FSharpType.TypeReference
+        | FSharpType.Option inner -> FSharpType.Option(f inner)
+        | FSharpType.ResizeArray inner -> FSharpType.ResizeArray(f inner)
+        | FSharpType.JSApi(FSharpJSApi.ReadonlyArray inner) ->
+            FSharpType.JSApi(FSharpJSApi.ReadonlyArray(f inner))
+        | FSharpType.Tuple elements -> FSharpType.Tuple(elements |> List.map f)
+        | FSharpType.Union unionInfo ->
+            { unionInfo with
+                Cases =
+                    unionInfo.Cases
+                    |> List.map (
+                        function
+                        | FSharpUnionCase.Typed inner -> FSharpUnionCase.Typed(f inner)
+                        | FSharpUnionCase.Field(name, inner) -> FSharpUnionCase.Field(name, f inner)
+                        | case -> case
+                    )
+            }
+            |> FSharpType.Union
+        | FSharpType.Function functionType ->
+            { functionType with
+                Parameters =
+                    functionType.Parameters
+                    |> List.map (fun parameter ->
+                        { parameter with
+                            Type = f parameter.Type
+                        }
+                    )
+                ReturnType = f functionType.ReturnType
+            }
+            |> FSharpType.Function
+        | typ -> typ
+
+    /// The return type of a function comes before its parameters
+    let children (typ: FSharpType) : FSharpType list =
+        match typ with
+        | FSharpType.TypeReference typeReference -> typeReference.TypeArguments
+        | FSharpType.Option inner
+        | FSharpType.ResizeArray inner
+        | FSharpType.JSApi(FSharpJSApi.ReadonlyArray inner) -> [ inner ]
+        | FSharpType.Tuple elements -> elements
+        | FSharpType.Union unionInfo ->
+            unionInfo.Cases
+            |> List.choose (
+                function
+                | FSharpUnionCase.Typed inner
+                | FSharpUnionCase.Field(_, inner) -> Some inner
+                | _ -> None
+            )
+        | FSharpType.Function functionType ->
+            functionType.ReturnType :: (functionType.Parameters |> List.map _.Type)
+        | _ -> []
