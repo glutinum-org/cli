@@ -415,8 +415,33 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
     let withoutDomLib =
         targets |> List.exists (fun target -> domLibReplacements.Contains target.name)
 
+    // `Buffer` of playwright is a global of `@types/node`, which its users install: the package
+    // is loaded as TypeScript loads it, when it is installed next to the inputs and stands for
+    // a binding
+    let globalTypePackages =
+        // A package standing for the runtime declares the globals itself
+        let isRuntime =
+            targets
+            |> List.exists (fun target ->
+                builtInExternalPackageNames
+                |> List.exists (fun (name, _, _) -> name = target.name)
+            )
+
+        if options.ExternalPackages && not isRuntime then
+            Resolve.findNodeModules host host.cwd
+            |> Option.map (fun nodeModules -> host.path.join [| nodeModules; "@types/node" |])
+            |> Option.filter host.fs.directoryExists
+            // The program names the files of a linked package by their real path
+            |> Option.map host.fs.realPath
+            |> Option.bind (Resolve.describePackage host)
+            |> Option.toList
+        else
+            []
+
+    let globalTypes = globalTypePackages |> List.map _.runtimeName
+
     let program =
-        Bootstrap.createProgramFromFiles host entryFiles withoutDomLib options.NoLib
+        Bootstrap.createProgramFromFiles host entryFiles globalTypes withoutDomLib options.NoLib
 
     let checker = program.getTypeChecker ()
 
@@ -446,7 +471,7 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
         if externalPackageNames.IsEmpty then
             []
         else
-            let reachable = describeReachable []
+            let reachable = describeReachable [] @ globalTypePackages |> List.distinctBy _.name
 
             externalPackageNames
             |> List.filter (fun (name, _, _) ->

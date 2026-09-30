@@ -934,17 +934,19 @@ module Bootstrap =
     let createProgramFromFiles
         (host: Host)
         (entryFiles: string[])
+        (globalTypes: string list)
         (withoutDomLib: bool)
         (noLib: bool)
         : Ts.Program
         =
-        // ESNext, so lib types such as `AsyncIterable` resolve; `types: []` stops TypeScript from
-        // loading every `node_modules/@types`; Bundler resolution follows `exports` maps
+        // ESNext, so lib types such as `AsyncIterable` resolve; `types` stops TypeScript from
+        // loading every `node_modules/@types`, only the ones asked for; Bundler resolution
+        // follows `exports` maps
         let compilerOptions = createEmpty<Ts.CompilerOptions>
         compilerOptions.target <- Some Ts.ScriptTarget.ESNext
         compilerOptions.``module`` <- Some Ts.ModuleKind.ESNext
         compilerOptions.moduleResolution <- Some Ts.ModuleResolutionKind.Bundler
-        compilerOptions.types <- Some(ResizeArray())
+        compilerOptions.types <- Some(ResizeArray globalTypes)
         compilerOptions.strict <- Some true
 
         // A package replacing the DOM lib (`@types/web`) redeclares its globals
