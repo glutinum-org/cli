@@ -50,6 +50,8 @@ module Config =
     [<Interface>]
     type rest =
         abstract member value: string with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (value: string) : rest = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

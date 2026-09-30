@@ -335,11 +335,25 @@ module private UtilityType =
 
             let freeTypeParameters = declaredTypeParameters freeTypeParameterNames
 
+            let creates =
+                if not members.IsEmpty && isDataObject members then
+                    let returnType =
+                        ({
+                            Name = name
+                            TypeParameters = typeArguments freeTypeParameterNames
+                        }
+                        : FSharpMapped)
+                        |> FSharpType.Mapped
+
+                    paramObjectCreateMembers context returnType members
+                else
+                    []
+
             anonymousInterface
                 context
                 name
                 freeTypeParameterNames
-                (TransformMembers.toFSharpMember context members)
+                (TransformMembers.toFSharpMember context members @ creates)
                 []
             |> FSharpType.Interface
             |> context.ExposeType
@@ -4358,10 +4372,42 @@ let private aliasOfUtilityType (scope: AliasScope) (utilityType: GlueUtilityType
 
     | GlueUtilityType.Omit members
     | GlueUtilityType.Pick members ->
+        let typeParameters = scope.TypeParameters.Value.TypeParameters
+
+        let candidate =
+            ({
+                Documentation = scope.Declaration.Documentation
+                FullName = scope.Declaration.FullName
+                Name = scope.Declaration.Name
+                Members = members
+                TypeParameters = scope.Declaration.TypeParameters
+                HeritageClauses = []
+            }
+            : GlueInterface)
+
+        let creates =
+            if
+                ParamObjectCandidate.isCandidate
+                    context.State.ParamObjects
+                    context.TypeMemory
+                    candidate
+            then
+                let returnType =
+                    ({
+                        Name = scope.Name
+                        TypeParameters = typeParameters
+                    }
+                    : FSharpMapped)
+                    |> FSharpType.Mapped
+
+                paramObjectCreateMembers context returnType members
+            else
+                []
+
         aliasInterfaceOf
             scope
-            scope.TypeParameters.Value.TypeParameters
-            (TransformMembers.toFSharpMember context members)
+            typeParameters
+            (TransformMembers.toFSharpMember context members @ creates)
             []
 
     | GlueUtilityType.Readonly readonlyInfo ->

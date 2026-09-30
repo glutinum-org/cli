@@ -50,6 +50,8 @@ module Sender =
             abstract member nsp: string with get, set
             abstract member ``type``: string with get, set
             abstract member data: float with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (nsp: string, ``type``: string, data: float) : message = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"
