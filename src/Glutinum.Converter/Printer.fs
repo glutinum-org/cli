@@ -968,9 +968,7 @@ let private printUnion (printer: Printer) (unionInfo: FSharpUnion) =
             printInlineAttributes printer enumCaseInfo.Attributes
 
             printer.WriteInline(enumCaseInfo.Name)
-        | FSharpUnionCase.Typed typ ->
-            printer.WriteInline(printType typ)
-            printer.NewLine
+        | FSharpUnionCase.Typed typ -> printer.WriteInline(printType typ)
         | FSharpUnionCase.Field(name, typ) -> printer.WriteInline($"{name} of {printType typ}")
         | FSharpUnionCase.NamedFields(caseInfo, fields) ->
             printInlineAttributes printer caseInfo.Attributes
