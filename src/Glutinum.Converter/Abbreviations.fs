@@ -113,8 +113,6 @@ let apply (types: FSharpType list) : FSharpType list =
                             TypeParameters = arguments
                         }
                         |> FSharpType.Mapped
-                // `ReadonlyArray<T>` is a type of `Glutinum.Types`, not an abbreviation of the file
-                | FSharpType.JSApi _ -> typ
                 | typ -> FSharpType.mapChildren cut typ
 
             let cutType = cut aliasInfo.Type
