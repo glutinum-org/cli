@@ -368,6 +368,8 @@ type ReadInProgress =
         Partials: ResizeArray<Ts.Type>
         KeyOfDeclarations: ResizeArray<Ts.Node>
         TypeQueryDeclarations: ResizeArray<Ts.Node>
+        /// The union aliases being inlined as the cases of another union
+        UnionAliases: ResizeArray<Ts.Node>
     }
 
     static member Create() =
@@ -377,6 +379,7 @@ type ReadInProgress =
             Partials = ResizeArray()
             KeyOfDeclarations = ResizeArray()
             TypeQueryDeclarations = ResizeArray()
+            UnionAliases = ResizeArray()
         }
 
 [<Mangle>]

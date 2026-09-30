@@ -90,11 +90,25 @@ let rec private readUnionTypeCases
 
                             // Only the cases of a union alias declared in the current module are inlined,
                             // the other aliases stay references
-                            if isInAnotherModule then
+                            let isBeingInlined =
+                                reader.InProgress.UnionAliases
+                                |> Seq.exists (fun inProgress ->
+                                    obj.ReferenceEquals(inProgress, declaration)
+                                )
+
+                            // `type Nested = ReadonlyArray<Nested | string>` names itself in its
+                            // cases: it stays a reference there
+                            if isInAnotherModule || isBeingInlined then
                                 reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
                             else
-                                match reader.ReadNode declaration with
-                                | GlueType.TypeAliasDeclaration { Type = GlueType.Union _ } as aliasType ->
+                                let aliasType =
+                                    withInProgress
+                                        reader.InProgress.UnionAliases
+                                        declaration
+                                        (fun () -> reader.ReadNode declaration)
+
+                                match aliasType with
+                                | GlueType.TypeAliasDeclaration { Type = GlueType.Union _ } ->
                                     Some [ aliasType ]
                                 | _ ->
                                     reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
