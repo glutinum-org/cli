@@ -124,193 +124,11 @@ let genericDelegateTypeParameters (state: State) (fullName: string) : string lis
         | _ -> []
     | _ -> []
 
-/// The members of an interface, `keyof T` and `T[K]` with `T` known
-let private tryMembers (state: State) (typeReference: GlueTypeReference) =
-    state.Interfaces.TryFind typeReference.FullName
-    |> Option.map (fun info ->
-        ParamObjectCandidate.tryResolveMembers state.TypeMemory info
-        |> Option.defaultValue info.Members
-    )
-
-let private memberName (glueMember: GlueMember) =
-    match glueMember with
-    | GlueMember.Property info -> Some(info.Name, info.Type)
-    | GlueMember.Method info -> Some(info.Name, GlueType.Unknown)
-    | GlueMember.MethodSignature info -> Some(info.Name, GlueType.Unknown)
-    | _ -> None
-
-let private isLiteralOf (literal: GlueLiteral) (primitive: GluePrimitive) =
-    match literal, primitive with
-    | GlueLiteral.String _, GluePrimitive.String
-    | GlueLiteral.Int _, GluePrimitive.Number
-    | GlueLiteral.Float _, GluePrimitive.Number
-    | GlueLiteral.Bool _, GluePrimitive.Bool
-    | GlueLiteral.Null, GluePrimitive.Null -> true
-    | _ -> false
-
-let rec private inherits
-    (state: State)
-    (visited: Set<string>)
-    (fullName: string)
-    (parentFullName: string)
-    =
-    match state.Interfaces.TryFind fullName with
-    | Some info when not (visited.Contains fullName) ->
-        info.HeritageClauses
-        |> List.exists (
-            function
-            | GlueType.TypeReference parent ->
-                parent.FullName = parentFullName
-                || inherits state (visited.Add fullName) parent.FullName parentFullName
-            | _ -> false
-        )
-    | _ -> false
-
-/// `PipelineTransformSource<T>` is its `PipelineSource<T> | PipelineTransform<any, T>`
-let private tryExpandAlias (state: State) (typeReference: GlueTypeReference) =
-    match state.AllAliases.TryFind typeReference.FullName with
-    | Some alias when
-        not (state.Aliases.ContainsKey typeReference.FullName)
-        && alias.TypeParameters.Length = typeReference.TypeArguments.Length
-        ->
-        let substitutions =
-            List.zip (alias.TypeParameters |> List.map _.Name) typeReference.TypeArguments
-            |> Map.ofList
-
-        Some(GlueSubstitution.substitute substitutions alias.Type)
-    | _ -> None
-
-let rec private isAssignableWithin
-    (state: State)
-    (visited: Set<string>)
-    (check: GlueType)
-    (extends_: GlueType)
-    : bool option
-    =
-    let isAssignable = isAssignableWithin state visited
-
-    match check, extends_ with
-    | GlueType.TypeParameter _, _
-    | _, GlueType.TypeParameter _ -> None
-    // `[T] extends [Node]` compares the types without the distribution over a union
-    | GlueType.TupleType [ check ], GlueType.TupleType [ extends_ ] -> isAssignable check extends_
-    | _, GlueType.Primitive GluePrimitive.Any
-    | _, GlueType.Unknown -> Some true
-    | GlueType.Literal check, GlueType.Literal extends_ -> Some(check = extends_)
-    | GlueType.Literal literal, GlueType.Primitive primitive -> Some(isLiteralOf literal primitive)
-    | GlueType.Primitive check, GlueType.Primitive extends_ -> Some(check = extends_)
-    | GlueType.Primitive _, GlueType.Literal _
-    | GlueType.Literal _, GlueType.TypeReference _
-    | GlueType.Primitive _, GlueType.TypeReference _
-    | GlueType.TypeReference _, GlueType.Literal _
-    | GlueType.TypeReference _, GlueType.Primitive _ -> Some false
-    | GlueType.Literal(GlueLiteral.String name), GlueType.KeyOf(GlueType.TypeReference map) ->
-        tryMembers state map
-        |> Option.map (
-            List.exists (fun glueMember ->
-                match memberName glueMember with
-                | Some(memberName, _) -> memberName = name
-                | None -> false
-            )
-        )
-    | GlueType.TypeReference check, GlueType.TypeReference extends_ when
-        check.FullName = extends_.FullName
-        ->
-        Some true
-    | GlueType.TypeReference check, GlueType.TypeReference extends_ when
-        state.Interfaces.ContainsKey check.FullName
-        && not (state.AllAliases.ContainsKey extends_.FullName)
-        ->
-        Some(inherits state Set.empty check.FullName extends_.FullName)
-    | GlueType.TypeReference typeReference, _ when
-        not (visited.Contains typeReference.FullName)
-        && (tryExpandAlias state typeReference).IsSome
-        ->
-        isAssignableWithin
-            state
-            (visited.Add typeReference.FullName)
-            (tryExpandAlias state typeReference).Value
-            extends_
-    | _, GlueType.TypeReference typeReference when
-        not (visited.Contains typeReference.FullName)
-        && (tryExpandAlias state typeReference).IsSome
-        ->
-        isAssignableWithin
-            state
-            (visited.Add typeReference.FullName)
-            check
-            (tryExpandAlias state typeReference).Value
-    | GlueType.TypeReference check, GlueType.TypeReference _ ->
-        if state.Interfaces.ContainsKey check.FullName then
-            Some false
-        elif state.AllAliases.ContainsKey check.FullName then
-            None
-        else
-            Some false
-    | GlueType.Union(GlueTypeUnion cases), _ ->
-        let answers = cases |> List.map (fun case -> isAssignable case extends_)
-
-        if answers |> List.forall ((=) (Some true)) then
-            Some true
-        elif answers |> List.forall ((=) (Some false)) then
-            Some false
-        else
-            None
-    | _, GlueType.Union(GlueTypeUnion cases) ->
-        let answers = cases |> List.map (fun case -> isAssignable check case)
-
-        if answers |> List.exists ((=) (Some true)) then
-            Some true
-        elif answers |> List.forall ((=) (Some false)) then
-            Some false
-        else
-            None
-    | _ -> None
-
-/// `check extends extends_`, `None` when the answer depends on a type parameter
-let private isAssignable (state: State) (check: GlueType) (extends_: GlueType) : bool option =
-    isAssignableWithin state Set.empty check extends_
-
-let private evaluate
-    (state: State)
-    (bindings: Map<string, GlueType>)
-    (conditionalType: GlueConditionalType)
-    =
-    let checkType = GlueSubstitution.substitute bindings conditionalType.CheckType
-    let extendsType = GlueSubstitution.substitute bindings conditionalType.ExtendsType
-
-    match checkType with
-    // `any extends X ? A : B` is both branches
-    | GlueType.Primitive GluePrimitive.Any ->
-        let branch (glueType: GlueType) =
-            match glueType with
-            | GlueType.Literal GlueLiteral.Null -> GlueType.Primitive GluePrimitive.Null
-            | _ -> glueType
-
-        if conditionalType.TrueType = conditionalType.FalseType then
-            Some conditionalType.TrueType
-        else
-            Some(
-                GlueType.Union(
-                    GlueTypeUnion
-                        [ branch conditionalType.TrueType; branch conditionalType.FalseType ]
-                )
-            )
-    | _ ->
-        match isAssignable state checkType extendsType with
-        | Some true -> Some conditionalType.TrueType
-        | Some false -> Some conditionalType.FalseType
-        | None -> None
-
 /// `T["start"] extends Date ? T["start"] : Date` is `Date` whatever `T` is
-let private tryCollapse
-    (resolve: GlueType -> GlueType)
-    (bindings: Map<string, GlueType>)
-    (conditionalType: GlueConditionalType)
-    =
+let private tryCollapse (resolve: GlueType -> GlueType) (conditionalType: GlueConditionalType) =
     let trueType =
         if conditionalType.TrueType = conditionalType.CheckType then
-            GlueSubstitution.substitute bindings conditionalType.ExtendsType
+            conditionalType.ExtendsType
         else
             conditionalType.TrueType
 
@@ -385,14 +203,10 @@ let rec private mentionsConditional (state: State) (glueType: GlueType) =
         || mentionsConditional state indexedAccess.IndexType
     | _ -> false
 
-let rec private resolveWith
-    (state: State)
-    (seen: Set<string>)
-    (defaults: Map<string, GlueType>)
-    (glueType: GlueType)
-    : GlueType
-    =
-    let resolve = resolveWith state seen defaults
+/// A conditional the reader left deferred depends on a type parameter nothing binds: it is
+/// collapsed when its branches agree, kept as written otherwise
+let rec private resolveWith (state: State) (seen: Set<string>) (glueType: GlueType) : GlueType =
+    let resolve = resolveWith state seen
 
     match glueType with
     | GlueType.TypeReference typeReference when
@@ -404,7 +218,7 @@ let rec private resolveWith
         let alias = state.Aliases.[typeReference.FullName]
 
         // An alias whose body names itself would expand without end
-        let resolve = resolveWith state (Set.add typeReference.FullName seen) defaults
+        let resolve = resolveWith state (Set.add typeReference.FullName seen)
 
         let substitutions =
             List.zip (alias.TypeParameters |> List.map _.Name) typeReference.TypeArguments
@@ -412,9 +226,7 @@ let rec private resolveWith
 
         match GlueSubstitution.substitute substitutions alias.Type with
         | GlueType.ConditionalType conditionalType ->
-            match evaluate state defaults conditionalType with
-            | Some resolved -> resolve resolved
-            | None -> tryCollapse resolve defaults conditionalType |> Option.defaultValue glueType
+            tryCollapse resolve conditionalType |> Option.defaultValue glueType
         | GlueType.TypeReference _ as body ->
             match resolve body with
             | GlueType.TypeReference resolved when state.Aliases.ContainsKey resolved.FullName ->
@@ -429,33 +241,7 @@ let rec private resolveWith
             else
                 resolved
     | GlueType.ConditionalType conditionalType ->
-        match evaluate state defaults conditionalType with
-        | Some resolved -> resolve resolved
-        | None -> tryCollapse resolve defaults conditionalType |> Option.defaultValue glueType
-    // `T["data"]` is the member of the default of `T`
-    | GlueType.IndexedAccessType({
-                                     ObjectType = GlueType.TypeParameter name
-                                     IndexType = GlueType.Literal _
-                                 } as indexedAccess) when defaults.ContainsKey name ->
-        GlueType.IndexedAccessType
-            { indexedAccess with
-                ObjectType = defaults.[name]
-            }
-        |> resolve
-    | GlueType.IndexedAccessType {
-                                     ObjectType = GlueType.TypeReference object
-                                     IndexType = GlueType.Literal(GlueLiteral.String key)
-                                 } ->
-        tryMembers state object
-        |> Option.bind (
-            List.tryPick (fun glueMember ->
-                match memberName glueMember with
-                | Some(name, GlueType.Unknown) when name = key -> None
-                | Some(name, typ) when name = key -> Some(resolve typ)
-                | _ -> None
-            )
-        )
-        |> Option.defaultValue glueType
+        tryCollapse resolve conditionalType |> Option.defaultValue glueType
     | GlueType.TypeReference typeReference ->
         GlueType.TypeReference
             { typeReference with
@@ -481,20 +267,7 @@ let rec private resolveWith
             }
     | _ -> glueType
 
-/// A type parameter is its default, else its constraint, when a condition is checked
-let private resolve (state: State) (defaults: Map<string, GlueType>) (glueType: GlueType) =
-    resolveWith state Set.empty defaults glueType
-
-let private bindings (typeParameters: GlueTypeParameter list) =
-    typeParameters
-    |> List.choose (fun typeParameter ->
-        match typeParameter.Default, typeParameter.Constraint with
-        | Some default_, _ -> Some(typeParameter.Name, default_)
-        | None, Some(GlueType.KeyOf _) -> None
-        | None, Some constraint_ -> Some(typeParameter.Name, constraint_)
-        | None, None -> None
-    )
-    |> Map.ofList
+let private resolve (state: State) (glueType: GlueType) = resolveWith state Set.empty glueType
 
 /// `...args: AnyRest` where `type AnyRest = [...args: any[]]` is a rest parameter of `any`
 let private restArray (state: State) (glueType: GlueType) =
@@ -510,14 +283,10 @@ let private restArray (state: State) (glueType: GlueType) =
         | _ -> glueType
     | _ -> glueType
 
-let private resolveParameters
-    (state: State)
-    (bindings: Map<string, GlueType>)
-    (parameters: GlueParameter list)
-    =
+let private resolveParameters (state: State) (parameters: GlueParameter list) =
     parameters
     |> List.map (fun parameter ->
-        let resolved = resolve state bindings parameter.Type
+        let resolved = resolve state parameter.Type
 
         { parameter with
             Type =
@@ -528,44 +297,30 @@ let private resolveParameters
         }
     )
 
-/// The members of a declaration, its conditional types resolved with its default type arguments
-let resolveMembers
-    (state: State)
-    (typeParameters: GlueTypeParameter list)
-    (members: GlueMember list)
-    =
+/// The members of a declaration, the conditional types left deferred collapsed
+let resolveMembers (state: State) (members: GlueMember list) =
     if state.Aliases.IsEmpty then
         members
     else
-        let declarationBindings = bindings typeParameters
-
-        let withOwn (ownTypeParameters: GlueTypeParameter list) =
-            (declarationBindings, bindings ownTypeParameters)
-            ||> Map.fold (fun acc name typ -> Map.add name typ acc)
-
         members
         |> List.map (fun glueMember ->
             match glueMember with
             | GlueMember.Method info ->
-                let bindings = withOwn info.TypeParameters
-
                 GlueMember.Method
                     { info with
-                        Parameters = resolveParameters state bindings info.Parameters
-                        Type = resolve state bindings info.Type
+                        Parameters = resolveParameters state info.Parameters
+                        Type = resolve state info.Type
                     }
             | GlueMember.MethodSignature info ->
-                let bindings = withOwn info.TypeParameters
-
                 GlueMember.MethodSignature
                     { info with
-                        Parameters = resolveParameters state bindings info.Parameters
-                        Type = resolve state bindings info.Type
+                        Parameters = resolveParameters state info.Parameters
+                        Type = resolve state info.Type
                     }
             | GlueMember.Property info ->
                 GlueMember.Property
                     { info with
-                        Type = resolve state declarationBindings info.Type
+                        Type = resolve state info.Type
                     }
             | _ -> glueMember
         )
@@ -574,9 +329,7 @@ let resolveFunction (state: State) (info: GlueFunctionDeclaration) : GlueFunctio
     if state.Aliases.IsEmpty then
         info
     else
-        let bindings = bindings info.TypeParameters
-
         { info with
-            Parameters = resolveParameters state bindings info.Parameters
-            Type = resolve state bindings info.Type
+            Parameters = resolveParameters state info.Parameters
+            Type = resolve state info.Type
         }

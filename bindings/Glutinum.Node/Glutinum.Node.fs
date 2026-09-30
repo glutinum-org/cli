@@ -106686,7 +106686,8 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('checkContinue',$1...)")>]
-            abstract member emit_checkContinue: req: obj * res: obj -> bool
+            abstract member emit_checkContinue:
+                req: Node.http.IncomingMessage * res: Server.emit_checkContinue.res -> bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -106728,7 +106729,8 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('checkExpectation',$1...)")>]
-            abstract member emit_checkExpectation: req: obj * res: obj -> bool
+            abstract member emit_checkExpectation:
+                req: Node.http.IncomingMessage * res: Server.emit_checkExpectation.res -> bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -106814,7 +106816,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.emit('connect',$1...)")>]
             abstract member emit_connect:
-                req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer -> bool
+                req: Node.http.IncomingMessage *
+                socket: Node.stream.Stream_.Duplex *
+                head: Node.NonSharedBuffer ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -106856,7 +106861,8 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('dropRequest',$1...)")>]
-            abstract member emit_dropRequest: req: obj * socket: Node.stream.Stream_.Duplex -> bool
+            abstract member emit_dropRequest:
+                req: Node.http.IncomingMessage * socket: Node.stream.Stream_.Duplex -> bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -106898,7 +106904,8 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('request',$1...)")>]
-            abstract member emit_request: req: obj * res: obj -> bool
+            abstract member emit_request:
+                req: Node.http.IncomingMessage * res: Server.emit_request.res -> bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -106941,7 +106948,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.emit('upgrade',$1...)")>]
             abstract member emit_upgrade:
-                req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer -> bool
+                req: Node.http.IncomingMessage *
+                socket: Node.stream.Stream_.Duplex *
+                head: Node.NonSharedBuffer ->
+                    bool
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -112491,19 +112501,49 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module addListener_dropRequest =
 
-                type listener = delegate of req: obj * socket: Node.stream.Stream_.Duplex -> unit
+                type listener =
+                    delegate of
+                        req: Node.http.IncomingMessage * socket: Node.stream.Stream_.Duplex -> unit
 
             module addListener_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
+
+            module emit_checkContinue =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type res =
+                    inherit Node.http.ServerResponse<Node.http.IncomingMessage>
+                    abstract member req: Node.http.IncomingMessage with get, set
+
+            module emit_checkExpectation =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type res =
+                    inherit Node.http.ServerResponse<Node.http.IncomingMessage>
+                    abstract member req: Node.http.IncomingMessage with get, set
+
+            module emit_request =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type res =
+                    inherit Node.http.ServerResponse<Node.http.IncomingMessage>
+                    abstract member req: Node.http.IncomingMessage with get, set
 
             module on_clientError =
 
@@ -112514,18 +112554,24 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module on_dropRequest =
 
-                type listener = delegate of req: obj * socket: Node.stream.Stream_.Duplex -> unit
+                type listener =
+                    delegate of
+                        req: Node.http.IncomingMessage * socket: Node.stream.Stream_.Duplex -> unit
 
             module on_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module once_clientError =
@@ -112537,18 +112583,24 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module once_dropRequest =
 
-                type listener = delegate of req: obj * socket: Node.stream.Stream_.Duplex -> unit
+                type listener =
+                    delegate of
+                        req: Node.http.IncomingMessage * socket: Node.stream.Stream_.Duplex -> unit
 
             module once_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependListener_clientError =
@@ -112560,18 +112612,24 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependListener_dropRequest =
 
-                type listener = delegate of req: obj * socket: Node.stream.Stream_.Duplex -> unit
+                type listener =
+                    delegate of
+                        req: Node.http.IncomingMessage * socket: Node.stream.Stream_.Duplex -> unit
 
             module prependListener_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependOnceListener_clientError =
@@ -112583,18 +112641,24 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependOnceListener_dropRequest =
 
-                type listener = delegate of req: obj * socket: Node.stream.Stream_.Duplex -> unit
+                type listener =
+                    delegate of
+                        req: Node.http.IncomingMessage * socket: Node.stream.Stream_.Duplex -> unit
 
             module prependOnceListener_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
         module ServerResponse =
@@ -127193,7 +127257,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('checkContinue',$1...)")>]
-            abstract member emit_checkContinue: request: obj * response: obj -> bool
+            abstract member emit_checkContinue:
+                request: Node.http2.Http2ServerRequest *
+                response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -127235,7 +127302,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('request',$1...)")>]
-            abstract member emit_request: request: obj * response: obj -> bool
+            abstract member emit_request:
+                request: Node.http2.Http2ServerRequest *
+                response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -129665,7 +129735,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('checkContinue',$1...)")>]
-            abstract member emit_checkContinue: request: obj * response: obj -> bool
+            abstract member emit_checkContinue:
+                request: Node.http2.Http2ServerRequest *
+                response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -129707,7 +129780,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('request',$1...)")>]
-            abstract member emit_request: request: obj * response: obj -> bool
+            abstract member emit_request:
+                request: Node.http2.Http2ServerRequest *
+                response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -142254,11 +142330,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module addListener_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module addListener_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module addListener_sessionError =
 
@@ -142286,11 +142370,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module on_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module on_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module on_sessionError =
 
@@ -142318,11 +142410,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module once_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module once_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module once_sessionError =
 
@@ -142350,11 +142450,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module prependListener_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependListener_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependListener_sessionError =
 
@@ -142382,11 +142490,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module prependOnceListener_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependOnceListener_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependOnceListener_sessionError =
 
@@ -142416,11 +142532,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module addListener_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module addListener_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module addListener_sessionError =
 
@@ -142447,11 +142571,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module on_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module on_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module on_sessionError =
 
@@ -142478,11 +142610,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module once_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module once_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module once_sessionError =
 
@@ -142509,11 +142649,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module prependListener_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependListener_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependListener_sessionError =
 
@@ -142540,11 +142688,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module prependOnceListener_checkContinue =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependOnceListener_request =
 
-                type listener = delegate of request: obj * response: obj -> unit
+                type listener =
+                    delegate of
+                        request: Node.http2.Http2ServerRequest *
+                        response: Node.http2.Http2ServerResponse<Node.http2.Http2ServerRequest> ->
+                            unit
 
             module prependOnceListener_sessionError =
 
@@ -144776,7 +144932,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('checkContinue',$1...)")>]
-            abstract member emit_checkContinue: req: obj * res: obj -> bool
+            abstract member emit_checkContinue:
+                req: Node.http.IncomingMessage *
+                res: Node.http.ServerResponse<Node.http.IncomingMessage> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -144818,7 +144977,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('checkExpectation',$1...)")>]
-            abstract member emit_checkExpectation: req: obj * res: obj -> bool
+            abstract member emit_checkExpectation:
+                req: Node.http.IncomingMessage *
+                res: Node.http.ServerResponse<Node.http.IncomingMessage> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -144904,7 +145066,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.emit('connect',$1...)")>]
             abstract member emit_connect:
-                req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer -> bool
+                req: Node.http.IncomingMessage *
+                socket: Node.stream.Stream_.Duplex *
+                head: Node.NonSharedBuffer ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -144946,7 +145111,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('request',$1...)")>]
-            abstract member emit_request: req: obj * res: obj -> bool
+            abstract member emit_request:
+                req: Node.http.IncomingMessage *
+                res: Node.http.ServerResponse<Node.http.IncomingMessage> ->
+                    bool
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -144989,7 +145157,10 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.emit('upgrade',$1...)")>]
             abstract member emit_upgrade:
-                req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer -> bool
+                req: Node.http.IncomingMessage *
+                socket: Node.stream.Stream_.Duplex *
+                head: Node.NonSharedBuffer ->
+                    bool
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -147022,14 +147193,18 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module addListener_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module emit_OCSPRequest =
@@ -147095,14 +147270,18 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module on_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module once_keylog =
@@ -147159,14 +147338,18 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module once_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependListener_keylog =
@@ -147223,14 +147406,18 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependListener_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependOnceListener_keylog =
@@ -147287,14 +147474,18 @@ recursive mode, operations are retried on failure.""")>]
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
             module prependOnceListener_upgrade =
 
                 type listener =
                     delegate of
-                        req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
+                        req: Node.http.IncomingMessage *
+                        socket: Node.stream.Stream_.Duplex *
+                        head: Node.NonSharedBuffer ->
                             unit
 
     module inspector =
@@ -197330,9 +197521,10 @@ Duplex.fromWeb($0, $1)""")>]
                     [<Emit("$0.setResolveSnapshotPath($1...)")>]
                     abstract member setResolveSnapshotPath: fn: (string option -> string) -> unit
 
-            type MockFunctionCall<'F, 'ReturnType> = MockFunctionCall<'F, 'ReturnType, obj>
+            type MockFunctionCall<'F, 'ReturnType> =
+                MockFunctionCall<'F, 'ReturnType, ResizeArray<obj>>
 
-            type MockFunctionCall<'F> = MockFunctionCall<'F, obj, obj>
+            type MockFunctionCall<'F> = MockFunctionCall<'F, obj, ResizeArray<obj>>
 
             module RunOptions =
 
@@ -197510,10 +197702,10 @@ Duplex.fromWeb($0, $1)""")>]
             [<Interface>]
             type ReporterConstructorWrapper<'T> =
                 [<EmitConstructor>]
-                abstract member Create: [<ParamArray>] args: obj[] -> obj
+                abstract member Create: [<ParamArray>] args: obj[] -> Node.stream.Stream_.Transform
 
                 [<Emit("$0($1...)")>]
-                abstract member Invoke: [<ParamArray>] args: obj[] -> obj
+                abstract member Invoke: [<ParamArray>] args: obj[] -> Node.stream.Stream_.Transform
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -197674,9 +197866,9 @@ Duplex.fromWeb($0, $1)""")>]
         type MockFunctionCall<'F, 'ReturnType, 'Args> =
             test_.MockFunctionCall<'F, 'ReturnType, 'Args>
 
-        type MockFunctionCall<'F, 'ReturnType> = MockFunctionCall<'F, 'ReturnType, obj>
+        type MockFunctionCall<'F, 'ReturnType> = MockFunctionCall<'F, 'ReturnType, ResizeArray<obj>>
 
-        type MockFunctionCall<'F> = MockFunctionCall<'F, obj, obj>
+        type MockFunctionCall<'F> = MockFunctionCall<'F, obj, ResizeArray<obj>>
 
         type MockFunctionContext<'F> = test_.MockFunctionContext<'F>
 

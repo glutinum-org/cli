@@ -2898,7 +2898,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             Members =
                 info.Members
                 |> CallableProperties.asMethods context.TypeMemory
-                |> Conditionals.resolveMembers context.State.Conditionals info.TypeParameters
+                |> Conditionals.resolveMembers context.State.Conditionals
         }
 
     let name, context = sanitizeTypeNameAndPushScope info.Name context
@@ -4934,9 +4934,7 @@ let private transformClassDeclaration
                 classDeclaration.Members
                 |> withoutBaseClassProperties context.TypeMemory classDeclaration.HeritageClauses
                 |> CallableProperties.asMethods context.TypeMemory
-                |> Conditionals.resolveMembers
-                    context.State.Conditionals
-                    classDeclaration.TypeParameters
+                |> Conditionals.resolveMembers context.State.Conditionals
                 |> TransformMembers.toFSharpMember context
             TypeParameters = typeParametersResult.TypeParameters
             Inheritance = inheritance
