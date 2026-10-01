@@ -20,6 +20,11 @@ let readFunctionDeclaration
 
     let isDefaultExport =
         Utils.ModifierUtil.HasModifier(declaration.modifiers, Ts.SyntaxKind.DefaultKeyword)
+        || (
+            match declaration.name with
+            | Some name -> Utils.isDefaultInExportList declaration (name.getText ())
+            | None -> false
+        )
 
     let name =
         match declaration.name with

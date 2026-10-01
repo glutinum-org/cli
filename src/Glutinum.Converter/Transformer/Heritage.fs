@@ -6,12 +6,18 @@ open Glutinum.Converter.FSharpAST
 open Glutinum.Converter.GlueAST
 
 // `inherit obj` or `inherit JS.Uint8Array` is invalid, those base types are not interfaces
+/// `interface dirFS extends String {}`: the lib type is mapped to the F# primitive by name
+let private primitiveNames =
+    set [ "string"; "float"; "int"; "bool"; "obj"; "unit"; "bigint" ]
+
 let isInheritableType (typ: FSharpType) =
     match typ with
     | FSharpType.Object
     | FSharpType.Primitive _ -> false
     | FSharpType.TypeReference typeReference ->
-        not (typeReference.Name.StartsWith "JS.") && typeReference.Name <> "Action"
+        not (typeReference.Name.StartsWith "JS.")
+        && typeReference.Name <> "Action"
+        && not (primitiveNames.Contains typeReference.Name)
     | _ -> true
 
 /// `declare abstract class XRSystem implements XRSystem {}` merged with the interface

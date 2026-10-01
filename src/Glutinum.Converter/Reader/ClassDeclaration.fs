@@ -44,6 +44,7 @@ let readClassDeclaration
 
     let isDefaultExport =
         ModifierUtil.HasModifier(classDeclaration.modifiers, Ts.SyntaxKind.DefaultKeyword)
+        || Utils.isDefaultInExportList classDeclaration (name.getText ())
 
     let classDeclaration =
         {

@@ -2851,8 +2851,20 @@ let private tryTransformCallableInterface
     (info: GlueInterface)
     : FSharpType option
     =
+    // `interface dirFS { (dir: string): FS }` merged with `interface dirFS extends String {}`
+    // is one interface, a delegate can't carry the members of the other declaration
+    let isDeclaredOnce =
+        context.TypeMemory
+        |> List.filter (
+            function
+            | GlueType.Interface candidate -> candidate.FullName = info.FullName
+            | _ -> false
+        )
+        |> List.length
+        <= 1
+
     match info.Members, info.HeritageClauses with
-    | [ GlueMember.CallSignature callSignature ], [] ->
+    | [ GlueMember.CallSignature callSignature ], [] when isDeclaredOnce ->
         let name, context = sanitizeTypeNameAndPushScope info.Name context
         let xmlDocInfo = transformComment info.Documentation
 

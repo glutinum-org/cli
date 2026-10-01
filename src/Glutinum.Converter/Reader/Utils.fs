@@ -819,6 +819,34 @@ let isExportedDeclaration (statement: Ts.Node) (names: Collections.Set<string>) 
 
     hasExportModifier || isInsideNamespace || isGlobal || isInExportList
 
+/// `declare class Client {}; export { Client as default }`
+let isDefaultInExportList (statement: Ts.Node) (name: string) =
+    statement.parent?kind = Ts.SyntaxKind.SourceFile
+    && (statement.getSourceFile ()).statements
+       |> Seq.exists (fun other ->
+           match other.kind with
+           | Ts.SyntaxKind.ExportDeclaration ->
+               let exportDeclaration = other :?> Ts.ExportDeclaration
+
+               exportDeclaration.moduleSpecifier.IsNone
+               && (
+                   match exportDeclaration.exportClause with
+                   | Some exportClause when exportClause?kind = Ts.SyntaxKind.NamedExports ->
+                       let namedExports: Ts.NamedExports = !!exportClause
+
+                       namedExports.elements
+                       |> Seq.exists (fun specifier ->
+                           match specifier.propertyName with
+                           | Some propertyName ->
+                               identifierText !!propertyName = name
+                               && identifierText !!specifier.name = "default"
+                           | None -> false
+                       )
+                   | _ -> false
+               )
+           | _ -> false
+       )
+
 /// `declare class Dispatcher {}; export default Dispatcher` or `export = Dispatcher`
 let isExportAssignmentTarget (statement: Ts.Node) (names: Collections.Set<string>) =
     statement.parent?kind = Ts.SyntaxKind.SourceFile
