@@ -1,0 +1,1 @@
+{ "name": "re-exported-value-and-type", "version": "1.0.0", "main": "lib/index.js", "types": "types/index.d.ts", "exports": { ".": { "types": "./types/index.d.ts", "default": "./lib/index.js" } } }

@@ -40,6 +40,13 @@ let tryUnwrapOption (typ: FSharpType) =
 
 /// A `[<ParamObject>]` class only makes sense for a plain data object: a callable, constructable
 /// or indexed type literal is generated as an interface
+/// A parameter named `None` is matched against the union case, escaped or not: no `Create`
+/// can take it
+let private unionCaseNames =
+    set [ "None"; "Some"; "Ok"; "Error"; "ValueNone"; "ValueSome" ]
+
+let isUnionCaseName (name: string) = unionCaseNames.Contains name
+
 let isDataObject (members: GlueMember list) =
     members
     |> List.forall (
@@ -47,8 +54,8 @@ let isDataObject (members: GlueMember list) =
         | GlueMember.IndexSignature _
         | GlueMember.CallSignature _
         | GlueMember.ConstructSignature _ -> false
+        | GlueMember.Property property -> not (isUnionCaseName property.Name)
         | GlueMember.MethodSignature _
-        | GlueMember.Property _
         | GlueMember.GetAccessor _
         | GlueMember.SetAccessor _
         | GlueMember.Method _ -> true

@@ -111,15 +111,8 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.AutoOpen -> "[<AutoOpen>]"
     | FSharpAttribute.Obsolete message ->
         match message with
-        | Some message ->
-            // ``` of a markdown fence opens a quoted identifier, a triple quoted string
-            // does not protect it
-            if message.Contains "``" || message.Contains "\"\"\"" then
-                $"[<Obsolete(\"%s{escapeStringLiteral message}\")>]"
-            elif message.Contains "\n" || message.Contains "\"" then
-                $"[<Obsolete(\"\"\"%s{message}\"\"\")>]"
-            else
-                $"[<Obsolete(\"%s{message}\")>]"
+        // A triple quoted string spanning lines breaks the parser inside a deeply nested type
+        | Some message -> $"[<Obsolete(\"%s{escapeStringLiteral message}\")>]"
         | None -> "[<Obsolete>]"
     | FSharpAttribute.AbstractClass -> "[<AbstractClass>]"
     | FSharpAttribute.EmitMacroInvoke methodName -> $"[<Emit(\"$0.{methodName}($1...)\")>]"

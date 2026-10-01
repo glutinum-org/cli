@@ -5886,12 +5886,10 @@ module Node =
         abstract member includes:
             value: U3<string, float, Node.Buffer> * encoding: Node.BufferEncoding -> bool
 
-    [<Obsolete("""This is intended for internal use, and will be removed once `@types/node` no longer supports
-TypeScript versions earlier than 5.7.""")>]
+    [<Obsolete("This is intended for internal use, and will be removed once `@types/node` no longer supports\nTypeScript versions earlier than 5.7.")>]
     type NonSharedBuffer = Node.Buffer<obj>
 
-    [<Obsolete("""This is intended for internal use, and will be removed once `@types/node` no longer supports
-TypeScript versions earlier than 5.7.""")>]
+    [<Obsolete("This is intended for internal use, and will be removed once `@types/node` no longer supports\nTypeScript versions earlier than 5.7.")>]
     type AllowSharedBuffer = Node.Buffer<obj>
 
     module NodeJS =
@@ -11826,8 +11824,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// processes inherit the mask from the parent process.
             /// Can only be set if not in worker thread.
             /// </summary>
-            [<Obsolete("""Calling `process.umask()` with no argument causes the process-wide umask to be written twice. This introduces a race condition between threads, and is a potential
-security vulnerability. There is no safe, cross-platform alternative API.""")>]
+            [<Obsolete("Calling `process.umask()` with no argument causes the process-wide umask to be written twice. This introduces a race condition between threads, and is a potential\nsecurity vulnerability. There is no safe, cross-platform alternative API.")>]
             abstract member umask: unit -> float
 
             /// <summary>
@@ -91277,12 +91274,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             abstract member maxRetries: float option with get, set
 
-            [<Obsolete("""since v14.14.0 In future versions of Node.js and will trigger a warning
-`fs.rmdir(path, { recursive: true })` will throw if `path` does not exist or is a file.
-Use `fs.rm(path, { recursive: true, force: true })` instead.
-
-If `true`, perform a recursive directory removal. In
-recursive mode, operations are retried on failure.""")>]
+            [<Obsolete("since v14.14.0 In future versions of Node.js and will trigger a warning\n`fs.rmdir(path, { recursive: true })` will throw if `path` does not exist or is a file.\nUse `fs.rm(path, { recursive: true, force: true })` instead.\n\nIf `true`, perform a recursive directory removal. In\nrecursive mode, operations are retried on failure.")>]
             abstract member ``recursive``: bool option with get, set
 
             /// <summary>
@@ -101701,7 +101693,7 @@ recursive mode, operations are retried on failure.""")>]
                 abstract member bytesRead: float with get, set
                 abstract member buffer: 'T with get, set
 
-            [<Obsolete("""This interface will be removed in a future version. Use `import { ReadOptionsWithBuffer } from "node:fs"` instead.""")>]
+            [<Obsolete("This interface will be removed in a future version. Use `import { ReadOptionsWithBuffer } from \"node:fs\"` instead.")>]
             [<AllowNullLiteral>]
             [<Interface>]
             type FileReadOptions<'T> =
@@ -112003,7 +111995,7 @@ recursive mode, operations are retried on failure.""")>]
             /// The <c>message.aborted</c> property will be <c>true</c> if the request has
             /// been aborted.
             /// </summary>
-            [<Obsolete("""Since v17.0.0,v16.12.0 - Check `message.destroyed` from <a href="stream.html#class-streamreadable" class="type">stream.Readable</a>.""")>]
+            [<Obsolete("Since v17.0.0,v16.12.0 - Check `message.destroyed` from <a href=\"stream.html#class-streamreadable\" class=\"type\">stream.Readable</a>.")>]
             abstract member aborted: bool with get, set
 
             /// <summary>
@@ -161785,8 +161777,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("node:process");
               Emit("$0.umask($1...)");
-              Obsolete("""Calling `process.umask()` with no argument causes the process-wide umask to be written twice. This introduces a race condition between threads, and is a potential
-security vulnerability. There is no safe, cross-platform alternative API.""")>]
+              Obsolete("Calling `process.umask()` with no argument causes the process-wide umask to be written twice. This introduces a race condition between threads, and is a potential\nsecurity vulnerability. There is no safe, cross-platform alternative API.")>]
             static member umask() : float = nativeOnly
 
             /// <summary>
@@ -164687,36 +164678,20 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             static member toASCII(domain: string) : string = nativeOnly
 
             [<Import("ucs2", "node:punycode")>]
-            [<Obsolete("""since v7.0.0
-The version of the punycode module bundled in Node.js is being deprecated.
-In a future major version of Node.js this module will be removed.
-Users currently depending on the punycode module should switch to using
-the userland-provided Punycode.js module instead.""")>]
+            [<Obsolete("since v7.0.0\nThe version of the punycode module bundled in Node.js is being deprecated.\nIn a future major version of Node.js this module will be removed.\nUsers currently depending on the punycode module should switch to using\nthe userland-provided Punycode.js module instead.")>]
             static member inline ucs2: Node.punycode.ucs2 = nativeOnly
 
             [<Import("version", "node:punycode")>]
-            [<Obsolete("""since v7.0.0
-The version of the punycode module bundled in Node.js is being deprecated.
-In a future major version of Node.js this module will be removed.
-Users currently depending on the punycode module should switch to using
-the userland-provided Punycode.js module instead.""")>]
+            [<Obsolete("since v7.0.0\nThe version of the punycode module bundled in Node.js is being deprecated.\nIn a future major version of Node.js this module will be removed.\nUsers currently depending on the punycode module should switch to using\nthe userland-provided Punycode.js module instead.")>]
             static member inline version: string = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
         type ucs2 =
-            [<Obsolete("""since v7.0.0
-The version of the punycode module bundled in Node.js is being deprecated.
-In a future major version of Node.js this module will be removed.
-Users currently depending on the punycode module should switch to using
-the userland-provided Punycode.js module instead.""")>]
+            [<Obsolete("since v7.0.0\nThe version of the punycode module bundled in Node.js is being deprecated.\nIn a future major version of Node.js this module will be removed.\nUsers currently depending on the punycode module should switch to using\nthe userland-provided Punycode.js module instead.")>]
             abstract member decode: string: string -> ResizeArray<float>
 
-            [<Obsolete("""since v7.0.0
-The version of the punycode module bundled in Node.js is being deprecated.
-In a future major version of Node.js this module will be removed.
-Users currently depending on the punycode module should switch to using
-the userland-provided Punycode.js module instead.""")>]
+            [<Obsolete("since v7.0.0\nThe version of the punycode module bundled in Node.js is being deprecated.\nIn a future major version of Node.js this module will be removed.\nUsers currently depending on the punycode module should switch to using\nthe userland-provided Punycode.js module instead.")>]
             abstract member encode: codePoints: ResizeArray<float> -> string
 
     module querystring =
@@ -213988,7 +213963,7 @@ URL.parse($0, $1)""")>]
                 Node.stream.web.TransformStream
              >
 
-        [<Obsolete("""Use `import { Transferable } from "node:worker_threads"` instead.""")>]
+        [<Obsolete("Use `import { Transferable } from \"node:worker_threads\"` instead.")>]
         type TransferListItem = Node.worker_threads.Transferable
 
         /// <summary>
@@ -224979,8 +224954,7 @@ module UndiciTypes =
             /// Readable.fromWeb(response.body).pipe(busboy)
             /// </c><c></c>
             /// </example>
-            [<Obsolete("""This method is not recommended for parsing multipart/form-data bodies in server environments.
-It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.com/package/@fastify/busboy) as follows:""")>]
+            [<Obsolete("This method is not recommended for parsing multipart/form-data bodies in server environments.\nIt is recommended to use a library such as [@fastify/busboy](https://www.npmjs.com/package/@fastify/busboy) as follows:")>]
             abstract member formData: (unit -> JS.Promise<UndiciTypes.formdata.FormData>) with get
 
             abstract member json: (unit -> JS.Promise<obj>) with get

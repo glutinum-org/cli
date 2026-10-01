@@ -229,7 +229,7 @@ let isCandidate (state: State) (typeMemory: GlueType list) (info: GlueInterface)
             && members
                |> List.forall (
                    function
-                   | GlueMember.Property _ -> true
+                   | GlueMember.Property property -> not (isUnionCaseName property.Name)
                    | _ -> false
                )
         | None -> false

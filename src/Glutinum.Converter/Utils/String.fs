@@ -19,5 +19,9 @@ let capitalizeFirstLetter (text: string) =
 let withoutDeclarationExtension (fileName: string) =
     System.Text.RegularExpressions.Regex.Replace(fileName, "\\.d\\.[cm]?ts$", "")
 
+/// A declaration file written on Windows ends its lines with `\r\n`
+let normalizeLineEndings (text: string) =
+    text.Replace("\r\n", "\n").Replace("\r", "\n")
+
 let splitLines (text: string) =
-    text.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n') |> Array.toList
+    normalizeLineEndings(text).Split('\n') |> Array.toList

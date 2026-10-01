@@ -5842,9 +5842,7 @@ module Web =
         static member inline Option: Exports.Option__.Type = nativeOnly
 
         [<Global("clientInformation")>]
-        [<Obsolete("""This is a legacy alias of `navigator`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/navigator)""")>]
+        [<Obsolete("This is a legacy alias of `navigator`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/navigator)")>]
         static member inline clientInformation: Web.Navigator = nativeOnly
 
         /// <summary>
@@ -7067,27 +7065,19 @@ module Web =
         static member inline onwaiting: (Web.Event -> unit) option = nativeOnly
 
         [<Global("onwebkitanimationend")>]
-        [<Obsolete("""This is a legacy alias of `onanimationend`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationend_event)""")>]
+        [<Obsolete("This is a legacy alias of `onanimationend`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationend_event)")>]
         static member inline onwebkitanimationend: (Web.Event -> unit) option = nativeOnly
 
         [<Global("onwebkitanimationiteration")>]
-        [<Obsolete("""This is a legacy alias of `onanimationiteration`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationiteration_event)""")>]
+        [<Obsolete("This is a legacy alias of `onanimationiteration`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationiteration_event)")>]
         static member inline onwebkitanimationiteration: (Web.Event -> unit) option = nativeOnly
 
         [<Global("onwebkitanimationstart")>]
-        [<Obsolete("""This is a legacy alias of `onanimationstart`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationstart_event)""")>]
+        [<Obsolete("This is a legacy alias of `onanimationstart`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationstart_event)")>]
         static member inline onwebkitanimationstart: (Web.Event -> unit) option = nativeOnly
 
         [<Global("onwebkittransitionend")>]
-        [<Obsolete("""This is a legacy alias of `ontransitionend`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/transitionend_event)""")>]
+        [<Obsolete("This is a legacy alias of `ontransitionend`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/transitionend_event)")>]
         static member inline onwebkittransitionend: (Web.Event -> unit) option = nativeOnly
 
         /// <summary>
@@ -7213,9 +7203,7 @@ module Web =
             nativeOnly
 
         [<Global("onunload")>]
-        [<Obsolete("""The unload event is not reliable, consider visibilitychange or pagehide events.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/unload_event)""")>]
+        [<Obsolete("The unload event is not reliable, consider visibilitychange or pagehide events.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/unload_event)")>]
         static member inline onunload: (Web.Event -> unit) option = nativeOnly
 
         /// <summary>
@@ -18673,9 +18661,7 @@ module Web =
     /// <summary>
     /// The **<c>AudioProcessingEvent</c>** interface of the Web Audio API represents events that occur when a ScriptProcessorNode input buffer is ready to be processed.
     /// </summary>
-    [<Obsolete("""As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and is soon to be replaced by AudioWorklet.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioProcessingEvent)""")>]
+    [<Obsolete("As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and is soon to be replaced by AudioWorklet.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioProcessingEvent)")>]
     [<AllowNullLiteral>]
     [<Interface>]
     type AudioProcessingEvent =
@@ -24290,194 +24276,118 @@ module Web =
         /// </summary>
         abstract member visibility: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `alignContent`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content)""")>]
+        [<Obsolete("This is a legacy alias of `alignContent`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-content)")>]
         abstract member webkitAlignContent: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `alignItems`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items)""")>]
+        [<Obsolete("This is a legacy alias of `alignItems`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-items)")>]
         abstract member webkitAlignItems: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `alignSelf`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self)""")>]
+        [<Obsolete("This is a legacy alias of `alignSelf`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/align-self)")>]
         abstract member webkitAlignSelf: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animation`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation)""")>]
+        [<Obsolete("This is a legacy alias of `animation`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation)")>]
         abstract member webkitAnimation: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationDelay`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-delay)""")>]
+        [<Obsolete("This is a legacy alias of `animationDelay`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-delay)")>]
         abstract member webkitAnimationDelay: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationDirection`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction)""")>]
+        [<Obsolete("This is a legacy alias of `animationDirection`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-direction)")>]
         abstract member webkitAnimationDirection: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationDuration`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-duration)""")>]
+        [<Obsolete("This is a legacy alias of `animationDuration`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-duration)")>]
         abstract member webkitAnimationDuration: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationFillMode`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-fill-mode)""")>]
+        [<Obsolete("This is a legacy alias of `animationFillMode`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-fill-mode)")>]
         abstract member webkitAnimationFillMode: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationIterationCount`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-iteration-count)""")>]
+        [<Obsolete("This is a legacy alias of `animationIterationCount`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-iteration-count)")>]
         abstract member webkitAnimationIterationCount: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationName`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-name)""")>]
+        [<Obsolete("This is a legacy alias of `animationName`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-name)")>]
         abstract member webkitAnimationName: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationPlayState`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state)""")>]
+        [<Obsolete("This is a legacy alias of `animationPlayState`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-play-state)")>]
         abstract member webkitAnimationPlayState: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `animationTimingFunction`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function)""")>]
+        [<Obsolete("This is a legacy alias of `animationTimingFunction`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/animation-timing-function)")>]
         abstract member webkitAnimationTimingFunction: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `appearance`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance)""")>]
+        [<Obsolete("This is a legacy alias of `appearance`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/appearance)")>]
         abstract member webkitAppearance: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `backfaceVisibility`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility)""")>]
+        [<Obsolete("This is a legacy alias of `backfaceVisibility`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backface-visibility)")>]
         abstract member webkitBackfaceVisibility: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `backgroundClip`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip)""")>]
+        [<Obsolete("This is a legacy alias of `backgroundClip`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip)")>]
         abstract member webkitBackgroundClip: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `backgroundOrigin`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-origin)""")>]
+        [<Obsolete("This is a legacy alias of `backgroundOrigin`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-origin)")>]
         abstract member webkitBackgroundOrigin: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `backgroundSize`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-size)""")>]
+        [<Obsolete("This is a legacy alias of `backgroundSize`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-size)")>]
         abstract member webkitBackgroundSize: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `borderBottomLeftRadius`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-left-radius)""")>]
+        [<Obsolete("This is a legacy alias of `borderBottomLeftRadius`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-left-radius)")>]
         abstract member webkitBorderBottomLeftRadius: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `borderBottomRightRadius`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-right-radius)""")>]
+        [<Obsolete("This is a legacy alias of `borderBottomRightRadius`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-bottom-right-radius)")>]
         abstract member webkitBorderBottomRightRadius: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `borderRadius`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-radius)""")>]
+        [<Obsolete("This is a legacy alias of `borderRadius`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-radius)")>]
         abstract member webkitBorderRadius: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `borderTopLeftRadius`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-left-radius)""")>]
+        [<Obsolete("This is a legacy alias of `borderTopLeftRadius`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-left-radius)")>]
         abstract member webkitBorderTopLeftRadius: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `borderTopRightRadius`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-right-radius)""")>]
+        [<Obsolete("This is a legacy alias of `borderTopRightRadius`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-top-right-radius)")>]
         abstract member webkitBorderTopRightRadius: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxAlign`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align)""")>]
+        [<Obsolete("This is a legacy alias of `boxAlign`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-align)")>]
         abstract member webkitBoxAlign: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxFlex`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex)""")>]
+        [<Obsolete("This is a legacy alias of `boxFlex`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-flex)")>]
         abstract member webkitBoxFlex: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxOrdinalGroup`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-ordinal-group)""")>]
+        [<Obsolete("This is a legacy alias of `boxOrdinalGroup`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-ordinal-group)")>]
         abstract member webkitBoxOrdinalGroup: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxOrient`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient)""")>]
+        [<Obsolete("This is a legacy alias of `boxOrient`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-orient)")>]
         abstract member webkitBoxOrient: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxPack`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack)""")>]
+        [<Obsolete("This is a legacy alias of `boxPack`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-pack)")>]
         abstract member webkitBoxPack: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxShadow`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-shadow)""")>]
+        [<Obsolete("This is a legacy alias of `boxShadow`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-shadow)")>]
         abstract member webkitBoxShadow: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `boxSizing`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-sizing)""")>]
+        [<Obsolete("This is a legacy alias of `boxSizing`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-sizing)")>]
         abstract member webkitBoxSizing: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `filter`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/filter)""")>]
+        [<Obsolete("This is a legacy alias of `filter`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/filter)")>]
         abstract member webkitFilter: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flex`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex)""")>]
+        [<Obsolete("This is a legacy alias of `flex`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex)")>]
         abstract member webkitFlex: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flexBasis`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis)""")>]
+        [<Obsolete("This is a legacy alias of `flexBasis`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-basis)")>]
         abstract member webkitFlexBasis: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flexDirection`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-direction)""")>]
+        [<Obsolete("This is a legacy alias of `flexDirection`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-direction)")>]
         abstract member webkitFlexDirection: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flexFlow`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow)""")>]
+        [<Obsolete("This is a legacy alias of `flexFlow`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-flow)")>]
         abstract member webkitFlexFlow: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flexGrow`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-grow)""")>]
+        [<Obsolete("This is a legacy alias of `flexGrow`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-grow)")>]
         abstract member webkitFlexGrow: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flexShrink`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-shrink)""")>]
+        [<Obsolete("This is a legacy alias of `flexShrink`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-shrink)")>]
         abstract member webkitFlexShrink: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `flexWrap`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-wrap)""")>]
+        [<Obsolete("This is a legacy alias of `flexWrap`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/flex-wrap)")>]
         abstract member webkitFlexWrap: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `justifyContent`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content)""")>]
+        [<Obsolete("This is a legacy alias of `justifyContent`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/justify-content)")>]
         abstract member webkitJustifyContent: string with get, set
 
         /// <summary>
@@ -24485,95 +24395,61 @@ module Web =
         /// </summary>
         abstract member webkitLineClamp: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `mask`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask)""")>]
+        [<Obsolete("This is a legacy alias of `mask`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask)")>]
         abstract member webkitMask: string with get, set
 
         /// <summary>
         /// The non-standard prefixed -webkit-mask-box-image shorthand property sets the mask image for an element's border box.
         /// </summary>
-        [<Obsolete("""This is a legacy alias of `maskBorder`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border)""")>]
+        [<Obsolete("This is a legacy alias of `maskBorder`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border)")>]
         abstract member webkitMaskBoxImage: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskBorderOutset`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-outset)""")>]
+        [<Obsolete("This is a legacy alias of `maskBorderOutset`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-outset)")>]
         abstract member webkitMaskBoxImageOutset: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskBorderRepeat`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat)""")>]
+        [<Obsolete("This is a legacy alias of `maskBorderRepeat`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-repeat)")>]
         abstract member webkitMaskBoxImageRepeat: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskBorderSlice`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-slice)""")>]
+        [<Obsolete("This is a legacy alias of `maskBorderSlice`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-slice)")>]
         abstract member webkitMaskBoxImageSlice: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskBorderSource`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-source)""")>]
+        [<Obsolete("This is a legacy alias of `maskBorderSource`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-source)")>]
         abstract member webkitMaskBoxImageSource: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskBorderWidth`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-width)""")>]
+        [<Obsolete("This is a legacy alias of `maskBorderWidth`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-border-width)")>]
         abstract member webkitMaskBoxImageWidth: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskClip`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-clip)""")>]
+        [<Obsolete("This is a legacy alias of `maskClip`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-clip)")>]
         abstract member webkitMaskClip: string with get, set
 
         /// <summary>
         /// The -webkit-mask-composite property specifies the manner in which multiple mask images applied to the same element are composited with one another. Mask images are composited in the opposite order that they are declared with the -webkit-mask-image property.
         /// </summary>
-        [<Obsolete("""This is a legacy alias of `maskComposite`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite)""")>]
+        [<Obsolete("This is a legacy alias of `maskComposite`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite)")>]
         abstract member webkitMaskComposite: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskImage`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-image)""")>]
+        [<Obsolete("This is a legacy alias of `maskImage`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-image)")>]
         abstract member webkitMaskImage: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskOrigin`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-origin)""")>]
+        [<Obsolete("This is a legacy alias of `maskOrigin`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-origin)")>]
         abstract member webkitMaskOrigin: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskPosition`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position)""")>]
+        [<Obsolete("This is a legacy alias of `maskPosition`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-position)")>]
         abstract member webkitMaskPosition: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskRepeat`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat)""")>]
+        [<Obsolete("This is a legacy alias of `maskRepeat`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-repeat)")>]
         abstract member webkitMaskRepeat: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `maskSize`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-size)""")>]
+        [<Obsolete("This is a legacy alias of `maskSize`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-size)")>]
         abstract member webkitMaskSize: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `order`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/order)""")>]
+        [<Obsolete("This is a legacy alias of `order`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/order)")>]
         abstract member webkitOrder: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `perspective`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective)""")>]
+        [<Obsolete("This is a legacy alias of `perspective`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective)")>]
         abstract member webkitPerspective: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `perspectiveOrigin`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin)""")>]
+        [<Obsolete("This is a legacy alias of `perspectiveOrigin`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/perspective-origin)")>]
         abstract member webkitPerspectiveOrigin: string with get, set
 
         /// <summary>
@@ -24583,9 +24459,7 @@ module Web =
         /// </summary>
         abstract member webkitTextFillColor: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `textSizeAdjust`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-size-adjust)""")>]
+        [<Obsolete("This is a legacy alias of `textSizeAdjust`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-size-adjust)")>]
         abstract member webkitTextSizeAdjust: string with get, set
 
         /// <summary>
@@ -24607,49 +24481,31 @@ module Web =
         /// </summary>
         abstract member webkitTextStrokeWidth: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transform`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform)""")>]
+        [<Obsolete("This is a legacy alias of `transform`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform)")>]
         abstract member webkitTransform: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transformOrigin`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin)""")>]
+        [<Obsolete("This is a legacy alias of `transformOrigin`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-origin)")>]
         abstract member webkitTransformOrigin: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transformStyle`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style)""")>]
+        [<Obsolete("This is a legacy alias of `transformStyle`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transform-style)")>]
         abstract member webkitTransformStyle: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transition`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition)""")>]
+        [<Obsolete("This is a legacy alias of `transition`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition)")>]
         abstract member webkitTransition: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transitionDelay`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-delay)""")>]
+        [<Obsolete("This is a legacy alias of `transitionDelay`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-delay)")>]
         abstract member webkitTransitionDelay: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transitionDuration`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-duration)""")>]
+        [<Obsolete("This is a legacy alias of `transitionDuration`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-duration)")>]
         abstract member webkitTransitionDuration: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transitionProperty`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-property)""")>]
+        [<Obsolete("This is a legacy alias of `transitionProperty`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-property)")>]
         abstract member webkitTransitionProperty: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `transitionTimingFunction`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function)""")>]
+        [<Obsolete("This is a legacy alias of `transitionTimingFunction`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/transition-timing-function)")>]
         abstract member webkitTransitionTimingFunction: string with get, set
 
-        [<Obsolete("""This is a legacy alias of `userSelect`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/user-select)""")>]
+        [<Obsolete("This is a legacy alias of `userSelect`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/user-select)")>]
         abstract member webkitUserSelect: string with get, set
 
         /// <summary>
@@ -24695,9 +24551,7 @@ module Web =
         /// </summary>
         abstract member wordSpacing: string with get, set
 
-        [<Obsolete("""`word-wrap` is a legacy alias of `overflow-wrap`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-wrap)""")>]
+        [<Obsolete("`word-wrap` is a legacy alias of `overflow-wrap`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/overflow-wrap)")>]
         abstract member wordWrap: string with get, set
 
         /// <summary>
@@ -29369,9 +29223,7 @@ module Web =
         /// </summary>
         abstract member characterSet: string with get
 
-        [<Obsolete("""This is a legacy alias of `characterSet`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/characterSet)""")>]
+        [<Obsolete("This is a legacy alias of `characterSet`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/characterSet)")>]
         abstract member charset: string with get
 
         /// <summary>
@@ -29504,9 +29356,7 @@ module Web =
         /// </summary>
         abstract member implementation: Web.DOMImplementation with get
 
-        [<Obsolete("""This is a legacy alias of `characterSet`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/characterSet)""")>]
+        [<Obsolete("This is a legacy alias of `characterSet`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/characterSet)")>]
         abstract member inputEncoding: string with get
 
         /// <summary>
@@ -31829,9 +31679,7 @@ module Web =
         /// </summary>
         abstract member toggleAttribute: qualifiedName: string * ?force: bool -> bool
 
-        [<Obsolete("""This is a legacy alias of `matches`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/matches)""")>]
+        [<Obsolete("This is a legacy alias of `matches`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/matches)")>]
         abstract member webkitMatchesSelector: selectors: string -> bool
 
         /// <summary>
@@ -36884,24 +36732,16 @@ module Web =
         /// </summary>
         abstract member onwaiting: (Web.Event -> unit) option with get, set
 
-        [<Obsolete("""This is a legacy alias of `onanimationend`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationend_event)""")>]
+        [<Obsolete("This is a legacy alias of `onanimationend`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationend_event)")>]
         abstract member onwebkitanimationend: (Web.Event -> unit) option with get, set
 
-        [<Obsolete("""This is a legacy alias of `onanimationiteration`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationiteration_event)""")>]
+        [<Obsolete("This is a legacy alias of `onanimationiteration`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationiteration_event)")>]
         abstract member onwebkitanimationiteration: (Web.Event -> unit) option with get, set
 
-        [<Obsolete("""This is a legacy alias of `onanimationstart`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationstart_event)""")>]
+        [<Obsolete("This is a legacy alias of `onanimationstart`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/animationstart_event)")>]
         abstract member onwebkitanimationstart: (Web.Event -> unit) option with get, set
 
-        [<Obsolete("""This is a legacy alias of `ontransitionend`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/transitionend_event)""")>]
+        [<Obsolete("This is a legacy alias of `ontransitionend`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/transitionend_event)")>]
         abstract member onwebkittransitionend: (Web.Event -> unit) option with get, set
 
         /// <summary>
@@ -66859,9 +66699,7 @@ module Web =
     /// <summary>
     /// The legacy **<c>PerformanceNavigation</c>** interface represents information about how the navigation to the current document was done.
     /// </summary>
-    [<Obsolete("""This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceNavigation)""")>]
+    [<Obsolete("This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceNavigation)")>]
     [<AllowNullLiteral>]
     [<Interface>]
     type PerformanceNavigation =
@@ -67228,9 +67066,7 @@ module Web =
     /// <summary>
     /// The **<c>PerformanceTiming</c>** interface is a legacy interface kept for backwards compatibility and contains properties that offer performance timing information for various events which occur during the loading and use of the current page. You get a PerformanceTiming object describing your page using the window.performance.timing property.
     /// </summary>
-    [<Obsolete("""This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceTiming)""")>]
+    [<Obsolete("This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceTiming)")>]
     [<AllowNullLiteral>]
     [<Interface>]
     type PerformanceTiming =
@@ -86884,9 +86720,7 @@ module Web =
     /// <summary>
     /// The **<c>ScriptProcessorNode</c>** interface allows the generation, processing, or analyzing of audio using JavaScript.
     /// </summary>
-    [<Obsolete("""As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and was replaced by AudioWorklet (see AudioWorkletNode).
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/ScriptProcessorNode)""")>]
+    [<Obsolete("As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and was replaced by AudioWorklet (see AudioWorkletNode).\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ScriptProcessorNode)")>]
     [<AllowNullLiteral>]
     [<Interface>]
     type ScriptProcessorNode =
@@ -102295,9 +102129,7 @@ module Web =
         inherit Web.WindowOrWorkerGlobalScope
         inherit Web.WindowSessionStorage
 
-        [<Obsolete("""This is a legacy alias of `navigator`.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/navigator)""")>]
+        [<Obsolete("This is a legacy alias of `navigator`.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/navigator)")>]
         abstract member clientInformation: Web.Navigator with get
 
         /// <summary>
@@ -103118,9 +102950,7 @@ module Web =
         /// </summary>
         abstract member onunhandledrejection: (Web.PromiseRejectionEvent -> unit) option with get, set
 
-        [<Obsolete("""The unload event is not reliable, consider visibilitychange or pagehide events.
-
-[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/unload_event)""")>]
+        [<Obsolete("The unload event is not reliable, consider visibilitychange or pagehide events.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/unload_event)")>]
         abstract member onunload: (Web.Event -> unit) option with get, set
 
         abstract member addEventListener<'K> :

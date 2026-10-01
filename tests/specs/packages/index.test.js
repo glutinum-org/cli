@@ -32,6 +32,7 @@ const fixtures = [
     "crossFileConditional",
     "unboundTypeParameter",
     "reExportedConstraint",
+    "reExportedValueAndType",
     "iteratorObjectBase",
 ]
 

@@ -60,7 +60,9 @@ let transformComment (comment: GlueComment list) : TransformCommentResult =
             |}
             comment
 
-    let obsoleteAttributes = categories.Deprecated |> List.map FSharpAttribute.Obsolete
+    let obsoleteAttributes =
+        categories.Deprecated
+        |> List.map (Option.map String.normalizeLineEndings >> FSharpAttribute.Obsolete)
 
     let remarks =
         if not categories.Remarks.IsEmpty || not categories.Throws.IsEmpty then

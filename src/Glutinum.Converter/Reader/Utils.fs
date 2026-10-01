@@ -969,7 +969,15 @@ let private topLevelDeclarationName (declaration: Ts.Node) : string option =
         | parent when parent.kind = Ts.SyntaxKind.SourceFile -> node
         | parent -> top parent
 
-    match (top declaration)?name with
+    let top = top declaration
+
+    match top?name with
+    // `export declare const EventType` is a statement without a name, its declaration has one
+    | null when
+        top.kind = Ts.SyntaxKind.VariableStatement
+        && declaration.kind = Ts.SyntaxKind.VariableDeclaration
+        ->
+        Some((declaration :?> Ts.VariableDeclaration).name?getText (): string)
     | null -> None
     | name -> Some(name?getText (): string)
 
