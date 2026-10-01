@@ -789,24 +789,40 @@ module UtilityType =
             GlueType.Primitive GluePrimitive.Any
 
     /// The members of the type from their declarations, `contextNode` locates the errors
-    let private readMembers (reader: ITypeScriptReader) (contextNode: Ts.Node) (typ: Ts.Type) =
+    /// `Pick<typeof globalThis, 'DocumentFragment'>`: the global is a variable merged with an
+    /// interface, only a declaration standing for a member is read as one
+    let private isMemberDeclaration (declaration: Ts.Declaration) =
+        match declaration.kind with
+        | Ts.SyntaxKind.InterfaceDeclaration
+        | Ts.SyntaxKind.ClassDeclaration
+        | Ts.SyntaxKind.TypeAliasDeclaration
+        | Ts.SyntaxKind.EnumDeclaration
+        | Ts.SyntaxKind.ModuleDeclaration -> false
+        | _ -> true
 
+    /// The members of a property: one per declaration standing for a member, else from its type
+    let private readPropertyMembers
+        (reader: ITypeScriptReader)
+        (contextNode: Ts.Node)
+        (property: Ts.Symbol)
+        : GlueMember list
+        =
+        let declarations =
+            property.declarations
+            |> Option.map (Seq.filter isMemberDeclaration >> Seq.toList)
+            |> Option.defaultValue []
+
+        match declarations with
+        | [] -> readPropertyWithoutDeclaration reader contextNode property |> Option.toList
+        | declarations ->
+            declarations |> List.map (readInstantiatedMember reader contextNode property)
+
+    let private readMembers (reader: ITypeScriptReader) (contextNode: Ts.Node) (typ: Ts.Type) =
         typ
         |> reader.checker.getPropertiesOfType
         |> Seq.toList
-        |> List.choose (fun property ->
-            match property.declarations with
-            | Some declarations ->
-                declarations
-                |> Seq.map (readInstantiatedMember reader contextNode property)
-                |> Some
-            | None ->
-                readPropertyWithoutDeclaration reader contextNode property
-                |> Option.map Seq.singleton
-        )
-        |> Seq.concat
-        |> Seq.distinct
-        |> Seq.toList
+        |> List.collect (readPropertyMembers reader contextNode)
+        |> List.distinct
 
     /// <summary>
     /// When a generic type reference is applied with concrete type arguments
@@ -1219,19 +1235,23 @@ module UtilityType =
             |> Seq.filter (fun prop -> keysToOmit |> Seq.contains prop.name |> (=) keepListedKeys)
             |> Seq.toList
 
+        // `secondBest?: Omit<HighlightResult, 'second_best'>` names its own interface, the
+        // inner one is `any`
+        let isInProgress =
+            reader.InProgress.Expansions
+            |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, baseType))
+
         let members =
-            filteredProperties
-            |> List.collect (fun property ->
-                match property.declarations with
-                // Overloads and merged declarations are several declarations
-                | Some declarations ->
-                    declarations
-                    |> Seq.toList
-                    |> List.map (readInstantiatedMember reader typeReferenceNode property)
-                | None ->
-                    Report.readerError ("type node", "Missing declarations", typeReferenceNode)
-                    |> failwith
-            )
+            if isInProgress then
+                []
+            else
+                withInProgress
+                    reader.InProgress.Expansions
+                    baseType
+                    (fun () ->
+                        filteredProperties
+                        |> List.collect (readPropertyMembers reader typeReferenceNode)
+                    )
 
         let defaults = defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
 
@@ -1265,7 +1285,7 @@ module UtilityType =
             else
                 members
         |> fun members ->
-            if hasUnboundKeys then
+            if hasUnboundKeys || isInProgress then
                 GlueType.Primitive GluePrimitive.Any
             else
                 members
