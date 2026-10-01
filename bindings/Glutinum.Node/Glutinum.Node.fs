@@ -144105,7 +144105,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         [<AllowNullLiteral>]
         [<Interface>]
         type Agent =
-            inherit Node.http.Agent
+            inherit Node.events.EventEmitter
             abstract member options: Node.https.AgentOptions with get, set
 
             /// <summary>
@@ -144134,6 +144134,81 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// that determine socket reusability.
             /// </summary>
             abstract member getName: ?options: Node.https.RequestOptions -> string
+            /// <summary>
+            /// By default set to 256. For agents with <c>keepAlive</c> enabled, this
+            /// sets the maximum number of sockets that will be left open in the free
+            /// state.
+            /// </summary>
+            abstract member maxFreeSockets: float with get, set
+            /// <summary>
+            /// By default set to <c>Infinity</c>. Determines how many concurrent sockets the agent
+            /// can have open per origin. Origin is the returned value of <c>agent.getName()</c>.
+            /// </summary>
+            abstract member maxSockets: float with get, set
+            /// <summary>
+            /// By default set to <c>Infinity</c>. Determines how many concurrent sockets the agent
+            /// can have open. Unlike <c>maxSockets</c>, this parameter applies across all origins.
+            /// </summary>
+            abstract member maxTotalSockets: float with get, set
+            /// <summary>
+            /// An object which contains arrays of sockets currently awaiting use by
+            /// the agent when <c>keepAlive</c> is enabled. Do not modify.
+            ///
+            /// Sockets in the <c>freeSockets</c> list will be automatically destroyed and
+            /// removed from the array on <c>'timeout'</c>.
+            /// </summary>
+            abstract member freeSockets: Node.NodeJS.ReadOnlyDict<ResizeArray<Node.net.Socket>> with get
+            /// <summary>
+            /// An object which contains arrays of sockets currently in use by the
+            /// agent. Do not modify.
+            /// </summary>
+            abstract member sockets: Node.NodeJS.ReadOnlyDict<ResizeArray<Node.net.Socket>> with get
+            /// <summary>
+            /// An object which contains queues of requests that have not yet been assigned to
+            /// sockets. Do not modify.
+            /// </summary>
+            abstract member requests: Node.NodeJS.ReadOnlyDict<ResizeArray<Node.http.ClientRequest>> with get
+            /// <summary>
+            /// Destroy any sockets that are currently in use by the agent.
+            ///
+            /// It is usually not necessary to do this. However, if using an
+            /// agent with <c>keepAlive</c> enabled, then it is best to explicitly shut down
+            /// the agent when it is no longer needed. Otherwise,
+            /// sockets might stay open for quite a long time before the server
+            /// terminates them.
+            /// </summary>
+            abstract member destroy: unit -> unit
+            /// <summary>
+            /// Called when <c>socket</c> is detached from a request and could be persisted by the<c>Agent</c>. Default behavior is to:
+            ///
+            /// <code lang="js">
+            /// socket.setKeepAlive(true, this.keepAliveMsecs);
+            /// socket.unref();
+            /// return true;
+            /// </code>
+            ///
+            /// This method can be overridden by a particular <c>Agent</c> subclass. If this
+            /// method returns a falsy value, the socket will be destroyed instead of persisting
+            /// it for use with the next request.
+            ///
+            /// The <c>socket</c> argument can be an instance of <c>net.Socket</c>, a subclass of <c>stream.Duplex</c>.
+            /// </summary>
+            abstract member keepSocketAlive: socket: Node.stream.Stream_.Duplex -> unit
+
+            /// <summary>
+            /// Called when <c>socket</c> is attached to <c>request</c> after being persisted because of
+            /// the keep-alive options. Default behavior is to:
+            ///
+            /// <code lang="js">
+            /// socket.ref();
+            /// </code>
+            ///
+            /// This method can be overridden by a particular <c>Agent</c> subclass.
+            ///
+            /// The <c>socket</c> argument can be an instance of <c>net.Socket</c>, a subclass of <c>stream.Duplex</c>.
+            /// </summary>
+            abstract member reuseSocket:
+                socket: Node.stream.Stream_.Duplex * request: Node.http.ClientRequest -> unit
 
         /// <summary>
         /// See <c>http.Server</c> for more information.

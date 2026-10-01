@@ -709,3 +709,25 @@ module GlueSubstitution =
                     Parameters = parameters info.Parameters
                     Type = substitute info.Type
                 }
+
+    /// The type arguments of a reference by the name of the type parameters they stand for
+    let ofTypeArguments
+        (typeParameters: GlueTypeParameter list)
+        (typeArguments: GlueType list)
+        : Map<string, GlueType>
+        =
+        let substitutions =
+            typeParameters
+            |> List.mapi (fun index typeParameter ->
+                let argument =
+                    typeArguments
+                    |> List.tryItem index
+                    |> Option.orElse typeParameter.Default
+                    |> Option.defaultValue (GlueType.Primitive GluePrimitive.Any)
+
+                typeParameter.Name, argument
+            )
+            |> Map.ofList
+
+        // `T = Response<ResBody>`: a default mentions the earlier type parameters
+        substitutions |> Map.map (fun _ argument -> substitute substitutions argument)

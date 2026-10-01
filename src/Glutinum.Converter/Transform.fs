@@ -3048,9 +3048,13 @@ let private tryTransformCallableInterface
 
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
     let info =
+        let heritageClauses, members =
+            withoutRedeclaredBases context.TypeMemory info.Members info.HeritageClauses
+
         { info with
+            HeritageClauses = heritageClauses
             Members =
-                info.Members
+                members
                 |> CallableProperties.asMethods context.TypeMemory
                 |> Conditionals.resolveMembers context.State.Conditionals
         }
@@ -5037,6 +5041,18 @@ let private transformClassDeclaration
     : FSharpType list
     =
     let name, context = sanitizeTypeNameAndPushScope classDeclaration.Name context
+
+    let classDeclaration =
+        let heritageClauses, members =
+            withoutRedeclaredBases
+                context.TypeMemory
+                classDeclaration.Members
+                classDeclaration.HeritageClauses
+
+        { classDeclaration with
+            HeritageClauses = heritageClauses
+            Members = members
+        }
 
     let typeParametersResult =
         transformDeclarationTypeParameters context classDeclaration.TypeParameters

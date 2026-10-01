@@ -17379,7 +17379,7 @@ module Web =
     [<AllowNullLiteral>]
     [<Interface>]
     type AudioBufferSourceNode =
-        inherit Web.AudioScheduledSourceNode
+        inherit Web.AudioNode
         /// <summary>
         /// The **<c>buffer</c>** property of the AudioBufferSourceNode interface provides the ability to play back audio using an AudioBuffer as the source of the sound data.
         ///
@@ -17582,6 +17582,17 @@ module Web =
         abstract member removeEventListener:
             ``type``: string * listener: Web.EventListenerObject * options: Web.EventListenerOptions ->
                 unit
+
+        /// <summary>
+        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioScheduledSourceNode/ended_event)
+        /// </summary>
+        abstract member onended: (Web.Event -> unit) option with get, set
+        /// <summary>
+        /// The **<c>stop()</c>** method on AudioScheduledSourceNode schedules a sound to cease playback at the specified time. If no time is specified, then the sound stops playing immediately.
+        ///
+        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioScheduledSourceNode/stop)
+        /// </summary>
+        abstract member stop: ?``when``: float -> unit
 
     /// <summary>
     /// The **<c>AudioContext</c>** interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode.

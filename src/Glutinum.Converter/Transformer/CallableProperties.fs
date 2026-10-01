@@ -82,28 +82,6 @@ let rec tryCallableHeritageAt
 let tryCallableHeritage (typeMemory: GlueType list) (heritageClause: GlueType) =
     tryCallableHeritageAt 0 typeMemory heritageClause
 
-let private substitutions
-    (typeParameters: GlueTypeParameter list)
-    (typeArguments: GlueType list)
-    : Map<string, GlueType>
-    =
-    let substitutions =
-        typeParameters
-        |> List.mapi (fun index typeParameter ->
-            let argument =
-                typeArguments
-                |> List.tryItem index
-                |> Option.orElse typeParameter.Default
-                |> Option.defaultValue (GlueType.Primitive GluePrimitive.Any)
-
-            typeParameter.Name, argument
-        )
-        |> Map.ofList
-
-    // `T = Response<ResBody>`: a default mentions the earlier type parameters
-    substitutions
-    |> Map.map (fun _ argument -> GlueSubstitution.substitute substitutions argument)
-
 let private isCallSignature (glueMember: GlueMember) =
     match glueMember with
     | GlueMember.CallSignature _ -> true
@@ -223,7 +201,10 @@ let rec private signaturesOf
                 && info.Members |> List.forall isCallSignature
                 && info.HeritageClauses.IsEmpty
                 ->
-                let substitutions = substitutions info.TypeParameters typeReference.TypeArguments
+                let substitutions =
+                    GlueSubstitution.ofTypeArguments
+                        info.TypeParameters
+                        typeReference.TypeArguments
 
                 callSignatures info.Members
                 |> List.map (fun callSignature ->
@@ -239,7 +220,10 @@ let rec private signaturesOf
             | GlueType.TypeAliasDeclaration info when
                 info.FullName = typeReference.FullName && info.FullName <> ""
                 ->
-                let substitutions = substitutions info.TypeParameters typeReference.TypeArguments
+                let substitutions =
+                    GlueSubstitution.ofTypeArguments
+                        info.TypeParameters
+                        typeReference.TypeArguments
 
                 match info.Type with
                 | GlueType.FunctionType functionType ->
