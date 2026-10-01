@@ -536,6 +536,8 @@ and GlueConditionalType =
         ExtendsType: GlueType
         TrueType: GlueType
         FalseType: GlueType
+        /// `infer T` of the extends type, `ExtendsType` and `TrueType` name it as a type parameter
+        Inferred: GlueTypeParameter list
     }
 
 and GlueReExport =
@@ -628,6 +630,7 @@ module GlueSubstitution =
                     ExtendsType = substitute conditionalType.ExtendsType
                     TrueType = substitute conditionalType.TrueType
                     FalseType = substitute conditionalType.FalseType
+                    Inferred = conditionalType.Inferred
                 }
         | GlueType.KeyOf innerType -> GlueType.KeyOf(substitute innerType)
         | GlueType.IndexedAccessType indexedAccess ->

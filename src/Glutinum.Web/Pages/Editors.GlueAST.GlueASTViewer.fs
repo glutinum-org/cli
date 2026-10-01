@@ -530,6 +530,11 @@ type GlueASTViewer =
                     ASTViewer.renderNode "FalseType" [
                         GlueASTViewer.GlueType conditionalType.FalseType
                     ]
+                    conditionalType.Inferred
+                    |> List.map (fun typeParameter ->
+                        GlueASTViewer.GlueType(GlueType.TypeParameter typeParameter.Name)
+                    )
+                    |> ASTViewer.renderNode "Inferred"
                 ]
                 context
 

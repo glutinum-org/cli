@@ -8,7 +8,9 @@ open System
 [<Erase>]
 type Exports =
     [<Import("pipeline", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member pipeline<'B> (destination: 'B) : JS.Promise<obj> = nativeOnly
+    static member pipeline<'P> (destination: Destination<'P>) : JS.Promise<'P> = nativeOnly
+    [<Import("pipeline", "REPLACE_ME_WITH_MODULE_NAME")>]
+    static member pipeline<'B> (destination: 'B) : JS.Promise<unit> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

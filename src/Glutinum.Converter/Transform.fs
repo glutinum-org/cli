@@ -1655,7 +1655,7 @@ let private transformExports
             | GlueType.ExportDefault(GlueType.FunctionDeclaration info) ->
                 KeyOfMaps.expandFunction context.State.KeyOfMaps info
                 |> Conditionals.resolveFunction context.State.Conditionals
-                |> TransformMembers.withDefaultedTypeParameterOverloadsOfFunction
+                |> List.collect TransformMembers.withDefaultedTypeParameterOverloadsOfFunction
                 |> List.collect (fun (info: GlueFunctionDeclaration) ->
                     UnionOverloads.expandParameters context.TypeMemory info.Parameters
                     |> List.map (fun parameters ->

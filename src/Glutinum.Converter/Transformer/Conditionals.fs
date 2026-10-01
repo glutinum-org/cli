@@ -74,6 +74,22 @@ let create (typeMemory: GlueType list) : State =
 
 let isConditionalAlias (state: State) (fullName: string) = state.Aliases.ContainsKey fullName
 
+/// The branches compared with `infer T` standing for its constraint, `any` without one
+let private withInferredConstraints (conditionalType: GlueConditionalType) =
+    let constraints =
+        conditionalType.Inferred
+        |> List.map (fun typeParameter ->
+            typeParameter.Name,
+            typeParameter.Constraint
+            |> Option.defaultValue (GlueType.Primitive GluePrimitive.Any)
+        )
+        |> Map.ofList
+
+    { conditionalType with
+        ExtendsType = GlueSubstitution.substitute constraints conditionalType.ExtendsType
+        TrueType = GlueSubstitution.substitute constraints conditionalType.TrueType
+    }
+
 /// An F# interface can't inherit the abstract class a JavaScript error is printed as
 let rec private isErrorClass (state: State) (visited: Set<string>) (fullName: string) =
     match state.Classes.TryFind fullName with
@@ -226,7 +242,8 @@ let rec private resolveWith (state: State) (seen: Set<string>) (glueType: GlueTy
 
         match GlueSubstitution.substitute substitutions alias.Type with
         | GlueType.ConditionalType conditionalType ->
-            tryCollapse resolve conditionalType |> Option.defaultValue glueType
+            tryCollapse resolve (withInferredConstraints conditionalType)
+            |> Option.defaultValue glueType
         | GlueType.TypeReference _ as body ->
             match resolve body with
             | GlueType.TypeReference resolved when state.Aliases.ContainsKey resolved.FullName ->
@@ -241,7 +258,8 @@ let rec private resolveWith (state: State) (seen: Set<string>) (glueType: GlueTy
             else
                 resolved
     | GlueType.ConditionalType conditionalType ->
-        tryCollapse resolve conditionalType |> Option.defaultValue glueType
+        tryCollapse resolve (withInferredConstraints conditionalType)
+        |> Option.defaultValue glueType
     | GlueType.TypeReference typeReference ->
         GlueType.TypeReference
             { typeReference with
@@ -267,7 +285,283 @@ let rec private resolveWith (state: State) (seen: Set<string>) (glueType: GlueTy
             }
     | _ -> glueType
 
-let private resolve (state: State) (glueType: GlueType) = resolveWith state Set.empty glueType
+/// An inline conditional is left to the transform, as it was before the aliases were collapsed
+let private resolve (state: State) (glueType: GlueType) =
+    if state.Aliases.IsEmpty then
+        glueType
+    else
+        resolveWith state Set.empty glueType
+
+/// A branch of `Arg extends ElementHandle<infer T> ? T : ...`
+type private Branch =
+    | Overload of extends: GlueType * result: GlueType * inferred: GlueTypeParameter list
+    /// `T extends null ? never : T`: nothing to call with
+    | Nothing
+    /// A branch F# can't stand for, the conditional stays as written
+    | Inexpressible
+
+/// The body an alias reference stands for, `Unboxed<Arg>` as its conditional,
+/// `PageFunction<Arg, R>` as the union holding it
+let private expandAlias (state: State) (typeReference: GlueTypeReference) : GlueType option =
+    match state.AllAliases.TryFind typeReference.FullName with
+    | Some alias when alias.TypeParameters.Length = typeReference.TypeArguments.Length ->
+        let substitutions =
+            List.zip (alias.TypeParameters |> List.map _.Name) typeReference.TypeArguments
+            |> Map.ofList
+
+        Some(GlueSubstitution.substitute substitutions alias.Type)
+    | _ -> None
+
+let private inlineConditional (state: State) (glueType: GlueType) : GlueConditionalType option =
+    match glueType with
+    | GlueType.ConditionalType conditionalType -> Some conditionalType
+    | GlueType.TypeReference typeReference ->
+        match expandAlias state typeReference with
+        | Some(GlueType.ConditionalType conditionalType) -> Some conditionalType
+        | _ -> None
+    | _ -> None
+
+/// The first conditional over one of the own type parameters, `Unboxed<Arg>` of the callback
+/// of `PageFunction<Arg, R>`. An alias is entered once
+let rec private tryFindConditional
+    (state: State)
+    (own: Set<string>)
+    (seen: Set<string>)
+    (glueType: GlueType)
+    : (string * GlueConditionalType) option
+    =
+    let find = tryFindConditional state own seen
+
+    let overOwn (conditionalType: GlueConditionalType) =
+        match conditionalType.CheckType with
+        | GlueType.TypeParameter name when own.Contains name -> Some(name, conditionalType)
+        | _ -> None
+
+    match inlineConditional state glueType |> Option.bind overOwn with
+    | Some found -> Some found
+    | None ->
+        match glueType with
+        | GlueType.TypeReference typeReference ->
+            typeReference.TypeArguments
+            |> List.tryPick find
+            |> Option.orElseWith (fun () ->
+                if seen.Contains typeReference.FullName then
+                    None
+                else
+                    expandAlias state typeReference
+                    |> Option.bind (tryFindConditional state own (seen.Add typeReference.FullName))
+            )
+        | GlueType.Union(GlueTypeUnion cases) -> cases |> List.tryPick find
+        | GlueType.Array innerType
+        | GlueType.ReadOnly innerType
+        | GlueType.OptionalType innerType -> find innerType
+        | GlueType.TupleType elements -> elements |> List.tryPick find
+        | GlueType.FunctionType functionType ->
+            functionType.Parameters
+            |> List.tryPick (fun parameter -> find parameter.Type)
+            |> Option.orElseWith (fun () -> find functionType.Type)
+        | _ -> None
+
+/// The branches of a conditional chain over the same check type, and its last `else`
+let rec private branchesOf
+    (checkType: GlueType)
+    (conditionalType: GlueConditionalType)
+    : (GlueType * GlueType * GlueTypeParameter list) list * GlueType
+    =
+    let branch =
+        conditionalType.ExtendsType, conditionalType.TrueType, conditionalType.Inferred
+
+    match conditionalType.FalseType with
+    | GlueType.ConditionalType next when next.CheckType = checkType ->
+        let branches, elseType = branchesOf checkType next
+        branch :: branches, elseType
+    | elseType -> [ branch ], elseType
+
+/// `ElementHandle<infer T>` is an overload taking `ElementHandle<T>`, `string` one taking a
+/// `string`: nothing but its literals extends a primitive. `Node` is not, its subtypes would
+/// miss the overload
+let private classify
+    (state: State)
+    (checkedName: string)
+    (own: Set<string>)
+    (extends: GlueType, result: GlueType, inferred: GlueTypeParameter list)
+    : Branch
+    =
+    let inferredNames = inferred |> List.map _.Name
+
+    let argumentNames =
+        match extends with
+        | GlueType.TypeReference typeReference ->
+            typeReference.TypeArguments
+            |> List.choose (
+                function
+                | GlueType.TypeParameter name when List.contains name inferredNames -> Some name
+                | _ -> None
+            )
+        | _ -> []
+
+    if result = GlueType.Primitive GluePrimitive.Never then
+        Nothing
+    elif
+        List.contains checkedName (GlueSubstitution.mentionedTypeParameters extends)
+        || mentionsConditional state result
+        || inferredNames |> List.exists own.Contains
+    then
+        Inexpressible
+    else
+        match extends with
+        | GlueType.TypeReference typeReference when
+            not typeReference.TypeArguments.IsEmpty
+            && argumentNames.Length = typeReference.TypeArguments.Length
+            && (argumentNames |> List.distinct) = inferredNames
+            ->
+            Overload(extends, result, inferred)
+        | GlueType.Primitive(GluePrimitive.String | GluePrimitive.Number | GluePrimitive.Bool | GluePrimitive.BigInt) when
+            inferred.IsEmpty
+            ->
+            Overload(extends, result, [])
+        | _ -> Inexpressible
+
+/// `evaluate<R, Arg>(pageFunction: (arg: Unboxed<Arg>) => R, arg: Arg)` gets an overload per
+/// branch of `Unboxed`, `evaluate<R, T>(pageFunction: (arg: T) => R, arg: ElementHandle<T>)`.
+/// The signature as written stays last, its `else` standing for the conditional when every
+/// branch got its overload
+let private expandSignature
+    (state: State)
+    (typeParameters: GlueTypeParameter list)
+    (parameters: GlueParameter list)
+    (returnType: GlueType)
+    : (GlueTypeParameter list * GlueParameter list * GlueType) list
+    =
+    let own = typeParameters |> List.map _.Name |> set
+
+    let found =
+        parameters
+        |> List.tryPick (fun parameter -> tryFindConditional state own Set.empty parameter.Type)
+        |> Option.orElseWith (fun () -> tryFindConditional state own Set.empty returnType)
+
+    match found with
+    | None -> [ typeParameters, parameters, returnType ]
+    | Some(checkedName, conditionalType) ->
+        let branches, elseType = branchesOf conditionalType.CheckType conditionalType
+        let classified = branches |> List.map (classify state checkedName own)
+
+        let checkedNames = set [ checkedName ]
+
+        // `PageFunction<Arg, R>` is inlined when its body holds the conditional
+        let rec replace
+            (replacement: GlueType)
+            (seen: Set<string>)
+            (glueType: GlueType)
+            : GlueType
+            =
+            let replaceWithin = replace replacement
+            let replace = replace replacement seen
+
+            match inlineConditional state glueType with
+            | Some inlined when inlined.CheckType = GlueType.TypeParameter checkedName ->
+                replacement
+            | _ ->
+                match glueType with
+                | GlueType.TypeReference typeReference ->
+                    let body =
+                        if seen.Contains typeReference.FullName then
+                            None
+                        else
+                            expandAlias state typeReference
+                            |> Option.filter (fun body ->
+                                (tryFindConditional state checkedNames Set.empty body).IsSome
+                            )
+
+                    match body with
+                    | Some body -> replaceWithin (seen.Add typeReference.FullName) body
+                    | None ->
+                        GlueType.TypeReference
+                            { typeReference with
+                                TypeArguments = typeReference.TypeArguments |> List.map replace
+                            }
+                | GlueType.Union(GlueTypeUnion cases) ->
+                    GlueType.Union(GlueTypeUnion(cases |> List.map replace))
+                | GlueType.Array innerType -> GlueType.Array(replace innerType)
+                | GlueType.ReadOnly innerType -> GlueType.ReadOnly(replace innerType)
+                | GlueType.OptionalType innerType -> GlueType.OptionalType(replace innerType)
+                | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map replace)
+                | GlueType.FunctionType functionType ->
+                    GlueType.FunctionType
+                        { functionType with
+                            Parameters =
+                                functionType.Parameters
+                                |> List.map (fun parameter ->
+                                    { parameter with
+                                        Type = replace parameter.Type
+                                    }
+                                )
+                            Type = replace functionType.Type
+                        }
+                | _ -> glueType
+
+        let signature
+            (replacement: GlueType)
+            (substitutions: Map<string, GlueType>)
+            (typeParameters: GlueTypeParameter list)
+            =
+            typeParameters,
+            parameters
+            |> List.map (fun parameter ->
+                { parameter with
+                    Type =
+                        replace replacement Set.empty parameter.Type
+                        |> GlueSubstitution.substitute substitutions
+                }
+            ),
+            replace replacement Set.empty returnType
+            |> GlueSubstitution.substitute substitutions
+
+        // `eachDay(interval, options?: Opts)`: with the option left out, F# can't tell the
+        // overloads apart. Only a required parameter typed by the checked parameter tells them
+        let isTold =
+            parameters
+            |> List.exists (fun parameter ->
+                not parameter.IsOptional
+                && not parameter.IsSpread
+                && parameter.Type = GlueType.TypeParameter checkedName
+            )
+
+        let overloads =
+            classified
+            |> List.choose (
+                function
+                | Overload(extends, result, inferred) when isTold ->
+                    let typeParameters =
+                        (typeParameters
+                         |> List.filter (fun typeParameter -> typeParameter.Name <> checkedName))
+                        @ (inferred
+                           |> List.map (fun typeParameter ->
+                               { typeParameter with Constraint = None }
+                           ))
+
+                    Some(signature result (Map.ofList [ checkedName, extends ]) typeParameters)
+                | Overload _
+                | Nothing
+                | Inexpressible -> None
+            )
+
+        let everyBranchStoodFor =
+            classified
+            |> List.forall (
+                function
+                | Inexpressible -> false
+                | Overload _ -> isTold
+                | Nothing -> true
+            )
+
+        let asWritten =
+            if everyBranchStoodFor then
+                signature elseType Map.empty typeParameters
+            else
+                typeParameters, parameters, returnType
+
+        overloads @ [ asWritten ] |> List.distinct
 
 /// `...args: AnyRest` where `type AnyRest = [...args: any[]]` is a rest parameter of `any`
 let private restArray (state: State) (glueType: GlueType) =
@@ -284,52 +578,64 @@ let private restArray (state: State) (glueType: GlueType) =
     | _ -> glueType
 
 let private resolveParameters (state: State) (parameters: GlueParameter list) =
-    parameters
-    |> List.map (fun parameter ->
-        let resolved = resolve state parameter.Type
-
-        { parameter with
-            Type =
-                if parameter.IsSpread then
-                    restArray state resolved
-                else
-                    resolved
-        }
-    )
-
-/// The members of a declaration, the conditional types left deferred collapsed
-let resolveMembers (state: State) (members: GlueMember list) =
     if state.Aliases.IsEmpty then
-        members
+        parameters
     else
-        members
-        |> List.map (fun glueMember ->
-            match glueMember with
-            | GlueMember.Method info ->
+        parameters
+        |> List.map (fun parameter ->
+            let resolved = resolve state parameter.Type
+
+            { parameter with
+                Type =
+                    if parameter.IsSpread then
+                        restArray state resolved
+                    else
+                        resolved
+            }
+        )
+
+/// The members of a declaration, the conditional types left deferred collapsed, the ones over
+/// an own type parameter expanded into overloads
+let resolveMembers (state: State) (members: GlueMember list) =
+    members
+    |> List.collect (fun glueMember ->
+        match glueMember with
+        | GlueMember.Method info ->
+            expandSignature state info.TypeParameters info.Parameters info.Type
+            |> List.map (fun (typeParameters, parameters, returnType) ->
                 GlueMember.Method
                     { info with
-                        Parameters = resolveParameters state info.Parameters
-                        Type = resolve state info.Type
+                        TypeParameters = typeParameters
+                        Parameters = resolveParameters state parameters
+                        Type = resolve state returnType
                     }
-            | GlueMember.MethodSignature info ->
+            )
+        | GlueMember.MethodSignature info ->
+            expandSignature state info.TypeParameters info.Parameters info.Type
+            |> List.map (fun (typeParameters, parameters, returnType) ->
                 GlueMember.MethodSignature
                     { info with
-                        Parameters = resolveParameters state info.Parameters
-                        Type = resolve state info.Type
+                        TypeParameters = typeParameters
+                        Parameters = resolveParameters state parameters
+                        Type = resolve state returnType
                     }
-            | GlueMember.Property info ->
+            )
+        | GlueMember.Property info ->
+            [
                 GlueMember.Property
                     { info with
                         Type = resolve state info.Type
                     }
-            | _ -> glueMember
-        )
+            ]
+        | _ -> [ glueMember ]
+    )
 
-let resolveFunction (state: State) (info: GlueFunctionDeclaration) : GlueFunctionDeclaration =
-    if state.Aliases.IsEmpty then
-        info
-    else
+let resolveFunction (state: State) (info: GlueFunctionDeclaration) : GlueFunctionDeclaration list =
+    expandSignature state info.TypeParameters info.Parameters info.Type
+    |> List.map (fun (typeParameters, parameters, returnType) ->
         { info with
-            Parameters = resolveParameters state info.Parameters
-            Type = resolve state info.Type
+            TypeParameters = typeParameters
+            Parameters = resolveParameters state parameters
+            Type = resolve state returnType
         }
+    )

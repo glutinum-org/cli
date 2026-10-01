@@ -2041,19 +2041,22 @@ let private readConditionalType (reader: ITypeScriptReader) (typeNode: Ts.TypeNo
             let inferred =
                 inferTypeNodes conditionalTypeNode.extendsType
                 |> List.map (fun inferTypeNode ->
-                    inferTypeNode.typeParameter.name.getText (),
-                    inferredConstraint reader inferTypeNode
+                    ({
+                        Name = inferTypeNode.typeParameter.name.getText ()
+                        Constraint = Some(inferredConstraint reader inferTypeNode)
+                        Default = None
+                    }
+                    : GlueTypeParameter)
                 )
-                |> Microsoft.FSharp.Collections.Map.ofList
+                |> List.distinctBy _.Name
 
             let conditionalType =
                 ({
                     CheckType = reader.ReadTypeNode conditionalTypeNode.checkType
                     ExtendsType = reader.ReadTypeNode conditionalTypeNode.extendsType
-                    TrueType =
-                        reader.ReadTypeNode conditionalTypeNode.trueType
-                        |> GlueSubstitution.substitute inferred
+                    TrueType = reader.ReadTypeNode conditionalTypeNode.trueType
                     FalseType = reader.ReadTypeNode conditionalTypeNode.falseType
+                    Inferred = inferred
                 }
                 : GlueConditionalType)
 
@@ -2251,7 +2254,10 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
     | Ts.SyntaxKind.ExpressionWithTypeArguments -> readExpressionWithTypeArguments reader typeNode
 
-    | Ts.SyntaxKind.InferType -> inferredConstraint reader (typeNode :?> Ts.InferTypeNode)
+    // `infer T` names a type parameter of the conditional, the transform binds it
+    | Ts.SyntaxKind.InferType ->
+        (typeNode :?> Ts.InferTypeNode).typeParameter.name.getText()
+        |> GlueType.TypeParameter
 
     | Ts.SyntaxKind.ConditionalType -> readConditionalType reader typeNode
 
