@@ -4305,13 +4305,16 @@ let private aliasOfTypeReference (scope: AliasScope) (typeReference: GlueTypeRef
     match typeReference.TypeArguments with
     // `type X = Promise<A & B>`: the intersection is a real interface, not `obj`
     | [ GlueType.IntersectionType members ] ->
+        // `type Keys<T> = Prune<A<T> & B>` keeps `T` on the interface and the alias
+        let typeParameters = scope.TypeParameters.Value.TypeParameters
+
         let makeInterfaceTyp name =
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = name
                 OriginalName = scope.Declaration.Name
-                TypeParameters = []
+                TypeParameters = typeParameters
                 Members = TransformMembers.toFSharpMember context members
                 Inheritance = []
             }
@@ -4337,7 +4340,7 @@ let private aliasOfTypeReference (scope: AliasScope) (typeReference: GlueTypeRef
                     Type = FSharpType.Discard
                 }
                 |> FSharpType.TypeReference
-            TypeParameters = []
+            TypeParameters = typeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -4990,11 +4993,50 @@ let private transformClassDeclaration
 
     classDefinition :: specialiazedAlias
 
+/// The delegate of `setData: (data: string) => void` is the `Options.setData` the map exposed
+let private keysMemberTransform (scope: TransformContext) (memberName: string) =
+    let _, memberScope = sanitizeMemberNameAndPushScope false memberName scope
+    transformType memberScope
+
+/// `Options.Keys` when a method constrains a type parameter by `keyof Options`
+let private keysModuleOf
+    (context: TransformContext)
+    (interfaceInfo: GlueInterface)
+    (fsharpInterface: FSharpInterface)
+    : FSharpType list
+    =
+    if KeyOfMaps.isMapNamed context.State.KeyOfMaps interfaceInfo.FullName interfaceInfo.Name then
+        // `HTMLElementEventMap` inherits most of its keys
+        let members =
+            ParamObjectCandidate.tryResolveMembers context.TypeMemory interfaceInfo
+            |> Option.defaultValue interfaceInfo.Members
+
+        [
+            KeyOfMaps.keysModule
+                (keysMemberTransform (context.PushScope fsharpInterface.Name))
+                fsharpInterface.Name
+                members
+        ]
+    else
+        []
+
 let private transformToFsharp
     (context: TransformContext)
     (glueTypes: GlueType list)
     : FSharpType list
     =
+    context.SiblingTypeNames <-
+        glueTypes
+        |> List.choose (
+            function
+            | GlueType.Interface info -> Some info.Name
+            | GlueType.ClassDeclaration info -> Some info.Name
+            | GlueType.TypeAliasDeclaration info -> Some info.Name
+            | _ -> None
+        )
+        |> List.map Naming.sanitizeTypeName
+        |> set
+
     glueTypes
     |> List.collect (
         function
@@ -5023,12 +5065,11 @@ let private transformToFsharp
             let creates =
                 paramObjectCreateMembers (context.PushScope fsharpInterface.Name) returnType members
 
-            [
-                FSharpType.Interface
-                    { fsharpInterface with
-                        Members = fsharpInterface.Members @ creates
-                    }
-            ]
+            FSharpType.Interface
+                { fsharpInterface with
+                    Members = fsharpInterface.Members @ creates
+                }
+            :: keysModuleOf context interfaceInfo fsharpInterface
 
         | GlueType.Interface interfaceInfo ->
             match tryTransformCallableInterface context interfaceInfo with
@@ -5036,25 +5077,8 @@ let private transformToFsharp
             | None ->
                 let fsharpInterface = transformInterface context interfaceInfo
 
-                [
-                    FSharpType.Interface fsharpInterface
-
-                    if
-                        KeyOfMaps.isMapNamed
-                            context.State.KeyOfMaps
-                            interfaceInfo.FullName
-                            interfaceInfo.Name
-                    then
-                        // `HTMLElementEventMap` inherits most of its keys
-                        let members =
-                            ParamObjectCandidate.tryResolveMembers context.TypeMemory interfaceInfo
-                            |> Option.defaultValue interfaceInfo.Members
-
-                        KeyOfMaps.keysModule
-                            (transformType (context.PushScope fsharpInterface.Name))
-                            fsharpInterface.Name
-                            members
-                ]
+                FSharpType.Interface fsharpInterface
+                :: keysModuleOf context interfaceInfo fsharpInterface
 
         | GlueType.Enum enumInfo -> transformEnum enumInfo |> List.singleton
 
@@ -5070,7 +5094,7 @@ let private transformToFsharp
                     KeyOfMaps.isMap context.State.KeyOfMaps typeAliasInfo.FullName
                     ->
                     KeyOfMaps.keysModule
-                        (transformType (context.PushScope fsharpInterface.Name))
+                        (keysMemberTransform (context.PushScope fsharpInterface.Name))
                         fsharpInterface.Name
                         members
                 | _ -> ()

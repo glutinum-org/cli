@@ -355,7 +355,18 @@ type TransformContext
     member this.ReferenceName(name: string) =
         typeLiteralsMemory.ReferenceName(this.FullName, name)
 
+    /// The types declared beside each other in the scope, set by the transform of the scope
+    member val SiblingTypeNames: Set<string> = Set.empty with get, set
+
     member this.PushScope(scopeName: string, ?originalScopeName: string) =
+        // `module Formatter` beside `type Formatter` is compiled as `FormatterModule`, the name
+        // an interface `FormatterModule` beside them has already
+        let scopeName =
+            if this.SiblingTypeNames.Contains(scopeName + "Module") then
+                scopeName + "_"
+            else
+                scopeName
+
         let childContext =
             TransformContext(
                 reporter,

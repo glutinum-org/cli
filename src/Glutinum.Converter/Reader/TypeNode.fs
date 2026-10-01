@@ -2094,9 +2094,16 @@ let private readConditionalType (reader: ITypeScriptReader) (typeNode: Ts.TypeNo
         // because 'T is not used in the type
         // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
         // usage by inlining the logic here and make it more specific
-        match readTypeUsingFlags reader typ with
-        | GlueType.Primitive GluePrimitive.Any -> reader.ReadTypeNode conditionalTypeNode.checkType
-        | forward -> forward
+        match typ.flags with
+        // `Flag extends true ? Value : Fallback` is its branch
+        | HasTypeFlags Ts.TypeFlags.TypeParameter -> GlueType.TypeParameter typ.symbol.name
+        | HasTypeFlags Ts.TypeFlags.BooleanLiteral ->
+            GlueType.Literal(GlueLiteral.Bool(typ?intrinsicName = "true"))
+        | _ ->
+            match readTypeUsingFlags reader typ with
+            | GlueType.Primitive GluePrimitive.Any ->
+                reader.ReadTypeNode conditionalTypeNode.checkType
+            | forward -> forward
 
 let private readTemplateLiteralType (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
     let checker = reader.checker

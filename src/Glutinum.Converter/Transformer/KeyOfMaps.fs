@@ -23,15 +23,16 @@ type State =
 
 let create (typeMemory: GlueType list) : State =
     let maps = HashSet<string>()
-    let mapNames = HashSet<string>()
+    let mapNames = Dictionary<string, string>()
     let indexedAliases = Dictionary<string, string>()
 
     let collectFromTypeParameters (typeParameters: GlueTypeParameter list) =
         for typeParameter in typeParameters do
             match typeParameter.Constraint with
-            | Some(GlueType.KeyOf(GlueType.TypeReference map)) ->
+            // `keyof CSSStyleDeclaration` of the DOM binding has no `Key` to refer to
+            | Some(GlueType.KeyOf(GlueType.TypeReference map)) when not map.IsStandardLibrary ->
                 maps.Add map.FullName |> ignore
-                mapNames.Add map.Name |> ignore
+                mapNames.[map.FullName] <- map.Name
             | _ -> ()
 
     let collectFromMembers (members: GlueMember list) =
@@ -65,9 +66,25 @@ let create (typeMemory: GlueType list) : State =
 
     typeMemory |> List.iter collect
 
+    // `keyof CSSStyleDeclaration` of the DOM binding has no `Key` to refer to
+    let declared = HashSet<string>()
+
+    let rec collectDeclared (glueType: GlueType) =
+        match glueType with
+        | GlueType.Interface info -> declared.Add info.FullName |> ignore
+        | GlueType.ClassDeclaration info -> declared.Add info.FullName |> ignore
+        | GlueType.TypeAliasDeclaration info -> declared.Add info.FullName |> ignore
+        | GlueType.ModuleDeclaration info -> info.Types |> List.iter collectDeclared
+        | GlueType.FileModule info -> info.Types |> List.iter collectDeclared
+        | _ -> ()
+
+    typeMemory |> List.iter collectDeclared
+
+    let maps = maps |> Seq.filter declared.Contains |> Seq.toList
+
     {
-        Maps = Set.ofSeq maps
-        MapNames = Set.ofSeq mapNames
+        Maps = Set.ofList maps
+        MapNames = maps |> List.map (fun fullName -> mapNames.[fullName]) |> Set.ofList
         IndexedAliases =
             indexedAliases
             |> Seq.map (fun (KeyValue(key, value)) -> key, value)
@@ -150,7 +167,8 @@ let private expand
     ((typeParameters, parameters, returnType), typeParameters)
     ||> List.fold (fun (typeParameters, parameters, returnType) typeParameter ->
         match typeParameter.Constraint with
-        | Some(GlueType.KeyOf(GlueType.TypeReference map)) ->
+        // A map the output doesn't declare has no `Key`, the constraint stays a `string`
+        | Some(GlueType.KeyOf(GlueType.TypeReference map)) when isMap state map.FullName ->
             let substitute = substitute state typeParameter.Name map
 
             typeParameters
@@ -208,8 +226,9 @@ let expandMembers (state: State) (members: GlueMember list) : GlueMember list =
     )
 
 /// The module of a map: `Key<'V>` and the typed keys
+/// `transformType` takes the member the type belongs to, its delegate is named after it
 let keysModule
-    (transformType: GlueType -> FSharpType)
+    (transformType: string -> GlueType -> FSharpType)
     (name: string)
     (members: GlueMember list)
     : FSharpType
@@ -236,7 +255,7 @@ let keysModule
                     OriginalName = property.Name
                     Parameters = []
                     TypeParameters = []
-                    Type = keyType (transformType property.Type)
+                    Type = keyType (transformType property.Name property.Type)
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
