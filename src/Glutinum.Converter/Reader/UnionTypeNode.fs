@@ -96,8 +96,7 @@ let rec private readUnionTypeCases
                                     obj.ReferenceEquals(inProgress, declaration)
                                 )
 
-                            // `type Nested = ReadonlyArray<Nested | string>` names itself in its
-                            // cases: it stays a reference there
+                            // `type Nested = ReadonlyArray<Nested | string>` would inline itself without end
                             if isInAnotherModule || isBeingInlined then
                                 reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
                             else

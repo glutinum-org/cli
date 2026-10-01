@@ -422,103 +422,117 @@ let private classify
             Overload(extends, result, [])
         | _ -> Inexpressible
 
+/// A signature, the overloads of a conditional are built from the one as written
+type private Signature =
+    {
+        TypeParameters: GlueTypeParameter list
+        Parameters: GlueParameter list
+        ReturnType: GlueType
+    }
+
+/// The conditionals over `checkedName` replaced, `PageFunction<Arg, R>` holding one is inlined
+let rec private replaceConditional
+    (state: State)
+    (checkedName: string)
+    (replacement: GlueType)
+    (seen: Set<string>)
+    (glueType: GlueType)
+    : GlueType
+    =
+    let replace = replaceConditional state checkedName replacement seen
+
+    match inlineConditional state glueType with
+    | Some inlined when inlined.CheckType = GlueType.TypeParameter checkedName -> replacement
+    | _ ->
+        match glueType with
+        | GlueType.TypeReference typeReference ->
+            let body =
+                if seen.Contains typeReference.FullName then
+                    None
+                else
+                    expandAlias state typeReference
+                    |> Option.filter (fun body ->
+                        (tryFindConditional state (set [ checkedName ]) Set.empty body).IsSome
+                    )
+
+            match body with
+            | Some body ->
+                replaceConditional
+                    state
+                    checkedName
+                    replacement
+                    (seen.Add typeReference.FullName)
+                    body
+            | None ->
+                GlueType.TypeReference
+                    { typeReference with
+                        TypeArguments = typeReference.TypeArguments |> List.map replace
+                    }
+        | GlueType.Union(GlueTypeUnion cases) ->
+            GlueType.Union(GlueTypeUnion(cases |> List.map replace))
+        | GlueType.Array innerType -> GlueType.Array(replace innerType)
+        | GlueType.ReadOnly innerType -> GlueType.ReadOnly(replace innerType)
+        | GlueType.OptionalType innerType -> GlueType.OptionalType(replace innerType)
+        | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map replace)
+        | GlueType.FunctionType functionType ->
+            GlueType.FunctionType
+                { functionType with
+                    Parameters =
+                        functionType.Parameters
+                        |> List.map (fun parameter ->
+                            { parameter with
+                                Type = replace parameter.Type
+                            }
+                        )
+                    Type = replace functionType.Type
+                }
+        | _ -> glueType
+
+/// The signature with the conditional over `checkedName` replaced and the substitutions applied
+let private signatureWith
+    (state: State)
+    (checkedName: string)
+    (replacement: GlueType)
+    (substitutions: Map<string, GlueType>)
+    (signature: Signature)
+    : Signature
+    =
+    let rewrite (glueType: GlueType) =
+        replaceConditional state checkedName replacement Set.empty glueType
+        |> GlueSubstitution.substitute substitutions
+
+    { signature with
+        Parameters =
+            signature.Parameters
+            |> List.map (fun parameter ->
+                { parameter with
+                    Type = rewrite parameter.Type
+                }
+            )
+        ReturnType = rewrite signature.ReturnType
+    }
+
 /// `evaluate<R, Arg>(pageFunction: (arg: Unboxed<Arg>) => R, arg: Arg)` gets an overload per
 /// branch of `Unboxed`, `evaluate<R, T>(pageFunction: (arg: T) => R, arg: ElementHandle<T>)`.
 /// The signature as written stays last, its `else` standing for the conditional when every
 /// branch got its overload
-let private expandSignature
-    (state: State)
-    (typeParameters: GlueTypeParameter list)
-    (parameters: GlueParameter list)
-    (returnType: GlueType)
-    : (GlueTypeParameter list * GlueParameter list * GlueType) list
-    =
-    let own = typeParameters |> List.map _.Name |> set
+let private expandSignature (state: State) (signature: Signature) : Signature list =
+    let own = signature.TypeParameters |> List.map _.Name |> set
 
     let found =
-        parameters
+        signature.Parameters
         |> List.tryPick (fun parameter -> tryFindConditional state own Set.empty parameter.Type)
-        |> Option.orElseWith (fun () -> tryFindConditional state own Set.empty returnType)
+        |> Option.orElseWith (fun () -> tryFindConditional state own Set.empty signature.ReturnType)
 
     match found with
-    | None -> [ typeParameters, parameters, returnType ]
+    | None -> [ signature ]
     | Some(checkedName, conditionalType) ->
         let branches, elseType = branchesOf conditionalType.CheckType conditionalType
         let classified = branches |> List.map (classify state checkedName own)
 
-        let checkedNames = set [ checkedName ]
-
-        let rec replace
-            (replacement: GlueType)
-            (seen: Set<string>)
-            (glueType: GlueType)
-            : GlueType
-            =
-            let replaceWithin = replace replacement
-            let replace = replace replacement seen
-
-            match inlineConditional state glueType with
-            | Some inlined when inlined.CheckType = GlueType.TypeParameter checkedName ->
-                replacement
-            | _ ->
-                match glueType with
-                | GlueType.TypeReference typeReference ->
-                    let body =
-                        if seen.Contains typeReference.FullName then
-                            None
-                        else
-                            expandAlias state typeReference
-                            |> Option.filter (fun body ->
-                                (tryFindConditional state checkedNames Set.empty body).IsSome
-                            )
-
-                    match body with
-                    | Some body -> replaceWithin (seen.Add typeReference.FullName) body
-                    | None ->
-                        GlueType.TypeReference
-                            { typeReference with
-                                TypeArguments = typeReference.TypeArguments |> List.map replace
-                            }
-                | GlueType.Union(GlueTypeUnion cases) ->
-                    GlueType.Union(GlueTypeUnion(cases |> List.map replace))
-                | GlueType.Array innerType -> GlueType.Array(replace innerType)
-                | GlueType.ReadOnly innerType -> GlueType.ReadOnly(replace innerType)
-                | GlueType.OptionalType innerType -> GlueType.OptionalType(replace innerType)
-                | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map replace)
-                | GlueType.FunctionType functionType ->
-                    GlueType.FunctionType
-                        { functionType with
-                            Parameters =
-                                functionType.Parameters
-                                |> List.map (fun parameter ->
-                                    { parameter with
-                                        Type = replace parameter.Type
-                                    }
-                                )
-                            Type = replace functionType.Type
-                        }
-                | _ -> glueType
-
-        let signature
-            (replacement: GlueType)
-            (substitutions: Map<string, GlueType>)
-            (typeParameters: GlueTypeParameter list)
-            =
-            typeParameters,
-            parameters
-            |> List.map (fun parameter ->
-                { parameter with
-                    Type =
-                        replace replacement Set.empty parameter.Type
-                        |> GlueSubstitution.substitute substitutions
-                }
-            ),
-            replace replacement Set.empty returnType
-            |> GlueSubstitution.substitute substitutions
-
         // With `options?: Opts` left out, F# can't tell the overloads apart
         let isTold =
-            parameters
+            signature.Parameters
             |> List.exists (fun parameter ->
                 not parameter.IsOptional
                 && not parameter.IsSpread
@@ -531,14 +545,18 @@ let private expandSignature
                 function
                 | Overload(extends, result, inferred) when isTold ->
                     let typeParameters =
-                        (typeParameters
+                        (signature.TypeParameters
                          |> List.filter (fun typeParameter -> typeParameter.Name <> checkedName))
                         @ (inferred
                            |> List.map (fun typeParameter ->
                                { typeParameter with Constraint = None }
                            ))
 
-                    Some(signature result (Map.ofList [ checkedName, extends ]) typeParameters)
+                    { signature with
+                        TypeParameters = typeParameters
+                    }
+                    |> signatureWith state checkedName result (Map.ofList [ checkedName, extends ])
+                    |> Some
                 | Overload _
                 | Nothing
                 | Inexpressible -> None
@@ -555,9 +573,9 @@ let private expandSignature
 
         let asWritten =
             if everyBranchStoodFor then
-                signature elseType Map.empty typeParameters
+                signatureWith state checkedName elseType Map.empty signature
             else
-                typeParameters, parameters, returnType
+                signature
 
         overloads @ [ asWritten ] |> List.distinct
 
@@ -599,23 +617,35 @@ let resolveMembers (state: State) (members: GlueMember list) =
     |> List.collect (fun glueMember ->
         match glueMember with
         | GlueMember.Method info ->
-            expandSignature state info.TypeParameters info.Parameters info.Type
-            |> List.map (fun (typeParameters, parameters, returnType) ->
+            expandSignature
+                state
+                {
+                    TypeParameters = info.TypeParameters
+                    Parameters = info.Parameters
+                    ReturnType = info.Type
+                }
+            |> List.map (fun signature ->
                 GlueMember.Method
                     { info with
-                        TypeParameters = typeParameters
-                        Parameters = resolveParameters state parameters
-                        Type = resolve state returnType
+                        TypeParameters = signature.TypeParameters
+                        Parameters = resolveParameters state signature.Parameters
+                        Type = resolve state signature.ReturnType
                     }
             )
         | GlueMember.MethodSignature info ->
-            expandSignature state info.TypeParameters info.Parameters info.Type
-            |> List.map (fun (typeParameters, parameters, returnType) ->
+            expandSignature
+                state
+                {
+                    TypeParameters = info.TypeParameters
+                    Parameters = info.Parameters
+                    ReturnType = info.Type
+                }
+            |> List.map (fun signature ->
                 GlueMember.MethodSignature
                     { info with
-                        TypeParameters = typeParameters
-                        Parameters = resolveParameters state parameters
-                        Type = resolve state returnType
+                        TypeParameters = signature.TypeParameters
+                        Parameters = resolveParameters state signature.Parameters
+                        Type = resolve state signature.ReturnType
                     }
             )
         | GlueMember.Property info ->
@@ -629,11 +659,17 @@ let resolveMembers (state: State) (members: GlueMember list) =
     )
 
 let resolveFunction (state: State) (info: GlueFunctionDeclaration) : GlueFunctionDeclaration list =
-    expandSignature state info.TypeParameters info.Parameters info.Type
-    |> List.map (fun (typeParameters, parameters, returnType) ->
+    expandSignature
+        state
+        {
+            TypeParameters = info.TypeParameters
+            Parameters = info.Parameters
+            ReturnType = info.Type
+        }
+    |> List.map (fun signature ->
         { info with
-            TypeParameters = typeParameters
-            Parameters = resolveParameters state parameters
-            Type = resolve state returnType
+            TypeParameters = signature.TypeParameters
+            Parameters = resolveParameters state signature.Parameters
+            Type = resolve state signature.ReturnType
         }
     )

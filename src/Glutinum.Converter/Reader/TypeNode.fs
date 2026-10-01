@@ -394,6 +394,113 @@ let private typeParameterNamesOf (checker: Ts.TypeChecker) (typ: Ts.Type) =
         | _ -> None
     )
 
+/// An answer still naming one of the bound types stands for the binding, not the reference
+let private isStillBound
+    (checker: Ts.TypeChecker)
+    (bound: Map<string, Ts.TypeNode>)
+    (typ: Ts.Type)
+    =
+    // `never` or `string` in the answer says nothing, a named type does
+    let substitutes =
+        bound.Values
+        |> Seq.filter (fun node -> node.kind = Ts.SyntaxKind.TypeReference)
+        |> Seq.map checker.getTypeFromTypeNode
+        |> Seq.toList
+
+    let mentioned = mentionedTypes checker 0 typ
+
+    substitutes
+    |> List.exists (fun substitute ->
+        mentioned |> List.exists (fun typ -> obj.ReferenceEquals(typ, substitute))
+    )
+
+/// The checker asked again with the type parameters the deferred conditionals name bound, until
+/// nothing is deferred or nothing new binds
+let rec private resolveWithBindings
+    (checker: Ts.TypeChecker)
+    (typeNode: Ts.TypeNode)
+    (bindings: Map<string, Ts.TypeNode>)
+    (bound: Map<string, Ts.TypeNode>)
+    (typ: Ts.Type)
+    : Ts.Type option
+    =
+    let conditionals = deferredConditionals checker 0 typ
+
+    if conditionals.IsEmpty then
+        if isStillBound checker bound typ then
+            None
+        else
+            Some typ
+    else
+        let alreadyBound = bound.Count
+
+        let bound =
+            (bound, conditionals)
+            ||> List.fold (fun bound conditional ->
+                (bound,
+                 typeParameterNamesOf checker conditional.checkType
+                 @ typeParameterNamesOf checker conditional.extendsType)
+                ||> List.fold (fun bound name ->
+                    match bindings.TryFind name with
+                    | Some binding when not (bound.ContainsKey name) -> bound.Add(name, binding)
+                    | _ -> bound
+                )
+            )
+
+        // A synthesized conditional gets a new root each time, the loop ends on the bindings
+        if bound.Count = alreadyBound || not (mentionsBoundTypeParameter bound typeNode) then
+            None
+        else
+            checker.getTypeFromTypeNode (substituteBoundTypeParameters bound typeNode)
+            |> resolveWithBindings checker typeNode bindings bound
+
+/// A conditional node, or a reference to an alias whose body is one, alias chains followed
+let rec private standsForConditional
+    (checker: Ts.TypeChecker)
+    (visited: Set<string>)
+    (node: Ts.Node)
+    : bool
+    =
+    match node.kind with
+    | Ts.SyntaxKind.ConditionalType -> true
+    | Ts.SyntaxKind.ParenthesizedType ->
+        standsForConditional checker visited (node :?> Ts.ParenthesizedTypeNode).``type``
+    | Ts.SyntaxKind.TypeReference ->
+        let typeReferenceNode = node :?> Ts.TypeReferenceNode
+
+        match
+            symbolAtLocation checker !!typeReferenceNode.typeName
+            |> Option.bind (resolveAlias checker)
+        with
+        | Some symbol ->
+            let key = checker.getFullyQualifiedName symbol
+
+            not (visited.Contains key)
+            && (symbol.declarations
+                |> Option.map (
+                    Seq.exists (fun declaration ->
+                        declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
+                        && standsForConditional
+                            checker
+                            (visited.Add key)
+                            (declaration :?> Ts.TypeAliasDeclaration).``type``
+                    )
+                )
+                |> Option.defaultValue false)
+        | None -> false
+    | _ -> false
+
+/// Inside the constraint of a type parameter, a default is not a constraint
+let rec private isWithinConstraint (node: Ts.Node) =
+    if isNull node || isNull node.parent then
+        false
+    elif node.parent.kind = Ts.SyntaxKind.TypeParameter then
+        match (node.parent :?> Ts.TypeParameterDeclaration).``constraint`` with
+        | Some constraint_ -> obj.ReferenceEquals(constraint_, node)
+        | None -> false
+    else
+        isWithinConstraint node.parent
+
 /// `on<K>(event: Key<K, T>)` of `EventEmitter<T = DefaultEventMap>`: the checker defers
 /// `Key<K, T>`, it resolves `Key<K, DefaultEventMap>`. The type parameters the condition names
 /// are bound to their default or constraint, the ones the branches name only stay generic, and
@@ -404,106 +511,12 @@ let private tryResolveDeferred
     : GlueType option
     =
     let checker = reader.checker
-
-    let rec resolve
-        (bindings: Map<string, Ts.TypeNode>)
-        (bound: Map<string, Ts.TypeNode>)
-        (typ: Ts.Type)
-        =
-        let conditionals = deferredConditionals checker 0 typ
-
-        if conditionals.IsEmpty then
-            // `never` or `string` in the answer says nothing, a named type does
-            let substitutes =
-                bound.Values
-                |> Seq.filter (fun node -> node.kind = Ts.SyntaxKind.TypeReference)
-                |> Seq.map checker.getTypeFromTypeNode
-                |> Seq.toList
-
-            let mentioned = mentionedTypes checker 0 typ
-
-            let stillBound =
-                substitutes
-                |> List.exists (fun substitute ->
-                    mentioned |> List.exists (fun typ -> obj.ReferenceEquals(typ, substitute))
-                )
-
-            if stillBound then
-                None
-            else
-                Some typ
-        else
-            let alreadyBound = bound.Count
-
-            let bound =
-                (bound, conditionals)
-                ||> List.fold (fun bound conditional ->
-                    (bound,
-                     typeParameterNamesOf checker conditional.checkType
-                     @ typeParameterNamesOf checker conditional.extendsType)
-                    ||> List.fold (fun bound name ->
-                        match bindings.TryFind name with
-                        | Some binding when not (bound.ContainsKey name) ->
-                            bound.Add(name, binding)
-                        | _ -> bound
-                    )
-                )
-
-            // A synthesized conditional gets a new root each time, the loop ends on the bindings
-            if bound.Count = alreadyBound || not (mentionsBoundTypeParameter bound typeNode) then
-                None
-            else
-                checker.getTypeFromTypeNode (substituteBoundTypeParameters bound typeNode)
-                |> resolve bindings bound
-
-    // The order of the checker's answers shapes its unions, it is asked about conditionals only
-    let rec standsForConditional (visited: Set<string>) (node: Ts.Node) : bool =
-        match node.kind with
-        | Ts.SyntaxKind.ConditionalType -> true
-        | Ts.SyntaxKind.ParenthesizedType ->
-            standsForConditional visited (node :?> Ts.ParenthesizedTypeNode).``type``
-        | Ts.SyntaxKind.TypeReference ->
-            let typeReferenceNode = node :?> Ts.TypeReferenceNode
-
-            match
-                symbolAtLocation checker !!typeReferenceNode.typeName
-                |> Option.bind (resolveAlias checker)
-            with
-            | Some symbol ->
-                let key = checker.getFullyQualifiedName symbol
-
-                not (visited.Contains key)
-                && (symbol.declarations
-                    |> Option.map (
-                        Seq.exists (fun declaration ->
-                            declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
-                            && standsForConditional
-                                (visited.Add key)
-                                (declaration :?> Ts.TypeAliasDeclaration).``type``
-                        )
-                    )
-                    |> Option.defaultValue false)
-            | None -> false
-        | _ -> false
-
-    let isConditional = standsForConditional Set.empty typeNode
-
-    // A constraint is read as written, `B extends PipelineDestination<A, any>` resolved to a union once
-    let rec isWithinConstraint (node: Ts.Node) =
-        if isNull node || isNull node.parent then
-            false
-        elif node.parent.kind = Ts.SyntaxKind.TypeParameter then
-            match (node.parent :?> Ts.TypeParameterDeclaration).``constraint`` with
-            | Some constraint_ -> obj.ReferenceEquals(constraint_, node)
-            | None -> false
-        else
-            isWithinConstraint node.parent
-
     let bindings = boundTypeParameters reader typeNode
 
+    // The order of the checker's answers shapes its unions, it is asked about conditionals only
     if
         not (isParseTreeNode typeNode)
-        || not isConditional
+        || not (standsForConditional checker Set.empty typeNode)
         || isWithinConstraint typeNode
         || not (mentionsBoundTypeParameter bindings typeNode)
     then
@@ -514,7 +527,7 @@ let private tryResolveDeferred
         if (deferredConditionals checker 0 typ).IsEmpty then
             None
         else
-            resolve bindings Map.empty typ
+            resolveWithBindings checker typeNode bindings Map.empty typ
             |> Option.bind (fun resolved ->
                 checker.typeToTypeNode (
                     resolved,
@@ -2047,10 +2060,13 @@ let private readExpressionWithTypeArguments
                             else
                                 []
 
-                        (if ofAlias.IsEmpty then
-                             resolvedBaseTypeArguments checker expression
-                         else
-                             ofAlias)
+                        let arguments =
+                            if ofAlias.IsEmpty then
+                                resolvedBaseTypeArguments checker expression
+                            else
+                                ofAlias
+
+                        arguments
                         |> List.map (fun argument ->
                             let flags = typeNodeBuilderFlags
 
