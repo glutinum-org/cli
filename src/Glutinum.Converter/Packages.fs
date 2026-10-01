@@ -300,6 +300,8 @@ type GenerateOptions =
         ModuleName: string option
         /// A single `.d.ts` declares the globals of a script, nothing is imported
         GlobalScript: bool
+        /// The overloads a signature gets at most from its union parameters
+        MaxOverloads: int
         /// The declarations of the generated package to keep, every one when empty
         Include: string list
         /// The package is the ES library itself, the program is created without it
@@ -314,6 +316,7 @@ let defaultOptions =
         Include = []
         NoLib = false
         GlobalScript = false
+        MaxOverloads = Transformer.UnionOverloads.defaultMaxOverloads
     }
 
 /// `Glutinum.Types.TypeScript` is the namespace `Glutinum.Types` and the module `TypeScript`
@@ -605,7 +608,14 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
 
     // Every package is a module with its own import specifier
     let transformResult =
-        Transform.applyWith Naming.MODULE_PLACEHOLDER readerResult.TypeMemory glueAst
+        Transform.applyWithOptions
+            {
+                Source =
+                    Transformer.Context.ImportSource.Module(Naming.MODULE_PLACEHOLDER, Map.empty)
+                MaxOverloads = options.MaxOverloads
+            }
+            readerResult.TypeMemory
+            glueAst
 
     let printer = new Printer.Printer()
 

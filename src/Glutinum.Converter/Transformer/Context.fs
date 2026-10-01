@@ -94,14 +94,17 @@ type TransformState =
         KeyOfMaps: KeyOfMaps.State
         /// The partial interfaces whose members are being expanded, a cycle is cut
         PartialHeritageBeingExpanded: ResizeArray<string>
+        /// The overloads a signature gets at most from its union parameters
+        MaxOverloads: int
     }
 
-    static member Create(typeMemory: GlueType list) =
+    static member Create(typeMemory: GlueType list, maxOverloads: int) =
         {
             Conditionals = Conditionals.create typeMemory
             ParamObjects = ParamObjectCandidate.create typeMemory
             KeyOfMaps = KeyOfMaps.create typeMemory
             PartialHeritageBeingExpanded = ResizeArray()
+            MaxOverloads = maxOverloads
         }
 
 /// The names of the anonymous types of a scope (`Exports.exec.callback`) of an F# module: a

@@ -7,8 +7,8 @@ module Glutinum.Converter.Transformer.UnionOverloads
 open Glutinum.Converter.FSharpAST
 open Glutinum.Converter.GlueAST
 
-[<Literal>]
-let private MAX_OVERLOADS = 16
+/// The overloads a signature gets at most from its union parameters, `--max-overloads`
+let defaultMaxOverloads = 16
 
 let private isNullish (glueType: GlueType) =
     match glueType with
@@ -144,6 +144,7 @@ let rec private cartesian (choices: 'T list list) : 'T list list =
 
 /// The parameter lists of the overloads, the original one when nothing is expanded
 let expandParameters
+    (maxOverloads: int)
     (typeMemory: GlueType list)
     (parameters: GlueParameter list)
     : GlueParameter list list
@@ -197,7 +198,7 @@ let expandParameters
     let choices, count =
         ((List.empty, 1), List.zip choices parameters)
         ||> List.fold (fun (acc, count) (choice, parameter) ->
-            if count * choice.Length <= MAX_OVERLOADS then
+            if count * choice.Length <= maxOverloads then
                 acc @ [ choice ], count * choice.Length
             else
                 acc @ [ [ Some parameter ] ], count
@@ -226,20 +227,25 @@ let expandParameters
             // A caller holding a value at the union type has no expanded overload to pass it to
             expanded @ [ parameters ] |> List.distinct
 
-let expandMembers (typeMemory: GlueType list) (members: GlueMember list) : GlueMember list =
+let expandMembers
+    (maxOverloads: int)
+    (typeMemory: GlueType list)
+    (members: GlueMember list)
+    : GlueMember list
+    =
     members
     |> List.collect (fun glueMember ->
         match glueMember with
         | GlueMember.MethodSignature info ->
-            expandParameters typeMemory info.Parameters
+            expandParameters maxOverloads typeMemory info.Parameters
             |> List.map (fun parameters ->
                 GlueMember.MethodSignature { info with Parameters = parameters }
             )
         | GlueMember.Method info ->
-            expandParameters typeMemory info.Parameters
+            expandParameters maxOverloads typeMemory info.Parameters
             |> List.map (fun parameters -> GlueMember.Method { info with Parameters = parameters })
         | GlueMember.ConstructSignature info ->
-            expandParameters typeMemory info.Parameters
+            expandParameters maxOverloads typeMemory info.Parameters
             |> List.map (fun parameters ->
                 GlueMember.ConstructSignature { info with Parameters = parameters }
             )

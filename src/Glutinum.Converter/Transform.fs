@@ -1270,7 +1270,10 @@ let private exportClass
         else
             info.Constructors
             |> List.collect (fun constructorInfo ->
-                UnionOverloads.expandParameters context.TypeMemory constructorInfo.Parameters
+                UnionOverloads.expandParameters
+                    context.State.MaxOverloads
+                    context.TypeMemory
+                    constructorInfo.Parameters
                 |> List.map (fun parameters ->
                     { constructorInfo with
                         Parameters = parameters
@@ -1526,7 +1529,10 @@ let private exportEqualsVariable
             function
             | GlueMember.CallSignature info ->
                 // `yargs(args?: string[] | string)`: one overload per case
-                UnionOverloads.expandParameters context.TypeMemory info.Parameters
+                UnionOverloads.expandParameters
+                    context.State.MaxOverloads
+                    context.TypeMemory
+                    info.Parameters
                 |> List.map (fun parameters ->
                     ({
                         Documentation = []
@@ -1657,7 +1663,10 @@ let private transformExports
                 |> Conditionals.resolveFunction context.State.Conditionals
                 |> List.collect TransformMembers.withDefaultedTypeParameterOverloadsOfFunction
                 |> List.collect (fun (info: GlueFunctionDeclaration) ->
-                    UnionOverloads.expandParameters context.TypeMemory info.Parameters
+                    UnionOverloads.expandParameters
+                        context.State.MaxOverloads
+                        context.TypeMemory
+                        info.Parameters
                     |> List.map (fun parameters ->
                         GlueType.FunctionDeclaration { info with Parameters = parameters }
                     )
@@ -2504,7 +2513,7 @@ module private TransformMembers =
                 id)
         |> KeyOfMaps.expandMembers context.State.KeyOfMaps
         |> withDefaultedTypeParameterOverloads
-        |> UnionOverloads.expandMembers context.TypeMemory
+        |> UnionOverloads.expandMembers context.State.MaxOverloads context.TypeMemory
         |> mergeAccessors members
         |> List.choose (
             function
@@ -5406,13 +5415,25 @@ type TransformResult =
 let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
     applyWith Naming.MODULE_PLACEHOLDER typeMemory glueAst
 
-let applyWithSource (source: ImportSource) (typeMemory: GlueType list) (glueAst: GlueType list) =
+/// What a run of the transform is given besides the declarations
+type TransformOptions =
+    {
+        Source: ImportSource
+        /// The overloads a signature gets at most from its union parameters
+        MaxOverloads: int
+    }
+
+let applyWithOptions
+    (options: TransformOptions)
+    (typeMemory: GlueType list)
+    (glueAst: GlueType list)
+    =
     let reporter = Reporter()
     let typeLiteralsMemory = TypeLiteralsMemory()
-    let state = TransformState.Create typeMemory
+    let state = TransformState.Create(typeMemory, options.MaxOverloads)
 
     let transformed =
-        transform typeMemory state reporter typeLiteralsMemory source true glueAst
+        transform typeMemory state reporter typeLiteralsMemory options.Source true glueAst
 
     let aliases = Merge.aliasesOf transformed
 
@@ -5430,6 +5451,15 @@ let applyWithSource (source: ImportSource) (typeMemory: GlueType list) (glueAst:
         IncludeReadonlyArrayAlias = reporter.HasReadonlyArray
         IncludeIterableAlias = reporter.HasIterable
     }
+
+let applyWithSource (source: ImportSource) (typeMemory: GlueType list) (glueAst: GlueType list) =
+    applyWithOptions
+        {
+            Source = source
+            MaxOverloads = UnionOverloads.defaultMaxOverloads
+        }
+        typeMemory
+        glueAst
 
 let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: GlueType list) =
     applyWithSource (ImportSource.Module(importSpecifier, Map.empty)) typeMemory glueAst

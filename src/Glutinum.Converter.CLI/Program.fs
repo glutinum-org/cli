@@ -32,6 +32,7 @@ type private CliOptions =
     abstract member external: ResizeArray<string> with get
     abstract member ``include``: ResizeArray<string> with get
     abstract member ``global``: bool option with get
+    abstract member maxOverloads: string option with get
 
 let private getVersion () =
     let moduleDir = Path.dirname (Url.fileURLToPath (importMetaUrl ()))
@@ -84,18 +85,21 @@ let private toGenerateOptions (options: CliOptions) : Packages.GenerateOptions =
         Include = includes
         NoLib = not options.lib
         GlobalScript = options.``global`` |> Option.defaultValue false
+        MaxOverloads =
+            options.maxOverloads
+            |> Option.map int
+            |> Option.defaultValue Transformer.UnionOverloads.defaultMaxOverloads
     }
 
 let private generate (options: Packages.GenerateOptions) (isAll: bool) (inputs: string list) =
     match isAll, inputs with
     | true, _ -> generatePackagesFromDisk options []
     | false, [ input ] when input.EndsWith ".d.ts" ->
-        let moduleName = options.ModuleName |> Option.defaultValue "Glutinum"
-
-        if options.GlobalScript then
-            generateGlobalBindingFileWith moduleName input
-        else
-            generateBindingFileWith moduleName input
+        generateBindingFileWithOptions
+            (options.ModuleName |> Option.defaultValue "Glutinum")
+            options.GlobalScript
+            options.MaxOverloads
+            input
     | false, inputs -> generatePackagesFromDisk options inputs
 
 let private write (outFile: string option) (content: string) =
@@ -135,6 +139,10 @@ let private run (argv: string array) =
         .option("--no-externals", "generate @types/node and @types/web instead of referencing them")
         .option("--no-lib", "create the program without the TypeScript library")
         .option("--global", "the .d.ts declares the globals of a script, nothing is imported")
+        .option(
+            "--max-overloads <count>",
+            "overloads a signature gets at most from its union parameters, 16 by default"
+        )
     |> ignore
 
     program

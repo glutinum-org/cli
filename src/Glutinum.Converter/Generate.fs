@@ -8,7 +8,12 @@ let createProgramForCLI (fileName: string) (source: string) : Ts.Program =
 
 /// Generate the binding of a single declaration file as the module <c>moduleName</c>
 /// `isGlobal`: the file declares the globals of a script, nothing is imported
-let private generateFile (moduleName: string) (isGlobal: bool) (filePath: string) =
+let private generateFile
+    (moduleName: string)
+    (isGlobal: bool)
+    (maxOverloads: int)
+    (filePath: string)
+    =
 
     if Glutinum.Node.fs.Exports.existsSync filePath |> not then
         failwith $"File does not exist: {filePath}"
@@ -39,7 +44,13 @@ let private generateFile (moduleName: string) (isGlobal: bool) (filePath: string
             )
 
     let transformResult =
-        Transform.applyWithSource source readerResult.TypeMemory readerResult.GlueAST
+        Transform.applyWithOptions
+            {
+                Source = source
+                MaxOverloads = maxOverloads
+            }
+            readerResult.TypeMemory
+            readerResult.GlueAST
 
     for reporter in transformResult.Warnings do
         Log.warn reporter
@@ -52,10 +63,16 @@ let private generateFile (moduleName: string) (isGlobal: bool) (filePath: string
     printer.ToString()
 
 let generateBindingFileWith (moduleName: string) (filePath: string) =
-    generateFile moduleName false filePath
+    generateFile moduleName false Transformer.UnionOverloads.defaultMaxOverloads filePath
 
-let generateGlobalBindingFileWith (moduleName: string) (filePath: string) =
-    generateFile moduleName true filePath
+/// `isGlobal`: the file declares the globals of a script, nothing is imported
+let generateBindingFileWithOptions
+    (moduleName: string)
+    (isGlobal: bool)
+    (maxOverloads: int)
+    (filePath: string)
+    =
+    generateFile moduleName isGlobal maxOverloads filePath
 
 let generateBindingFile (filePath: string) =
     generateBindingFileWith "Glutinum" filePath

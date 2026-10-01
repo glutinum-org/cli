@@ -64,6 +64,8 @@ The bindings of the runtimes are generated from this repository and published on
 
 A binding generated for a package using the DOM or the Node types references them instead of generating them again, the header of the file tells which one to add. `--no-externals` generates them inline.
 
+A single `.d.ts` declaring the globals of a script, the hooks of PocketBase for example, is generated with `--global`: its functions and variables are globals instead of imports. A parameter typed by a union gives one overload per case; `--max-overloads <count>` caps the overloads a signature gets this way, 16 by default, the parameters past the cap keep their erased union.
+
 `./build.sh bindings` regenerates them from the versions pinned in `bindings/package.json`, `./build.sh test bindings` runs them in Node and Chromium.
 
 ## Contributing
