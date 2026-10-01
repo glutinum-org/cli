@@ -1667,9 +1667,9 @@ let private transformExports
                         context.State.MaxOverloads
                         context.TypeMemory
                         info.Parameters
-                    |> List.map (fun parameters ->
-                        GlueType.FunctionDeclaration { info with Parameters = parameters }
-                    )
+                    |> List.map (fun parameters -> { info with Parameters = parameters })
+                    |> List.collect TransformMembers.withDictionaryParameterOverloadsOfFunction
+                    |> List.map GlueType.FunctionDeclaration
                 )
             | glueType -> [ glueType ]
         )
@@ -2003,6 +2003,125 @@ module private TransformMembers =
             )
         else
             None
+
+    /// `{ [key: string]: any }` takes any object
+    let private isAnyDictionary (glueType: GlueType) =
+        match glueType with
+        | GlueType.TypeLiteral { Members = members } when not members.IsEmpty ->
+            members
+            |> List.forall (
+                function
+                | GlueMember.IndexSignature {
+                                                Type = GlueType.Primitive GluePrimitive.Any
+                                            }
+                | GlueMember.IndexSignature { Type = GlueType.Unknown } -> true
+                | _ -> false
+            )
+        | _ -> false
+
+    /// F# cannot pick between `create<'T, 'Body>` and `create<'Body>`: a type parameter told by the
+    /// result alone gets no overload
+    let private tryDictionarySignature
+        (typeParameters: GlueTypeParameter list)
+        (parameters: GlueParameter list)
+        =
+        let told =
+            parameters
+            |> List.collect (fun parameter ->
+                GlueSubstitution.mentionedTypeParameters parameter.Type
+            )
+            |> Set.ofList
+
+        let hasDictionary =
+            parameters |> List.exists (fun parameter -> isAnyDictionary parameter.Type)
+
+        let allTold =
+            typeParameters
+            |> List.forall (fun typeParameter -> told.Contains typeParameter.Name)
+
+        if hasDictionary && allTold then
+            let taken = HashSet<string>(typeParameters |> List.map _.Name)
+
+            let fresh (parameter: GlueParameter) =
+                let name = parameter.Name |> String.capitalizeFirstLetter |> Naming.sanitizeTypeName
+
+                let rec pick (candidate: string) (index: int) =
+                    if taken.Add candidate then
+                        candidate
+                    else
+                        pick (name + string index) (index + 1)
+
+                pick name 1
+
+            let added = ResizeArray<GlueTypeParameter>()
+
+            let parameters =
+                parameters
+                |> List.map (fun parameter ->
+                    if isAnyDictionary parameter.Type then
+                        let name = fresh parameter
+
+                        added.Add
+                            {
+                                Name = name
+                                Constraint = None
+                                Default = None
+                            }
+
+                        { parameter with
+                            Type = GlueType.TypeParameter name
+                        }
+                    else
+                        parameter
+                )
+
+            Some(typeParameters @ List.ofSeq added, parameters)
+        else
+            None
+
+    /// `create(bodyParams: { [key: string]: any })` also gets `create<'BodyParams>(bodyParams: 'BodyParams)`
+    let private withDictionaryParameterOverloads (members: GlueMember list) =
+        members
+        |> List.collect (fun glueMember ->
+            match glueMember with
+            | GlueMember.MethodSignature info ->
+                match tryDictionarySignature info.TypeParameters info.Parameters with
+                | Some(typeParameters, parameters) ->
+                    [
+                        glueMember
+                        GlueMember.MethodSignature
+                            { info with
+                                TypeParameters = typeParameters
+                                Parameters = parameters
+                            }
+                    ]
+                | None -> [ glueMember ]
+            | GlueMember.Method info ->
+                match tryDictionarySignature info.TypeParameters info.Parameters with
+                | Some(typeParameters, parameters) ->
+                    [
+                        glueMember
+                        GlueMember.Method
+                            { info with
+                                TypeParameters = typeParameters
+                                Parameters = parameters
+                            }
+                    ]
+                | None -> [ glueMember ]
+            | _ -> [ glueMember ]
+        )
+
+    let withDictionaryParameterOverloadsOfFunction (info: GlueFunctionDeclaration) =
+        match tryDictionarySignature info.TypeParameters info.Parameters with
+        | Some(typeParameters, parameters) ->
+            [
+                info
+                { info with
+                    TypeParameters = typeParameters
+                    Parameters = parameters
+                }
+            ]
+        | None -> [ info ]
 
     /// `layerGroup<P = any>(layers: Layer[]): LayerGroup<P>` also gets
     /// `layerGroup(layers: Layer[]): LayerGroup<any>`
@@ -2514,6 +2633,7 @@ module private TransformMembers =
         |> KeyOfMaps.expandMembers context.State.KeyOfMaps
         |> withDefaultedTypeParameterOverloads
         |> UnionOverloads.expandMembers context.State.MaxOverloads context.TypeMemory
+        |> withDictionaryParameterOverloads
         |> mergeAccessors members
         |> List.choose (
             function
