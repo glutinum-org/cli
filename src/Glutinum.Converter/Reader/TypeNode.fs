@@ -12,6 +12,13 @@ type private IntersectionTypePropertyResult =
     | ForceAny
 
 // Properties created by a mapped type (e.g. `{ [K in Keys]: string }`) have no declaration
+/// The node a reference lands at, the reference itself unless members are read for another declaration
+let private landingOf (reader: ITypeScriptReader) (node: Ts.Node) : Ts.Node =
+    if reader.InProgress.Landing.Count = 0 then
+        node
+    else
+        reader.InProgress.Landing.[reader.InProgress.Landing.Count - 1]
+
 let private readPropertyWithoutDeclaration
     (reader: ITypeScriptReader)
     (contextNode: Ts.Node)
@@ -406,8 +413,6 @@ let private tryResolveDeferred
         let conditionals = deferredConditionals checker 0 typ
 
         if conditionals.IsEmpty then
-            // `ChartOptions<ChartType>` is not an answer for `ChartOptions<TType>`: an answer
-            // still made of a bound type is dropped, the reference stays
             // `never` or `string` in the answer says nothing, a named type does
             let substitutes =
                 bound.Values
@@ -444,16 +449,14 @@ let private tryResolveDeferred
                     )
                 )
 
-            // Nothing new to bind: the condition needs a parameter nothing binds
+            // A synthesized conditional gets a new root each time, the loop ends on the bindings
             if bound.Count = alreadyBound || not (mentionsBoundTypeParameter bound typeNode) then
                 None
             else
                 checker.getTypeFromTypeNode (substituteBoundTypeParameters bound typeNode)
                 |> resolve bindings bound
 
-    // Only a conditional, or an alias standing for one, is deferred. A reference to any other
-    // alias stays a reference, the checker is not asked: the order of its answers shapes its
-    // unions
+    // The order of the checker's answers shapes its unions, it is asked about conditionals only
     let rec standsForConditional (visited: Set<string>) (node: Ts.Node) : bool =
         match node.kind with
         | Ts.SyntaxKind.ConditionalType -> true
@@ -485,8 +488,7 @@ let private tryResolveDeferred
 
     let isConditional = standsForConditional Set.empty typeNode
 
-    // `B extends PipelineDestination<A, any>` stays the constraint of `'B`, the transform reads
-    // it as written. A default is a value, `P = RouteParameters<Route>` is resolved
+    // A constraint is read as written, `B extends PipelineDestination<A, any>` resolved to a union once
     let rec isWithinConstraint (node: Ts.Node) =
         if isNull node || isNull node.parent then
             false
@@ -499,7 +501,6 @@ let private tryResolveDeferred
 
     let bindings = boundTypeParameters reader typeNode
 
-    // A node naming no bound type parameter has nothing to be resolved with
     if
         not (isParseTreeNode typeNode)
         || not isConditional
@@ -775,7 +776,6 @@ module UtilityType =
         | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
         | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
 
-        // `Exclude<DeepPartial<Options<TType>>, ...>`: the branch depends on the type arguments
         | HasTypeFlags Ts.TypeFlags.Conditional -> GlueType.Primitive GluePrimitive.Any
 
         | _ ->
@@ -812,10 +812,15 @@ module UtilityType =
             |> Option.map (Seq.filter isMemberDeclaration >> Seq.toList)
             |> Option.defaultValue []
 
-        match declarations with
-        | [] -> readPropertyWithoutDeclaration reader contextNode property |> Option.toList
-        | declarations ->
-            declarations |> List.map (readInstantiatedMember reader contextNode property)
+        withInProgress
+            reader.InProgress.Landing
+            contextNode
+            (fun () ->
+                match declarations with
+                | [] -> readPropertyWithoutDeclaration reader contextNode property |> Option.toList
+                | declarations ->
+                    declarations |> List.map (readInstantiatedMember reader contextNode property)
+            )
 
     let private readMembers (reader: ITypeScriptReader) (contextNode: Ts.Node) (typ: Ts.Type) =
         typ
@@ -1172,8 +1177,7 @@ module UtilityType =
         let keysToOmitType =
             typeReferenceNode.typeArguments.Value[1] |> reader.checker.getTypeFromTypeNode
 
-        // `Pick<Locale, LocaleFields>` names its keys through a type parameter, the members
-        // it stands for are only known once the parameter is bound
+        // Keys named through a type parameter are known once it is bound
         let hasUnboundKeys =
             match keysToOmitType.flags with
             | HasTypeFlags Ts.TypeFlags.TypeParameter
@@ -1235,8 +1239,7 @@ module UtilityType =
             |> Seq.filter (fun prop -> keysToOmit |> Seq.contains prop.name |> (=) keepListedKeys)
             |> Seq.toList
 
-        // `secondBest?: Omit<HighlightResult, 'second_best'>` names its own interface, the
-        // inner one is `any`
+        // `Omit<HighlightResult, ...>` inside `HighlightResult` would read without end
         let isInProgress =
             reader.InProgress.Expansions
             |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, baseType))
@@ -1488,7 +1491,12 @@ let private readTypeReference (reader: ITypeScriptReader) (typeNode: Ts.TypeNode
                                 modulePathForSymbol
                                     checker
                                     reader.PackageContext
-                                    isQualified
+                                    (isQualified
+                                     || crossesNamespace
+                                         checker
+                                         reader.PackageContext
+                                         symbolOpt
+                                         (landingOf reader typeNode))
                                     symbolOpt
                         TypeArguments =
                             // `MessageEvent<T>` of the DOM lib merged with a non-generic
@@ -1877,15 +1885,20 @@ let private readIntersectionConstituents
             GlueType.Primitive GluePrimitive.Any
     else
         let members =
-            properties
-            |> List.choose (
-                function
-                | Single(property, declaration) ->
-                    Some(readInstantiatedMember reader typeNode property declaration)
-                | WithoutDeclaration property ->
-                    readPropertyWithoutDeclaration reader typeNode property
-                | ForceAny -> failwith "Should not happen here"
-            )
+            withInProgress
+                reader.InProgress.Landing
+                (typeNode :> Ts.Node)
+                (fun () ->
+                    properties
+                    |> List.choose (
+                        function
+                        | Single(property, declaration) ->
+                            Some(readInstantiatedMember reader typeNode property declaration)
+                        | WithoutDeclaration property ->
+                            readPropertyWithoutDeclaration reader typeNode property
+                        | ForceAny -> failwith "Should not happen here"
+                    )
+                )
 
         // `getProperties` leaves the index signatures out, the type literals declare them
         let indexSignatures =
@@ -2005,11 +2018,39 @@ let private readExpressionWithTypeArguments
                     if isLibraryName reader name then
                         []
                     else
-                        modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
+                        modulePathForSymbol
+                            checker
+                            reader.PackageContext
+                            (isQualified
+                             || crossesNamespace
+                                 checker
+                                 reader.PackageContext
+                                 symbolOpt
+                                 (landingOf reader expression))
+                            symbolOpt
                 TypeArguments =
                     match readTypeArguments reader expression with
                     | [] ->
-                        resolvedBaseTypeArguments checker expression
+                        // The alias instantiation holds the arguments `extends CoreApp` leaves implicit
+                        let isThroughAnotherAlias =
+                            match
+                                checker.getSymbolAtLocation expression.expression, typ.aliasSymbol
+                            with
+                            | Some written, Some alias -> not (obj.ReferenceEquals(written, alias))
+                            | _ -> false
+
+                        let ofAlias =
+                            if isThroughAnotherAlias then
+                                typ.aliasTypeArguments
+                                |> Option.map Seq.toList
+                                |> Option.defaultValue []
+                            else
+                                []
+
+                        (if ofAlias.IsEmpty then
+                             resolvedBaseTypeArguments checker expression
+                         else
+                             ofAlias)
                         |> List.map (fun argument ->
                             let flags = typeNodeBuilderFlags
 
@@ -2028,8 +2069,7 @@ let private readConditionalType (reader: ITypeScriptReader) (typeNode: Ts.TypeNo
 
     let typ = checker.getTypeAtLocation conditionalTypeNode
 
-    // The branch depends on the type arguments: resolved with the defaults of the enclosing
-    // declaration, else kept for the transform
+    // Deferred: resolved with the defaults of the enclosing declaration, else left to the transform
     if isDeferredConditional typ then
         // `JSHandle<T = any>`: `T extends Node ? ElementHandle<T> : null` is both branches
         let bothBranches () =
@@ -2095,7 +2135,6 @@ let private readConditionalType (reader: ITypeScriptReader) (typeNode: Ts.TypeNo
         // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
         // usage by inlining the logic here and make it more specific
         match typ.flags with
-        // `Flag extends true ? Value : Fallback` is its branch
         | HasTypeFlags Ts.TypeFlags.TypeParameter -> GlueType.TypeParameter typ.symbol.name
         | HasTypeFlags Ts.TypeFlags.BooleanLiteral ->
             GlueType.Literal(GlueLiteral.Bool(typ?intrinsicName = "true"))

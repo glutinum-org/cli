@@ -448,7 +448,6 @@ let private expandSignature
 
         let checkedNames = set [ checkedName ]
 
-        // `PageFunction<Arg, R>` is inlined when its body holds the conditional
         let rec replace
             (replacement: GlueType)
             (seen: Set<string>)
@@ -517,8 +516,7 @@ let private expandSignature
             replace replacement Set.empty returnType
             |> GlueSubstitution.substitute substitutions
 
-        // `eachDay(interval, options?: Opts)`: with the option left out, F# can't tell the
-        // overloads apart. Only a required parameter typed by the checked parameter tells them
+        // With `options?: Opts` left out, F# can't tell the overloads apart
         let isTold =
             parameters
             |> List.exists (fun parameter ->

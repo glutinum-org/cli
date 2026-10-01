@@ -370,6 +370,8 @@ type ReadInProgress =
         TypeQueryDeclarations: ResizeArray<Ts.Node>
         /// The union aliases being inlined as the cases of another union
         UnionAliases: ResizeArray<Ts.Node>
+        /// The nodes the members read for another declaration land at
+        Landing: ResizeArray<Ts.Node>
     }
 
     static member Create() =
@@ -380,6 +382,7 @@ type ReadInProgress =
             KeyOfDeclarations = ResizeArray()
             TypeQueryDeclarations = ResizeArray()
             UnionAliases = ResizeArray()
+            Landing = ResizeArray()
         }
 
 [<Mangle>]

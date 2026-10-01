@@ -359,8 +359,7 @@ type TransformContext
     member val SiblingTypeNames: Set<string> = Set.empty with get, set
 
     member this.PushScope(scopeName: string, ?originalScopeName: string) =
-        // `module Formatter` beside `type Formatter` is compiled as `FormatterModule`, the name
-        // an interface `FormatterModule` beside them has already
+        // F# compiles `module Formatter` beside `type Formatter` as `FormatterModule`
         let scopeName =
             if this.SiblingTypeNames.Contains(scopeName + "Module") then
                 scopeName + "_"

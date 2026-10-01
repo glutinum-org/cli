@@ -2851,8 +2851,7 @@ let private tryTransformCallableInterface
     (info: GlueInterface)
     : FSharpType option
     =
-    // `interface dirFS { (dir: string): FS }` merged with `interface dirFS extends String {}`
-    // is one interface, a delegate can't carry the members of the other declaration
+    // A delegate can't carry the members of a merged second declaration
     let isDeclaredOnce =
         context.TypeMemory
         |> List.filter (
@@ -3021,6 +3020,16 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | GlueType.UtilityType(GlueUtilityType.Pick _) -> false
             // External base types can't be inherited
             | GlueType.Discard -> false
+            | _ -> true
+        )
+        // `interface X extends _TygojaAny {}` of `type _TygojaAny = any`: nothing to inherit
+        |> List.filter (fun heritageClause ->
+            match heritageClause with
+            | GlueType.TypeReference typeReference ->
+                match context.State.Conditionals.AllAliases.TryFind typeReference.FullName with
+                | Some { Type = GlueType.Primitive _ }
+                | Some { Type = GlueType.Unknown } -> false
+                | _ -> true
             | _ -> true
         )
         |> List.filter (not << isArrayHeritage)
@@ -4317,7 +4326,6 @@ let private aliasOfTypeReference (scope: AliasScope) (typeReference: GlueTypeRef
     match typeReference.TypeArguments with
     // `type X = Promise<A & B>`: the intersection is a real interface, not `obj`
     | [ GlueType.IntersectionType members ] ->
-        // `type Keys<T> = Prune<A<T> & B>` keeps `T` on the interface and the alias
         let typeParameters = scope.TypeParameters.Value.TypeParameters
 
         let makeInterfaceTyp name =

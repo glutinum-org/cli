@@ -1060,6 +1060,33 @@ let modulePathForSymbol
 
         filePath @ namespaces
 
+/// The declaration is in a namespace the landing node does not see, an enclosing one is seen
+let crossesNamespace
+    (checker: Ts.TypeChecker)
+    (packageContext: PackageContext option)
+    (symbolOpt: Ts.Symbol option)
+    (landing: Ts.Node)
+    : bool
+    =
+    let rec isEnclosing (declared: string list) (landed: string list) =
+        match declared, landed with
+        | [], _ -> true
+        | d :: declared, l :: landed when d = l -> isEnclosing declared landed
+        | _ -> false
+
+    match
+        symbolOpt
+        |> Option.bind (resolveAlias checker)
+        |> Option.bind (mainDeclaration packageContext)
+    with
+    | Some declaration ->
+        not (
+            isEnclosing
+                (namespaceChain packageContext declaration)
+                (namespaceChain packageContext landing)
+        )
+    | None -> false
+
 module Type =
 
     module StringLiteral =

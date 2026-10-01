@@ -61,8 +61,42 @@ let private isPlain (delegateInfo: FSharpDelegate) =
     && parametersAreRequired
     && mentionsNoNestedType
 
+/// A type the delegate names relative to its module, qualified for the module the extension lands in
+let rec private qualify
+    (modulePath: string list)
+    (declared: HashSet<string>)
+    (typ: FSharpType)
+    : FSharpType
+    =
+    let qualify = qualify modulePath declared
+    let isDeclared (name: string) = declared.Contains(name.Split('.').[0])
+
+    match typ with
+    | FSharpType.TypeReference info when info.ModulePath.IsEmpty && isDeclared info.Name ->
+        FSharpType.TypeReference
+            { info with
+                ModulePath = modulePath
+                TypeArguments = info.TypeArguments |> List.map qualify
+            }
+    | FSharpType.Mapped info when isDeclared info.Name ->
+        FSharpType.Mapped
+            { info with
+                Name = String.concat "." (modulePath @ [ info.Name ])
+                TypeParameters =
+                    info.TypeParameters
+                    |> List.map (
+                        function
+                        | FSharpTypeParameter.FSharpType typ ->
+                            FSharpTypeParameter.FSharpType(qualify typ)
+                        | typeParameter -> typeParameter
+                    )
+            }
+    | typ -> FSharpType.mapChildren qualify typ
+
 let private extensionOf
     (delegates: Dictionary<string, FSharpDelegate>)
+    (declaredIn: Dictionary<string, HashSet<string>>)
+    (path: string list)
     (fsharpMember: FSharpMember)
     =
     // An anonymous callback is referenced by the name of its companion delegate, a named
@@ -98,17 +132,32 @@ let private extensionOf
             target info.Type
             |> Option.bind (fun key ->
                 match delegates.TryGetValue key with
-                | true, d -> Some d
+                | true, d -> Some(key, d)
                 | _ -> None
             )
 
         match delegateInfo with
-        | Some delegateInfo when isPlain delegateInfo ->
+        | Some(key, delegateInfo) when isPlain delegateInfo ->
+            let delegatePath =
+                key.Split('.') |> Array.toList |> List.take (key.Split('.').Length - 1)
+
+            let qualify (typ: FSharpType) =
+                match declaredIn.TryGetValue(String.concat "." delegatePath) with
+                | true, declared when delegatePath <> path && not delegatePath.IsEmpty ->
+                    qualify delegatePath declared typ
+                | _ -> typ
+
             Some
                 {
                     Name = info.Name
-                    Parameters = delegateInfo.Parameters
-                    ReturnType = delegateInfo.ReturnType
+                    Parameters =
+                        delegateInfo.Parameters
+                        |> List.map (fun parameter ->
+                            { parameter with
+                                Type = qualify parameter.Type
+                            }
+                        )
+                    ReturnType = qualify delegateInfo.ReturnType
                 }
         | _ -> None
     | _ -> None
@@ -128,14 +177,32 @@ let private declaredNames (types: FSharpType list) =
     )
     |> Set.ofList
 
-let rec private extend (delegates: Dictionary<string, FSharpDelegate>) (types: FSharpType list) =
+let rec private collectDeclared
+    (path: string list)
+    (types: FSharpType list)
+    (into: Dictionary<string, HashSet<string>>)
+    =
+    into.[String.concat "." path] <- HashSet(declaredNames types)
+
+    for typ in types do
+        match typ with
+        | FSharpType.Module moduleInfo ->
+            collectDeclared (path @ [ moduleInfo.Name ]) moduleInfo.Types into
+        | _ -> ()
+
+let rec private extend
+    (delegates: Dictionary<string, FSharpDelegate>)
+    (declaredIn: Dictionary<string, HashSet<string>>)
+    (path: string list)
+    (types: FSharpType list)
+    =
     let taken = declaredNames types
 
     types
     |> List.collect (fun typ ->
         match typ with
         | FSharpType.Interface interfaceInfo ->
-            match interfaceInfo.Members |> List.choose (extensionOf delegates) with
+            match interfaceInfo.Members |> List.choose (extensionOf delegates declaredIn path) with
             | [] -> [ typ ]
             | members ->
                 let rec free (name: string) =
@@ -158,7 +225,12 @@ let rec private extend (delegates: Dictionary<string, FSharpDelegate>) (types: F
             [
                 FSharpType.Module
                     { moduleInfo with
-                        Types = extend delegates moduleInfo.Types
+                        Types =
+                            extend
+                                delegates
+                                declaredIn
+                                (path @ [ moduleInfo.Name ])
+                                moduleInfo.Types
                     }
             ]
         | _ -> [ typ ]
@@ -167,4 +239,6 @@ let rec private extend (delegates: Dictionary<string, FSharpDelegate>) (types: F
 let apply (types: FSharpType list) : FSharpType list =
     let delegates = Dictionary<string, FSharpDelegate>()
     collectDelegates [] types delegates
-    extend delegates types
+    let declaredIn = Dictionary<string, HashSet<string>>()
+    collectDeclared [] types declaredIn
+    extend delegates declaredIn [] types

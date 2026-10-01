@@ -29,7 +29,6 @@ let create (typeMemory: GlueType list) : State =
     let collectFromTypeParameters (typeParameters: GlueTypeParameter list) =
         for typeParameter in typeParameters do
             match typeParameter.Constraint with
-            // `keyof CSSStyleDeclaration` of the DOM binding has no `Key` to refer to
             | Some(GlueType.KeyOf(GlueType.TypeReference map)) when not map.IsStandardLibrary ->
                 maps.Add map.FullName |> ignore
                 mapNames.[map.FullName] <- map.Name
@@ -66,7 +65,7 @@ let create (typeMemory: GlueType list) : State =
 
     typeMemory |> List.iter collect
 
-    // `keyof CSSStyleDeclaration` of the DOM binding has no `Key` to refer to
+    // A map another binding declares has no `Key` here
     let declared = HashSet<string>()
 
     let rec collectDeclared (glueType: GlueType) =
@@ -167,7 +166,6 @@ let private expand
     ((typeParameters, parameters, returnType), typeParameters)
     ||> List.fold (fun (typeParameters, parameters, returnType) typeParameter ->
         match typeParameter.Constraint with
-        // A map the output doesn't declare has no `Key`, the constraint stays a `string`
         | Some(GlueType.KeyOf(GlueType.TypeReference map)) when isMap state map.FullName ->
             let substitute = substitute state typeParameter.Name map
 
