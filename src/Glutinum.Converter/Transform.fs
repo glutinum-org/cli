@@ -5406,20 +5406,13 @@ type TransformResult =
 let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
     applyWith Naming.MODULE_PLACEHOLDER typeMemory glueAst
 
-let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: GlueType list) =
+let applyWithSource (source: ImportSource) (typeMemory: GlueType list) (glueAst: GlueType list) =
     let reporter = Reporter()
     let typeLiteralsMemory = TypeLiteralsMemory()
     let state = TransformState.Create typeMemory
 
     let transformed =
-        transform
-            typeMemory
-            state
-            reporter
-            typeLiteralsMemory
-            (ImportSource.Module(importSpecifier, Map.empty))
-            true
-            glueAst
+        transform typeMemory state reporter typeLiteralsMemory source true glueAst
 
     let aliases = Merge.aliasesOf transformed
 
@@ -5437,3 +5430,6 @@ let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: Gl
         IncludeReadonlyArrayAlias = reporter.HasReadonlyArray
         IncludeIterableAlias = reporter.HasIterable
     }
+
+let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: GlueType list) =
+    applyWithSource (ImportSource.Module(importSpecifier, Map.empty)) typeMemory glueAst

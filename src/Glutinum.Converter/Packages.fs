@@ -298,6 +298,8 @@ type GenerateOptions =
         /// The full name of the module of the generated package, `Glutinum.Types.TypeScript`,
         /// instead of `Glutinum.<Module>` derived from the package name
         ModuleName: string option
+        /// A single `.d.ts` declares the globals of a script, nothing is imported
+        GlobalScript: bool
         /// The declarations of the generated package to keep, every one when empty
         Include: string list
         /// The package is the ES library itself, the program is created without it
@@ -311,6 +313,7 @@ let defaultOptions =
         ModuleName = None
         Include = []
         NoLib = false
+        GlobalScript = false
     }
 
 /// `Glutinum.Types.TypeScript` is the namespace `Glutinum.Types` and the module `TypeScript`
@@ -415,9 +418,7 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
     let withoutDomLib =
         targets |> List.exists (fun target -> domLibReplacements.Contains target.name)
 
-    // `Buffer` of playwright is a global of `@types/node`, which its users install: the package
-    // is loaded as TypeScript loads it, when it is installed next to the inputs and stands for
-    // a binding
+    // TypeScript loads an installed `@types/node` as a global type package, `Buffer` of playwright is one
     let globalTypePackages =
         // A package standing for the runtime declares the globals itself
         let isRuntime =

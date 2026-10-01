@@ -7,7 +7,8 @@ let createProgramForCLI (fileName: string) (source: string) : Ts.Program =
     Hosting.Bootstrap.createProgramForCLI fileName source
 
 /// Generate the binding of a single declaration file as the module <c>moduleName</c>
-let generateBindingFileWith (moduleName: string) (filePath: string) =
+/// `isGlobal`: the file declares the globals of a script, nothing is imported
+let private generateFile (moduleName: string) (isGlobal: bool) (filePath: string) =
 
     if Glutinum.Node.fs.Exports.existsSync filePath |> not then
         failwith $"File does not exist: {filePath}"
@@ -28,11 +29,17 @@ let generateBindingFileWith (moduleName: string) (filePath: string) =
     for warning in readerResult.Warnings do
         Log.warn warning
 
+    let source =
+        if isGlobal then
+            Transformer.Context.ImportSource.Global
+        else
+            Transformer.Context.ImportSource.Module(
+                readerResult.ImportSpecifier |> Option.defaultValue Naming.MODULE_PLACEHOLDER,
+                Map.empty
+            )
+
     let transformResult =
-        Transform.applyWith
-            (readerResult.ImportSpecifier |> Option.defaultValue Naming.MODULE_PLACEHOLDER)
-            readerResult.TypeMemory
-            readerResult.GlueAST
+        Transform.applyWithSource source readerResult.TypeMemory readerResult.GlueAST
 
     for reporter in transformResult.Warnings do
         Log.warn reporter
@@ -43,6 +50,12 @@ let generateBindingFileWith (moduleName: string) (filePath: string) =
     Printer.printFileWith moduleName false [] printer transformResult
 
     printer.ToString()
+
+let generateBindingFileWith (moduleName: string) (filePath: string) =
+    generateFile moduleName false filePath
+
+let generateGlobalBindingFileWith (moduleName: string) (filePath: string) =
+    generateFile moduleName true filePath
 
 let generateBindingFile (filePath: string) =
     generateBindingFileWith "Glutinum" filePath
