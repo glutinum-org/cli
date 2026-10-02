@@ -2768,6 +2768,11 @@ let private paramObjectParameters
     : FSharpParameter list
     =
     members
+    |> List.filter (
+        function
+        | GlueMember.IndexSignature _ -> false
+        | _ -> true
+    )
     |> TransformMembers.toFSharpParameters context
     |> List.map (fun parameter ->
         match tryUnwrapOption parameter.Type with

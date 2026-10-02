@@ -375,6 +375,34 @@ let resolvedBaseTypeArguments
         |> Option.map (fun baseType -> resolvedTypeArguments checker (unbox<Ts.Type> baseType))
         |> Option.defaultValue []
 
+/// `extends RequestInit` of another binding: the base interface is in memory, `Create` names
+/// its properties
+let private readExternalBase
+    (reader: ITypeScriptReader)
+    (clauseType: Ts.ExpressionWithTypeArguments)
+    =
+    match reader.PackageContext with
+    | Some packageContext ->
+        reader.checker.getSymbolAtLocation clauseType.expression
+        |> Option.map (followAlias reader.checker)
+        |> Option.bind (fun (symbol: Ts.Symbol) -> symbol.declarations)
+        |> Option.iter (
+            Seq.iter (fun declaration ->
+                let declaration = unbox<Ts.Node> declaration
+
+                if
+                    declaration.kind = Ts.SyntaxKind.InterfaceDeclaration
+                    && not (reader.HasRead declaration)
+                    && (packageContext.TryFindExternalModulePath(
+                        declaration.getSourceFile().fileName
+                    ))
+                        .IsSome
+                then
+                    reader.ReadNode declaration |> ignore
+            )
+        )
+    | None -> ()
+
 let readHeritageClauses
     (reader: ITypeScriptReader)
     (heritageClauses: Ts.NodeArray<Ts.HeritageClause> option)
@@ -383,7 +411,14 @@ let readHeritageClauses
     | Some heritageClauses ->
         heritageClauses
         |> Seq.toList
-        |> List.collect (fun clause -> clause.types |> Seq.toList |> List.map reader.ReadTypeNode)
+        |> List.collect (fun clause ->
+            clause.types
+            |> Seq.toList
+            |> List.map (fun clauseType ->
+                readExternalBase reader clauseType
+                reader.ReadTypeNode clauseType
+            )
+        )
     | None -> []
 
 /// <summary>

@@ -80,6 +80,8 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
         member this.ReadModuleDeclaration(moduleDeclaration: Ts.ModuleDeclaration) : GlueType =
             readModuleDeclaration this moduleDeclaration |> GlueType.ModuleDeclaration
 
+        member _.HasRead(node: Ts.Node) : bool = readNodes.Contains node
+
         member this.ReadNode(node: Ts.Node) : GlueType =
             let typ = readNode this node
 

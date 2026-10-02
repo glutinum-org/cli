@@ -222,14 +222,28 @@ let create (typeMemory: GlueType list) : State =
 let isCandidate (state: State) (typeMemory: GlueType list) (info: GlueInterface) =
     let members = tryResolveMembers typeMemory info
 
+    // `[key: string]: any` beside the properties takes the extra fields, `Create` names the properties
+    let takesExtraFields (indexSignature: GlueIndexSignature) =
+        not indexSignature.IsReadOnly
+        && (indexSignature.Parameters
+            |> List.forall (fun parameter ->
+                parameter.Type = GlueType.Primitive GluePrimitive.String
+            ))
+
     let hasOnlyProperties =
         match members with
         | Some members ->
-            not members.IsEmpty
+            members
+            |> List.exists (
+                function
+                | GlueMember.Property _ -> true
+                | _ -> false
+            )
             && members
                |> List.forall (
                    function
                    | GlueMember.Property property -> not (isUnionCaseName property.Name)
+                   | GlueMember.IndexSignature indexSignature -> takesExtraFields indexSignature
                    | _ -> false
                )
         | None -> false

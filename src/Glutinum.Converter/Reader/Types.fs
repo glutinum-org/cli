@@ -403,6 +403,8 @@ type ITypeScriptReader =
 
     abstract ReadNode: node: Ts.Node -> GlueType
 
+    abstract HasRead: node: Ts.Node -> bool
+
     abstract ReadTypeNode: typNode: Ts.TypeNode -> GlueType
 
     abstract ReadTypeNode: typNode: Ts.TypeNode option -> GlueType

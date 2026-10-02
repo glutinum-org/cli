@@ -13208,6 +13208,18 @@ module Web =
                     ResizeArray<float option>
                  > option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?composite:
+                    U2<Web.CompositeOperationOrAuto, ResizeArray<Web.CompositeOperationOrAuto>>,
+                ?easing: U2<string, ResizeArray<string>>,
+                ?offset: U2<float, ResizeArray<float option>>
+            )
+            : PropertyIndexedKeyframes
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialCreationOptions =

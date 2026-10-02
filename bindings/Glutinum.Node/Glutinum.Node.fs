@@ -49547,6 +49547,27 @@ Certificate.verifySpkac($0)""")>]
             [<EmitIndexer>]
             abstract member Item: key: string -> obj with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?crv: string,
+                    ?d: string,
+                    ?dp: string,
+                    ?dq: string,
+                    ?e: string,
+                    ?k: string,
+                    ?kty: string,
+                    ?n: string,
+                    ?p: string,
+                    ?q: string,
+                    ?qi: string,
+                    ?x: string,
+                    ?y: string
+                )
+                : JsonWebKey
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AsymmetricKeyDetails =
@@ -106024,6 +106045,94 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member ``x-frame-options``: string option with get, set
             abstract member ``x-xss-protection``: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?accept: U2<string, ResizeArray<string>>,
+                    ?``accept-charset``: U2<string, ResizeArray<string>>,
+                    ?``accept-encoding``: U2<string, ResizeArray<string>>,
+                    ?``accept-language``: U2<string, ResizeArray<string>>,
+                    ?``accept-ranges``: string,
+                    ?``access-control-allow-credentials``: string,
+                    ?``access-control-allow-headers``: string,
+                    ?``access-control-allow-methods``: string,
+                    ?``access-control-allow-origin``: string,
+                    ?``access-control-expose-headers``: string,
+                    ?``access-control-max-age``: string,
+                    ?``access-control-request-headers``: string,
+                    ?``access-control-request-method``: string,
+                    ?age: string,
+                    ?allow: string,
+                    ?authorization: string,
+                    ?``cache-control``: string,
+                    ?``cdn-cache-control``: string,
+                    ?connection: U2<string, ResizeArray<string>>,
+                    ?``content-disposition``: string,
+                    ?``content-encoding``: string,
+                    ?``content-language``: string,
+                    ?``content-length``: U2<string, float>,
+                    ?``content-location``: string,
+                    ?``content-range``: string,
+                    ?``content-security-policy``: string,
+                    ?``content-security-policy-report-only``: string,
+                    ?``content-type``: string,
+                    ?cookie: U2<string, ResizeArray<string>>,
+                    ?dav: U2<string, ResizeArray<string>>,
+                    ?dnt: string,
+                    ?date: string,
+                    ?etag: string,
+                    ?expect: string,
+                    ?expires: string,
+                    ?forwarded: string,
+                    ?from: string,
+                    ?host: string,
+                    ?``if-match``: string,
+                    ?``if-modified-since``: string,
+                    ?``if-none-match``: string,
+                    ?``if-range``: string,
+                    ?``if-unmodified-since``: string,
+                    ?``last-modified``: string,
+                    ?link: U2<string, ResizeArray<string>>,
+                    ?location: string,
+                    ?``max-forwards``: string,
+                    ?origin: string,
+                    ?pragma: U2<string, ResizeArray<string>>,
+                    ?``proxy-authenticate``: U2<string, ResizeArray<string>>,
+                    ?``proxy-authorization``: string,
+                    ?``public-key-pins``: string,
+                    ?``public-key-pins-report-only``: string,
+                    ?range: string,
+                    ?referer: string,
+                    ?``referrer-policy``: string,
+                    ?refresh: string,
+                    ?``retry-after``: string,
+                    ?``sec-websocket-accept``: string,
+                    ?``sec-websocket-extensions``: U2<string, ResizeArray<string>>,
+                    ?``sec-websocket-key``: string,
+                    ?``sec-websocket-protocol``: U2<string, ResizeArray<string>>,
+                    ?``sec-websocket-version``: string,
+                    ?server: string,
+                    ?``set-cookie``: U2<string, ResizeArray<string>>,
+                    ?``strict-transport-security``: string,
+                    ?te: string,
+                    ?trailer: string,
+                    ?``transfer-encoding``: string,
+                    ?``user-agent``: string,
+                    ?upgrade: string,
+                    ?``upgrade-insecure-requests``: string,
+                    ?vary: string,
+                    ?via: U2<string, ResizeArray<string>>,
+                    ?warning: string,
+                    ?``www-authenticate``: U2<string, ResizeArray<string>>,
+                    ?``x-content-type-options``: string,
+                    ?``x-dns-prefetch-control``: string,
+                    ?``x-frame-options``: string,
+                    ?``x-xss-protection``: string
+                )
+                : OutgoingHttpHeaders
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ClientRequestArgs =
@@ -113225,6 +113334,87 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member ``:authority``: string option with get, set
             abstract member ``:scheme``: string option with get, set
             abstract member ``:protocol``: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?accept: string,
+                    ?``accept-encoding``: string,
+                    ?``accept-language``: string,
+                    ?``accept-patch``: string,
+                    ?``accept-ranges``: string,
+                    ?``access-control-allow-credentials``: string,
+                    ?``access-control-allow-headers``: string,
+                    ?``access-control-allow-methods``: string,
+                    ?``access-control-allow-origin``: string,
+                    ?``access-control-expose-headers``: string,
+                    ?``access-control-max-age``: string,
+                    ?``access-control-request-headers``: string,
+                    ?``access-control-request-method``: string,
+                    ?age: string,
+                    ?allow: string,
+                    ?``alt-svc``: string,
+                    ?authorization: string,
+                    ?``cache-control``: string,
+                    ?connection: string,
+                    ?``content-disposition``: string,
+                    ?``content-encoding``: string,
+                    ?``content-language``: string,
+                    ?``content-length``: string,
+                    ?``content-location``: string,
+                    ?``content-range``: string,
+                    ?``content-type``: string,
+                    ?cookie: string,
+                    ?date: string,
+                    ?etag: string,
+                    ?expect: string,
+                    ?expires: string,
+                    ?forwarded: string,
+                    ?from: string,
+                    ?host: string,
+                    ?``if-match``: string,
+                    ?``if-modified-since``: string,
+                    ?``if-none-match``: string,
+                    ?``if-unmodified-since``: string,
+                    ?``last-modified``: string,
+                    ?location: string,
+                    ?origin: string,
+                    ?pragma: string,
+                    ?``proxy-authenticate``: string,
+                    ?``proxy-authorization``: string,
+                    ?``public-key-pins``: string,
+                    ?range: string,
+                    ?referer: string,
+                    ?``retry-after``: string,
+                    ?``sec-fetch-site``: string,
+                    ?``sec-fetch-mode``: string,
+                    ?``sec-fetch-user``: string,
+                    ?``sec-fetch-dest``: string,
+                    ?``sec-websocket-accept``: string,
+                    ?``sec-websocket-extensions``: string,
+                    ?``sec-websocket-key``: string,
+                    ?``sec-websocket-protocol``: string,
+                    ?``sec-websocket-version``: string,
+                    ?``set-cookie``: ResizeArray<string>,
+                    ?``strict-transport-security``: string,
+                    ?tk: string,
+                    ?trailer: string,
+                    ?``transfer-encoding``: string,
+                    ?upgrade: string,
+                    ?``user-agent``: string,
+                    ?vary: string,
+                    ?via: string,
+                    ?warning: string,
+                    ?``www-authenticate``: string,
+                    ?``:path``: string,
+                    ?``:method``: string,
+                    ?``:authority``: string,
+                    ?``:scheme``: string,
+                    ?``:protocol``: string
+                )
+                : IncomingHttpHeaders
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -151470,6 +151660,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             type ImportAttributes =
                 inherit Node.NodeJS.Dict<string>
                 abstract member ``type``: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?``type``: string) : ImportAttributes = nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -198700,6 +198893,20 @@ Duplex.fromWeb($0, $1)""")>]
             /// Common name.
             /// </summary>
             abstract member CN: U2<string, ResizeArray<string>> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?C: U2<string, ResizeArray<string>>,
+                    ?ST: U2<string, ResizeArray<string>>,
+                    ?L: U2<string, ResizeArray<string>>,
+                    ?O: U2<string, ResizeArray<string>>,
+                    ?OU: U2<string, ResizeArray<string>>,
+                    ?CN: U2<string, ResizeArray<string>>
+                )
+                : Certificate
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
