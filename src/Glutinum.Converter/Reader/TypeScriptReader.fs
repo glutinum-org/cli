@@ -23,6 +23,7 @@ open Glutinum.Converter.Reader.ExportAssignment
 open Glutinum.Converter.Reader.ExportDeclaration
 open Glutinum.Converter.Reader.Documentation
 open Glutinum.Converter.Reader.NamedTupleMember
+open System.Collections.Generic
 
 type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) =
     let warnings = ResizeArray<string>()
@@ -31,6 +32,9 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
     // We use a list because in TypeScript, types declarations can be duplicated
     // A dictionary would only store the last declaration
     let typeMemory = ResizeArray<GlueType>()
+
+    /// A declaration reached again through a re-export or a reference is in memory once
+    let readNodes = HashSet<Ts.Node>(HashIdentity.Reference)
 
     let inProgress = ReadInProgress.Create()
 
@@ -78,7 +82,10 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
 
         member this.ReadNode(node: Ts.Node) : GlueType =
             let typ = readNode this node
-            typeMemory.Add(typ)
+
+            if readNodes.Add node then
+                typeMemory.Add(typ)
+
             typ
 
         member this.ReadTypeAliasDeclaration

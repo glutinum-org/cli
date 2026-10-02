@@ -124,7 +124,7 @@ let rec private declarations (glueTypes: GlueType list) =
 
 /// An interface declared several times is one declaration, a name alone has to be unique
 let private tryFindBase (typeMemory: GlueType list) (typeReference: GlueTypeReference) =
-    let candidates = declarations typeMemory |> List.distinct
+    let candidates = declarations typeMemory
 
     let found =
         if typeReference.FullName <> "" then
