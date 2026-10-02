@@ -4,6 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open Glutinum.Converter.Reader.Utils
 open TypeScript
+open Fable.Core.JsInterop
 
 let readClassDeclaration
     (reader: ITypeScriptReader)
@@ -40,7 +41,18 @@ let readClassDeclaration
             | _ -> None
         )
 
-    let members = members |> Seq.toList |> List.map reader.ReadDeclaration
+    // A caller has no access to a protected member
+    let members =
+        members
+        |> List.filter (fun classElement ->
+            not (
+                ModifierUtil.HasModifier(
+                    unbox<Ts.NodeArray<Ts.ModifierLike> option> classElement?modifiers,
+                    Ts.SyntaxKind.ProtectedKeyword
+                )
+            )
+        )
+        |> List.map reader.ReadDeclaration
 
     let isDefaultExport =
         ModifierUtil.HasModifier(classDeclaration.modifiers, Ts.SyntaxKind.DefaultKeyword)
