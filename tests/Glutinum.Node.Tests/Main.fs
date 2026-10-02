@@ -89,7 +89,7 @@ let main _ =
                                 fs.writeFileSync (file, "async content")
 
                                 let! content =
-                                    awaitPromise (Node.fs_promises.Exports.readFile (file, utf8))
+                                    awaitPromise (Node.fs.promises.Exports.readFile (file, utf8))
 
                                 assertThat content (isEqualTo "async content")
                             }
