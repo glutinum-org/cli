@@ -1,5 +1,5 @@
 ---
-last_commit_released: bc253d603fb4d98975432ad990924d4c3ddd58c6
+last_commit_released: f7edba103bf435df7b4f7be955725218d61f7e5a
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,62 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.3 - 2026-10-02
+
+### 🚀 Features
+
+* Create a param object for an object literal type alias ([89ca42b](https://github.com/glutinum-org/cli/commit/89ca42be6ca5a724dabd3f6c3b3fabf920959e95))
+* Name the values of a boolean in a literal union ([410e23a](https://github.com/glutinum-org/cli/commit/410e23ad7f696c07083dc9f7f2e407af28703b97))
+* Create a param object for a base interface ([08037e0](https://github.com/glutinum-org/cli/commit/08037e0e66b48a107b90f85e5646fd7b2428b813))
+* Create a param object for a nested or generic interface ([5d4f7ef](https://github.com/glutinum-org/cli/commit/5d4f7ef256bb99fd4d034d33141fabb632392198))
+* Create a param object for every interface used as an argument ([b49f371](https://github.com/glutinum-org/cli/commit/b49f371cd21d278adce456ff54c903d5d107f00f))
+* Resolve Omit and Pick with the TypeScript checker ([c4e7939](https://github.com/glutinum-org/cli/commit/c4e7939eea34dac6dca7c941c58825176bcbc4d0))
+* Name a module after the subpath exporting its declarations ([ccdfba7](https://github.com/glutinum-org/cli/commit/ccdfba77319b564bc26daa1be5f72f7aa6375264))
+* Nest the module of an unpublished file after its directories ([c9bbfee](https://github.com/glutinum-org/cli/commit/c9bbfeea84763c50fa9a22a6a76174d13624907f))
+* Spell a subpath module as the exports map does ([1091945](https://github.com/glutinum-org/cli/commit/109194540e560e1c337fd7fa31d26d8bd618e2d5))
+* Hoist the declarations of an unpublished file to the package module ([7933519](https://github.com/glutinum-org/cli/commit/7933519ede82c26ce4485e3b4a193acf371ef278))
+* Name a default exported variable as the package publishes it ([22b9ac5](https://github.com/glutinum-org/cli/commit/22b9ac5e5ceff599e5fd846854a08d192f8904bb))
+* Import a Node built-in through its node: alias ([f07b5de](https://github.com/glutinum-org/cli/commit/f07b5de65cf1c77215b1fb4204b155247815589d))
+* Nest an ambient module of a script after its specifier ([7ba3ef7](https://github.com/glutinum-org/cli/commit/7ba3ef747e426d45700f97c4be771f7b855f814e))
+* Resolve conditional types with the type checker ([dc4fa6f](https://github.com/glutinum-org/cli/commit/dc4fa6fa2a488490e37c9bb9381191bf47744de0))
+* Give the Omit and Pick of a generic base a Create factory ([0e98a45](https://github.com/glutinum-org/cli/commit/0e98a45de96476e7e2e6c19f8dd57dacef7b52c9))
+* Read an intersection with an empty type literal as its other member ([e8e88ad](https://github.com/glutinum-org/cli/commit/e8e88ad39f9946a65dbb97dadd204703b99ea54e))
+* Load @types/node as a global type package when it is installed ([33d7b3e](https://github.com/glutinum-org/cli/commit/33d7b3e560a0b81c3a46dd14e0c42a051d4bb935))
+* Overload a method per branch of a conditional over its type parameter ([0383ce8](https://github.com/glutinum-org/cli/commit/0383ce8863871f79572d92e00c6cbb2cbd2db0ba))
+* Generate the globals of a script with --global ([11dc6df](https://github.com/glutinum-org/cli/commit/11dc6df038be8e662917de2c132bf2aa3bd97710))
+* Cap the overloads of a signature with --max-overloads ([4b2b5ef](https://github.com/glutinum-org/cli/commit/4b2b5ef6ea07b2b11480286aeaab0c9310e5891e))
+* Overload a dictionary parameter with a type parameter ([5497f67](https://github.com/glutinum-org/cli/commit/5497f6703f380346d447d96396a794e8353d3730))
+* Generate Create for an option bag with an index signature ([13b31fb](https://github.com/glutinum-org/cli/commit/13b31fbf0329b991766c8cc335e3d6db26173234))
+
+### 🐞 Bug Fixes
+
+* Drop a parameter that can only be undefined ([5fee048](https://github.com/glutinum-org/cli/commit/5fee0484fe34ed6acb3bd55bd79d95616e131b94))
+* An optional method is an optional function member ([efba79c](https://github.com/glutinum-org/cli/commit/efba79cb45418c8920784afae710113cd33c9849))
+* Flatten an intersection with a class into its members ([87df98b](https://github.com/glutinum-org/cli/commit/87df98b46d105e0b3e95bbe521290ece96ce62e0))
+* Render the missing AST fields in the web viewers ([691435c](https://github.com/glutinum-org/cli/commit/691435c0e028cb9b5d3a7b7d472461f85c14a1aa))
+* Inherit the class of an intersection instead of falling back to obj ([af3932d](https://github.com/glutinum-org/cli/commit/af3932d321f514f26cca270735b75c4faa6e81bc))
+* Make overloads sharing their required parameters distinguishable ([4dda3b4](https://github.com/glutinum-org/cli/commit/4dda3b49d9323e6196e65234ffd078328cf5555c))
+* Import a declaration from the public entry exporting it ([3970d67](https://github.com/glutinum-org/cli/commit/3970d6703ee8ae3e4480261cf0ad402509478574))
+* Keep the union overload beside the expanded arms ([aeb7f13](https://github.com/glutinum-org/cli/commit/aeb7f1360356ec586bd3a3792cccc93f35f6a76f))
+* Recover the declarations generated as empty types ([8ac0e98](https://github.com/glutinum-org/cli/commit/8ac0e98d2854b26b2c7d72676e718057fa7489cc))
+* Name an anonymous array element type Item ([0310ab7](https://github.com/glutinum-org/cli/commit/0310ab700c56bd70fc0aa638b44ce3d7fbe5a0eb))
+* Read a Pick of unbound keys as obj ([43cd73e](https://github.com/glutinum-org/cli/commit/43cd73edf328cadcf1fdb72e307912a81d996fe4))
+* Resolve the entry of a package with an exports map from the map ([bcd9339](https://github.com/glutinum-org/cli/commit/bcd9339b99da2f9b1fb6fee451c7334adc38b929))
+* Read the declared type of a default exported variable ([7413dfe](https://github.com/glutinum-org/cli/commit/7413dfe3a173215d1857d2c7bfb3ea58d50c2726))
+* Number an anonymous type inside its module ([326837f](https://github.com/glutinum-org/cli/commit/326837fc97f3e1be8a131c6e5b9cd8900f20a4c7))
+* Print a typed union case without a blank line after it ([f1b25b3](https://github.com/glutinum-org/cli/commit/f1b25b3622ceb385d1bbd8fc3d4d91a45f24ac3c))
+* Keep a union alias a reference inside its own cases ([80d9665](https://github.com/glutinum-org/cli/commit/80d9665f0e9bd3b799d8d8a3095c3efd33a1f3f3))
+* Read Omit and Pick of a self-referencing or global base ([5fbe693](https://github.com/glutinum-org/cli/commit/5fbe69360e5643a160ab7d8c1a7e0db5a0a4df27))
+* Compile the msal-browser binding ([63b31fc](https://github.com/glutinum-org/cli/commit/63b31fcdbb2f2460f47e483752db3e4962051959))
+* Compile the sortablejs and i18next bindings ([86f4d0c](https://github.com/glutinum-org/cli/commit/86f4d0c408075a3ef68eefa9c52185c33d991812))
+* Import a default declared through the export list ([84b3381](https://github.com/glutinum-org/cli/commit/84b33812304c5c5db02b341733356dd8f9d7d6d1))
+* Qualify a type reaching another namespace through a member, a delegate or an alias ([905efc1](https://github.com/glutinum-org/cli/commit/905efc1f4979505521c3eb6062607c69f3d1b127))
+* Drop the heritage a redeclared method makes ambiguous ([31bcafa](https://github.com/glutinum-org/cli/commit/31bcafa2c3349947cafd082281ab18445e8c22e1))
+* Store a declaration read several times once in the type memory ([4eec086](https://github.com/glutinum-org/cli/commit/4eec086ad00c53319085c9b521389e2084a9b1e5))
+* Drop the protected members of a class ([22228fc](https://github.com/glutinum-org/cli/commit/22228fcf1772b4f73a7c03fbf2b6cd4f917fd474))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/bc253d603fb4d98975432ad990924d4c3ddd58c6..f7edba103bf435df7b4f7be955725218d61f7e5a)</small></strong>
 
 ## 1.0.0-beta.2 - 2026-09-28
 

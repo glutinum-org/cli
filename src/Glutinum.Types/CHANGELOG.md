@@ -1,5 +1,5 @@
 ---
-last_commit_released: bc253d603fb4d98975432ad990924d4c3ddd58c6
+last_commit_released: f7edba103bf435df7b4f7be955725218d61f7e5a
 ---
 
 # Changelog
@@ -7,6 +7,15 @@ last_commit_released: bc253d603fb4d98975432ad990924d4c3ddd58c6
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.3 - 2026-10-02
+
+### 🐞 Bug Fixes
+
+* An optional method is an optional function member ([efba79c](https://github.com/glutinum-org/cli/commit/efba79cb45418c8920784afae710113cd33c9849))
+* Keep the union overload beside the expanded arms ([aeb7f13](https://github.com/glutinum-org/cli/commit/aeb7f1360356ec586bd3a3792cccc93f35f6a76f))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/bc253d603fb4d98975432ad990924d4c3ddd58c6..f7edba103bf435df7b4f7be955725218d61f7e5a)</small></strong>
 
 ## 1.0.0-beta.2 - 2026-09-28
 
