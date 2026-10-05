@@ -1,5 +1,5 @@
 ---
-last_commit_released: bc253d603fb4d98975432ad990924d4c3ddd58c6
+last_commit_released: f7edba103bf435df7b4f7be955725218d61f7e5a
 name: Glutinum.Web
 ---
 
@@ -12,6 +12,26 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0-beta.3 - 2026-10-02
+
+### 🚀 Features
+
+* Name the values of a boolean in a literal union ([410e23a](https://github.com/glutinum-org/cli/commit/410e23ad7f696c07083dc9f7f2e407af28703b97))
+* Create a param object for a base interface ([08037e0](https://github.com/glutinum-org/cli/commit/08037e0e66b48a107b90f85e5646fd7b2428b813))
+* Create a param object for a nested or generic interface ([5d4f7ef](https://github.com/glutinum-org/cli/commit/5d4f7ef256bb99fd4d034d33141fabb632392198))
+* Create a param object for every interface used as an argument ([b49f371](https://github.com/glutinum-org/cli/commit/b49f371cd21d278adce456ff54c903d5d107f00f))
+* Generate Create for an option bag with an index signature ([13b31fb](https://github.com/glutinum-org/cli/commit/13b31fbf0329b991766c8cc335e3d6db26173234))
+
+### 🐞 Bug Fixes
+
+* Make overloads sharing their required parameters distinguishable ([4dda3b4](https://github.com/glutinum-org/cli/commit/4dda3b49d9323e6196e65234ffd078328cf5555c))
+* Keep the union overload beside the expanded arms ([aeb7f13](https://github.com/glutinum-org/cli/commit/aeb7f1360356ec586bd3a3792cccc93f35f6a76f))
+* Read a Pick of unbound keys as obj ([43cd73e](https://github.com/glutinum-org/cli/commit/43cd73edf328cadcf1fdb72e307912a81d996fe4))
+* Compile the msal-browser binding ([63b31fc](https://github.com/glutinum-org/cli/commit/63b31fcdbb2f2460f47e483752db3e4962051959))
+* Drop the heritage a redeclared method makes ambiguous ([31bcafa](https://github.com/glutinum-org/cli/commit/31bcafa2c3349947cafd082281ab18445e8c22e1))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/bc253d603fb4d98975432ad990924d4c3ddd58c6..f7edba103bf435df7b4f7be955725218d61f7e5a)</small></strong>
 
 ## 1.0.0-beta.2 - 2026-09-28
 
