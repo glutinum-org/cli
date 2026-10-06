@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Options =
     abstract member level: float with get
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: float) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -9,6 +9,8 @@ open System
 type TypeLiteral =
     abstract member kind: string with get, set
     abstract member x: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: string, x: float) : TypeLiteral = nativeOnly
 
 type FunctionType =
     delegate of a: string * b: float -> unit
@@ -17,6 +19,8 @@ type FunctionType =
 [<Interface>]
 type Props =
     abstract member shape: Props.shape with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (shape: Props.shape) : Props = nativeOnly
 
 module Props =
 

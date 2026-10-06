@@ -13,11 +13,15 @@ type SyntaxKind =
 [<Interface>]
 type SuperExpression =
     abstract member kind: SyntaxKind with get
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: SyntaxKind) : SuperExpression = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type ThisExpression =
     abstract member kind: SyntaxKind with get
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: SyntaxKind) : ThisExpression = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

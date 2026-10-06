@@ -8,16 +8,24 @@ open System
 [<Interface>]
 type TerminalOptions =
     abstract member prefix: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (prefix: string) : TerminalOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type ExtersionTerminalOptions =
     abstract member suffix: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (suffix: string) : ExtersionTerminalOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Foo =
     abstract member terminal: U2<Foo.terminal.U2.ReadOnlyTerminalOptions, Foo.terminal.U2.ReadOnlyExtersionTerminalOptions> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (terminal: Foo.terminal.U2.ReadOnlyTerminalOptions) : Foo = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (terminal: Foo.terminal.U2.ReadOnlyExtersionTerminalOptions) : Foo = nativeOnly
 
 module Foo =
 

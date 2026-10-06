@@ -9,12 +9,16 @@ open System
 type Todo =
     abstract member title: string with get, set
     abstract member description: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (title: string, description: string) : Todo = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type TodoExtra =
     abstract member completed: bool with get, set
     abstract member createdAt: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (completed: bool, createdAt: float) : TodoExtra = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -22,6 +26,8 @@ type TodoPreview =
     abstract member title: string with get, set
     abstract member completed: bool with get, set
     abstract member createdAt: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (title: string, completed: bool, createdAt: float) : TodoPreview = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

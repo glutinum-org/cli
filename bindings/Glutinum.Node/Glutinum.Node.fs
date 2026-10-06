@@ -9007,9 +9007,93 @@ module Node =
                 | major
                 | minor
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type TypedArray<'TArrayBuffer> = interface end
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type TypedArray<'TArrayBuffer> =
+            | Case1 of JS.Uint8Array
+            | Case2 of JS.Uint8ClampedArray
+            | Case3 of JS.Uint16Array
+            | Case4 of JS.Uint32Array
+            | Case5 of JS.Int8Array
+            | Case6 of JS.Int16Array
+            | Case7 of JS.Int32Array
+            | Case8 of obj
+            | Case9 of JS.Float32Array
+            | Case10 of JS.Float64Array
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Uint8Array) : TypedArray<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Uint8Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Uint8ClampedArray) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Uint8ClampedArray) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Uint16Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Uint16Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Uint32Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Uint32Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Int8Array) : TypedArray<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Int8Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Int16Array) : TypedArray<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Int16Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Int32Array) : TypedArray<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Int32Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : TypedArray<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : TypedArray<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Float32Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Float32Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: JS.Float64Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: JS.Float64Array) : TypedArray<'TArrayBuffer> =
+                nativeOnly
 
         type ArrayBufferView<'TArrayBuffer> = U2<Node.NodeJS.TypedArray<'TArrayBuffer>, obj>
 
@@ -9139,6 +9223,17 @@ module Node =
             abstract member _json: RequireExtensions._json with get, set
             abstract member _node: RequireExtensions._node with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    _js: RequireExtensions._js,
+                    _json: RequireExtensions._json,
+                    _node: RequireExtensions._node
+                )
+                : RequireExtensions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type RequireResolveOptions =
@@ -9229,6 +9324,13 @@ module Node =
             /// </summary>
             abstract member arrayBuffers: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (rss: float, heapTotal: float, heapUsed: float, external: float, arrayBuffers: float)
+                : MemoryUsage
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type CpuUsage =
@@ -9246,6 +9348,19 @@ module Node =
             abstract member headersUrl: string option with get, set
             abstract member libUrl: string option with get, set
             abstract member lts: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    name: string,
+                    ?sourceUrl: string,
+                    ?headersUrl: string,
+                    ?libUrl: string,
+                    ?lts: string
+                )
+                : ProcessRelease
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -9323,6 +9438,25 @@ module Node =
             [<Obsolete("This property is always true, and any checks based on it are redundant.")>]
             abstract member uv: bool with get
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cached_builtins: bool,
+                    debug: bool,
+                    inspector: bool,
+                    ipv6: bool,
+                    require_module: bool,
+                    tls: bool,
+                    tls_alpn: bool,
+                    tls_ocsp: bool,
+                    tls_sni: bool,
+                    typescript: ProcessFeatures.typescript,
+                    uv: bool
+                )
+                : ProcessFeatures
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ProcessVersions =
@@ -9335,6 +9469,22 @@ module Node =
             abstract member zlib: string with get, set
             abstract member modules: string with get, set
             abstract member openssl: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    http_parser: string,
+                    node: string,
+                    v8: string,
+                    ares: string,
+                    uv: string,
+                    zlib: string,
+                    modules: string,
+                    openssl: string
+                )
+                : ProcessVersions
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -9634,6 +9784,30 @@ module Node =
             abstract member userCPUTime: float with get, set
             abstract member voluntaryContextSwitches: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    fsRead: float,
+                    fsWrite: float,
+                    involuntaryContextSwitches: float,
+                    ipcReceived: float,
+                    ipcSent: float,
+                    majorPageFault: float,
+                    maxRSS: float,
+                    minorPageFault: float,
+                    sharedMemorySize: float,
+                    signalsCount: float,
+                    swappedOut: float,
+                    systemCPUTime: float,
+                    unsharedDataSize: float,
+                    unsharedStackSize: float,
+                    userCPUTime: float,
+                    voluntaryContextSwitches: float
+                )
+                : ResourceUsage
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type EmitWarningOptions =
@@ -9666,6 +9840,13 @@ module Node =
         type ProcessConfig =
             abstract member target_defaults: ProcessConfig.target_defaults with get
             abstract member variables: ProcessConfig.variables with get
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (target_defaults: ProcessConfig.target_defaults, variables: ProcessConfig.variables)
+                : ProcessConfig
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -15334,6 +15515,9 @@ module Node =
         abstract member dispose: obj with get
         abstract member asyncDispose: obj with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(dispose: obj, asyncDispose: obj) : SymbolConstructor = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type Disposable =
@@ -16199,6 +16383,13 @@ module Node =
     type Global =
         abstract member URL: Node.url.URL with get, set
         abstract member URLSearchParams: Node.url.URLSearchParams with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (URL: Node.url.URL, URLSearchParams: Node.url.URLSearchParams)
+            : Global
+            =
+            nativeOnly
 
     type AbortController = Glutinum.Web.AbortController
 
@@ -25811,6 +26002,10 @@ module Node =
                 abstract member thisArg: obj with get, set
                 abstract member arguments: ResizeArray<obj> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(thisArg: obj, arguments: ResizeArray<obj>) : CallTrackerCall =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type CallTrackerReportInformation =
@@ -25831,6 +26026,13 @@ module Node =
                 /// A stack trace of the function.
                 /// </summary>
                 abstract member stack: obj with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (message: string, actual: float, expected: float, operator: string, stack: obj)
+                    : CallTrackerReportInformation
+                    =
+                    nativeOnly
 
             type AssertPredicate =
                 U5<RegExp, AssertPredicate.U5.Case2, (obj -> bool), obj, Exception>
@@ -34057,6 +34259,41 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member timeout: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?timeout: float
+                )
+                : MessagingOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    killSignal: Node.NodeJS.Signals,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?timeout: float
+                )
+                : MessagingOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    killSignal: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?timeout: float
+                )
+                : MessagingOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ProcessEnvOptions =
@@ -34065,12 +34302,74 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member cwd: U2<string, Node.url.URL> option with get, set
             abstract member env: Node.NodeJS.ProcessEnv option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?uid: float, ?gid: float, ?env: Node.NodeJS.ProcessEnv)
+                : ProcessEnvOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (cwd: string, ?uid: float, ?gid: float, ?env: Node.NodeJS.ProcessEnv)
+                : ProcessEnvOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (cwd: Node.url.URL, ?uid: float, ?gid: float, ?env: Node.NodeJS.ProcessEnv)
+                : ProcessEnvOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type CommonOptions =
             inherit Node.child_process.ProcessEnvOptions
             abstract member windowsHide: bool option with get, set
             abstract member timeout: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float
+                )
+                : CommonOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float
+                )
+                : CommonOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float
+                )
+                : CommonOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -34089,6 +34388,27 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member stdio: Node.child_process.StdioOptions option with get, set
             abstract member shell: U2<bool, string> option with get, set
             abstract member windowsVerbatimArguments: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?argv0: string,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?shell: U2<bool, string>,
+                    ?windowsVerbatimArguments: bool
+                )
+                : CommonSpawnOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -34924,6 +35244,26 @@ AsyncLocalStorage.snapshot()""")>]
         type ExecFileOptionsWithOtherEncoding =
             inherit Node.child_process.ExecFileOptions
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?windowsVerbatimArguments: bool,
+                    ?shell: U2<bool, string>,
+                    ?signal: Node.AbortSignal,
+                    ?encoding: string
+                )
+                : ExecFileOptionsWithOtherEncoding
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ExecFileException =
@@ -35371,6 +35711,21 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member signal: Node.NodeJS.Signals option with get, set
             abstract member error: Exception option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    pid: float,
+                    output: ResizeArray<'T option>,
+                    stdout: 'T,
+                    stderr: 'T,
+                    ?status: float,
+                    ?signal: Node.NodeJS.Signals,
+                    ?error: Exception
+                )
+                : SpawnSyncReturns<'T>
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type CommonExecOptions =
@@ -35387,6 +35742,25 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member killSignal: U2<Node.NodeJS.Signals, float> option with get, set
             abstract member maxBuffer: float option with get, set
             abstract member encoding: CommonExecOptions.encoding option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?encoding: CommonExecOptions.encoding
+                )
+                : CommonExecOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -49600,6 +49974,21 @@ Certificate.verifySpkac($0)""")>]
             /// </summary>
             abstract member namedCurve: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?modulusLength: float,
+                    ?publicExponent: bigint,
+                    ?hashAlgorithm: string,
+                    ?mgf1HashAlgorithm: string,
+                    ?saltLength: float,
+                    ?divisorLength: float,
+                    ?namedCurve: string
+                )
+                : AsymmetricKeyDetails
+                =
+                nativeOnly
+
         /// <summary>
         /// Node.js uses a <c>KeyObject</c> class to represent a symmetric or asymmetric key,
         /// and each kind of key exposes different functions. The <see href="createSecretKey">createSecretKey</see>, <see href="createPublicKey">createPublicKey</see> and <see href="createPrivateKey">createPrivateKey</see> methods are used to create <c>KeyObject</c>instances. <c>KeyObject</c>
@@ -51201,6 +51590,13 @@ KeyObject.from($0)""")>]
             abstract member padding: float option with get, set
             abstract member saltLength: float option with get, set
             abstract member dsaEncoding: Node.crypto.DSAEncoding option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?padding: float, ?saltLength: float, ?dsaEncoding: Node.crypto.DSAEncoding)
+                : SigningOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -53111,11 +53507,25 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member cipher: string option with get, set
             abstract member passphrase: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (format: 'T, ?cipher: string, ?passphrase: string)
+                : BasePrivateKeyEncodingOptions<'T>
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type KeyPairKeyObjectResult =
             abstract member publicKey: Node.crypto.KeyObject with get, set
             abstract member privateKey: Node.crypto.KeyObject with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (publicKey: Node.crypto.KeyObject, privateKey: Node.crypto.KeyObject)
+                : KeyPairKeyObjectResult
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -53318,6 +53728,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member publicKey: 'T1 with get, set
             abstract member privateKey: 'T2 with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(publicKey: 'T1, privateKey: 'T2) : KeyPairSyncResult<'T1, 'T2> =
+                nativeOnly
+
         module generateKeyPair_ =
 
             [<AbstractClass>]
@@ -53515,6 +53929,20 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </summary>
             abstract member mode: Node.crypto.CipherMode with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    name: string,
+                    nid: float,
+                    keyLength: float,
+                    mode: Node.crypto.CipherMode,
+                    ?blockSize: float,
+                    ?ivLength: float
+                )
+                : CipherInfo
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type SecureHeapUsage =
@@ -53534,6 +53962,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// The calculated ratio of <c>used</c> to <c>total</c> allocated bytes.
             /// </summary>
             abstract member utilization: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (total: float, min: float, used: float, utilization: float)
+                : SecureHeapUsage
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -53995,11 +54430,21 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             type Algorithm =
                 abstract member name: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(name: string) : Algorithm = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type EcKeyAlgorithm =
                 inherit Node.crypto.webcrypto_.KeyAlgorithm
                 abstract member namedCurve: Node.crypto.webcrypto_.NamedCurve with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (name: string, namedCurve: Node.crypto.webcrypto_.NamedCurve)
+                    : EcKeyAlgorithm
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -54110,6 +54555,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 inherit Node.crypto.webcrypto_.KeyAlgorithm
                 abstract member hash: Node.crypto.webcrypto_.KeyAlgorithm with get, set
                 abstract member length: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (name: string, hash: Node.crypto.webcrypto_.KeyAlgorithm, length: float)
+                    : HmacKeyAlgorithm
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -54224,6 +54676,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 inherit Node.crypto.webcrypto_.RsaKeyAlgorithm
                 abstract member hash: Node.crypto.webcrypto_.KeyAlgorithm with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        name: string,
+                        modulusLength: float,
+                        publicExponent: Node.crypto.webcrypto_.BigInteger,
+                        hash: Node.crypto.webcrypto_.KeyAlgorithm
+                    )
+                    : RsaHashedKeyAlgorithm
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RsaHashedKeyGenParams =
@@ -54249,12 +54713,34 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member modulusLength: float with get, set
                 abstract member publicExponent: Node.crypto.webcrypto_.BigInteger with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        name: string,
+                        modulusLength: float,
+                        publicExponent: Node.crypto.webcrypto_.BigInteger
+                    )
+                    : RsaKeyAlgorithm
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RsaKeyGenParams =
                 inherit Node.crypto.webcrypto_.Algorithm
                 abstract member modulusLength: float with get, set
                 abstract member publicExponent: Node.crypto.webcrypto_.BigInteger with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        name: string,
+                        modulusLength: float,
+                        publicExponent: Node.crypto.webcrypto_.BigInteger
+                    )
+                    : RsaKeyGenParams
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -54384,6 +54870,16 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 /// A <see href="CryptoKey">CryptoKey</see> whose type will be <c>'public'</c>.
                 /// </summary>
                 abstract member publicKey: Node.crypto.webcrypto_.CryptoKey with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        privateKey: Node.crypto.webcrypto_.CryptoKey,
+                        publicKey: Node.crypto.webcrypto_.CryptoKey
+                    )
+                    : CryptoKeyPair
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -64131,6 +64627,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </summary>
             abstract member family: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(address: string, family: float) : LookupAddress = nativeOnly
+
         module lookup_ =
 
             [<AbstractClass>]
@@ -64203,6 +64702,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member address: string with get, set
             abstract member ttl: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(address: string, ttl: float) : RecordWithTtl = nativeOnly
+
         [<Obsolete("Use `AnyARecord` or `AnyAaaaRecord` instead.")>]
         type AnyRecordWithTtl = U2<Node.dns.AnyARecord, Node.dns.AnyAaaaRecord>
 
@@ -64212,11 +64714,19 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             inherit Node.dns.RecordWithTtl
             abstract member ``type``: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(address: string, ttl: float, ``type``: string) : AnyARecord =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyAaaaRecord =
             inherit Node.dns.RecordWithTtl
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(address: string, ttl: float, ``type``: string) : AnyAaaaRecord =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64228,11 +64738,40 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member contactemail: string option with get, set
             abstract member contactphone: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    critical: float,
+                    ?issue: string,
+                    ?issuewild: string,
+                    ?iodef: string,
+                    ?contactemail: string,
+                    ?contactphone: string
+                )
+                : CaaRecord
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyCaaRecord =
             inherit Node.dns.CaaRecord
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    critical: float,
+                    ``type``: string,
+                    ?issue: string,
+                    ?issuewild: string,
+                    ?iodef: string,
+                    ?contactemail: string,
+                    ?contactphone: string
+                )
+                : AnyCaaRecord
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64240,11 +64779,21 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member priority: float with get, set
             abstract member exchange: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(priority: float, exchange: string) : MxRecord = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyMxRecord =
             inherit Node.dns.MxRecord
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (priority: float, exchange: string, ``type``: string)
+                : AnyMxRecord
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64256,11 +64805,40 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member order: float with get, set
             abstract member preference: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    flags: string,
+                    service: string,
+                    regexp: string,
+                    replacement: string,
+                    order: float,
+                    preference: float
+                )
+                : NaptrRecord
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyNaptrRecord =
             inherit Node.dns.NaptrRecord
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    flags: string,
+                    service: string,
+                    regexp: string,
+                    replacement: string,
+                    order: float,
+                    preference: float,
+                    ``type``: string
+                )
+                : AnyNaptrRecord
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64273,11 +64851,42 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member expire: float with get, set
             abstract member minttl: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    nsname: string,
+                    hostmaster: string,
+                    serial: float,
+                    refresh: float,
+                    retry: float,
+                    expire: float,
+                    minttl: float
+                )
+                : SoaRecord
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnySoaRecord =
             inherit Node.dns.SoaRecord
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    nsname: string,
+                    hostmaster: string,
+                    serial: float,
+                    refresh: float,
+                    retry: float,
+                    expire: float,
+                    minttl: float,
+                    ``type``: string
+                )
+                : AnySoaRecord
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64287,11 +64896,25 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member port: float with get, set
             abstract member name: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (priority: float, weight: float, port: float, name: string)
+                : SrvRecord
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnySrvRecord =
             inherit Node.dns.SrvRecord
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (priority: float, weight: float, port: float, name: string, ``type``: string)
+                : AnySrvRecord
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64301,11 +64924,25 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member ``match``: float with get, set
             abstract member data: obj with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (certUsage: float, selector: float, ``match``: float, data: obj)
+                : TlsaRecord
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyTlsaRecord =
             inherit Node.dns.TlsaRecord
             abstract member ``type``: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (certUsage: float, selector: float, ``match``: float, data: obj, ``type``: string)
+                : AnyTlsaRecord
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64313,11 +64950,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member ``type``: string with get, set
             abstract member entries: ResizeArray<string> with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(``type``: string, entries: ResizeArray<string>) : AnyTxtRecord =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyNsRecord =
             abstract member ``type``: string with get, set
             abstract member value: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(``type``: string, value: string) : AnyNsRecord = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64325,13 +64969,105 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member ``type``: string with get, set
             abstract member value: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(``type``: string, value: string) : AnyPtrRecord = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type AnyCnameRecord =
             abstract member ``type``: string with get, set
             abstract member value: string with get, set
 
-        type AnyRecord = obj
+            [<ParamObject; Emit("$0")>]
+            static member Create(``type``: string, value: string) : AnyCnameRecord = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type AnyRecord =
+            | Case1 of Node.dns.AnyARecord
+            | Case2 of Node.dns.AnyAaaaRecord
+            | Case3 of Node.dns.AnyCaaRecord
+            | Case4 of Node.dns.AnyCnameRecord
+            | Case5 of Node.dns.AnyMxRecord
+            | Case6 of Node.dns.AnyNaptrRecord
+            | Case7 of Node.dns.AnyNsRecord
+            | Case8 of Node.dns.AnyPtrRecord
+            | Case9 of Node.dns.AnySoaRecord
+            | Case10 of Node.dns.AnySrvRecord
+            | Case11 of Node.dns.AnyTlsaRecord
+            | Case12 of Node.dns.AnyTxtRecord
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyARecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyARecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyAaaaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyAaaaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyCaaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyCaaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyCnameRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyCnameRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyMxRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyMxRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyNaptrRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyNaptrRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyNsRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyNsRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyPtrRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyPtrRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnySoaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnySoaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnySrvRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnySrvRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyTlsaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyTlsaRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyTxtRecord) : AnyRecord = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyTxtRecord) : AnyRecord = nativeOnly
 
         module resolve_ =
 
@@ -87788,6 +88524,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             abstract member ffree: 'T with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (``type``: 'T, bsize: 'T, blocks: 'T, bfree: 'T, bavail: 'T, files: 'T, ffree: 'T)
+                : StatsFsBase<'T>
+                =
+                nativeOnly
+
         /// <summary>
         /// Provides information about a mounted file system.
         ///
@@ -87826,10 +88569,40 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         type StatsFs =
             inherit Node.fs.StatsFsBase<float>
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: float,
+                    bsize: float,
+                    blocks: float,
+                    bfree: float,
+                    bavail: float,
+                    files: float,
+                    ffree: float
+                )
+                : StatsFs
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type BigIntStatsFs =
             inherit Node.fs.StatsFsBase<bigint>
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: bigint,
+                    bsize: bigint,
+                    blocks: bigint,
+                    bfree: bigint,
+                    bavail: bigint,
+                    files: bigint,
+                    ffree: bigint
+                )
+                : BigIntStatsFs
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -92833,11 +93606,25 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         type ReadSyncOptions =
             inherit Node.fs.ReadOptions
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?offset: float, ?length: float, ?position: Node.fs.ReadPosition)
+                : ReadSyncOptions
+                =
+                nativeOnly
+
         [<Obsolete("Use `ReadOptionsWithBuffer` instead.")>]
         [<AllowNullLiteral>]
         [<Interface>]
         type ReadAsyncOptions<'T> =
             inherit Node.fs.ReadOptionsWithBuffer<'T>
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?offset: float, ?length: float, ?position: Node.fs.ReadPosition, ?buffer: 'T)
+                : ReadAsyncOptions<'T>
+                =
+                nativeOnly
 
         module read_ =
 
@@ -93787,6 +94574,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member persistent: bool option with get, set
             abstract member interval: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?bigint: bool, ?persistent: bool, ?interval: float)
+                : WatchFileOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type WatchOptions =
@@ -94227,11 +95021,68 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member signal: Node.AbortSignal option with get, set
             abstract member highWaterMark: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?flags: string,
+                    ?encoding: Node.BufferEncoding,
+                    ?mode: float,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?signal: Node.AbortSignal,
+                    ?highWaterMark: float
+                )
+                : StreamOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    fd: float,
+                    ?flags: string,
+                    ?encoding: Node.BufferEncoding,
+                    ?mode: float,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?signal: Node.AbortSignal,
+                    ?highWaterMark: float
+                )
+                : StreamOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    fd: Node.fs.promises.FileHandle,
+                    ?flags: string,
+                    ?encoding: Node.BufferEncoding,
+                    ?mode: float,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?signal: Node.AbortSignal,
+                    ?highWaterMark: float
+                )
+                : StreamOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type FSImplementation =
             abstract member ``open``: System.Delegate option with get, set
             abstract member close: System.Delegate option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?``open``: System.Delegate, ?close: System.Delegate)
+                : FSImplementation
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -94456,6 +95307,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member bytesWritten: float with get, set
             abstract member buffers: 'T with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(bytesWritten: float, buffers: 'T) : WriteVResult<'T> = nativeOnly
+
         module writev_ =
 
             [<AbstractClass>]
@@ -94471,6 +95325,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         type ReadVResult<'T> =
             abstract member bytesRead: float with get, set
             abstract member buffers: 'T with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(bytesRead: float, buffers: 'T) : ReadVResult<'T> = nativeOnly
 
         module readv_ =
 
@@ -94548,6 +95405,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         type BigIntOptions =
             abstract member bigint: bool with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(bigint: bool) : BigIntOptions = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type StatOptions =
@@ -94601,6 +95461,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// When true, path resolution for symlinks will be skipped
             /// </summary>
             abstract member verbatimSymlinks: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?dereference: bool,
+                    ?errorOnExist: bool,
+                    ?force: bool,
+                    ?mode: float,
+                    ?preserveTimestamps: bool,
+                    ?``recursive``: bool,
+                    ?verbatimSymlinks: bool
+                )
+                : CopyOptionsBase
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -94674,6 +95549,55 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             abstract member exclude: U2<('T -> bool), ReadonlyArray<string>> option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(?withFileTypes: bool) : _GlobOptions<'T> = nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(exclude: ('T -> bool), ?withFileTypes: bool) : _GlobOptions<'T> =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                : _GlobOptions<'T>
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(cwd: string, ?withFileTypes: bool) : _GlobOptions<'T> = nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (cwd: string, exclude: ('T -> bool), ?withFileTypes: bool)
+                : _GlobOptions<'T>
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (cwd: string, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                : _GlobOptions<'T>
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(cwd: Node.url.URL, ?withFileTypes: bool) : _GlobOptions<'T> =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (cwd: Node.url.URL, exclude: ('T -> bool), ?withFileTypes: bool)
+                : _GlobOptions<'T>
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (cwd: Node.url.URL, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                : _GlobOptions<'T>
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type GlobOptions =
@@ -94683,7 +95607,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member Create(?withFileTypes: bool) : GlobOptions = nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            static member Create(exclude: ('T -> bool), ?withFileTypes: bool) : GlobOptions =
+            static member Create
+                (exclude: (U2<Node.fs.Dirent, string> -> bool), ?withFileTypes: bool)
+                : GlobOptions
+                =
                 nativeOnly
 
             [<ParamObject; Emit("$0")>]
@@ -94698,7 +95625,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: string, exclude: ('T -> bool), ?withFileTypes: bool)
+                (cwd: string, exclude: (U2<Node.fs.Dirent, string> -> bool), ?withFileTypes: bool)
                 : GlobOptions
                 =
                 nativeOnly
@@ -94715,7 +95642,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: Node.url.URL, exclude: ('T -> bool), ?withFileTypes: bool)
+                (
+                    cwd: Node.url.URL,
+                    exclude: (U2<Node.fs.Dirent, string> -> bool),
+                    ?withFileTypes: bool
+                )
                 : GlobOptions
                 =
                 nativeOnly
@@ -94741,7 +95672,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (withFileTypes: bool, exclude: ('T -> bool))
+                (withFileTypes: bool, exclude: (Node.fs.Dirent -> bool))
                 : GlobOptionsWithFileTypes
                 =
                 nativeOnly
@@ -94759,7 +95690,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (withFileTypes: bool, cwd: string, exclude: ('T -> bool))
+                (withFileTypes: bool, cwd: string, exclude: (Node.fs.Dirent -> bool))
                 : GlobOptionsWithFileTypes
                 =
                 nativeOnly
@@ -94780,7 +95711,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (withFileTypes: bool, cwd: Node.url.URL, exclude: ('T -> bool))
+                (withFileTypes: bool, cwd: Node.url.URL, exclude: (Node.fs.Dirent -> bool))
                 : GlobOptionsWithFileTypes
                 =
                 nativeOnly
@@ -94806,7 +95737,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (exclude: ('T -> bool), ?withFileTypes: bool)
+                (exclude: (string -> bool), ?withFileTypes: bool)
                 : GlobOptionsWithoutFileTypes
                 =
                 nativeOnly
@@ -94824,7 +95755,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: string, exclude: ('T -> bool), ?withFileTypes: bool)
+                (cwd: string, exclude: (string -> bool), ?withFileTypes: bool)
                 : GlobOptionsWithoutFileTypes
                 =
                 nativeOnly
@@ -94845,7 +95776,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: Node.url.URL, exclude: ('T -> bool), ?withFileTypes: bool)
+                (cwd: Node.url.URL, exclude: (string -> bool), ?withFileTypes: bool)
                 : GlobOptionsWithoutFileTypes
                 =
                 nativeOnly
@@ -101702,17 +102633,34 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member eventType: Node.fs.WatchEventType with get, set
                 abstract member filename: 'T option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (eventType: Node.fs.WatchEventType, ?filename: 'T)
+                    : FileChangeInfo<'T>
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type FlagAndOpenMode =
                 abstract member mode: Node.fs.Mode option with get, set
                 abstract member flag: Node.fs.OpenMode option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?mode: Node.fs.Mode, ?flag: Node.fs.OpenMode)
+                    : FlagAndOpenMode
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type FileReadResult<'T> =
                 abstract member bytesRead: float with get, set
                 abstract member buffer: 'T with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(bytesRead: float, buffer: 'T) : FileReadResult<'T> = nativeOnly
 
             [<Obsolete("This interface will be removed in a future version. Use `import { ReadOptionsWithBuffer } from \"node:fs\"` instead.")>]
             [<AllowNullLiteral>]
@@ -101722,6 +102670,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member offset: float option with get, set
                 abstract member length: float option with get, set
                 abstract member position: Node.fs.ReadPosition option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?buffer: 'T, ?offset: float, ?length: float, ?position: Node.fs.ReadPosition)
+                    : FileReadOptions<'T>
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -105958,6 +106913,82 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member warning: string option with get, set
             abstract member ``www-authenticate``: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?accept: string,
+                    ?``accept-encoding``: string,
+                    ?``accept-language``: string,
+                    ?``accept-patch``: string,
+                    ?``accept-ranges``: string,
+                    ?``access-control-allow-credentials``: string,
+                    ?``access-control-allow-headers``: string,
+                    ?``access-control-allow-methods``: string,
+                    ?``access-control-allow-origin``: string,
+                    ?``access-control-expose-headers``: string,
+                    ?``access-control-max-age``: string,
+                    ?``access-control-request-headers``: string,
+                    ?``access-control-request-method``: string,
+                    ?age: string,
+                    ?allow: string,
+                    ?``alt-svc``: string,
+                    ?authorization: string,
+                    ?``cache-control``: string,
+                    ?connection: string,
+                    ?``content-disposition``: string,
+                    ?``content-encoding``: string,
+                    ?``content-language``: string,
+                    ?``content-length``: string,
+                    ?``content-location``: string,
+                    ?``content-range``: string,
+                    ?``content-type``: string,
+                    ?cookie: string,
+                    ?date: string,
+                    ?etag: string,
+                    ?expect: string,
+                    ?expires: string,
+                    ?forwarded: string,
+                    ?from: string,
+                    ?host: string,
+                    ?``if-match``: string,
+                    ?``if-modified-since``: string,
+                    ?``if-none-match``: string,
+                    ?``if-unmodified-since``: string,
+                    ?``last-modified``: string,
+                    ?location: string,
+                    ?origin: string,
+                    ?pragma: string,
+                    ?``proxy-authenticate``: string,
+                    ?``proxy-authorization``: string,
+                    ?``public-key-pins``: string,
+                    ?range: string,
+                    ?referer: string,
+                    ?``retry-after``: string,
+                    ?``sec-fetch-site``: string,
+                    ?``sec-fetch-mode``: string,
+                    ?``sec-fetch-user``: string,
+                    ?``sec-fetch-dest``: string,
+                    ?``sec-websocket-accept``: string,
+                    ?``sec-websocket-extensions``: string,
+                    ?``sec-websocket-key``: string,
+                    ?``sec-websocket-protocol``: string,
+                    ?``sec-websocket-version``: string,
+                    ?``set-cookie``: ResizeArray<string>,
+                    ?``strict-transport-security``: string,
+                    ?tk: string,
+                    ?trailer: string,
+                    ?``transfer-encoding``: string,
+                    ?upgrade: string,
+                    ?``user-agent``: string,
+                    ?vary: string,
+                    ?via: string,
+                    ?warning: string,
+                    ?``www-authenticate``: string
+                )
+                : IncomingHttpHeaders
+                =
+                nativeOnly
+
         type OutgoingHttpHeader = U3<float, string, ResizeArray<string>>
 
         [<AllowNullLiteral>]
@@ -109189,6 +110220,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member httpVersionMinor: float with get, set
             abstract member headers: Node.http.IncomingHttpHeaders with get, set
             abstract member rawHeaders: ResizeArray<string> with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    statusCode: float,
+                    statusMessage: string,
+                    httpVersion: string,
+                    httpVersionMajor: float,
+                    httpVersionMinor: float,
+                    headers: Node.http.IncomingHttpHeaders,
+                    rawHeaders: ResizeArray<string>
+                )
+                : InformationEvent
+                =
+                nativeOnly
 
         /// <summary>
         /// This object is created internally and returned from <see href="request">request</see>. It
@@ -113325,6 +114371,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         type IncomingHttpStatusHeader =
             abstract member ``:status``: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(?``:status``: float) : IncomingHttpStatusHeader = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type IncomingHttpHeaders =
@@ -113441,6 +114490,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member sumDependencyWeight: float option with get, set
             abstract member weight: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?localWindowSize: float,
+                    ?state: float,
+                    ?localClose: float,
+                    ?remoteClose: float,
+                    ?sumDependencyWeight: float,
+                    ?weight: float
+                )
+                : StreamState
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ServerStreamResponseOptions =
@@ -113459,6 +114522,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         type StatOptions =
             abstract member offset: float with get, set
             abstract member length: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(offset: float, length: float) : StatOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -119937,6 +121003,23 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member outboundQueueSize: float option with get, set
             abstract member deflateDynamicTableSize: float option with get, set
             abstract member inflateDynamicTableSize: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?effectiveLocalWindowSize: float,
+                    ?effectiveRecvDataLength: float,
+                    ?nextStreamID: float,
+                    ?localWindowSize: float,
+                    ?lastProcStreamID: float,
+                    ?remoteWindowSize: float,
+                    ?outboundQueueSize: float,
+                    ?deflateDynamicTableSize: float,
+                    ?inflateDynamicTableSize: float
+                )
+                : SessionState
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -126865,6 +127948,26 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             abstract member strictFieldWhitespaceValidation: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?maxDeflateDynamicTableSize: float,
+                    ?maxSettings: float,
+                    ?maxSessionMemory: float,
+                    ?maxHeaderListPairs: float,
+                    ?maxOutstandingPings: float,
+                    ?maxSendHeaderBlockLength: float,
+                    ?paddingStrategy: float,
+                    ?peerMaxConcurrentStreams: float,
+                    ?settings: Node.http2.Settings,
+                    ?remoteCustomSettings: ResizeArray<float>,
+                    ?unknownProtocolTimeout: float,
+                    ?strictFieldWhitespaceValidation: bool
+                )
+                : SessionOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ClientSessionOptions =
@@ -126923,6 +128026,34 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member Http1ServerResponse: 'Http1Response option with get, set
             abstract member Http2ServerRequest: 'Http2Request option with get, set
             abstract member Http2ServerResponse: 'Http2Response option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?maxDeflateDynamicTableSize: float,
+                    ?maxSettings: float,
+                    ?maxSessionMemory: float,
+                    ?maxHeaderListPairs: float,
+                    ?maxOutstandingPings: float,
+                    ?maxSendHeaderBlockLength: float,
+                    ?paddingStrategy: float,
+                    ?peerMaxConcurrentStreams: float,
+                    ?settings: Node.http2.Settings,
+                    ?remoteCustomSettings: ResizeArray<float>,
+                    ?unknownProtocolTimeout: float,
+                    ?strictFieldWhitespaceValidation: bool,
+                    ?maxSessionRejectedStreams: float,
+                    ?maxSessionInvalidFrames: float,
+                    ?streamResetBurst: float,
+                    ?streamResetRate: float,
+                    ?Http1IncomingMessage: 'Http1Request,
+                    ?Http1ServerResponse: 'Http1Response,
+                    ?Http2ServerRequest: 'Http2Request,
+                    ?Http2ServerResponse: 'Http2Response
+                )
+                : ServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -127015,6 +128146,88 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                      >
 
             inherit Node.tls.TlsOptions
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?maxDeflateDynamicTableSize: float,
+                    ?maxSettings: float,
+                    ?maxSessionMemory: float,
+                    ?maxHeaderListPairs: float,
+                    ?maxOutstandingPings: float,
+                    ?maxSendHeaderBlockLength: float,
+                    ?paddingStrategy: float,
+                    ?peerMaxConcurrentStreams: float,
+                    ?settings: Node.http2.Settings,
+                    ?remoteCustomSettings: ResizeArray<float>,
+                    ?unknownProtocolTimeout: float,
+                    ?strictFieldWhitespaceValidation: bool,
+                    ?maxSessionRejectedStreams: float,
+                    ?maxSessionInvalidFrames: float,
+                    ?streamResetBurst: float,
+                    ?streamResetRate: float,
+                    ?Http1IncomingMessage: 'Http1Request,
+                    ?Http1ServerResponse: 'Http1Response,
+                    ?Http2ServerRequest: 'Http2Request,
+                    ?Http2ServerResponse: 'Http2Response,
+                    ?ALPNCallback: (SecureClientSessionOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?SNICallback: SecureServerSessionOptions.SNICallback,
+                    ?rejectUnauthorized: bool,
+                    ?allowHalfOpen: bool,
+                    ?pauseOnConnect: bool,
+                    ?noDelay: bool,
+                    ?keepAlive: bool,
+                    ?keepAliveInitialDelay: float,
+                    ?highWaterMark: float,
+                    ?blockList: Node.net.BlockList,
+                    ?handshakeTimeout: float,
+                    ?sessionTimeout: float,
+                    ?ticketKeys: Node.Buffer,
+                    ?pskCallback: SecureServerSessionOptions.pskCallback,
+                    ?pskIdentityHint: string
+                )
+                : SecureServerSessionOptions<
+                      'Http1Request,
+                      'Http1Response,
+                      'Http2Request,
+                      'Http2Response
+                   >
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -142494,6 +143707,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 type cb = delegate of err: Exception option * ?ctx: Node.tls.SecureContext -> unit
 
+        module SecureServerSessionOptions =
+
+            type SNICallback =
+                delegate of
+                    servername: string * cb: SecureServerSessionOptions.SNICallback.cb -> unit
+
+            type pskCallback =
+                delegate of
+                    socket: Node.tls.TLSSocket * identity: string ->
+                        Node.NodeJS.ArrayBufferView option
+
+            module SNICallback =
+
+                type cb = delegate of err: Exception option * ?ctx: Node.tls.SecureContext -> unit
+
         module SecureServerOptions =
 
             type SNICallback =
@@ -148074,6 +149302,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member success: bool with get, set
                 abstract member stream: Node.inspector.IO_.StreamHandle option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (success: bool, ?stream: Node.inspector.IO_.StreamHandle)
+                    : LoadNetworkResourcePageResult
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetRequestPostDataParameterType =
@@ -148081,6 +149316,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Identifier of the network request to get content for.
                 /// </summary>
                 abstract member requestId: Node.inspector.Network_.RequestId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (requestId: Node.inspector.Network_.RequestId)
+                    : GetRequestPostDataParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148090,6 +149332,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member requestId: Node.inspector.Network_.RequestId with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (requestId: Node.inspector.Network_.RequestId)
+                    : GetResponseBodyParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StreamResourceContentParameterType =
@@ -148097,6 +149346,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Identifier of the request to stream.
                 /// </summary>
                 abstract member requestId: Node.inspector.Network_.RequestId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (requestId: Node.inspector.Network_.RequestId)
+                    : StreamResourceContentParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148106,6 +149362,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member url: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(url: string) : LoadNetworkResourceParameterType = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetRequestPostDataReturnType =
@@ -148113,6 +149372,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Request body string, omitting files from multipart requests
                 /// </summary>
                 abstract member postData: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(postData: string) : GetRequestPostDataReturnType = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148126,6 +149388,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member base64Encoded: bool with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (body: string, base64Encoded: bool)
+                    : GetResponseBodyReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StreamResourceContentReturnType =
@@ -148134,10 +149403,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member bufferedData: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(bufferedData: string) : StreamResourceContentReturnType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type LoadNetworkResourceReturnType =
                 abstract member resource: Node.inspector.Network_.LoadNetworkResourcePageResult with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (resource: Node.inspector.Network_.LoadNetworkResourcePageResult)
+                    : LoadNetworkResourceReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148378,6 +149658,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member ``method``: string with get, set
             abstract member ``params``: 'T with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(``method``: string, ``params``: 'T) : InspectorNotification<'T> =
+                nativeOnly
+
         module Schema_ =
 
             /// <summary>
@@ -148395,6 +149679,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member version: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(name: string, version: string) : Domain = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetDomainsReturnType =
@@ -148402,6 +149689,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// List of supported domains.
                 /// </summary>
                 abstract member domains: ResizeArray<Node.inspector.Schema_.Domain> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (domains: ResizeArray<Node.inspector.Schema_.Domain>)
+                    : GetDomainsReturnType
+                    =
+                    nativeOnly
 
         module Runtime_ =
 
@@ -148463,6 +149757,23 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member preview: Node.inspector.Runtime_.ObjectPreview option with get, set
                 abstract member customPreview: Node.inspector.Runtime_.CustomPreview option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ``type``: string,
+                        ?subtype: string,
+                        ?className: string,
+                        ?value: obj,
+                        ?unserializableValue: Node.inspector.Runtime_.UnserializableValue,
+                        ?description: string,
+                        ?objectId: Node.inspector.Runtime_.RemoteObjectId,
+                        ?preview: Node.inspector.Runtime_.ObjectPreview,
+                        ?customPreview: Node.inspector.Runtime_.CustomPreview
+                    )
+                    : RemoteObject
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type CustomPreview =
@@ -148471,6 +149782,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member formatterObjectId: Node.inspector.Runtime_.RemoteObjectId with get, set
                 abstract member bindRemoteObjectFunctionId: Node.inspector.Runtime_.RemoteObjectId with get, set
                 abstract member configObjectId: Node.inspector.Runtime_.RemoteObjectId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        header: string,
+                        hasBody: bool,
+                        formatterObjectId: Node.inspector.Runtime_.RemoteObjectId,
+                        bindRemoteObjectFunctionId: Node.inspector.Runtime_.RemoteObjectId,
+                        ?configObjectId: Node.inspector.Runtime_.RemoteObjectId
+                    )
+                    : CustomPreview
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Object containing abbreviated remote object value.
@@ -148503,6 +149827,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member entries: ResizeArray<Node.inspector.Runtime_.EntryPreview> option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ``type``: string,
+                        overflow: bool,
+                        properties: ResizeArray<Node.inspector.Runtime_.PropertyPreview>,
+                        ?subtype: string,
+                        ?description: string,
+                        ?entries: ResizeArray<Node.inspector.Runtime_.EntryPreview>
+                    )
+                    : ObjectPreview
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type PropertyPreview =
@@ -148527,6 +149865,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member subtype: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        name: string,
+                        ``type``: string,
+                        ?value: string,
+                        ?valuePreview: Node.inspector.Runtime_.ObjectPreview,
+                        ?subtype: string
+                    )
+                    : PropertyPreview
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type EntryPreview =
@@ -148538,6 +149889,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Preview of the value.
                 /// </summary>
                 abstract member value: Node.inspector.Runtime_.ObjectPreview with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        value: Node.inspector.Runtime_.ObjectPreview,
+                        ?key: Node.inspector.Runtime_.ObjectPreview
+                    )
+                    : EntryPreview
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Object property descriptor.
@@ -148586,6 +149947,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member symbol: Node.inspector.Runtime_.RemoteObject option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        name: string,
+                        configurable: bool,
+                        enumerable: bool,
+                        ?value: Node.inspector.Runtime_.RemoteObject,
+                        ?writable: bool,
+                        ?get: Node.inspector.Runtime_.RemoteObject,
+                        ?set: Node.inspector.Runtime_.RemoteObject,
+                        ?wasThrown: bool,
+                        ?isOwn: bool,
+                        ?symbol: Node.inspector.Runtime_.RemoteObject
+                    )
+                    : PropertyDescriptor
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Object internal property descriptor. This property isn't normally visible in JavaScript code.
             /// </summary>
@@ -148600,6 +149979,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// The value associated with the property.
                 /// </summary>
                 abstract member value: Node.inspector.Runtime_.RemoteObject option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (name: string, ?value: Node.inspector.Runtime_.RemoteObject)
+                    : InternalPropertyDescriptor
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Represents function call argument. Either remote object id <code>objectId</code>, primitive <code>value</code>, unserializable primitive value or neither of (for undefined) them should be specified.
@@ -148622,6 +150008,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Remote object handle.
                 /// </summary>
                 abstract member objectId: Node.inspector.Runtime_.RemoteObjectId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?value: obj,
+                        ?unserializableValue: Node.inspector.Runtime_.UnserializableValue,
+                        ?objectId: Node.inspector.Runtime_.RemoteObjectId
+                    )
+                    : CallArgument
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Id of an execution context.
@@ -148650,6 +150047,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Embedder-specific auxiliary data.
                 /// </summary>
                 abstract member auxData: obj option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        id: Node.inspector.Runtime_.ExecutionContextId,
+                        origin: string,
+                        name: string,
+                        ?auxData: obj
+                    )
+                    : ExecutionContextDescription
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Detailed information about exception (or error) that was thrown during script compilation or execution.
@@ -148695,6 +150104,23 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member executionContextId:
                     Node.inspector.Runtime_.ExecutionContextId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        exceptionId: float,
+                        text: string,
+                        lineNumber: float,
+                        columnNumber: float,
+                        ?scriptId: Node.inspector.Runtime_.ScriptId,
+                        ?url: string,
+                        ?stackTrace: Node.inspector.Runtime_.StackTrace,
+                        ?``exception``: Node.inspector.Runtime_.RemoteObject,
+                        ?executionContextId: Node.inspector.Runtime_.ExecutionContextId
+                    )
+                    : ExceptionDetails
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Number of milliseconds since epoch.
@@ -148837,6 +150263,23 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member awaitPromise: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        expression: string,
+                        ?objectGroup: string,
+                        ?includeCommandLineAPI: bool,
+                        ?silent: bool,
+                        ?contextId: Node.inspector.Runtime_.ExecutionContextId,
+                        ?returnByValue: bool,
+                        ?generatePreview: bool,
+                        ?userGesture: bool,
+                        ?awaitPromise: bool
+                    )
+                    : EvaluateParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type AwaitPromiseParameterType =
@@ -148852,6 +150295,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Whether preview should be generated for the result.
                 /// </summary>
                 abstract member generatePreview: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        promiseObjectId: Node.inspector.Runtime_.RemoteObjectId,
+                        ?returnByValue: bool,
+                        ?generatePreview: bool
+                    )
+                    : AwaitPromiseParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148900,6 +150354,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member objectGroup: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        functionDeclaration: string,
+                        ?objectId: Node.inspector.Runtime_.RemoteObjectId,
+                        ?arguments: ResizeArray<Node.inspector.Runtime_.CallArgument>,
+                        ?silent: bool,
+                        ?returnByValue: bool,
+                        ?generatePreview: bool,
+                        ?userGesture: bool,
+                        ?awaitPromise: bool,
+                        ?executionContextId: Node.inspector.Runtime_.ExecutionContextId,
+                        ?objectGroup: string
+                    )
+                    : CallFunctionOnParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetPropertiesParameterType =
@@ -148920,6 +150392,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member generatePreview: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        objectId: Node.inspector.Runtime_.RemoteObjectId,
+                        ?ownProperties: bool,
+                        ?accessorPropertiesOnly: bool,
+                        ?generatePreview: bool
+                    )
+                    : GetPropertiesParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ReleaseObjectParameterType =
@@ -148927,6 +150411,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Identifier of the object to release.
                 /// </summary>
                 abstract member objectId: Node.inspector.Runtime_.RemoteObjectId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (objectId: Node.inspector.Runtime_.RemoteObjectId)
+                    : ReleaseObjectParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148936,10 +150427,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member objectGroup: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(objectGroup: string) : ReleaseObjectGroupParameterType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetCustomObjectFormatterEnabledParameterType =
                 abstract member enabled: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(enabled: bool) : SetCustomObjectFormatterEnabledParameterType =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148962,6 +150461,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member executionContextId:
                     Node.inspector.Runtime_.ExecutionContextId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        expression: string,
+                        sourceURL: string,
+                        persistScript: bool,
+                        ?executionContextId: Node.inspector.Runtime_.ExecutionContextId
+                    )
+                    : CompileScriptParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149002,6 +150513,22 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member awaitPromise: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        ?executionContextId: Node.inspector.Runtime_.ExecutionContextId,
+                        ?objectGroup: string,
+                        ?silent: bool,
+                        ?includeCommandLineAPI: bool,
+                        ?returnByValue: bool,
+                        ?generatePreview: bool,
+                        ?awaitPromise: bool
+                    )
+                    : RunScriptParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type QueryObjectsParameterType =
@@ -149009,6 +150536,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Identifier of the prototype to return objects for.
                 /// </summary>
                 abstract member prototypeObjectId: Node.inspector.Runtime_.RemoteObjectId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (prototypeObjectId: Node.inspector.Runtime_.RemoteObjectId)
+                    : QueryObjectsParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149018,6 +150552,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member executionContextId:
                     Node.inspector.Runtime_.ExecutionContextId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?executionContextId: Node.inspector.Runtime_.ExecutionContextId)
+                    : GlobalLexicalScopeNamesParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149031,6 +150572,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        result: Node.inspector.Runtime_.RemoteObject,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : EvaluateReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type AwaitPromiseReturnType =
@@ -149043,6 +150594,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        result: Node.inspector.Runtime_.RemoteObject,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : AwaitPromiseReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type CallFunctionOnReturnType =
@@ -149054,6 +150615,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Exception details.
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        result: Node.inspector.Runtime_.RemoteObject,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : CallFunctionOnReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149074,6 +150645,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        result: ResizeArray<Node.inspector.Runtime_.PropertyDescriptor>,
+                        ?internalProperties:
+                            ResizeArray<Node.inspector.Runtime_.InternalPropertyDescriptor>,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : GetPropertiesReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type CompileScriptReturnType =
@@ -149085,6 +150668,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Exception details.
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?scriptId: Node.inspector.Runtime_.ScriptId,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : CompileScriptReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149098,6 +150691,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        result: Node.inspector.Runtime_.RemoteObject,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : RunScriptReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type QueryObjectsReturnType =
@@ -149106,10 +150709,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member objects: Node.inspector.Runtime_.RemoteObject with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (objects: Node.inspector.Runtime_.RemoteObject)
+                    : QueryObjectsReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GlobalLexicalScopeNamesReturnType =
                 abstract member names: ResizeArray<string> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (names: ResizeArray<string>)
+                    : GlobalLexicalScopeNamesReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149119,6 +150736,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member context: Node.inspector.Runtime_.ExecutionContextDescription with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (context: Node.inspector.Runtime_.ExecutionContextDescription)
+                    : ExecutionContextCreatedEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ExecutionContextDestroyedEventDataType =
@@ -149126,6 +150750,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Id of the destroyed context
                 /// </summary>
                 abstract member executionContextId: Node.inspector.Runtime_.ExecutionContextId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (executionContextId: Node.inspector.Runtime_.ExecutionContextId)
+                    : ExecutionContextDestroyedEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149135,6 +150766,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member timestamp: Node.inspector.Runtime_.Timestamp with get, set
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        timestamp: Node.inspector.Runtime_.Timestamp,
+                        exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : ExceptionThrownEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149147,6 +150788,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// The id of revoked exception, as reported in <code>exceptionThrown</code>.
                 /// </summary>
                 abstract member exceptionId: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (reason: string, exceptionId: float)
+                    : ExceptionRevokedEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149176,11 +150824,32 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member context: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ``type``: string,
+                        args: ResizeArray<Node.inspector.Runtime_.RemoteObject>,
+                        executionContextId: Node.inspector.Runtime_.ExecutionContextId,
+                        timestamp: Node.inspector.Runtime_.Timestamp,
+                        ?stackTrace: Node.inspector.Runtime_.StackTrace,
+                        ?context: string
+                    )
+                    : ConsoleAPICalledEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type InspectRequestedEventDataType =
                 abstract member ``object``: Node.inspector.Runtime_.RemoteObject with get, set
                 abstract member hints: obj with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (``object``: Node.inspector.Runtime_.RemoteObject, hints: obj)
+                    : InspectRequestedEventDataType
+                    =
+                    nativeOnly
 
         module Debugger_ =
 
@@ -149213,6 +150882,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member columnNumber: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        lineNumber: float,
+                        ?columnNumber: float
+                    )
+                    : Location
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Location in the source code.
             /// </summary>
@@ -149221,6 +150901,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             type ScriptPosition =
                 abstract member lineNumber: float with get, set
                 abstract member columnNumber: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(lineNumber: float, columnNumber: float) : ScriptPosition =
+                    nativeOnly
 
             /// <summary>
             /// JavaScript call frame. Array of call frames form the call stack.
@@ -149261,6 +150945,22 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member returnValue: Node.inspector.Runtime_.RemoteObject option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        callFrameId: Node.inspector.Debugger_.CallFrameId,
+                        functionName: string,
+                        location: Node.inspector.Debugger_.Location,
+                        url: string,
+                        scopeChain: ResizeArray<Node.inspector.Debugger_.Scope>,
+                        this: Node.inspector.Runtime_.RemoteObject,
+                        ?functionLocation: Node.inspector.Debugger_.Location,
+                        ?returnValue: Node.inspector.Runtime_.RemoteObject
+                    )
+                    : CallFrame
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Scope description.
             /// </summary>
@@ -149285,6 +150985,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member endLocation: Node.inspector.Debugger_.Location option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ``type``: string,
+                        ``object``: Node.inspector.Runtime_.RemoteObject,
+                        ?name: string,
+                        ?startLocation: Node.inspector.Debugger_.Location,
+                        ?endLocation: Node.inspector.Debugger_.Location
+                    )
+                    : Scope
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Search match for resource.
             /// </summary>
@@ -149299,6 +151012,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Line with match content.
                 /// </summary>
                 abstract member lineContent: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(lineNumber: float, lineContent: string) : SearchMatch =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149317,6 +151034,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member columnNumber: float option with get, set
                 abstract member ``type``: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        lineNumber: float,
+                        ?columnNumber: float,
+                        ?``type``: string
+                    )
+                    : BreakLocation
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetBreakpointsActiveParameterType =
@@ -149325,6 +151054,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member active: bool with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(active: bool) : SetBreakpointsActiveParameterType = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetSkipAllPausesParameterType =
@@ -149332,6 +151064,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// New value for skip pauses state.
                 /// </summary>
                 abstract member skip: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(skip: bool) : SetSkipAllPausesParameterType = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149361,6 +151096,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member condition: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        lineNumber: float,
+                        ?url: string,
+                        ?urlRegex: string,
+                        ?scriptHash: string,
+                        ?columnNumber: float,
+                        ?condition: string
+                    )
+                    : SetBreakpointByUrlParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetBreakpointParameterType =
@@ -149373,10 +151122,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member condition: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (location: Node.inspector.Debugger_.Location, ?condition: string)
+                    : SetBreakpointParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RemoveBreakpointParameterType =
                 abstract member breakpointId: Node.inspector.Debugger_.BreakpointId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (breakpointId: Node.inspector.Debugger_.BreakpointId)
+                    : RemoveBreakpointParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149394,6 +151157,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member restrictToFunction: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        start: Node.inspector.Debugger_.Location,
+                        ?``end``: Node.inspector.Debugger_.Location,
+                        ?restrictToFunction: bool
+                    )
+                    : GetPossibleBreakpointsParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ContinueToLocationParameterType =
@@ -149403,6 +151177,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member location: Node.inspector.Debugger_.Location with get, set
                 abstract member targetCallFrames: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (location: Node.inspector.Debugger_.Location, ?targetCallFrames: string)
+                    : ContinueToLocationParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type PauseOnAsyncCallParameterType =
@@ -149410,6 +151191,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Debugger will pause when async call with given stack trace is started.
                 /// </summary>
                 abstract member parentStackTraceId: Node.inspector.Runtime_.StackTraceId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (parentStackTraceId: Node.inspector.Runtime_.StackTraceId)
+                    : PauseOnAsyncCallParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149419,10 +151207,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member breakOnAsyncCall: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(?breakOnAsyncCall: bool) : StepIntoParameterType = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetStackTraceParameterType =
                 abstract member stackTraceId: Node.inspector.Runtime_.StackTraceId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (stackTraceId: Node.inspector.Runtime_.StackTraceId)
+                    : GetStackTraceParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149444,6 +151242,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member isRegex: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        query: string,
+                        ?caseSensitive: bool,
+                        ?isRegex: bool
+                    )
+                    : SearchInContentParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetScriptSourceParameterType =
@@ -149460,6 +151270,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member dryRun: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (scriptId: Node.inspector.Runtime_.ScriptId, scriptSource: string, ?dryRun: bool)
+                    : SetScriptSourceParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RestartFrameParameterType =
@@ -149467,6 +151284,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Call frame identifier to evaluate on.
                 /// </summary>
                 abstract member callFrameId: Node.inspector.Debugger_.CallFrameId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (callFrameId: Node.inspector.Debugger_.CallFrameId)
+                    : RestartFrameParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149476,6 +151300,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (scriptId: Node.inspector.Runtime_.ScriptId)
+                    : GetScriptSourceParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetPauseOnExceptionsParameterType =
@@ -149483,6 +151314,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Pause on exceptions mode.
                 /// </summary>
                 abstract member state: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(state: string) : SetPauseOnExceptionsParameterType = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149520,6 +151354,22 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member throwOnSideEffect: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        callFrameId: Node.inspector.Debugger_.CallFrameId,
+                        expression: string,
+                        ?objectGroup: string,
+                        ?includeCommandLineAPI: bool,
+                        ?silent: bool,
+                        ?returnByValue: bool,
+                        ?generatePreview: bool,
+                        ?throwOnSideEffect: bool
+                    )
+                    : EvaluateOnCallFrameParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetVariableValueParameterType =
@@ -149540,6 +151390,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member callFrameId: Node.inspector.Debugger_.CallFrameId with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scopeNumber: float,
+                        variableName: string,
+                        newValue: Node.inspector.Runtime_.CallArgument,
+                        callFrameId: Node.inspector.Debugger_.CallFrameId
+                    )
+                    : SetVariableValueParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetReturnValueParameterType =
@@ -149547,6 +151409,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// New return value.
                 /// </summary>
                 abstract member newValue: Node.inspector.Runtime_.CallArgument with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (newValue: Node.inspector.Runtime_.CallArgument)
+                    : SetReturnValueParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149556,6 +151425,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member maxDepth: float with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(maxDepth: float) : SetAsyncCallStackDepthParameterType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetBlackboxPatternsParameterType =
@@ -149563,6 +151436,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Array of regexps that will be used to check script url for blackbox state.
                 /// </summary>
                 abstract member patterns: ResizeArray<string> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (patterns: ResizeArray<string>)
+                    : SetBlackboxPatternsParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149573,6 +151453,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member scriptId: Node.inspector.Runtime_.ScriptId with get, set
                 abstract member positions: ResizeArray<Node.inspector.Debugger_.ScriptPosition> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        positions: ResizeArray<Node.inspector.Debugger_.ScriptPosition>
+                    )
+                    : SetBlackboxedRangesParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type EnableReturnType =
@@ -149580,6 +151470,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Unique identifier of the debugger.
                 /// </summary>
                 abstract member debuggerId: Node.inspector.Runtime_.UniqueDebuggerId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (debuggerId: Node.inspector.Runtime_.UniqueDebuggerId)
+                    : EnableReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149593,6 +151490,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member locations: ResizeArray<Node.inspector.Debugger_.Location> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        breakpointId: Node.inspector.Debugger_.BreakpointId,
+                        locations: ResizeArray<Node.inspector.Debugger_.Location>
+                    )
+                    : SetBreakpointByUrlReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetBreakpointReturnType =
@@ -149605,6 +151512,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member actualLocation: Node.inspector.Debugger_.Location with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        breakpointId: Node.inspector.Debugger_.BreakpointId,
+                        actualLocation: Node.inspector.Debugger_.Location
+                    )
+                    : SetBreakpointReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetPossibleBreakpointsReturnType =
@@ -149613,10 +151530,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member locations: ResizeArray<Node.inspector.Debugger_.BreakLocation> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (locations: ResizeArray<Node.inspector.Debugger_.BreakLocation>)
+                    : GetPossibleBreakpointsReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetStackTraceReturnType =
                 abstract member stackTrace: Node.inspector.Runtime_.StackTrace with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (stackTrace: Node.inspector.Runtime_.StackTrace)
+                    : GetStackTraceReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149625,6 +151556,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// List of search matches.
                 /// </summary>
                 abstract member result: ResizeArray<Node.inspector.Debugger_.SearchMatch> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (result: ResizeArray<Node.inspector.Debugger_.SearchMatch>)
+                    : SearchInContentReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149650,6 +151588,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?callFrames: ResizeArray<Node.inspector.Debugger_.CallFrame>,
+                        ?stackChanged: bool,
+                        ?asyncStackTrace: Node.inspector.Runtime_.StackTrace,
+                        ?asyncStackTraceId: Node.inspector.Runtime_.StackTraceId,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : SetScriptSourceReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RestartFrameReturnType =
@@ -149666,6 +151617,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member asyncStackTraceId: Node.inspector.Runtime_.StackTraceId option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        callFrames: ResizeArray<Node.inspector.Debugger_.CallFrame>,
+                        ?asyncStackTrace: Node.inspector.Runtime_.StackTrace,
+                        ?asyncStackTraceId: Node.inspector.Runtime_.StackTraceId
+                    )
+                    : RestartFrameReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetScriptSourceReturnType =
@@ -149673,6 +151635,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Script source.
                 /// </summary>
                 abstract member scriptSource: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(scriptSource: string) : GetScriptSourceReturnType = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149685,6 +151650,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Exception details.
                 /// </summary>
                 abstract member exceptionDetails: Node.inspector.Runtime_.ExceptionDetails option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        result: Node.inspector.Runtime_.RemoteObject,
+                        ?exceptionDetails: Node.inspector.Runtime_.ExceptionDetails
+                    )
+                    : EvaluateOnCallFrameReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149750,6 +151725,29 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member stackTrace: Node.inspector.Runtime_.StackTrace option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        url: string,
+                        startLine: float,
+                        startColumn: float,
+                        endLine: float,
+                        endColumn: float,
+                        executionContextId: Node.inspector.Runtime_.ExecutionContextId,
+                        hash: string,
+                        ?executionContextAuxData: obj,
+                        ?isLiveEdit: bool,
+                        ?sourceMapURL: string,
+                        ?hasSourceURL: bool,
+                        ?isModule: bool,
+                        ?length: float,
+                        ?stackTrace: Node.inspector.Runtime_.StackTrace
+                    )
+                    : ScriptParsedEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ScriptFailedToParseEventDataType =
@@ -149810,6 +151808,28 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member stackTrace: Node.inspector.Runtime_.StackTrace option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        url: string,
+                        startLine: float,
+                        startColumn: float,
+                        endLine: float,
+                        endColumn: float,
+                        executionContextId: Node.inspector.Runtime_.ExecutionContextId,
+                        hash: string,
+                        ?executionContextAuxData: obj,
+                        ?sourceMapURL: string,
+                        ?hasSourceURL: bool,
+                        ?isModule: bool,
+                        ?length: float,
+                        ?stackTrace: Node.inspector.Runtime_.StackTrace
+                    )
+                    : ScriptFailedToParseEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type BreakpointResolvedEventDataType =
@@ -149821,6 +151841,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Actual breakpoint location.
                 /// </summary>
                 abstract member location: Node.inspector.Debugger_.Location with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        breakpointId: Node.inspector.Debugger_.BreakpointId,
+                        location: Node.inspector.Debugger_.Location
+                    )
+                    : BreakpointResolvedEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -149853,6 +151883,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Just scheduled async call will have this stack trace as parent stack during async execution. This field is available only after <code>Debugger.stepInto</code> call with <code>breakOnAsynCall</code> flag.
                 /// </summary>
                 abstract member asyncCallStackTraceId: Node.inspector.Runtime_.StackTraceId option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        callFrames: ResizeArray<Node.inspector.Debugger_.CallFrame>,
+                        reason: string,
+                        ?data: obj,
+                        ?hitBreakpoints: ResizeArray<string>,
+                        ?asyncStackTrace: Node.inspector.Runtime_.StackTrace,
+                        ?asyncStackTraceId: Node.inspector.Runtime_.StackTraceId,
+                        ?asyncCallStackTraceId: Node.inspector.Runtime_.StackTraceId
+                    )
+                    : PausedEventDataType
+                    =
+                    nativeOnly
 
         module Console_ =
 
@@ -149887,6 +151932,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member column: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        source: string,
+                        level: string,
+                        text: string,
+                        ?url: string,
+                        ?line: float,
+                        ?column: float
+                    )
+                    : ConsoleMessage
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type MessageAddedEventDataType =
@@ -149894,6 +151953,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Console message that has been added.
                 /// </summary>
                 abstract member message: Node.inspector.Console_.ConsoleMessage with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (message: Node.inspector.Console_.ConsoleMessage)
+                    : MessageAddedEventDataType
+                    =
+                    nativeOnly
 
         module Profiler_ =
 
@@ -149930,6 +151996,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member positionTicks:
                     ResizeArray<Node.inspector.Profiler_.PositionTickInfo> option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        id: float,
+                        callFrame: Node.inspector.Runtime_.CallFrame,
+                        ?hitCount: float,
+                        ?children: ResizeArray<float>,
+                        ?deoptReason: string,
+                        ?positionTicks: ResizeArray<Node.inspector.Profiler_.PositionTickInfo>
+                    )
+                    : ProfileNode
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Profile.
             /// </summary>
@@ -149957,6 +152037,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member timeDeltas: ResizeArray<float> option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        nodes: ResizeArray<Node.inspector.Profiler_.ProfileNode>,
+                        startTime: float,
+                        endTime: float,
+                        ?samples: ResizeArray<float>,
+                        ?timeDeltas: ResizeArray<float>
+                    )
+                    : Profile
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Specifies a number of samples attributed to a certain source position.
             /// </summary>
@@ -149971,6 +152064,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Number of samples attributed to the source line.
                 /// </summary>
                 abstract member ticks: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(line: float, ticks: float) : PositionTickInfo = nativeOnly
 
             /// <summary>
             /// Coverage data for a source range.
@@ -149991,6 +152087,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member count: float with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (startOffset: float, endOffset: float, count: float)
+                    : CoverageRange
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Coverage data for a JavaScript function.
             /// </summary>
@@ -150009,6 +152112,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Whether coverage data for this function has block granularity.
                 /// </summary>
                 abstract member isBlockCoverage: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        functionName: string,
+                        ranges: ResizeArray<Node.inspector.Profiler_.CoverageRange>,
+                        isBlockCoverage: bool
+                    )
+                    : FunctionCoverage
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Coverage data for a JavaScript script.
@@ -150029,6 +152143,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member functions: ResizeArray<Node.inspector.Profiler_.FunctionCoverage> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        scriptId: Node.inspector.Runtime_.ScriptId,
+                        url: string,
+                        functions: ResizeArray<Node.inspector.Profiler_.FunctionCoverage>
+                    )
+                    : ScriptCoverage
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetSamplingIntervalParameterType =
@@ -150036,6 +152161,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// New sampling interval in microseconds.
                 /// </summary>
                 abstract member interval: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(interval: float) : SetSamplingIntervalParameterType =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150049,6 +152178,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member detailed: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?callCount: bool, ?detailed: bool)
+                    : StartPreciseCoverageParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StopReturnType =
@@ -150056,6 +152192,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Recorded profile.
                 /// </summary>
                 abstract member profile: Node.inspector.Profiler_.Profile with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(profile: Node.inspector.Profiler_.Profile) : StopReturnType =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150065,6 +152205,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member result: ResizeArray<Node.inspector.Profiler_.ScriptCoverage> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (result: ResizeArray<Node.inspector.Profiler_.ScriptCoverage>)
+                    : TakePreciseCoverageReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetBestEffortCoverageReturnType =
@@ -150072,6 +152219,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Coverage data for the current isolate.
                 /// </summary>
                 abstract member result: ResizeArray<Node.inspector.Profiler_.ScriptCoverage> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (result: ResizeArray<Node.inspector.Profiler_.ScriptCoverage>)
+                    : GetBestEffortCoverageReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150086,6 +152240,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member title: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (id: string, location: Node.inspector.Debugger_.Location, ?title: string)
+                    : ConsoleProfileStartedEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ConsoleProfileFinishedEventDataType =
@@ -150099,6 +152260,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Profile title passed as an argument to console.profile().
                 /// </summary>
                 abstract member title: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        id: string,
+                        location: Node.inspector.Debugger_.Location,
+                        profile: Node.inspector.Profiler_.Profile,
+                        ?title: string
+                    )
+                    : ConsoleProfileFinishedEventDataType
+                    =
+                    nativeOnly
 
         module HeapProfiler_ =
 
@@ -150128,6 +152301,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member children:
                     ResizeArray<Node.inspector.HeapProfiler_.SamplingHeapProfileNode> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        callFrame: Node.inspector.Runtime_.CallFrame,
+                        selfSize: float,
+                        children: ResizeArray<Node.inspector.HeapProfiler_.SamplingHeapProfileNode>
+                    )
+                    : SamplingHeapProfileNode
+                    =
+                    nativeOnly
+
             /// <summary>
             /// Profile.
             /// </summary>
@@ -150136,10 +152320,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             type SamplingHeapProfile =
                 abstract member head: Node.inspector.HeapProfiler_.SamplingHeapProfileNode with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (head: Node.inspector.HeapProfiler_.SamplingHeapProfileNode)
+                    : SamplingHeapProfile
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StartTrackingHeapObjectsParameterType =
                 abstract member trackAllocations: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?trackAllocations: bool)
+                    : StartTrackingHeapObjectsParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150149,6 +152347,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member reportProgress: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(?reportProgress: bool) : StopTrackingHeapObjectsParameterType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type TakeHeapSnapshotParameterType =
@@ -150156,6 +152358,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
                 /// </summary>
                 abstract member reportProgress: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?reportProgress: bool) : TakeHeapSnapshotParameterType =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150166,6 +152372,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member objectGroup: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        objectId: Node.inspector.HeapProfiler_.HeapSnapshotObjectId,
+                        ?objectGroup: string
+                    )
+                    : GetObjectByHeapObjectIdParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type AddInspectedHeapObjectParameterType =
@@ -150173,6 +152389,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Heap snapshot object id to be accessible by means of $x command line API.
                 /// </summary>
                 abstract member heapObjectId: Node.inspector.HeapProfiler_.HeapSnapshotObjectId with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (heapObjectId: Node.inspector.HeapProfiler_.HeapSnapshotObjectId)
+                    : AddInspectedHeapObjectParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150182,6 +152405,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member objectId: Node.inspector.Runtime_.RemoteObjectId with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (objectId: Node.inspector.Runtime_.RemoteObjectId)
+                    : GetHeapObjectIdParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StartSamplingParameterType =
@@ -150190,6 +152420,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member samplingInterval: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(?samplingInterval: float) : StartSamplingParameterType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type GetObjectByHeapObjectIdReturnType =
@@ -150197,6 +152431,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Evaluation result.
                 /// </summary>
                 abstract member result: Node.inspector.Runtime_.RemoteObject with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (result: Node.inspector.Runtime_.RemoteObject)
+                    : GetObjectByHeapObjectIdReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150207,6 +152448,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member heapSnapshotObjectId:
                     Node.inspector.HeapProfiler_.HeapSnapshotObjectId with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (heapSnapshotObjectId: Node.inspector.HeapProfiler_.HeapSnapshotObjectId)
+                    : GetHeapObjectIdReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StopSamplingReturnType =
@@ -150214,6 +152462,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Recorded sampling heap profile.
                 /// </summary>
                 abstract member profile: Node.inspector.HeapProfiler_.SamplingHeapProfile with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (profile: Node.inspector.HeapProfiler_.SamplingHeapProfile)
+                    : StopSamplingReturnType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150223,10 +152478,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member profile: Node.inspector.HeapProfiler_.SamplingHeapProfile with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (profile: Node.inspector.HeapProfiler_.SamplingHeapProfile)
+                    : GetSamplingProfileReturnType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type AddHeapSnapshotChunkEventDataType =
                 abstract member chunk: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(chunk: string) : AddHeapSnapshotChunkEventDataType = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150235,11 +152500,25 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member total: float with get, set
                 abstract member finished: bool option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (``done``: float, total: float, ?finished: bool)
+                    : ReportHeapSnapshotProgressEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type LastSeenObjectIdEventDataType =
                 abstract member lastSeenObjectId: float with get, set
                 abstract member timestamp: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (lastSeenObjectId: float, timestamp: float)
+                    : LastSeenObjectIdEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150248,6 +152527,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment.
                 /// </summary>
                 abstract member statsUpdate: ResizeArray<float> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (statsUpdate: ResizeArray<float>)
+                    : HeapStatsUpdateEventDataType
+                    =
+                    nativeOnly
 
         module NodeTracing_ =
 
@@ -150263,10 +152549,24 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member includedCategories: ResizeArray<string> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (includedCategories: ResizeArray<string>, ?recordMode: string)
+                    : TraceConfig
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type StartParameterType =
                 abstract member traceConfig: Node.inspector.NodeTracing_.TraceConfig with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (traceConfig: Node.inspector.NodeTracing_.TraceConfig)
+                    : StartParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150276,10 +152576,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member categories: ResizeArray<string> with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(categories: ResizeArray<string>) : GetCategoriesReturnType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type DataCollectedEventDataType =
                 abstract member value: ResizeArray<obj> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(value: ResizeArray<obj>) : DataCollectedEventDataType =
+                    nativeOnly
 
         module NodeWorker_ =
 
@@ -150298,6 +152606,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member title: string with get, set
                 abstract member url: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        workerId: Node.inspector.NodeWorker_.WorkerID,
+                        ``type``: string,
+                        title: string,
+                        url: string
+                    )
+                    : WorkerInfo
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SendMessageToWorkerParameterType =
@@ -150306,6 +152626,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Identifier of the session.
                 /// </summary>
                 abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (message: string, sessionId: Node.inspector.NodeWorker_.SessionID)
+                    : SendMessageToWorkerParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150316,10 +152643,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member waitForDebuggerOnStart: bool with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(waitForDebuggerOnStart: bool) : EnableParameterType =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type DetachParameterType =
                 abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (sessionId: Node.inspector.NodeWorker_.SessionID)
+                    : DetachParameterType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150331,6 +152669,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member workerInfo: Node.inspector.NodeWorker_.WorkerInfo with get, set
                 abstract member waitingForDebugger: bool with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        sessionId: Node.inspector.NodeWorker_.SessionID,
+                        workerInfo: Node.inspector.NodeWorker_.WorkerInfo,
+                        waitingForDebugger: bool
+                    )
+                    : AttachedToWorkerEventDataType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type DetachedFromWorkerEventDataType =
@@ -150338,6 +152687,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Detached session identifier.
                 /// </summary>
                 abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (sessionId: Node.inspector.NodeWorker_.SessionID)
+                    : DetachedFromWorkerEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150348,12 +152704,23 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member sessionId: Node.inspector.NodeWorker_.SessionID with get, set
                 abstract member message: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (sessionId: Node.inspector.NodeWorker_.SessionID, message: string)
+                    : ReceivedMessageFromWorkerEventDataType
+                    =
+                    nativeOnly
+
         module NodeRuntime_ =
 
             [<AllowNullLiteral>]
             [<Interface>]
             type NotifyWhenWaitingForDisconnectParameterType =
                 abstract member enabled: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(enabled: bool) : NotifyWhenWaitingForDisconnectParameterType =
+                    nativeOnly
 
         module Target_ =
 
@@ -150371,16 +152738,44 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member attached: bool with get, set
                 abstract member canAccessOpener: bool with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        targetId: Node.inspector.Target_.TargetID,
+                        ``type``: string,
+                        title: string,
+                        url: string,
+                        attached: bool,
+                        canAccessOpener: bool
+                    )
+                    : TargetInfo
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SetAutoAttachParameterType =
                 abstract member autoAttach: bool with get, set
                 abstract member waitForDebuggerOnStart: bool with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (autoAttach: bool, waitForDebuggerOnStart: bool)
+                    : SetAutoAttachParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type TargetCreatedEventDataType =
                 abstract member targetInfo: Node.inspector.Target_.TargetInfo with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (targetInfo: Node.inspector.Target_.TargetInfo)
+                    : TargetCreatedEventDataType
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150388,6 +152783,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member sessionId: Node.inspector.Target_.SessionID with get, set
                 abstract member targetInfo: Node.inspector.Target_.TargetInfo with get, set
                 abstract member waitingForDebugger: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        sessionId: Node.inspector.Target_.SessionID,
+                        targetInfo: Node.inspector.Target_.TargetInfo,
+                        waitingForDebugger: bool
+                    )
+                    : AttachedToTargetEventDataType
+                    =
+                    nativeOnly
 
         module IO_ =
 
@@ -150410,6 +152816,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member size: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (handle: Node.inspector.IO_.StreamHandle, ?offset: float, ?size: float)
+                    : ReadParameterType
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type CloseParameterType =
@@ -150417,6 +152830,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Handle of the stream to close.
                 /// </summary>
                 abstract member handle: Node.inspector.IO_.StreamHandle with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(handle: Node.inspector.IO_.StreamHandle) : CloseParameterType =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -150429,6 +152846,9 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// Set if the end-of-file condition occurred while reading.
                 /// </summary>
                 abstract member eof: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(data: string, eof: bool) : ReadReturnType = nativeOnly
 
     module ``module`` =
 
@@ -151558,6 +153978,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member directory: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (status: float, ?message: string, ?directory: string)
+                    : EnableCompileCacheResult
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RegisterOptions<'Data> =
@@ -151736,6 +154163,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member url: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        url: string,
+                        ?format: string,
+                        ?importAttributes: Node.``module``.Module_.ImportAttributes,
+                        ?shortCircuit: bool
+                    )
+                    : ResolveFnOutput
+                    =
+                    nativeOnly
+
             /// <summary>
             /// The <c>resolve</c> hook chain is responsible for telling Node.js where to find and
             /// how to cache a given <c>import</c> statement or expression, or <c>require</c> call. It can
@@ -151802,6 +154241,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </summary>
                 abstract member source: Node.``module``.Module_.ModuleSource option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?format: string,
+                        ?shortCircuit: bool,
+                        ?source: Node.``module``.Module_.ModuleSource
+                    )
+                    : LoadFnOutput
+                    =
+                    nativeOnly
+
             /// <summary>
             /// The <c>load</c> hook provides a way to define a custom method of determining how a
             /// URL should be interpreted, retrieved, and parsed. It is also in charge of
@@ -151839,6 +154289,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// If the support is enabled for generated code from <c>eval</c> or <c>new Function</c>.
                 /// </summary>
                 abstract member generatedCode: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (enabled: bool, nodeModules: bool, generatedCode: bool)
+                    : SourceMapsSupport
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -151906,6 +154363,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 abstract member originalLine: float with get, set
                 abstract member originalColumn: float with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        generatedLine: float,
+                        generatedColumn: float,
+                        originalSource: string,
+                        originalLine: float,
+                        originalColumn: float
+                    )
+                    : SourceMapping
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type SourceOrigin =
@@ -151925,6 +154395,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// The 1-indexed columnNumber of the corresponding call site in the original source
                 /// </summary>
                 abstract member columnNumber: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (fileName: string, lineNumber: float, columnNumber: float, ?name: string)
+                    : SourceOrigin
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -152564,6 +155041,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member family: string with get, set
             abstract member port: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(address: string, family: string, port: float) : AddressInfo =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type SocketConstructorOpts =
@@ -152621,10 +155102,34 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member autoSelectFamilyAttemptTimeout: float option with get, set
             abstract member blockList: Node.net.BlockList option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    port: float,
+                    ?host: string,
+                    ?localAddress: string,
+                    ?localPort: float,
+                    ?hints: float,
+                    ?family: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?noDelay: bool,
+                    ?keepAlive: bool,
+                    ?keepAliveInitialDelay: float,
+                    ?autoSelectFamily: bool,
+                    ?autoSelectFamilyAttemptTimeout: float,
+                    ?blockList: Node.net.BlockList
+                )
+                : TcpSocketConnectOpts
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type IpcSocketConnectOpts =
             abstract member path: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(path: string) : IpcSocketConnectOpts = nativeOnly
 
         type SocketConnectOpts = U2<Node.net.TcpSocketConnectOpts, Node.net.IpcSocketConnectOpts>
 
@@ -157772,12 +160277,56 @@ BlockList.isBlockList($0)""")>]
             inherit Node.net.SocketConstructorOpts
             abstract member timeout: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    port: float,
+                    ?host: string,
+                    ?localAddress: string,
+                    ?localPort: float,
+                    ?hints: float,
+                    ?family: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?noDelay: bool,
+                    ?keepAlive: bool,
+                    ?keepAliveInitialDelay: float,
+                    ?autoSelectFamily: bool,
+                    ?autoSelectFamilyAttemptTimeout: float,
+                    ?blockList: Node.net.BlockList,
+                    ?fd: float,
+                    ?allowHalfOpen: bool,
+                    ?onread: Node.net.OnReadOpts,
+                    ?readable: bool,
+                    ?writable: bool,
+                    ?signal: Node.AbortSignal,
+                    ?timeout: float
+                )
+                : TcpNetConnectOpts
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type IpcNetConnectOpts =
             inherit Node.net.IpcSocketConnectOpts
             inherit Node.net.SocketConstructorOpts
             abstract member timeout: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?fd: float,
+                    ?allowHalfOpen: bool,
+                    ?onread: Node.net.OnReadOpts,
+                    ?readable: bool,
+                    ?writable: bool,
+                    ?signal: Node.AbortSignal,
+                    ?timeout: float
+                )
+                : IpcNetConnectOpts
+                =
+                nativeOnly
 
         type NetConnectOpts = U2<Node.net.TcpNetConnectOpts, Node.net.IpcNetConnectOpts>
 
@@ -158296,6 +160845,10 @@ SocketAddress.parse($0)""")>]
             abstract member speed: float with get, set
             abstract member times: CpuInfo.times with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(model: string, speed: float, times: CpuInfo.times) : CpuInfo =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type NetworkInterfaceBase =
@@ -158306,11 +160859,40 @@ SocketAddress.parse($0)""")>]
             abstract member cidr: string option with get, set
             abstract member scopeid: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    address: string,
+                    netmask: string,
+                    mac: string,
+                    ``internal``: bool,
+                    ?cidr: string,
+                    ?scopeid: float
+                )
+                : NetworkInterfaceBase
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type NetworkInterfaceInfoIPv4 =
             inherit Node.os.NetworkInterfaceBase
             abstract member family: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    address: string,
+                    netmask: string,
+                    mac: string,
+                    ``internal``: bool,
+                    family: string,
+                    ?cidr: string,
+                    ?scopeid: float
+                )
+                : NetworkInterfaceInfoIPv4
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -158318,6 +160900,21 @@ SocketAddress.parse($0)""")>]
             inherit Node.os.NetworkInterfaceBase
             abstract member family: string with get, set
             abstract member scopeid: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    address: string,
+                    netmask: string,
+                    mac: string,
+                    ``internal``: bool,
+                    family: string,
+                    scopeid: float,
+                    ?cidr: string
+                )
+                : NetworkInterfaceInfoIPv6
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -158327,6 +160924,13 @@ SocketAddress.parse($0)""")>]
             abstract member gid: float with get, set
             abstract member shell: 'T option with get, set
             abstract member homedir: 'T with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (username: 'T, uid: float, gid: float, homedir: 'T, ?shell: 'T)
+                : UserInfo<'T>
+                =
+                nativeOnly
 
         type NetworkInterfaceInfo =
             U2<Node.os.NetworkInterfaceInfoIPv4, Node.os.NetworkInterfaceInfoIPv6>
@@ -159196,6 +161800,13 @@ SocketAddress.parse($0)""")>]
                 /// </summary>
                 abstract member name: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (root: string, dir: string, ``base``: string, ext: string, name: string)
+                    : ParsedPath
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type FormatInputPathObject =
@@ -159560,6 +162171,9 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             abstract member flags: float with get
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(kind: float, flags: float) : NodeGCPerformanceDetail = nativeOnly
+
         /// <summary>
         /// The constructor of this class is not exposed to users directly.
         /// </summary>
@@ -159629,6 +162243,13 @@ SocketAddress.parse($0)""")>]
             /// Number of events that were waiting to be processed when the event provider was called.
             /// </summary>
             abstract member eventsWaiting: float with get
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (loopCount: float, events: float, eventsWaiting: float)
+                : UVMetrics
+                =
+                nativeOnly
 
         /// <summary>
         /// _This property is an extension by Node.js. It is not available in Web browsers._
@@ -164412,6 +167033,126 @@ SocketAddress.parse($0)""")>]
             abstract member zlib: obj with get, set
             abstract member ``node:zlib``: obj with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``assert``: obj,
+                    ``node:assert``: obj,
+                    ``assert/strict``: obj,
+                    ``node:assert/strict``: obj,
+                    async_hooks: obj,
+                    ``node:async_hooks``: obj,
+                    buffer: obj,
+                    ``node:buffer``: obj,
+                    child_process: obj,
+                    ``node:child_process``: obj,
+                    cluster: obj,
+                    ``node:cluster``: obj,
+                    console: obj,
+                    ``node:console``: obj,
+                    constants: obj,
+                    ``node:constants``: obj,
+                    crypto: obj,
+                    ``node:crypto``: obj,
+                    dgram: obj,
+                    ``node:dgram``: obj,
+                    diagnostics_channel: obj,
+                    ``node:diagnostics_channel``: obj,
+                    dns: obj,
+                    ``node:dns``: obj,
+                    ``dns/promises``: obj,
+                    ``node:dns/promises``: obj,
+                    domain: obj,
+                    ``node:domain``: obj,
+                    events: obj,
+                    ``node:events``: obj,
+                    fs: obj,
+                    ``node:fs``: obj,
+                    ``fs/promises``: obj,
+                    ``node:fs/promises``: obj,
+                    http: obj,
+                    ``node:http``: obj,
+                    http2: obj,
+                    ``node:http2``: obj,
+                    https: obj,
+                    ``node:https``: obj,
+                    inspector: obj,
+                    ``node:inspector``: obj,
+                    ``inspector/promises``: obj,
+                    ``node:inspector/promises``: obj,
+                    ``module``: obj,
+                    ``node:module``: obj,
+                    net: obj,
+                    ``node:net``: obj,
+                    os: obj,
+                    ``node:os``: obj,
+                    path: obj,
+                    ``node:path``: obj,
+                    ``path/posix``: obj,
+                    ``node:path/posix``: obj,
+                    ``path/win32``: obj,
+                    ``node:path/win32``: obj,
+                    perf_hooks: obj,
+                    ``node:perf_hooks``: obj,
+                    ``process``: obj,
+                    ``node:process``: obj,
+                    punycode: obj,
+                    ``node:punycode``: obj,
+                    querystring: obj,
+                    ``node:querystring``: obj,
+                    readline: obj,
+                    ``node:readline``: obj,
+                    ``readline/promises``: obj,
+                    ``node:readline/promises``: obj,
+                    repl: obj,
+                    ``node:repl``: obj,
+                    ``node:sea``: obj,
+                    ``node:sqlite``: obj,
+                    stream: obj,
+                    ``node:stream``: obj,
+                    ``stream/consumers``: obj,
+                    ``node:stream/consumers``: obj,
+                    ``stream/promises``: obj,
+                    ``node:stream/promises``: obj,
+                    ``stream/web``: obj,
+                    ``node:stream/web``: obj,
+                    string_decoder: obj,
+                    ``node:string_decoder``: obj,
+                    ``node:test``: obj,
+                    ``node:test/reporters``: obj,
+                    timers: obj,
+                    ``node:timers``: obj,
+                    ``timers/promises``: obj,
+                    ``node:timers/promises``: obj,
+                    tls: obj,
+                    ``node:tls``: obj,
+                    trace_events: obj,
+                    ``node:trace_events``: obj,
+                    tty: obj,
+                    ``node:tty``: obj,
+                    url: obj,
+                    ``node:url``: obj,
+                    util: obj,
+                    ``node:util``: obj,
+                    sys: obj,
+                    ``node:sys``: obj,
+                    ``util/types``: obj,
+                    ``node:util/types``: obj,
+                    v8: obj,
+                    ``node:v8``: obj,
+                    vm: obj,
+                    ``node:vm``: obj,
+                    wasi: obj,
+                    ``node:wasi``: obj,
+                    worker_threads: obj,
+                    ``node:worker_threads``: obj,
+                    zlib: obj,
+                    ``node:zlib``: obj
+                )
+                : BuiltInModule
+                =
+                nativeOnly
+
         module BuiltInModule =
 
             [<AllowNullLiteral>]
@@ -167627,6 +170368,9 @@ SocketAddress.parse($0)""")>]
         type CursorPos =
             abstract member rows: float with get, set
             abstract member cols: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(rows: float, cols: float) : CursorPos = nativeOnly
 
         module promises =
 
@@ -171252,6 +173996,13 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             abstract member ``type``: string option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (name: string, ?column: string, ?database: string, ?table: string, ?``type``: string)
+                : StatementColumnMetadata
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type StatementResultingChanges =
@@ -171267,6 +174018,34 @@ SocketAddress.parse($0)""")>]
             /// This property is the result of [<c>sqlite3_last_insert_rowid()</c>](https://www.sqlite.org/c3ref/last_insert_rowid.html).
             /// </summary>
             abstract member lastInsertRowid: U2<float, bigint> with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (changes: float, lastInsertRowid: float)
+                : StatementResultingChanges
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (changes: float, lastInsertRowid: bigint)
+                : StatementResultingChanges
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (changes: bigint, lastInsertRowid: float)
+                : StatementResultingChanges
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (changes: bigint, lastInsertRowid: bigint)
+                : StatementResultingChanges
+                =
+                nativeOnly
 
         /// <summary>
         /// This class represents a single [prepared statement](https://www.sqlite.org/c3ref/stmt.html). This class cannot be
@@ -171514,6 +174293,10 @@ SocketAddress.parse($0)""")>]
         type BackupProgressInfo =
             abstract member totalPages: float with get, set
             abstract member remainingPages: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(totalPages: float, remainingPages: float) : BackupProgressInfo =
+                nativeOnly
 
         module constants_ =
 
@@ -188424,11 +191207,25 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member ``done``: bool with get, set
                 abstract member value: 'T with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (``done``: bool, value: 'T)
+                    : ReadableStreamReadValueResult<'T>
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ReadableStreamReadDoneResult<'T> =
                 abstract member ``done``: bool with get, set
                 abstract member value: 'T option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (``done``: bool, ?value: 'T)
+                    : ReadableStreamReadDoneResult<'T>
+                    =
+                    nativeOnly
 
             type ReadableStreamReadResult<'T> =
                 U2<
@@ -188709,6 +191506,16 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member readable: Node.stream.web.ReadableStream<'O> with get
                 abstract member writable: Node.stream.web.WritableStream<'I> with get
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        readable: Node.stream.web.ReadableStream<'O>,
+                        writable: Node.stream.web.WritableStream<'I>
+                    )
+                    : TransformStream<'I, 'O>
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type TransformStreamDefaultController<'O> =
@@ -188801,6 +191608,13 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member highWaterMark: float with get
                 abstract member size: chunk: obj -> float
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (highWaterMark: float, size: Node.stream.web.QueuingStrategySize<obj>)
+                    : ByteLengthQueuingStrategy
+                    =
+                    nativeOnly
+
             /// <summary>
             /// This Streams API interface provides a built-in byte length queuing
             /// strategy that can be used when constructing streams.
@@ -188812,6 +191626,13 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member highWaterMark: float with get
                 abstract member size: chunk: obj -> float
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (highWaterMark: float, size: Node.stream.web.QueuingStrategySize)
+                    : CountQueuingStrategy
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type TextEncoderStream =
@@ -188821,6 +191642,17 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member encoding: string with get
                 abstract member readable: Node.stream.web.ReadableStream<JS.Uint8Array> with get
                 abstract member writable: Node.stream.web.WritableStream<string> with get
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        encoding: string,
+                        readable: Node.stream.web.ReadableStream<JS.Uint8Array>,
+                        writable: Node.stream.web.WritableStream<string>
+                    )
+                    : TextEncoderStream
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -188853,6 +191685,19 @@ Duplex.fromWeb($0, $1)""")>]
 
                 abstract member writable:
                     Node.stream.web.WritableStream<Node.stream.web.BufferSource> with get
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        encoding: string,
+                        fatal: bool,
+                        ignoreBOM: bool,
+                        readable: Node.stream.web.ReadableStream<string>,
+                        writable: Node.stream.web.WritableStream<Node.stream.web.BufferSource>
+                    )
+                    : TextDecoderStream
+                    =
+                    nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -192840,6 +195685,13 @@ Duplex.fromWeb($0, $1)""")>]
                     /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
                     /// </summary>
                     abstract member line: float option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?column: float, ?file: string, ?line: float)
+                        : LocationInfo
+                        =
+                        nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -199036,6 +201888,34 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             abstract member issuerCertificate: Node.tls.DetailedPeerCertificate with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ca: bool,
+                    raw: Node.NonSharedBuffer,
+                    subject: Node.tls.Certificate,
+                    issuer: Node.tls.Certificate,
+                    valid_from: string,
+                    valid_to: string,
+                    serialNumber: string,
+                    fingerprint: string,
+                    fingerprint256: string,
+                    fingerprint512: string,
+                    issuerCertificate: Node.tls.DetailedPeerCertificate,
+                    ?ext_key_usage: ResizeArray<string>,
+                    ?subjectaltname: string,
+                    ?infoAccess: Node.NodeJS.Dict<ResizeArray<string>>,
+                    ?bits: float,
+                    ?exponent: string,
+                    ?modulus: string,
+                    ?pubkey: Node.NonSharedBuffer,
+                    ?asn1Curve: string,
+                    ?nistCurve: string
+                )
+                : DetailedPeerCertificate
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type CipherNameAndProtocol =
@@ -199052,6 +201932,13 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             abstract member standardName: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (name: string, version: string, standardName: string)
+                : CipherNameAndProtocol
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type EphemeralKeyInfo =
@@ -199067,6 +201954,10 @@ Duplex.fromWeb($0, $1)""")>]
             /// The size of parameter of an ephemeral key exchange.
             /// </summary>
             abstract member size: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(``type``: string, size: float, ?name: string) : EphemeralKeyInfo =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -200685,6 +203576,47 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             abstract member rejectUnauthorized: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?SNICallback: CommonConnectionOptions.SNICallback,
+                    ?rejectUnauthorized: bool
+                )
+                : CommonConnectionOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ALPNProtocols: ReadonlyArray<string>,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?SNICallback: CommonConnectionOptions.SNICallback,
+                    ?rejectUnauthorized: bool
+                )
+                : CommonConnectionOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ALPNProtocols: Node.NodeJS.ArrayBufferView,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?SNICallback: CommonConnectionOptions.SNICallback,
+                    ?rejectUnauthorized: bool
+                )
+                : CommonConnectionOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type TlsOptions =
@@ -200801,6 +203733,13 @@ Duplex.fromWeb($0, $1)""")>]
         type PSKCallbackNegotation =
             abstract member psk: Node.NodeJS.ArrayBufferView with get, set
             abstract member identity: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (psk: Node.NodeJS.ArrayBufferView, identity: string)
+                : PSKCallbackNegotation
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -202426,6 +205365,13 @@ Duplex.fromWeb($0, $1)""")>]
         type SecurePair =
             abstract member encrypted: Node.tls.TLSSocket with get, set
             abstract member cleartext: Node.tls.TLSSocket with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (encrypted: Node.tls.TLSSocket, cleartext: Node.tls.TLSSocket)
+                : SecurePair
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -204772,17 +207718,116 @@ Duplex.fromWeb($0, $1)""")>]
             abstract member port: string option with get, set
             abstract member query: U2<string, Node.querystring.ParsedUrlQuery> option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    href: string,
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?path: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: string
+                )
+                : Url
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    href: string,
+                    query: string,
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?path: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: string
+                )
+                : Url
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    href: string,
+                    query: Node.querystring.ParsedUrlQuery,
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?path: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: string
+                )
+                : Url
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type UrlWithParsedQuery =
             inherit Node.url.Url
             abstract member query: Node.querystring.ParsedUrlQuery with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    href: string,
+                    query: Node.querystring.ParsedUrlQuery,
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?path: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: string
+                )
+                : UrlWithParsedQuery
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type UrlWithStringQuery =
             inherit Node.url.Url
             abstract member query: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    href: string,
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?path: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: string,
+                    ?query: string
+                )
+                : UrlWithStringQuery
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -208051,6 +211096,19 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member columnNumber: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    functionName: string,
+                    scriptName: string,
+                    scriptId: string,
+                    lineNumber: float,
+                    columnNumber: float
+                )
+                : CallSiteObject
+                =
+                nativeOnly
+
         type DiffEntry = DiffEntry.Item * string
 
         [<AllowNullLiteral>]
@@ -208320,6 +211378,9 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member written: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(read: float, written: float) : EncodeIntoResult = nativeOnly
+
         /// <summary>
         /// An implementation of the [WHATWG Encoding Standard](https://encoding.spec.whatwg.org/) <c>TextEncoder</c> API. All
         /// instances of <c>TextEncoder</c> only support UTF-8 encoding.
@@ -208401,6 +211462,61 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member ``default``:
                 U4<string, bool, ResizeArray<string>, ResizeArray<bool>> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (``type``: Node.util.ParseArgsOptionsType, ?multiple: bool, ?short: string)
+                : ParseArgsOptionDescriptor
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.util.ParseArgsOptionsType,
+                    ``default``: string,
+                    ?multiple: bool,
+                    ?short: string
+                )
+                : ParseArgsOptionDescriptor
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.util.ParseArgsOptionsType,
+                    ``default``: bool,
+                    ?multiple: bool,
+                    ?short: string
+                )
+                : ParseArgsOptionDescriptor
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.util.ParseArgsOptionsType,
+                    ``default``: ResizeArray<string>,
+                    ?multiple: bool,
+                    ?short: string
+                )
+                : ParseArgsOptionDescriptor
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.util.ParseArgsOptionsType,
+                    ``default``: ResizeArray<bool>,
+                    ?multiple: bool,
+                    ?short: string
+                )
+                : ParseArgsOptionDescriptor
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -210400,6 +213516,19 @@ URL.parse($0, $1)""")>]
             abstract member space_available_size: float with get, set
             abstract member physical_space_size: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    space_name: string,
+                    space_size: float,
+                    space_used_size: float,
+                    space_available_size: float,
+                    physical_space_size: float
+                )
+                : HeapSpaceInfo
+                =
+                nativeOnly
+
         [<RequireQualifiedAccess>]
         type DoesZapCodeSpaceFlag =
             | ``0`` = 0
@@ -210423,12 +213552,45 @@ URL.parse($0, $1)""")>]
             abstract member used_global_handles_size: float with get, set
             abstract member external_memory: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    total_heap_size: float,
+                    total_heap_size_executable: float,
+                    total_physical_size: float,
+                    total_available_size: float,
+                    used_heap_size: float,
+                    heap_size_limit: float,
+                    malloced_memory: float,
+                    peak_malloced_memory: float,
+                    does_zap_garbage: Node.v8.DoesZapCodeSpaceFlag,
+                    number_of_native_contexts: float,
+                    number_of_detached_contexts: float,
+                    total_global_handles_size: float,
+                    used_global_handles_size: float,
+                    external_memory: float
+                )
+                : HeapInfo
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type HeapCodeStatistics =
             abstract member code_and_metadata_size: float with get, set
             abstract member bytecode_and_metadata_size: float with get, set
             abstract member external_script_source_size: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    code_and_metadata_size: float,
+                    bytecode_and_metadata_size: float,
+                    external_script_source_size: float
+                )
+                : HeapCodeStatistics
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -210668,6 +213830,18 @@ URL.parse($0, $1)""")>]
             abstract member endTime: float with get, set
             abstract member statistics: ResizeArray<GCProfilerResult.statistics> with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    version: float,
+                    startTime: float,
+                    endTime: float,
+                    statistics: ResizeArray<GCProfilerResult.statistics>
+                )
+                : GCProfilerResult
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type HeapStatistics =
@@ -210683,6 +213857,25 @@ URL.parse($0, $1)""")>]
             abstract member externalMemory: float with get, set
             abstract member peakMallocedMemory: float with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    totalHeapSize: float,
+                    totalHeapSizeExecutable: float,
+                    totalPhysicalSize: float,
+                    totalAvailableSize: float,
+                    totalGlobalHandlesSize: float,
+                    usedGlobalHandlesSize: float,
+                    usedHeapSize: float,
+                    heapSizeLimit: float,
+                    mallocedMemory: float,
+                    externalMemory: float,
+                    peakMallocedMemory: float
+                )
+                : HeapStatistics
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type HeapSpaceStatistics =
@@ -210691,6 +213884,19 @@ URL.parse($0, $1)""")>]
             abstract member spaceUsedSize: float with get, set
             abstract member spaceAvailableSize: float with get, set
             abstract member physicalSpaceSize: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    spaceName: string,
+                    spaceSize: float,
+                    spaceUsedSize: float,
+                    spaceAvailableSize: float,
+                    physicalSpaceSize: float
+                )
+                : HeapSpaceStatistics
+                =
+                nativeOnly
 
         /// <summary>
         /// Called when a promise is constructed. This does not mean that corresponding before/after events will occur, only that the possibility exists. This will
@@ -210737,6 +213943,18 @@ URL.parse($0, $1)""")>]
             abstract member before: Node.v8.Before option with get, set
             abstract member after: Node.v8.After option with get, set
             abstract member settled: Node.v8.Settled option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?init: Node.v8.Init,
+                    ?before: Node.v8.Before,
+                    ?after: Node.v8.After,
+                    ?settled: Node.v8.Settled
+                )
+                : HookCallbacks
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -210794,6 +214012,19 @@ URL.parse($0, $1)""")>]
             /// Used for disabling hooks
             /// </returns>
             abstract member createHook: (Node.v8.HookCallbacks -> Action) with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    onInit: (Node.v8.Init -> Action),
+                    onSettled: (Node.v8.Settled -> Action),
+                    onBefore: (Node.v8.Before -> Action),
+                    onAfter: (Node.v8.After -> Action),
+                    createHook: (Node.v8.HookCallbacks -> Action)
+                )
+                : PromiseHooks
+                =
+                nativeOnly
 
         type StartupSnapshotCallbackFn = delegate of args: obj -> unit
 
@@ -211951,6 +215182,13 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member columnOffset: float option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?filename: string, ?lineOffset: float, ?columnOffset: float)
+                : BaseOptions
+                =
+                nativeOnly
+
         type DynamicModuleLoader<'T> =
             delegate of
                 specifier: string *
@@ -212405,6 +215643,9 @@ URL.parse($0, $1)""")>]
         [<Interface>]
         type MemoryMeasurement =
             abstract member total: MemoryMeasurement.total with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(total: MemoryMeasurement.total) : MemoryMeasurement = nativeOnly
 
         /// <summary>
         /// Instances of the <c>vm.Script</c> class contain precompiled scripts that can be
@@ -212922,6 +216163,13 @@ URL.parse($0, $1)""")>]
             /// provided.
             /// </summary>
             abstract member attributes: Node.``module``.Module_.ImportAttributes with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (specifier: string, attributes: Node.``module``.Module_.ImportAttributes)
+                : ModuleRequest
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -213673,6 +216921,19 @@ URL.parse($0, $1)""")>]
                 abstract member platform: string with get
                 abstract member userAgent: string with get
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        hardwareConcurrency: float,
+                        language: string,
+                        languages: ReadonlyArray<string>,
+                        platform: string,
+                        userAgent: string
+                    )
+                    : Navigator
+                    =
+                    nativeOnly
+
         module storage =
 
             type _Storage = obj
@@ -214233,6 +217494,13 @@ URL.parse($0, $1)""")>]
                 ?utilization1: Node.perf_hooks.EventLoopUtilization *
                 ?utilization2: Node.perf_hooks.EventLoopUtilization ->
                     Node.perf_hooks.EventLoopUtilization
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (eventLoopUtilization: Node.perf_hooks.EventLoopUtilityFunction)
+                : WorkerPerformance
+                =
+                nativeOnly
 
         type Transferable =
             U7<
@@ -221857,6 +225125,22 @@ module UndiciTypes =
                 abstract member bytesWritten: float option with get, set
                 abstract member bytesRead: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?localAddress: string,
+                        ?localPort: float,
+                        ?remoteAddress: string,
+                        ?remotePort: float,
+                        ?remoteFamily: string,
+                        ?timeout: float,
+                        ?bytesWritten: float,
+                        ?bytesRead: float
+                    )
+                    : SocketInfo
+                    =
+                    nativeOnly
+
         type OptionsInterceptors = Client_.OptionsInterceptors
 
         type Options = Client_.Options
@@ -222349,12 +225633,57 @@ module UndiciTypes =
                 abstract member path: string with get, set
                 abstract member headers: obj with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        completed: bool,
+                        path: string,
+                        headers: obj,
+                        ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
+                    )
+                    : Request
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        completed: bool,
+                        path: string,
+                        headers: obj,
+                        origin: string,
+                        ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
+                    )
+                    : Request
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        completed: bool,
+                        path: string,
+                        headers: obj,
+                        origin: Node.url.URL,
+                        ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
+                    )
+                    : Request
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type Response =
                 abstract member statusCode: float with get, set
                 abstract member statusText: string with get, set
                 abstract member headers: ResizeArray<Node.Buffer> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (statusCode: float, statusText: string, headers: ResizeArray<Node.Buffer>)
+                    : Response
+                    =
+                    nativeOnly
 
             type Error = obj
 
@@ -222367,6 +225696,19 @@ module UndiciTypes =
                 abstract member port: string with get, set
                 abstract member servername: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        host: string,
+                        hostname: string,
+                        protocol: string,
+                        port: string,
+                        ?servername: string
+                    )
+                    : ConnectParams
+                    =
+                    nativeOnly
+
             type Connector = UndiciTypes.connector.buildConnector_.connector
 
             [<AllowNullLiteral>]
@@ -222374,10 +225716,24 @@ module UndiciTypes =
             type RequestCreateMessage =
                 abstract member request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request)
+                    : RequestCreateMessage
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RequestBodySentMessage =
                 abstract member request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request)
+                    : RequestBodySentMessage
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -222387,11 +225743,31 @@ module UndiciTypes =
                 abstract member response:
                     UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Response with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request,
+                        response: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Response
+                    )
+                    : RequestHeadersMessage
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RequestTrailersMessage =
                 abstract member request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request with get, set
                 abstract member trailers: ResizeArray<Node.Buffer> with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request,
+                        trailers: ResizeArray<Node.Buffer>
+                    )
+                    : RequestTrailersMessage
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -222399,12 +225775,33 @@ module UndiciTypes =
                 abstract member request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request with get, set
                 abstract member error: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Error with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request,
+                        error: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Error
+                    )
+                    : RequestErrorMessage
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ClientSendHeadersMessage =
                 abstract member request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request with get, set
                 abstract member headers: string with get, set
                 abstract member socket: Node.net.Socket with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        request: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Request,
+                        headers: string,
+                        socket: Node.net.Socket
+                    )
+                    : ClientSendHeadersMessage
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -222416,6 +225813,17 @@ module UndiciTypes =
                     options: UndiciTypes.connector.buildConnector_.Options *
                     callback: UndiciTypes.connector.buildConnector_.Callback ->
                         unit
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        connectParams:
+                            UndiciTypes.diagnostics_channel.DiagnosticsChannel_.ConnectParams,
+                        connector: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Connector
+                    )
+                    : ClientBeforeConnectMessage
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -222430,6 +225838,18 @@ module UndiciTypes =
                     callback: UndiciTypes.connector.buildConnector_.Callback ->
                         unit
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        socket: Node.net.Socket,
+                        connectParams:
+                            UndiciTypes.diagnostics_channel.DiagnosticsChannel_.ConnectParams,
+                        connector: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Connector
+                    )
+                    : ClientConnectedMessage
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ClientConnectErrorMessage =
@@ -222443,6 +225863,19 @@ module UndiciTypes =
                     options: UndiciTypes.connector.buildConnector_.Options *
                     callback: UndiciTypes.connector.buildConnector_.Callback ->
                         unit
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        error: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Error,
+                        socket: Node.net.Socket,
+                        connectParams:
+                            UndiciTypes.diagnostics_channel.DiagnosticsChannel_.ConnectParams,
+                        connector: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Connector
+                    )
+                    : ClientConnectErrorMessage
+                    =
+                    nativeOnly
 
     module dispatcher =
 
@@ -224189,6 +227622,18 @@ module UndiciTypes =
                 abstract member socket: Node.stream.Stream_.Duplex with get, set
                 abstract member opaque: obj with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        statusCode: float,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        socket: Node.stream.Stream_.Duplex,
+                        opaque: obj
+                    )
+                    : ConnectData
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ResponseData =
@@ -224198,6 +227643,20 @@ module UndiciTypes =
                 abstract member trailers: ResponseData.trailers with get, set
                 abstract member opaque: obj with get, set
                 abstract member context: obj with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        statusCode: float,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        body: ResponseData.body,
+                        trailers: ResponseData.trailers,
+                        opaque: obj,
+                        context: obj
+                    )
+                    : ResponseData
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -224227,12 +227686,27 @@ module UndiciTypes =
                 abstract member opaque: obj with get, set
                 abstract member trailers: StreamData.trailers with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(opaque: obj, trailers: StreamData.trailers) : StreamData =
+                    nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type UpgradeData =
                 abstract member headers: UndiciTypes.header.IncomingHttpHeaders with get, set
                 abstract member socket: Node.stream.Stream_.Duplex with get, set
                 abstract member opaque: obj with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        socket: Node.stream.Stream_.Duplex,
+                        opaque: obj
+                    )
+                    : UpgradeData
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -224972,6 +228446,17 @@ module UndiciTypes =
             abstract member message: UndiciTypes.websocket.MessageEvent with get, set
             abstract member ``open``: Node.Event with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    error: UndiciTypes.websocket.ErrorEvent,
+                    message: UndiciTypes.websocket.MessageEvent,
+                    ``open``: Node.Event
+                )
+                : EventSourceEventMap
+                =
+                nativeOnly
+
         module EventSourceEventMap =
 
             [<AllowNullLiteral>]
@@ -225493,6 +228978,13 @@ module UndiciTypes =
             abstract member ``type``: string option with get, set
             abstract member endings: BlobPropertyBag.endings option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?``type``: string, ?endings: BlobPropertyBag.endings)
+                : BlobPropertyBag
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type FilePropertyBag =
@@ -225994,6 +229486,32 @@ module UndiciTypes =
             inherit UndiciTypes.mock_interceptor.MockInterceptor_.MockDispatch
             abstract member origin: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: U3<string, RegExp, (string -> bool)>,
+                    persist: bool,
+                    consumed: bool,
+                    data:
+                        UndiciTypes.mock_interceptor.MockInterceptor_.MockDispatchData<
+                            obj,
+                            Exception
+                         >,
+                    origin: string,
+                    ?``method``: U3<string, RegExp, (string -> bool)>,
+                    ?body: U3<string, RegExp, (string -> bool)>,
+                    ?headers:
+                        U2<
+                            PendingInterceptor.headers.U2.Case1,
+                            (PendingInterceptor.headers.U2.Case2.headers -> bool)
+                         >,
+                    ?query: obj,
+                    ?times: float
+                )
+                : PendingInterceptor
+                =
+                nativeOnly
+
         /// <summary>
         /// A mocked Agent class that implements the Agent API. It allows one to intercept HTTP requests made through undici and return mocked responses instead.
         /// </summary>
@@ -226085,6 +229603,26 @@ module UndiciTypes =
                 abstract member agent: UndiciTypes.agent.Agent option with get, set
 
         type Options = MockAgent_.Options
+
+        module PendingInterceptor =
+
+            module headers =
+
+                module U2 =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Case1 =
+                        [<EmitIndexer>]
+                        abstract member Item: key: string -> U3<string, RegExp, (string -> bool)> with get, set
+
+                    module Case2 =
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type headers =
+                            [<EmitIndexer>]
+                            abstract member Item: key: string -> string with get, set
 
         module MockAgent =
 
@@ -226972,6 +230510,10 @@ module UndiciTypes =
             abstract member cancelable: bool option with get, set
             abstract member composed: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(?bubbles: bool, ?cancelable: bool, ?composed: bool) : EventInit =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type EventListenerOptions =
@@ -227432,11 +230974,24 @@ module UndiciTypes =
             type RetryState =
                 abstract member counter: float with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(counter: float) : RetryState = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type RetryContext =
                 abstract member state: UndiciTypes.retry_handler.RetryHandler_.RetryState with get, set
                 abstract member opts: RetryContext.opts with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        state: UndiciTypes.retry_handler.RetryHandler_.RetryState,
+                        opts: RetryContext.opts
+                    )
+                    : RetryContext
+                    =
+                    nativeOnly
 
             type OnRetryCallback = delegate of ?result: Exception -> unit
 
@@ -227790,6 +231345,18 @@ module UndiciTypes =
             abstract member error: UndiciTypes.websocket.ErrorEvent with get, set
             abstract member message: UndiciTypes.websocket.MessageEvent with get, set
             abstract member ``open``: Node.Event with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    close: UndiciTypes.websocket.CloseEvent,
+                    error: UndiciTypes.websocket.ErrorEvent,
+                    message: UndiciTypes.websocket.MessageEvent,
+                    ``open``: Node.Event
+                )
+                : WebSocketEventMap
+                =
+                nativeOnly
 
         module WebSocketEventMap =
 

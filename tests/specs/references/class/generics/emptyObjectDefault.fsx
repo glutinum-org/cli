@@ -17,6 +17,8 @@ type Exports =
 type Collection<'StoreType, 'ContextType> =
     abstract member start: 'StoreType with get, set
     abstract member context: 'ContextType with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (start: 'StoreType, context: 'ContextType) : Collection<'StoreType, 'ContextType> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

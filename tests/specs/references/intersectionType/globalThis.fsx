@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Doc =
     abstract member title: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (title: string) : Doc = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

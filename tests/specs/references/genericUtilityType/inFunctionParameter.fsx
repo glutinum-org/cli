@@ -15,6 +15,8 @@ type Exports =
 type User =
     abstract member id: string with get, set
     abstract member name: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (id: string, name: string) : User = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

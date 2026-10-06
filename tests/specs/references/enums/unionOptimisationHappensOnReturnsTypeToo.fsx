@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type UnsetInline =
     abstract member unset: UnsetInline.unset option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?unset: UnsetInline.unset) : UnsetInline = nativeOnly
 
 module UnsetInline =
 

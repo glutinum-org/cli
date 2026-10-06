@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type MyObject =
     abstract member random: MyObject.random with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (random: MyObject.random) : MyObject = nativeOnly
 
 [<AutoOpen>]
 module MyObjectExtensions =

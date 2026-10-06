@@ -20,6 +20,8 @@ type Stream =
 [<Interface>]
 type Holder =
     abstract member out: Holder.out with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (out: Holder.out) : Holder = nativeOnly
 
 module Holder =
 

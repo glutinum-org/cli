@@ -38,6 +38,8 @@ module NamespaceImport =
         [<Interface>]
         type Circle =
             abstract member radius: float with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (radius: float) : Circle = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

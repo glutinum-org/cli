@@ -9,12 +9,16 @@ open System
 type Options<'T> =
     abstract member value: 'T with get, set
     abstract member label: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: 'T, label: string) : Options<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Base<'T> =
     abstract member opts: Base.opts<'T> with get, set
     abstract member rest: Base.rest<'T> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (opts: Base.opts<'T>, rest: Base.rest<'T>) : Base<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

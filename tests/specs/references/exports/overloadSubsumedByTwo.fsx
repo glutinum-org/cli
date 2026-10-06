@@ -18,6 +18,8 @@ type Exports =
 [<Interface>]
 type Parsed =
     abstract member valid: bool with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (valid: bool) : Parsed = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Box<'T> =
     abstract member value: 'T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: 'T) : Box<'T> = nativeOnly
 
 type StringBox =
     Box<string>

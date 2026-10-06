@@ -11,6 +11,8 @@ type CoreOptions =
     /// <see href="https://tanstack.com/table/v8/docs/api/core/table#setstate">API Docs</see>
     /// </summary>
     abstract member setState: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (setState: float) : CoreOptions = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -17,6 +17,8 @@ type Docs =
 [<Interface>]
 type Named =
     abstract member name: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (name: string) : Named = nativeOnly
 
 type MaybeNamed =
     Named option

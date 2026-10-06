@@ -30,6 +30,8 @@ type Config =
 [<Interface>]
 type Token =
     abstract member kind: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: string) : Token = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -41,6 +43,8 @@ type Results<'T> =
 type Events =
     abstract member data: string with get, set
     abstract member ``end``: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (data: string, ``end``: float) : Events = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

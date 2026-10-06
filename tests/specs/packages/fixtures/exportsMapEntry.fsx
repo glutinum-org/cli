@@ -16,6 +16,8 @@ module ExportsMapEntry =
     [<Interface>]
     type Device =
         abstract member name: string with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (name: string) : Device = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

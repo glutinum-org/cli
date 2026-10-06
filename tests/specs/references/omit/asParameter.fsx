@@ -20,6 +20,8 @@ type Options =
     abstract member a: string with get, set
     abstract member b: float option with get, set
     abstract member c: bool with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (a: string, c: bool, ?b: float) : Options = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -27,6 +29,8 @@ type Labeled<'T> =
     abstract member value: 'T with get, set
     abstract member label: string with get, set
     abstract member extra: bool with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: 'T, label: string, extra: bool) : Labeled<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

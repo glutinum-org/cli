@@ -8,11 +8,15 @@ open System
 [<Interface>]
 type A =
     abstract member a: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (a: string) : A = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type B =
     abstract member b: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (b: float) : B = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

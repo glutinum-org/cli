@@ -15,6 +15,8 @@ type CoreOptions =
     /// <see href="https://github.com/microsoft/tsdoc">TSDoc</see>
     /// </summary>
     abstract member setState: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (setState: float) : CoreOptions = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -9,6 +9,8 @@ open System
 type Options =
     abstract member a: string with get, set
     abstract member b: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (a: string, b: float) : Options = nativeOnly
 
 type Same =
     Options

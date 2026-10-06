@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Module =
     abstract member ``type``: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (``type``: string) : Module = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

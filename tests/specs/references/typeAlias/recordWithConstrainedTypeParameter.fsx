@@ -14,6 +14,8 @@ type Params<'P> =
 [<Interface>]
 type EventContext<'P> =
     abstract member ``params``: Params<'P> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (``params``: Params<'P>) : EventContext<'P> = nativeOnly
 
 type EventContext =
     EventContext<string>

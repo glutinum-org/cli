@@ -36,6 +36,8 @@ module DepLib =
     type Range =
         abstract member start: DepLib.Position with get, set
         abstract member ``end``: DepLib.Position with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (start: DepLib.Position, ``end``: DepLib.Position) : Range = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

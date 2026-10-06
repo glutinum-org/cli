@@ -8,11 +8,15 @@ open System
 [<Interface>]
 type A =
     abstract member b: A.b with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (b: A.b) : A = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type B =
     abstract member a: B.a with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (a: B.a) : B = nativeOnly
 
 module A =
 

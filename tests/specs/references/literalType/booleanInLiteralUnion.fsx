@@ -11,6 +11,12 @@ type Options =
     abstract member mode: Options.mode option with get, set
     abstract member plain: U2<string, bool> option with get, set
     abstract member withNumber: Options.withNumber option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?colorMode: Options.colorMode, ?mode: Options.mode, ?withNumber: Options.withNumber) : Options = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (plain: string, ?colorMode: Options.colorMode, ?mode: Options.mode, ?withNumber: Options.withNumber) : Options = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (plain: bool, ?colorMode: Options.colorMode, ?mode: Options.mode, ?withNumber: Options.withNumber) : Options = nativeOnly
 
 module Options =
 

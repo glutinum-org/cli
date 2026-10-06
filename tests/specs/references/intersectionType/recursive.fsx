@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Event =
     abstract member bubbles: bool with get
+    [<ParamObject; Emit("$0")>]
+    static member Create (bubbles: bool) : Event = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

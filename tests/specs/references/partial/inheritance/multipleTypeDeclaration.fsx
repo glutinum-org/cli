@@ -16,6 +16,8 @@ type Options =
     abstract member minDistance: float option with get, set
     abstract member dotSize: float option with get, set
     abstract member size: float option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?dotSize: float, ?minDistance: float) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

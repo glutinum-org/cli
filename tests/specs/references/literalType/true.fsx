@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type T =
     abstract member log: bool with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (log: bool) : T = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

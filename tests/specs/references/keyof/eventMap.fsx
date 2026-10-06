@@ -16,17 +16,23 @@ type Exports =
 [<Interface>]
 type MouseEvent =
     abstract member x: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (x: float) : MouseEvent = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type KeyboardEvent =
     abstract member key: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (key: string) : KeyboardEvent = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type ElementEventMap =
     abstract member click: MouseEvent with get, set
     abstract member keydown: KeyboardEvent with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (click: MouseEvent, keydown: KeyboardEvent) : ElementEventMap = nativeOnly
 
 module ElementEventMap =
 
@@ -53,6 +59,8 @@ type Element =
 [<Interface>]
 type TagNameMap =
     abstract member a: Element with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (a: Element) : TagNameMap = nativeOnly
 
 module TagNameMap =
 
@@ -77,6 +85,8 @@ type Document =
 [<Interface>]
 type GlobalEventMap =
     abstract member focus: KeyboardEvent with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (focus: KeyboardEvent) : GlobalEventMap = nativeOnly
 
 module GlobalEventMap =
 
@@ -96,6 +106,8 @@ module GlobalEventMap =
 type InputEventMap =
     inherit GlobalEventMap
     abstract member input: MouseEvent with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (focus: KeyboardEvent, input: MouseEvent) : InputEventMap = nativeOnly
 
 module InputEventMap =
 
@@ -122,6 +134,8 @@ type Input =
 type StreamEvents =
     abstract member close: (unit -> unit) with get, set
     abstract member data: (string -> unit) with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (close: (unit -> unit), data: (string -> unit)) : StreamEvents = nativeOnly
 
 module StreamEvents =
 
@@ -147,6 +161,8 @@ type Stream =
 [<Interface>]
 type CustomEvents =
     abstract member custom: (unit -> unit) with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (custom: (unit -> unit)) : CustomEvents = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

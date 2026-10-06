@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Animal =
     abstract member name: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (name: string) : Animal = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

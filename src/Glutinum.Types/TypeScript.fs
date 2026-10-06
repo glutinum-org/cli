@@ -1355,11 +1355,19 @@ module TypeScript =
         abstract member ``done``: bool option with get, set
         abstract member value: 'TYield with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(value: 'TYield, ?``done``: bool) : IteratorYieldResult<'TYield> =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type IteratorReturnResult<'TReturn> =
         abstract member ``done``: bool with get, set
         abstract member value: 'TReturn with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(``done``: bool, value: 'TReturn) : IteratorReturnResult<'TReturn> =
+            nativeOnly
 
     type IteratorResult<'T, 'TReturn> =
         U2<TypeScript.IteratorYieldResult<'T>, TypeScript.IteratorReturnResult<'TReturn>>
@@ -2406,7 +2414,8 @@ module TypeScript =
                             abstract member roundingPriority:
                                 Exports.apply.argumentsList.toLocaleString.options.roundingPriority option with get, set
 
-                            abstract member roundingIncrement: obj option with get, set
+                            abstract member roundingIncrement:
+                                Exports.apply.argumentsList.toLocaleString.options.roundingIncrement option with get, set
 
                             abstract member roundingMode:
                                 Exports.apply.argumentsList.toLocaleString.options.roundingMode option with get, set
@@ -2495,7 +2504,8 @@ module TypeScript =
                                         Exports.apply.argumentsList.toLocaleString.options.currencySign,
                                     ?roundingPriority:
                                         Exports.apply.argumentsList.toLocaleString.options.roundingPriority,
-                                    ?roundingIncrement: obj,
+                                    ?roundingIncrement:
+                                        Exports.apply.argumentsList.toLocaleString.options.roundingIncrement,
                                     ?roundingMode:
                                         Exports.apply.argumentsList.toLocaleString.options.roundingMode,
                                     ?trailingZeroDisplay:
@@ -2580,6 +2590,24 @@ module TypeScript =
                                 | auto
                                 | morePrecision
                                 | lessPrecision
+
+                            [<RequireQualifiedAccess>]
+                            type roundingIncrement =
+                                | ``1`` = 1
+                                | ``2`` = 2
+                                | ``5`` = 5
+                                | ``10`` = 10
+                                | ``20`` = 20
+                                | ``25`` = 25
+                                | ``50`` = 50
+                                | ``100`` = 100
+                                | ``200`` = 200
+                                | ``250`` = 250
+                                | ``500`` = 500
+                                | ``1000`` = 1000
+                                | ``2000`` = 2000
+                                | ``2500`` = 2500
+                                | ``5000`` = 5000
 
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
@@ -3363,7 +3391,8 @@ module TypeScript =
                             abstract member roundingPriority:
                                 Exports.construct.argumentsList.toLocaleString.options.roundingPriority option with get, set
 
-                            abstract member roundingIncrement: obj option with get, set
+                            abstract member roundingIncrement:
+                                Exports.construct.argumentsList.toLocaleString.options.roundingIncrement option with get, set
 
                             abstract member roundingMode:
                                 Exports.construct.argumentsList.toLocaleString.options.roundingMode option with get, set
@@ -3452,7 +3481,8 @@ module TypeScript =
                                         Exports.construct.argumentsList.toLocaleString.options.currencySign,
                                     ?roundingPriority:
                                         Exports.construct.argumentsList.toLocaleString.options.roundingPriority,
-                                    ?roundingIncrement: obj,
+                                    ?roundingIncrement:
+                                        Exports.construct.argumentsList.toLocaleString.options.roundingIncrement,
                                     ?roundingMode:
                                         Exports.construct.argumentsList.toLocaleString.options.roundingMode,
                                     ?trailingZeroDisplay:
@@ -3540,6 +3570,24 @@ module TypeScript =
                                 | auto
                                 | morePrecision
                                 | lessPrecision
+
+                            [<RequireQualifiedAccess>]
+                            type roundingIncrement =
+                                | ``1`` = 1
+                                | ``2`` = 2
+                                | ``5`` = 5
+                                | ``10`` = 10
+                                | ``20`` = 20
+                                | ``25`` = 25
+                                | ``50`` = 50
+                                | ``100`` = 100
+                                | ``200`` = 200
+                                | ``250`` = 250
+                                | ``500`` = 500
+                                | ``1000`` = 1000
+                                | ``2000`` = 2000
+                                | ``2500`` = 2500
+                                | ``5000`` = 5000
 
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
@@ -4287,6 +4335,13 @@ module TypeScript =
         abstract member SharedArrayBuffer: TypeScript.SharedArrayBuffer with get, set
         abstract member ArrayBuffer: JS.ArrayBuffer with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (SharedArrayBuffer: TypeScript.SharedArrayBuffer, ArrayBuffer: JS.ArrayBuffer)
+            : ArrayBufferTypes
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ErrorOptions =
@@ -4366,6 +4421,20 @@ module TypeScript =
         abstract member value: 'T option with get, set
         abstract member get: (unit -> 'T) option with get, set
         abstract member set: ('T -> unit) option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?enumerable: bool,
+                ?configurable: bool,
+                ?writable: bool,
+                ?value: 'T,
+                ?get: (unit -> 'T),
+                ?set: ('T -> unit)
+            )
+            : TypedPropertyDescriptor<'T>
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -4588,7 +4657,8 @@ module TypeScript =
                 abstract member roundingPriority:
                     ReadonlyArray.toLocaleString.options.roundingPriority option with get, set
 
-                abstract member roundingIncrement: obj option with get, set
+                abstract member roundingIncrement:
+                    ReadonlyArray.toLocaleString.options.roundingIncrement option with get, set
 
                 abstract member roundingMode:
                     ReadonlyArray.toLocaleString.options.roundingMode option with get, set
@@ -4646,7 +4716,7 @@ module TypeScript =
                         ?unitDisplay: ReadonlyArray.toLocaleString.options.unitDisplay,
                         ?currencySign: ReadonlyArray.toLocaleString.options.currencySign,
                         ?roundingPriority: ReadonlyArray.toLocaleString.options.roundingPriority,
-                        ?roundingIncrement: obj,
+                        ?roundingIncrement: ReadonlyArray.toLocaleString.options.roundingIncrement,
                         ?roundingMode: ReadonlyArray.toLocaleString.options.roundingMode,
                         ?trailingZeroDisplay:
                             ReadonlyArray.toLocaleString.options.trailingZeroDisplay,
@@ -4719,6 +4789,24 @@ module TypeScript =
                     | auto
                     | morePrecision
                     | lessPrecision
+
+                [<RequireQualifiedAccess>]
+                type roundingIncrement =
+                    | ``1`` = 1
+                    | ``2`` = 2
+                    | ``5`` = 5
+                    | ``10`` = 10
+                    | ``20`` = 20
+                    | ``25`` = 25
+                    | ``50`` = 50
+                    | ``100`` = 100
+                    | ``200`` = 200
+                    | ``250`` = 250
+                    | ``500`` = 500
+                    | ``1000`` = 1000
+                    | ``2000`` = 2000
+                    | ``2500`` = 2500
+                    | ``5000`` = 5000
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]

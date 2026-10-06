@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Static =
     abstract member memoize: Static.memoize with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (memoize: Static.memoize) : Static = nativeOnly
 
 module Static =
 

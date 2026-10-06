@@ -11,7 +11,7 @@ open Glutinum.Types.TypeScript
 [<Erase>]
 type Exports =
     [<Import("eachDay", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member eachDay<'IntervalType> (interval: 'IntervalType, ?options: Options option) : ResizeArray<Date> = nativeOnly
+    static member eachDay<'IntervalType> (interval: 'IntervalType, ?options: Options) : ResizeArray<Date> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

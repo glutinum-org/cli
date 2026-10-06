@@ -9,12 +9,16 @@ open System
 type CreateArtistBioBase =
     abstract member artistID: string with get, set
     abstract member thirdParty: bool option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (artistID: string, ?thirdParty: bool) : CreateArtistBioBase = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Pagination =
     abstract member page: float with get, set
     abstract member pageSize: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (page: float, pageSize: float) : Pagination = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

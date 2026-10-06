@@ -27,16 +27,22 @@ module ReExportedConstraint =
         [<Interface>]
         type Pipeline<'TKey> =
             abstract member key: 'TKey with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (key: 'TKey) : Pipeline<'TKey> = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
         type Sink<'TName> =
             abstract member name: 'TName with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (name: 'TName) : Sink<'TName> = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
         type Store<'TKey> =
             abstract member key: 'TKey with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (key: 'TKey) : Store<'TKey> = nativeOnly
 
         type Sink =
             Sink<U2<string, float>>

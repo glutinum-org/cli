@@ -9,6 +9,8 @@ open System
 type Todo =
     abstract member completed: bool with get, set
     abstract member createdAt: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (completed: bool, createdAt: float) : Todo = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

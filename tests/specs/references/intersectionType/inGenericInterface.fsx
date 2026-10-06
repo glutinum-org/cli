@@ -16,6 +16,8 @@ type KeyFormat =
 type BasePrivateKeyEncodingOptions<'T> =
     abstract member format: 'T with get, set
     abstract member cipher: string option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (format: 'T, ?cipher: string) : BasePrivateKeyEncodingOptions<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

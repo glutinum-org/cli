@@ -90,7 +90,6 @@ let typeName (typ: FSharpType) : string option =
 type TransformState =
     {
         Conditionals: Conditionals.State
-        ParamObjects: ParamObjectCandidate.State
         KeyOfMaps: KeyOfMaps.State
         /// The partial interfaces whose members are being expanded, a cycle is cut
         PartialHeritageBeingExpanded: ResizeArray<string>
@@ -101,7 +100,6 @@ type TransformState =
     static member Create(typeMemory: GlueType list, maxOverloads: int) =
         {
             Conditionals = Conditionals.create typeMemory
-            ParamObjects = ParamObjectCandidate.create typeMemory
             KeyOfMaps = KeyOfMaps.create typeMemory
             PartialHeritageBeingExpanded = ResizeArray()
             MaxOverloads = maxOverloads

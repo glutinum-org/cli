@@ -10,6 +10,8 @@ type Names =
     abstract member ``type``: Names.``type`` with get, set
     abstract member ``1st``: Names.``1st`` with get, set
     abstract member ``x-options``: Names.``x-options`` with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (``type``: Names.``type``, ``1st``: Names.``1st``, ``x-options``: Names.``x-options``) : Names = nativeOnly
 
 module Names =
 

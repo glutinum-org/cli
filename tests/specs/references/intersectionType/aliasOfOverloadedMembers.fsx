@@ -14,6 +14,8 @@ type Instance =
 [<Interface>]
 type Brand =
     abstract member kind: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: string) : Brand = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

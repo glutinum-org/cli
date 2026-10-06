@@ -7928,6 +7928,9 @@ module Web =
     type Algorithm =
         abstract member name: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string) : Algorithm = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AllAcceptedCredentialsOptions =
@@ -8069,6 +8072,19 @@ module Web =
         abstract member samplerate: float option with get, set
         abstract member spatialRendering: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                contentType: string,
+                ?bitrate: float,
+                ?channels: string,
+                ?samplerate: float,
+                ?spatialRendering: bool
+            )
+            : AudioConfiguration
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AudioContextOptions =
@@ -8174,6 +8190,13 @@ module Web =
         abstract member config: Web.AudioDecoderConfig option with get, set
         abstract member supported: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?config: Web.AudioDecoderConfig, ?supported: bool)
+            : AudioDecoderSupport
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AudioEncoderConfig =
@@ -8221,6 +8244,13 @@ module Web =
         abstract member config: Web.AudioEncoderConfig option with get, set
         abstract member supported: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?config: Web.AudioEncoderConfig, ?supported: bool)
+            : AudioEncoderSupport
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AudioNodeOptions =
@@ -8266,6 +8296,13 @@ module Web =
     type AudioTimestamp =
         abstract member contextTime: float option with get, set
         abstract member performanceTime: Web.DOMHighResTimeStamp option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?contextTime: float, ?performanceTime: Web.DOMHighResTimeStamp)
+            : AudioTimestamp
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8350,6 +8387,19 @@ module Web =
         abstract member largeBlob: Web.AuthenticationExtensionsLargeBlobOutputs option with get, set
         abstract member prf: Web.AuthenticationExtensionsPRFOutputs option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?appid: bool,
+                ?credProps: Web.CredentialPropertiesOutput,
+                ?hmacCreateSecret: bool,
+                ?largeBlob: Web.AuthenticationExtensionsLargeBlobOutputs,
+                ?prf: Web.AuthenticationExtensionsPRFOutputs
+            )
+            : AuthenticationExtensionsClientOutputs
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsClientOutputsJSON =
@@ -8357,6 +8407,18 @@ module Web =
         abstract member credProps: Web.CredentialPropertiesOutput option with get, set
         abstract member largeBlob: Web.AuthenticationExtensionsLargeBlobOutputsJSON option with get, set
         abstract member prf: Web.AuthenticationExtensionsPRFOutputsJSON option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?appid: bool,
+                ?credProps: Web.CredentialPropertiesOutput,
+                ?largeBlob: Web.AuthenticationExtensionsLargeBlobOutputsJSON,
+                ?prf: Web.AuthenticationExtensionsPRFOutputsJSON
+            )
+            : AuthenticationExtensionsClientOutputsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8393,12 +8455,26 @@ module Web =
         abstract member supported: bool option with get, set
         abstract member written: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?blob: obj, ?supported: bool, ?written: bool)
+            : AuthenticationExtensionsLargeBlobOutputs
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsLargeBlobOutputsJSON =
         abstract member blob: Web.Base64URLString option with get, set
         abstract member supported: bool option with get, set
         abstract member written: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?blob: Web.Base64URLString, ?supported: bool, ?written: bool)
+            : AuthenticationExtensionsLargeBlobOutputsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8440,11 +8516,25 @@ module Web =
         abstract member enabled: bool option with get, set
         abstract member results: Web.AuthenticationExtensionsPRFValues option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?enabled: bool, ?results: Web.AuthenticationExtensionsPRFValues)
+            : AuthenticationExtensionsPRFOutputs
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticationExtensionsPRFOutputsJSON =
         abstract member enabled: bool option with get, set
         abstract member results: Web.AuthenticationExtensionsPRFValuesJSON option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?enabled: bool, ?results: Web.AuthenticationExtensionsPRFValuesJSON)
+            : AuthenticationExtensionsPRFOutputsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8482,6 +8572,20 @@ module Web =
         abstract member response: Web.AuthenticatorAssertionResponseJSON with get, set
         abstract member ``type``: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                clientExtensionResults: Web.AuthenticationExtensionsClientOutputsJSON,
+                id: string,
+                rawId: Web.Base64URLString,
+                response: Web.AuthenticatorAssertionResponseJSON,
+                ``type``: string,
+                ?authenticatorAttachment: string
+            )
+            : AuthenticationResponseJSON
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AuthenticatorAssertionResponseJSON =
@@ -8489,6 +8593,18 @@ module Web =
         abstract member clientDataJSON: Web.Base64URLString with get, set
         abstract member signature: Web.Base64URLString with get, set
         abstract member userHandle: Web.Base64URLString option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                authenticatorData: Web.Base64URLString,
+                clientDataJSON: Web.Base64URLString,
+                signature: Web.Base64URLString,
+                ?userHandle: Web.Base64URLString
+            )
+            : AuthenticatorAssertionResponseJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8499,6 +8615,20 @@ module Web =
         abstract member publicKey: Web.Base64URLString option with get, set
         abstract member publicKeyAlgorithm: Web.COSEAlgorithmIdentifier with get, set
         abstract member transports: ResizeArray<string> with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                attestationObject: Web.Base64URLString,
+                authenticatorData: Web.Base64URLString,
+                clientDataJSON: Web.Base64URLString,
+                publicKeyAlgorithm: Web.COSEAlgorithmIdentifier,
+                transports: ResizeArray<string>,
+                ?publicKey: Web.Base64URLString
+            )
+            : AuthenticatorAttestationResponseJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8590,6 +8720,9 @@ module Web =
         abstract member name: string with get, set
         abstract member query: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, query: string) : CSSContainerCondition = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CSSMatrixComponentOptions =
@@ -8609,6 +8742,22 @@ module Web =
         abstract member percentHint: Web.CSSNumericBaseType option with get, set
         abstract member resolution: float option with get, set
         abstract member time: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?angle: float,
+                ?flex: float,
+                ?frequency: float,
+                ?length: float,
+                ?percent: float,
+                ?percentHint: Web.CSSNumericBaseType,
+                ?resolution: float,
+                ?time: float
+            )
+            : CSSNumericType
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8741,6 +8890,13 @@ module Web =
         abstract member includeUncontrolled: bool option with get, set
         abstract member ``type``: Web.ClientTypes option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?includeUncontrolled: bool, ?``type``: Web.ClientTypes)
+            : ClientQueryOptions
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ClipboardEventInit =
@@ -8845,6 +9001,97 @@ module Web =
         abstract member progress: float option with get, set
         abstract member startTime: Web.CSSNumberish option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?activeDuration: Web.CSSNumberish,
+                ?currentIteration: float,
+                ?endTime: Web.CSSNumberish,
+                ?localTime: Web.CSSNumberish,
+                ?progress: float,
+                ?startTime: Web.CSSNumberish
+            )
+            : ComputedEffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: float,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?activeDuration: Web.CSSNumberish,
+                ?currentIteration: float,
+                ?endTime: Web.CSSNumberish,
+                ?localTime: Web.CSSNumberish,
+                ?progress: float,
+                ?startTime: Web.CSSNumberish
+            )
+            : ComputedEffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: Web.CSSNumericValue,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?activeDuration: Web.CSSNumberish,
+                ?currentIteration: float,
+                ?endTime: Web.CSSNumberish,
+                ?localTime: Web.CSSNumberish,
+                ?progress: float,
+                ?startTime: Web.CSSNumberish
+            )
+            : ComputedEffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: string,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?activeDuration: Web.CSSNumberish,
+                ?currentIteration: float,
+                ?endTime: Web.CSSNumberish,
+                ?localTime: Web.CSSNumberish,
+                ?progress: float,
+                ?startTime: Web.CSSNumberish
+            )
+            : ComputedEffectTiming
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ComputedKeyframe =
@@ -8855,6 +9102,18 @@ module Web =
 
         [<EmitIndexer>]
         abstract member Item: property: string -> U2<string, float> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                composite: Web.CompositeOperationOrAuto,
+                computedOffset: float,
+                easing: string,
+                ?offset: float
+            )
+            : ComputedKeyframe
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8870,17 +9129,34 @@ module Web =
         abstract member exact: U2<bool, string> option with get, set
         abstract member ideal: U2<bool, string> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?exact: U2<bool, string>, ?ideal: U2<bool, string>)
+            : ConstrainBooleanOrDOMStringParameters
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ConstrainBooleanParameters =
         abstract member exact: bool option with get, set
         abstract member ideal: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?exact: bool, ?ideal: bool) : ConstrainBooleanParameters = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ConstrainDOMStringParameters =
         abstract member exact: U2<string, ResizeArray<string>> option with get, set
         abstract member ideal: U2<string, ResizeArray<string>> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?exact: U2<string, ResizeArray<string>>, ?ideal: U2<string, ResizeArray<string>>)
+            : ConstrainDOMStringParameters
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8889,12 +9165,26 @@ module Web =
         abstract member exact: float option with get, set
         abstract member ideal: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?max: float, ?min: float, ?exact: float, ?ideal: float)
+            : ConstrainDoubleRange
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ConstrainULongRange =
         inherit Web.ULongRange
         abstract member exact: float option with get, set
         abstract member ideal: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?max: float, ?min: float, ?exact: float, ?ideal: float)
+            : ConstrainULongRange
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8981,6 +9271,9 @@ module Web =
         abstract member name: string option with get, set
         abstract member value: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?name: string, ?value: string) : CookieListItem = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CookieStoreDeleteOptions =
@@ -9023,6 +9316,9 @@ module Web =
     type CredentialPropertiesOutput =
         abstract member rk: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?rk: bool) : CredentialPropertiesOutput = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CredentialRequestOptions =
@@ -9046,6 +9342,10 @@ module Web =
     type CryptoKeyPair =
         abstract member privateKey: Web.CryptoKey with get, set
         abstract member publicKey: Web.CryptoKey with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(privateKey: Web.CryptoKey, publicKey: Web.CryptoKey) : CryptoKeyPair =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9358,6 +9658,9 @@ module Web =
         abstract member max: float option with get, set
         abstract member min: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?max: float, ?min: float) : DoubleRange = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type DragEventInit =
@@ -9434,6 +9737,9 @@ module Web =
         inherit Web.KeyAlgorithm
         abstract member namedCurve: Web.NamedCurve with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, namedCurve: Web.NamedCurve) : EcKeyAlgorithm = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type EcKeyGenParams =
@@ -9485,6 +9791,73 @@ module Web =
         abstract member iterationStart: float option with get, set
         abstract member iterations: float option with get, set
         abstract member playbackRate: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : EffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: float,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : EffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: Web.CSSNumericValue,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : EffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                duration: string,
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : EffectTiming
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9634,6 +10007,34 @@ module Web =
         abstract member modifierSymbol: bool option with get, set
         abstract member modifierSymbolLock: bool option with get, set
         abstract member shiftKey: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool
+            )
+            : EventModifierInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9911,6 +10312,13 @@ module Web =
         abstract member offset: Web.GPUSize64 option with get, set
         abstract member size: Web.GPUSize64 option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (buffer: Web.GPUBuffer, ?offset: Web.GPUSize64, ?size: Web.GPUSize64)
+            : GPUBufferBinding
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUBufferBindingLayout =
@@ -9991,6 +10399,9 @@ module Web =
         abstract member b: float with get, set
         abstract member g: float with get, set
         abstract member r: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(a: float, b: float, g: float, r: float) : GPUColorDict = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10171,6 +10582,17 @@ module Web =
         abstract member height: Web.GPUIntegerCoordinate option with get, set
         abstract member width: Web.GPUIntegerCoordinate with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                width: Web.GPUIntegerCoordinate,
+                ?depthOrArrayLayers: Web.GPUIntegerCoordinate,
+                ?height: Web.GPUIntegerCoordinate
+            )
+            : GPUExtent3DDict
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUExternalTextureBindingLayout = interface end
@@ -10233,11 +10655,21 @@ module Web =
     type GPUObjectDescriptorBase =
         abstract member label: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?label: string) : GPUObjectDescriptorBase = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUOrigin2DDict =
         abstract member x: Web.GPUIntegerCoordinate option with get, set
         abstract member y: Web.GPUIntegerCoordinate option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?x: Web.GPUIntegerCoordinate, ?y: Web.GPUIntegerCoordinate)
+            : GPUOrigin2DDict
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10246,11 +10678,36 @@ module Web =
         abstract member y: Web.GPUIntegerCoordinate option with get, set
         abstract member z: Web.GPUIntegerCoordinate option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?x: Web.GPUIntegerCoordinate,
+                ?y: Web.GPUIntegerCoordinate,
+                ?z: Web.GPUIntegerCoordinate
+            )
+            : GPUOrigin3DDict
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUPipelineDescriptorBase =
         inherit Web.GPUObjectDescriptorBase
         abstract member layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode> with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (layout: Web.GPUPipelineLayout, ?label: string)
+            : GPUPipelineDescriptorBase
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (layout: Web.GPUAutoLayoutMode, ?label: string)
+            : GPUPipelineDescriptorBase
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10539,6 +10996,18 @@ module Web =
         abstract member colorFormats: ResizeArray<Web.GPUTextureFormat option> with get, set
         abstract member depthStencilFormat: Web.GPUTextureFormat option with get, set
         abstract member sampleCount: Web.GPUSize32 option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                colorFormats: ResizeArray<Web.GPUTextureFormat option>,
+                ?label: string,
+                ?depthStencilFormat: Web.GPUTextureFormat,
+                ?sampleCount: Web.GPUSize32
+            )
+            : GPURenderPassLayout
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11013,6 +11482,13 @@ module Web =
         abstract member highlight: Web.Highlight option with get, set
         abstract member ranges: ResizeArray<Web.AbstractRange> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?highlight: Web.Highlight, ?ranges: ResizeArray<Web.AbstractRange>)
+            : HighlightHitResult
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type HighlightsFromPointOptions =
@@ -11066,6 +11542,13 @@ module Web =
         abstract member hash: Web.KeyAlgorithm with get, set
         abstract member length: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, hash: Web.KeyAlgorithm, length: float)
+            : HmacKeyAlgorithm
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type HmacKeyGenParams =
@@ -11085,6 +11568,9 @@ module Web =
     type IDBDatabaseInfo =
         abstract member name: string option with get, set
         abstract member version: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?name: string, ?version: float) : IDBDatabaseInfo = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11232,6 +11718,9 @@ module Web =
     type ImageDecodeResult =
         abstract member complete: bool with get, set
         abstract member image: Web.VideoFrame with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(complete: bool, image: Web.VideoFrame) : ImageDecodeResult = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11518,6 +12007,13 @@ module Web =
         [<EmitIndexer>]
         abstract member Item: property: string -> U3<string, float, Web.CSSStyleValue> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?composite: Web.CompositeOperationOrAuto, ?easing: string, ?offset: float)
+            : Keyframe
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type KeyframeAnimationOptions =
@@ -11652,11 +12148,22 @@ module Web =
         abstract member mode: Web.LockMode option with get, set
         abstract member name: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?clientId: string, ?mode: Web.LockMode, ?name: string) : LockInfo =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type LockManagerSnapshot =
         abstract member held: ResizeArray<Web.LockInfo> option with get, set
         abstract member pending: ResizeArray<Web.LockInfo> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?held: ResizeArray<Web.LockInfo>, ?pending: ResizeArray<Web.LockInfo>)
+            : LockManagerSnapshot
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11714,10 +12221,29 @@ module Web =
         inherit Web.MediaCapabilitiesInfo
         abstract member keySystemAccess: Web.MediaKeySystemAccess option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                powerEfficient: bool,
+                smooth: bool,
+                supported: bool,
+                ?keySystemAccess: Web.MediaKeySystemAccess
+            )
+            : MediaCapabilitiesDecodingInfo
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaCapabilitiesEncodingInfo =
         inherit Web.MediaCapabilitiesInfo
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (powerEfficient: bool, smooth: bool, supported: bool)
+            : MediaCapabilitiesEncodingInfo
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11725,6 +12251,13 @@ module Web =
         abstract member powerEfficient: bool with get, set
         abstract member smooth: bool with get, set
         abstract member supported: bool with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (powerEfficient: bool, smooth: bool, supported: bool)
+            : MediaCapabilitiesInfo
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11757,6 +12290,13 @@ module Web =
     type MediaConfiguration =
         abstract member audio: Web.AudioConfiguration option with get, set
         abstract member video: Web.VideoConfiguration option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?audio: Web.AudioConfiguration, ?video: Web.VideoConfiguration)
+            : MediaConfiguration
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11865,12 +12405,34 @@ module Web =
         abstract member sessionTypes: ResizeArray<string> option with get, set
         abstract member videoCapabilities: ResizeArray<Web.MediaKeySystemMediaCapability> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?audioCapabilities: ResizeArray<Web.MediaKeySystemMediaCapability>,
+                ?distinctiveIdentifier: Web.MediaKeysRequirement,
+                ?initDataTypes: ResizeArray<string>,
+                ?label: string,
+                ?persistentState: Web.MediaKeysRequirement,
+                ?sessionTypes: ResizeArray<string>,
+                ?videoCapabilities: ResizeArray<Web.MediaKeySystemMediaCapability>
+            )
+            : MediaKeySystemConfiguration
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaKeySystemMediaCapability =
         abstract member contentType: string option with get, set
         abstract member encryptionScheme: string option with get, set
         abstract member robustness: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?contentType: string, ?encryptionScheme: string, ?robustness: string)
+            : MediaKeySystemMediaCapability
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11965,6 +12527,10 @@ module Web =
         abstract member min: float option with get, set
         abstract member step: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?max: float, ?min: float, ?step: float) : MediaSettingsRange =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaStreamAudioSourceOptions =
@@ -12025,6 +12591,29 @@ module Web =
         abstract member sampleRate: Web.ULongRange option with get, set
         abstract member sampleSize: Web.ULongRange option with get, set
         abstract member width: Web.ULongRange option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?aspectRatio: Web.DoubleRange,
+                ?autoGainControl: ResizeArray<bool>,
+                ?backgroundBlur: ResizeArray<bool>,
+                ?channelCount: Web.ULongRange,
+                ?deviceId: string,
+                ?displaySurface: string,
+                ?echoCancellation: ResizeArray<U2<bool, string>>,
+                ?facingMode: ResizeArray<string>,
+                ?frameRate: Web.DoubleRange,
+                ?groupId: string,
+                ?height: Web.ULongRange,
+                ?noiseSuppression: ResizeArray<bool>,
+                ?sampleRate: Web.ULongRange,
+                ?sampleSize: Web.ULongRange,
+                ?width: Web.ULongRange
+            )
+            : MediaTrackCapabilities
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12120,6 +12709,83 @@ module Web =
         abstract member width: float option with get, set
         abstract member zoom: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?aspectRatio: float,
+                ?autoGainControl: bool,
+                ?backgroundBlur: bool,
+                ?channelCount: float,
+                ?deviceId: string,
+                ?displaySurface: string,
+                ?facingMode: string,
+                ?frameRate: float,
+                ?groupId: string,
+                ?height: float,
+                ?noiseSuppression: bool,
+                ?sampleRate: float,
+                ?sampleSize: float,
+                ?torch: bool,
+                ?whiteBalanceMode: string,
+                ?width: float,
+                ?zoom: float
+            )
+            : MediaTrackSettings
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                echoCancellation: bool,
+                ?aspectRatio: float,
+                ?autoGainControl: bool,
+                ?backgroundBlur: bool,
+                ?channelCount: float,
+                ?deviceId: string,
+                ?displaySurface: string,
+                ?facingMode: string,
+                ?frameRate: float,
+                ?groupId: string,
+                ?height: float,
+                ?noiseSuppression: bool,
+                ?sampleRate: float,
+                ?sampleSize: float,
+                ?torch: bool,
+                ?whiteBalanceMode: string,
+                ?width: float,
+                ?zoom: float
+            )
+            : MediaTrackSettings
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                echoCancellation: string,
+                ?aspectRatio: float,
+                ?autoGainControl: bool,
+                ?backgroundBlur: bool,
+                ?channelCount: float,
+                ?deviceId: string,
+                ?displaySurface: string,
+                ?facingMode: string,
+                ?frameRate: float,
+                ?groupId: string,
+                ?height: float,
+                ?noiseSuppression: bool,
+                ?sampleRate: float,
+                ?sampleSize: float,
+                ?torch: bool,
+                ?whiteBalanceMode: string,
+                ?width: float,
+                ?zoom: float
+            )
+            : MediaTrackSettings
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaTrackSupportedConstraints =
@@ -12138,6 +12804,29 @@ module Web =
         abstract member sampleRate: bool option with get, set
         abstract member sampleSize: bool option with get, set
         abstract member width: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?aspectRatio: bool,
+                ?autoGainControl: bool,
+                ?backgroundBlur: bool,
+                ?channelCount: bool,
+                ?deviceId: bool,
+                ?displaySurface: bool,
+                ?echoCancellation: bool,
+                ?facingMode: bool,
+                ?frameRate: bool,
+                ?groupId: bool,
+                ?height: bool,
+                ?noiseSuppression: bool,
+                ?sampleRate: bool,
+                ?sampleSize: bool,
+                ?width: bool
+            )
+            : MediaTrackSupportedConstraints
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12382,6 +13071,10 @@ module Web =
         abstract member enabled: bool option with get, set
         abstract member headerValue: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?enabled: bool, ?headerValue: string) : NavigationPreloadState =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type NavigationReloadOptions =
@@ -12397,6 +13090,16 @@ module Web =
         abstract member committed: JS.Promise<Web.NavigationHistoryEntry> option with get, set
         abstract member finished: JS.Promise<Web.NavigationHistoryEntry> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?committed: JS.Promise<Web.NavigationHistoryEntry>,
+                ?finished: JS.Promise<Web.NavigationHistoryEntry>
+            )
+            : NavigationResult
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type NavigationUpdateCurrentEntryOptions =
@@ -12410,6 +13113,9 @@ module Web =
     type NotificationAction =
         abstract member action: string with get, set
         abstract member title: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(action: string, title: string) : NotificationAction = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12714,6 +13420,17 @@ module Web =
         abstract member modifiers: ResizeArray<Web.PaymentDetailsModifier> option with get, set
         abstract member shippingOptions: ResizeArray<Web.PaymentShippingOption> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?displayItems: ResizeArray<Web.PaymentItem>,
+                ?modifiers: ResizeArray<Web.PaymentDetailsModifier>,
+                ?shippingOptions: ResizeArray<Web.PaymentShippingOption>
+            )
+            : PaymentDetailsBase
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PaymentDetailsInit =
@@ -12741,6 +13458,18 @@ module Web =
         abstract member data: obj option with get, set
         abstract member supportedMethods: string with get, set
         abstract member total: Web.PaymentItem option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                supportedMethods: string,
+                ?additionalDisplayItems: ResizeArray<Web.PaymentItem>,
+                ?data: obj,
+                ?total: Web.PaymentItem
+            )
+            : PaymentDetailsModifier
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12806,6 +13535,9 @@ module Web =
         abstract member data: obj option with get, set
         abstract member supportedMethods: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(supportedMethods: string, ?data: obj) : PaymentMethodData = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PaymentOptions =
@@ -12847,6 +13579,13 @@ module Web =
         abstract member id: string with get, set
         abstract member label: string with get, set
         abstract member selected: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (amount: Web.PaymentCurrencyAmount, id: string, label: string, ?selected: bool)
+            : PaymentShippingOption
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12970,6 +13709,18 @@ module Web =
         abstract member imageHeight: Web.MediaSettingsRange option with get, set
         abstract member imageWidth: Web.MediaSettingsRange option with get, set
         abstract member redEyeReduction: Web.RedEyeReduction option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?fillLightMode: ResizeArray<Web.FillLightMode>,
+                ?imageHeight: Web.MediaSettingsRange,
+                ?imageWidth: Web.MediaSettingsRange,
+                ?redEyeReduction: Web.RedEyeReduction
+            )
+            : PhotoCapabilities
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13322,6 +14073,9 @@ module Web =
     type PublicKeyCredentialEntity =
         abstract member name: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string) : PublicKeyCredentialEntity = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PublicKeyCredentialParameters =
@@ -13429,6 +14183,17 @@ module Web =
         abstract member expirationTime: Web.EpochTimeStamp option with get, set
         abstract member keys: PushSubscriptionJSON.keys option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?endpoint: string,
+                ?expirationTime: Web.EpochTimeStamp,
+                ?keys: PushSubscriptionJSON.keys
+            )
+            : PushSubscriptionJSON
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type PushSubscriptionOptionsInit =
@@ -13487,6 +14252,9 @@ module Web =
     [<Interface>]
     type RTCCertificateExpiration =
         abstract member expires: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?expires: float) : RTCCertificateExpiration = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13568,11 +14336,28 @@ module Web =
         abstract member algorithm: string option with get, set
         abstract member value: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?algorithm: string, ?value: string) : RTCDtlsFingerprint = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCEncodedAudioFrameMetadata =
         inherit Web.RTCEncodedFrameMetadata
         abstract member sequenceNumber: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?contributingSources: ResizeArray<float>,
+                ?mimeType: string,
+                ?payloadType: float,
+                ?rtpTimestamp: float,
+                ?synchronizationSource: float,
+                ?sequenceNumber: float
+            )
+            : RTCEncodedAudioFrameMetadata
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13582,6 +14367,19 @@ module Web =
         abstract member payloadType: float option with get, set
         abstract member rtpTimestamp: float option with get, set
         abstract member synchronizationSource: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?contributingSources: ResizeArray<float>,
+                ?mimeType: string,
+                ?payloadType: float,
+                ?rtpTimestamp: float,
+                ?synchronizationSource: float
+            )
+            : RTCEncodedFrameMetadata
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13594,6 +14392,26 @@ module Web =
         abstract member temporalIndex: float option with get, set
         abstract member timestamp: float option with get, set
         abstract member width: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?contributingSources: ResizeArray<float>,
+                ?mimeType: string,
+                ?payloadType: float,
+                ?rtpTimestamp: float,
+                ?synchronizationSource: float,
+                ?dependencies: ResizeArray<float>,
+                ?frameId: float,
+                ?height: float,
+                ?spatialIndex: float,
+                ?temporalIndex: float,
+                ?timestamp: float,
+                ?width: float
+            )
+            : RTCEncodedVideoFrameMetadata
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13674,6 +14492,39 @@ module Web =
         abstract member totalRoundTripTime: float option with get, set
         abstract member transportId: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                localCandidateId: string,
+                remoteCandidateId: string,
+                state: Web.RTCStatsIceCandidatePairState,
+                transportId: string,
+                ?availableIncomingBitrate: float,
+                ?availableOutgoingBitrate: float,
+                ?bytesDiscardedOnSend: float,
+                ?bytesReceived: float,
+                ?bytesSent: float,
+                ?consentRequestsSent: float,
+                ?currentRoundTripTime: float,
+                ?lastPacketReceivedTimestamp: Web.DOMHighResTimeStamp,
+                ?lastPacketSentTimestamp: Web.DOMHighResTimeStamp,
+                ?nominated: bool,
+                ?packetsDiscardedOnSend: float,
+                ?packetsReceived: float,
+                ?packetsSent: float,
+                ?requestsReceived: float,
+                ?requestsSent: float,
+                ?responsesReceived: float,
+                ?responsesSent: float,
+                ?totalRoundTripTime: float
+            )
+            : RTCIceCandidatePairStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCIceServer =
@@ -13748,6 +14599,76 @@ module Web =
         abstract member totalSamplesReceived: float option with get, set
         abstract member totalSquaredInterFrameDelay: float option with get, set
         abstract member trackIdentifier: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                kind: string,
+                ssrc: float,
+                trackIdentifier: string,
+                ?codecId: string,
+                ?transportId: string,
+                ?jitter: float,
+                ?packetsLost: float,
+                ?packetsReceived: float,
+                ?audioLevel: float,
+                ?bytesReceived: float,
+                ?concealedSamples: float,
+                ?concealmentEvents: float,
+                ?decoderImplementation: string,
+                ?estimatedPlayoutTimestamp: Web.DOMHighResTimeStamp,
+                ?fecBytesReceived: float,
+                ?fecPacketsDiscarded: float,
+                ?fecPacketsReceived: float,
+                ?fecSsrc: float,
+                ?firCount: float,
+                ?frameHeight: float,
+                ?frameWidth: float,
+                ?framesAssembledFromMultiplePackets: float,
+                ?framesDecoded: float,
+                ?framesDropped: float,
+                ?framesPerSecond: float,
+                ?framesReceived: float,
+                ?framesRendered: float,
+                ?freezeCount: float,
+                ?headerBytesReceived: float,
+                ?insertedSamplesForDeceleration: float,
+                ?jitterBufferDelay: float,
+                ?jitterBufferEmittedCount: float,
+                ?jitterBufferMinimumDelay: float,
+                ?jitterBufferTargetDelay: float,
+                ?keyFramesDecoded: float,
+                ?lastPacketReceivedTimestamp: Web.DOMHighResTimeStamp,
+                ?mid: string,
+                ?nackCount: float,
+                ?packetsDiscarded: float,
+                ?pauseCount: float,
+                ?playoutId: string,
+                ?pliCount: float,
+                ?qpSum: float,
+                ?remoteId: string,
+                ?removedSamplesForAcceleration: float,
+                ?retransmittedBytesReceived: float,
+                ?retransmittedPacketsReceived: float,
+                ?rtxSsrc: float,
+                ?silentConcealedSamples: float,
+                ?totalAssemblyTime: float,
+                ?totalAudioEnergy: float,
+                ?totalDecodeTime: float,
+                ?totalFreezesDuration: float,
+                ?totalInterFrameDelay: float,
+                ?totalPausesDuration: float,
+                ?totalProcessingDelay: float,
+                ?totalSamplesDuration: float,
+                ?totalSamplesReceived: float,
+                ?totalSquaredInterFrameDelay: float
+            )
+            : RTCInboundRtpStreamStats
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13829,6 +14750,51 @@ module Web =
         abstract member totalEncodedBytesTarget: float option with get, set
         abstract member totalPacketSendDelay: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                kind: string,
+                ssrc: float,
+                ?codecId: string,
+                ?transportId: string,
+                ?bytesSent: float,
+                ?packetsSent: float,
+                ?active: bool,
+                ?firCount: float,
+                ?frameHeight: float,
+                ?frameWidth: float,
+                ?framesEncoded: float,
+                ?framesPerSecond: float,
+                ?framesSent: float,
+                ?headerBytesSent: float,
+                ?hugeFramesSent: float,
+                ?keyFramesEncoded: float,
+                ?mediaSourceId: string,
+                ?mid: string,
+                ?nackCount: float,
+                ?pliCount: float,
+                ?qpSum: float,
+                ?qualityLimitationDurations: RTCOutboundRtpStreamStats.qualityLimitationDurations,
+                ?qualityLimitationReason: Web.RTCQualityLimitationReason,
+                ?qualityLimitationResolutionChanges: float,
+                ?remoteId: string,
+                ?retransmittedBytesSent: float,
+                ?retransmittedPacketsSent: float,
+                ?rid: string,
+                ?rtxSsrc: float,
+                ?scalabilityMode: string,
+                ?targetBitrate: float,
+                ?totalEncodeTime: float,
+                ?totalEncodedBytesTarget: float,
+                ?totalPacketSendDelay: float
+            )
+            : RTCOutboundRtpStreamStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCPeerConnectionIceErrorEventInit =
@@ -13876,17 +14842,48 @@ module Web =
         abstract member packetsLost: float option with get, set
         abstract member packetsReceived: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                kind: string,
+                ssrc: float,
+                ?codecId: string,
+                ?transportId: string,
+                ?jitter: float,
+                ?packetsLost: float,
+                ?packetsReceived: float
+            )
+            : RTCReceivedRtpStreamStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtcpParameters =
         abstract member cname: string option with get, set
         abstract member reducedSize: bool option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?cname: string, ?reducedSize: bool) : RTCRtcpParameters = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpCapabilities =
         abstract member codecs: ResizeArray<Web.RTCRtpCodec> with get, set
         abstract member headerExtensions: ResizeArray<Web.RTCRtpHeaderExtensionCapability> with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                codecs: ResizeArray<Web.RTCRtpCodec>,
+                headerExtensions: ResizeArray<Web.RTCRtpHeaderExtensionCapability>
+            )
+            : RTCRtpCapabilities
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13896,16 +14893,39 @@ module Web =
         abstract member mimeType: string with get, set
         abstract member sdpFmtpLine: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (clockRate: float, mimeType: string, ?channels: float, ?sdpFmtpLine: string)
+            : RTCRtpCodec
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpCodecParameters =
         inherit Web.RTCRtpCodec
         abstract member payloadType: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                clockRate: float,
+                mimeType: string,
+                payloadType: float,
+                ?channels: float,
+                ?sdpFmtpLine: string
+            )
+            : RTCRtpCodecParameters
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpCodingParameters =
         abstract member rid: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?rid: string) : RTCRtpCodingParameters = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13914,6 +14934,18 @@ module Web =
         abstract member rtpTimestamp: float with get, set
         abstract member source: float with get, set
         abstract member timestamp: Web.DOMHighResTimeStamp with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                rtpTimestamp: float,
+                source: float,
+                timestamp: Web.DOMHighResTimeStamp,
+                ?audioLevel: float
+            )
+            : RTCRtpContributingSource
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13946,12 +14978,22 @@ module Web =
     type RTCRtpHeaderExtensionCapability =
         abstract member uri: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(uri: string) : RTCRtpHeaderExtensionCapability = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpHeaderExtensionParameters =
         abstract member encrypted: bool option with get, set
         abstract member id: float with get, set
         abstract member uri: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (id: float, uri: string, ?encrypted: bool)
+            : RTCRtpHeaderExtensionParameters
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13960,10 +15002,32 @@ module Web =
         abstract member headerExtensions: ResizeArray<Web.RTCRtpHeaderExtensionParameters> with get, set
         abstract member rtcp: Web.RTCRtcpParameters with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                codecs: ResizeArray<Web.RTCRtpCodecParameters>,
+                headerExtensions: ResizeArray<Web.RTCRtpHeaderExtensionParameters>,
+                rtcp: Web.RTCRtcpParameters
+            )
+            : RTCRtpParameters
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpReceiveParameters =
         inherit Web.RTCRtpParameters
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                codecs: ResizeArray<Web.RTCRtpCodecParameters>,
+                headerExtensions: ResizeArray<Web.RTCRtpHeaderExtensionParameters>,
+                rtcp: Web.RTCRtcpParameters
+            )
+            : RTCRtpReceiveParameters
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13996,10 +15060,37 @@ module Web =
         abstract member ssrc: float with get, set
         abstract member transportId: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                kind: string,
+                ssrc: float,
+                ?codecId: string,
+                ?transportId: string
+            )
+            : RTCRtpStreamStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCRtpSynchronizationSource =
         inherit Web.RTCRtpContributingSource
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                rtpTimestamp: float,
+                source: float,
+                timestamp: Web.DOMHighResTimeStamp,
+                ?audioLevel: float
+            )
+            : RTCRtpSynchronizationSource
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14026,6 +15117,23 @@ module Web =
         abstract member bytesSent: float option with get, set
         abstract member packetsSent: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                kind: string,
+                ssrc: float,
+                ?codecId: string,
+                ?transportId: string,
+                ?bytesSent: float,
+                ?packetsSent: float
+            )
+            : RTCSentRtpStreamStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCSessionDescriptionInit =
@@ -14046,6 +15154,13 @@ module Web =
         abstract member id: string with get, set
         abstract member timestamp: Web.DOMHighResTimeStamp with get, set
         abstract member ``type``: Web.RTCStatsType with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (id: string, timestamp: Web.DOMHighResTimeStamp, ``type``: Web.RTCStatsType)
+            : RTCStats
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14092,6 +15207,33 @@ module Web =
         abstract member srtpCipher: string option with get, set
         abstract member tlsVersion: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                timestamp: Web.DOMHighResTimeStamp,
+                ``type``: Web.RTCStatsType,
+                dtlsState: Web.RTCDtlsTransportState,
+                ?bytesReceived: float,
+                ?bytesSent: float,
+                ?dtlsCipher: string,
+                ?dtlsRole: Web.RTCDtlsRole,
+                ?iceLocalUsernameFragment: string,
+                ?iceRole: Web.RTCIceRole,
+                ?iceState: Web.RTCIceTransportState,
+                ?localCertificateId: string,
+                ?packetsReceived: float,
+                ?packetsSent: float,
+                ?remoteCertificateId: string,
+                ?selectedCandidatePairChanges: float,
+                ?selectedCandidatePairId: string,
+                ?srtpCipher: string,
+                ?tlsVersion: string
+            )
+            : RTCTransportStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ReadableStreamBYOBReaderReadOptions =
@@ -14135,11 +15277,19 @@ module Web =
         abstract member ``done``: bool with get, set
         abstract member value: 'T option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(``done``: bool, ?value: 'T) : ReadableStreamReadDoneResult<'T> =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ReadableStreamReadValueResult<'T> =
         abstract member ``done``: bool with get, set
         abstract member value: 'T with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(``done``: bool, value: 'T) : ReadableStreamReadValueResult<'T> =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14187,12 +15337,30 @@ module Web =
         abstract member response: Web.AuthenticatorAttestationResponseJSON with get, set
         abstract member ``type``: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                clientExtensionResults: Web.AuthenticationExtensionsClientOutputsJSON,
+                id: string,
+                rawId: Web.Base64URLString,
+                response: Web.AuthenticatorAttestationResponseJSON,
+                ``type``: string,
+                ?authenticatorAttachment: string
+            )
+            : RegistrationResponseJSON
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type Report =
         abstract member body: Web.ReportBody option with get, set
         abstract member ``type``: string option with get, set
         abstract member url: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?body: Web.ReportBody, ?``type``: string, ?url: string) : Report =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14332,6 +15500,18 @@ module Web =
         inherit Web.RsaKeyAlgorithm
         abstract member hash: Web.KeyAlgorithm with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                name: string,
+                modulusLength: float,
+                publicExponent: Web.BigInteger,
+                hash: Web.KeyAlgorithm
+            )
+            : RsaHashedKeyAlgorithm
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RsaHashedKeyGenParams =
@@ -14357,12 +15537,26 @@ module Web =
         abstract member modulusLength: float with get, set
         abstract member publicExponent: Web.BigInteger with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, modulusLength: float, publicExponent: Web.BigInteger)
+            : RsaKeyAlgorithm
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RsaKeyGenParams =
         inherit Web.Algorithm
         abstract member modulusLength: float with get, set
         abstract member publicExponent: Web.BigInteger with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, modulusLength: float, publicExponent: Web.BigInteger)
+            : RsaKeyGenParams
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14413,6 +15607,10 @@ module Web =
         abstract member name: string with get, set
         abstract member ``namespace``: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, ?``namespace``: string) : SanitizerAttributeNamespace =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SanitizerConfig =
@@ -14449,6 +15647,10 @@ module Web =
         abstract member name: string with get, set
         abstract member ``namespace``: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, ?``namespace``: string) : SanitizerElementNamespace =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SanitizerElementNamespaceWithAttributes =
@@ -14456,10 +15658,25 @@ module Web =
         abstract member attributes: ResizeArray<Web.SanitizerAttribute> option with get, set
         abstract member removeAttributes: ResizeArray<Web.SanitizerAttribute> option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                name: string,
+                ?``namespace``: string,
+                ?attributes: ResizeArray<Web.SanitizerAttribute>,
+                ?removeAttributes: ResizeArray<Web.SanitizerAttribute>
+            )
+            : SanitizerElementNamespaceWithAttributes
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SanitizerProcessingInstruction =
         abstract member target: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(target: string) : SanitizerProcessingInstruction = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14497,6 +15714,9 @@ module Web =
     [<Interface>]
     type ScrollOptions =
         abstract member behavior: Web.ScrollBehavior option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?behavior: Web.ScrollBehavior) : ScrollOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14570,6 +15790,13 @@ module Web =
         abstract member dataSetReady: bool with get, set
         abstract member ringIndicator: bool with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (clearToSend: bool, dataCarrierDetect: bool, dataSetReady: bool, ringIndicator: bool)
+            : SerialInputSignals
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SerialOptions =
@@ -14632,6 +15859,17 @@ module Web =
         abstract member bluetoothServiceClassId: Web.BluetoothServiceUUID option with get, set
         abstract member usbProductId: float option with get, set
         abstract member usbVendorId: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bluetoothServiceClassId: Web.BluetoothServiceUUID,
+                ?usbProductId: float,
+                ?usbVendorId: float
+            )
+            : SerialPortInfo
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14875,6 +16113,9 @@ module Web =
         abstract member quota: float option with get, set
         abstract member usage: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?quota: float, ?usage: float) : StorageEstimate = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type StorageEventInit =
@@ -15028,6 +16269,9 @@ module Web =
     type TextEncoderEncodeIntoResult =
         abstract member read: float with get, set
         abstract member written: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(read: float, written: float) : TextEncoderEncodeIntoResult = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15244,11 +16488,21 @@ module Web =
         abstract member max: float option with get, set
         abstract member min: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?max: float, ?min: float) : ULongRange = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type URLPatternComponentResult =
         abstract member groups: URLPatternComponentResult.groups with get, set
         abstract member input: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (groups: URLPatternComponentResult.groups, input: string)
+            : URLPatternComponentResult
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15262,6 +16516,23 @@ module Web =
         abstract member protocol: string option with get, set
         abstract member search: string option with get, set
         abstract member username: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?baseURL: string,
+                ?hash: string,
+                ?hostname: string,
+                ?password: string,
+                ?pathname: string,
+                ?port: string,
+                ?protocol: string,
+                ?search: string,
+                ?username: string
+            )
+            : URLPatternInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15283,6 +16554,23 @@ module Web =
         abstract member protocol: Web.URLPatternComponentResult with get, set
         abstract member search: Web.URLPatternComponentResult with get, set
         abstract member username: Web.URLPatternComponentResult with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                hash: Web.URLPatternComponentResult,
+                hostname: Web.URLPatternComponentResult,
+                inputs: ResizeArray<Web.URLPatternInput>,
+                password: Web.URLPatternComponentResult,
+                pathname: Web.URLPatternComponentResult,
+                port: Web.URLPatternComponentResult,
+                protocol: Web.URLPatternComponentResult,
+                search: Web.URLPatternComponentResult,
+                username: Web.URLPatternComponentResult
+            )
+            : URLPatternResult
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15449,6 +16737,24 @@ module Web =
         abstract member transferFunction: Web.TransferFunction option with get, set
         abstract member width: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                bitrate: float,
+                contentType: string,
+                framerate: float,
+                height: float,
+                width: float,
+                ?colorGamut: Web.ColorGamut,
+                ?hasAlphaChannel: bool,
+                ?hdrMetadataType: Web.HdrMetadataType,
+                ?scalabilityMode: string,
+                ?transferFunction: Web.TransferFunction
+            )
+            : VideoConfiguration
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type VideoDecoderConfig =
@@ -15497,6 +16803,13 @@ module Web =
     type VideoDecoderSupport =
         abstract member config: Web.VideoDecoderConfig option with get, set
         abstract member supported: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?config: Web.VideoDecoderConfig, ?supported: bool)
+            : VideoDecoderSupport
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15579,6 +16892,13 @@ module Web =
     type VideoEncoderSupport =
         abstract member config: Web.VideoEncoderConfig option with get, set
         abstract member supported: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?config: Web.VideoEncoderConfig, ?supported: bool)
+            : VideoEncoderSupport
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15832,12 +17152,35 @@ module Web =
         abstract member rttVariation: Web.DOMHighResTimeStamp option with get, set
         abstract member smoothedRtt: Web.DOMHighResTimeStamp option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                datagrams: Web.WebTransportDatagramStats,
+                ?bytesReceived: float,
+                ?minRtt: Web.DOMHighResTimeStamp,
+                ?packetsLost: float,
+                ?packetsReceived: float,
+                ?packetsSent: float,
+                ?rttVariation: Web.DOMHighResTimeStamp,
+                ?smoothedRtt: Web.DOMHighResTimeStamp
+            )
+            : WebTransportConnectionStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type WebTransportDatagramStats =
         abstract member droppedIncoming: float option with get, set
         abstract member expiredOutgoing: float option with get, set
         abstract member lostOutgoing: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?droppedIncoming: float, ?expiredOutgoing: float, ?lostOutgoing: float)
+            : WebTransportDatagramStats
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15890,10 +17233,20 @@ module Web =
         abstract member bytesRead: float option with get, set
         abstract member bytesReceived: float option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bytesRead: float, ?bytesReceived: float)
+            : WebTransportReceiveStreamStats
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type WebTransportSendOptions =
         abstract member sendOrder: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?sendOrder: float) : WebTransportSendOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -15909,6 +17262,13 @@ module Web =
         abstract member bytesAcknowledged: float option with get, set
         abstract member bytesSent: float option with get, set
         abstract member bytesWritten: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bytesAcknowledged: float, ?bytesSent: float, ?bytesWritten: float)
+            : WebTransportSendStreamStats
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -16002,6 +17362,34 @@ module Web =
         abstract member position: float option with get, set
         abstract member size: float option with get, set
         abstract member ``type``: Web.WriteCommandType with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (``type``: Web.WriteCommandType, ?position: float, ?size: float)
+            : WriteParams
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (``type``: Web.WriteCommandType, data: Web.BufferSource, ?position: float, ?size: float)
+            : WriteParams
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (``type``: Web.WriteCommandType, data: Web.Blob, ?position: float, ?size: float)
+            : WriteParams
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (``type``: Web.WriteCommandType, data: string, ?position: float, ?size: float)
+            : WriteParams
+            =
+            nativeOnly
 
     type NodeFilter = U2<(Web.Node -> float), NodeFilter.U2.Case2>
 
@@ -16361,6 +17749,66 @@ module Web =
         /// </summary>
         abstract member role: string option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?ariaActiveDescendantElement: Web.Element,
+                ?ariaAtomic: string,
+                ?ariaAutoComplete: string,
+                ?ariaBrailleLabel: string,
+                ?ariaBrailleRoleDescription: string,
+                ?ariaBusy: string,
+                ?ariaChecked: string,
+                ?ariaColCount: string,
+                ?ariaColIndex: string,
+                ?ariaColIndexText: string,
+                ?ariaColSpan: string,
+                ?ariaControlsElements: ReadonlyArray<Web.Element>,
+                ?ariaCurrent: string,
+                ?ariaDescribedByElements: ReadonlyArray<Web.Element>,
+                ?ariaDescription: string,
+                ?ariaDetailsElements: ReadonlyArray<Web.Element>,
+                ?ariaDisabled: string,
+                ?ariaErrorMessageElements: ReadonlyArray<Web.Element>,
+                ?ariaExpanded: string,
+                ?ariaFlowToElements: ReadonlyArray<Web.Element>,
+                ?ariaHasPopup: string,
+                ?ariaHidden: string,
+                ?ariaInvalid: string,
+                ?ariaKeyShortcuts: string,
+                ?ariaLabel: string,
+                ?ariaLabelledByElements: ReadonlyArray<Web.Element>,
+                ?ariaLevel: string,
+                ?ariaLive: string,
+                ?ariaModal: string,
+                ?ariaMultiLine: string,
+                ?ariaMultiSelectable: string,
+                ?ariaOrientation: string,
+                ?ariaOwnsElements: ReadonlyArray<Web.Element>,
+                ?ariaPlaceholder: string,
+                ?ariaPosInSet: string,
+                ?ariaPressed: string,
+                ?ariaReadOnly: string,
+                ?ariaRelevant: string,
+                ?ariaRequired: string,
+                ?ariaRoleDescription: string,
+                ?ariaRowCount: string,
+                ?ariaRowIndex: string,
+                ?ariaRowIndexText: string,
+                ?ariaRowSpan: string,
+                ?ariaSelected: string,
+                ?ariaSetSize: string,
+                ?ariaSort: string,
+                ?ariaValueMax: string,
+                ?ariaValueMin: string,
+                ?ariaValueNow: string,
+                ?ariaValueText: string,
+                ?role: string
+            )
+            : ARIAMixin
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>AbortController</c>** interface represents a controller object that allows you to abort one or more Web requests as and when desired.
     ///
@@ -16386,6 +17834,9 @@ module Web =
     [<Interface>]
     type AbortSignalEventMap =
         abstract member abort: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(abort: Web.Event) : AbortSignalEventMap = nativeOnly
 
     module AbortSignalEventMap =
 
@@ -16626,10 +18077,26 @@ module Web =
         /// </summary>
         abstract member startOffset: float with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                collapsed: bool,
+                endContainer: Web.Node,
+                endOffset: float,
+                startContainer: Web.Node,
+                startOffset: float
+            )
+            : AbstractRange
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type AbstractWorkerEventMap =
         abstract member error: Web.ErrorEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(error: Web.ErrorEvent) : AbstractWorkerEventMap = nativeOnly
 
     module AbstractWorkerEventMap =
 
@@ -16832,6 +18299,17 @@ module Web =
         abstract member cancel: Web.AnimationPlaybackEvent with get, set
         abstract member finish: Web.AnimationPlaybackEvent with get, set
         abstract member remove: Web.AnimationPlaybackEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cancel: Web.AnimationPlaybackEvent,
+                finish: Web.AnimationPlaybackEvent,
+                remove: Web.AnimationPlaybackEvent
+            )
+            : AnimationEventMap
+            =
+            nativeOnly
 
     module AnimationEventMap =
 
@@ -17908,6 +19386,9 @@ module Web =
     type AudioDecoderEventMap =
         abstract member dequeue: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(dequeue: Web.Event) : AudioDecoderEventMap = nativeOnly
+
     module AudioDecoderEventMap =
 
         [<AllowNullLiteral>]
@@ -18153,6 +19634,9 @@ module Web =
     [<Interface>]
     type AudioEncoderEventMap =
         abstract member dequeue: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(dequeue: Web.Event) : AudioEncoderEventMap = nativeOnly
 
     module AudioEncoderEventMap =
 
@@ -18713,6 +20197,9 @@ module Web =
     type AudioScheduledSourceNodeEventMap =
         abstract member ended: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(ended: Web.Event) : AudioScheduledSourceNodeEventMap = nativeOnly
+
     module AudioScheduledSourceNodeEventMap =
 
         [<AllowNullLiteral>]
@@ -18926,6 +20413,9 @@ module Web =
     [<Interface>]
     type AudioWorkletNodeEventMap =
         abstract member processorerror: Web.ErrorEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(processorerror: Web.ErrorEvent) : AudioWorkletNodeEventMap = nativeOnly
 
     module AudioWorkletNodeEventMap =
 
@@ -19151,6 +20641,13 @@ module Web =
         /// </summary>
         abstract member userHandle: obj option with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (clientDataJSON: obj, authenticatorData: obj, signature: obj, ?userHandle: obj)
+            : AuthenticatorAssertionResponse
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>AuthenticatorAttestationResponse</c>** interface of the Web Authentication API is the result of a WebAuthn credential registration. It contains information about the credential that the server needs to perform WebAuthn assertions, such as its credential ID and public key.
     /// Available only in secure contexts.
@@ -19208,6 +20705,9 @@ module Web =
         /// </summary>
         abstract member clientDataJSON: obj with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(clientDataJSON: obj) : AuthenticatorResponse = nativeOnly
+
     /// <summary>
     /// The **<c>BarProp</c>** interface of the Document Object Model represents the web browser user interface elements that are exposed to scripts in web pages. Each of the following interface elements are represented by a BarProp object.
     ///
@@ -19223,10 +20723,16 @@ module Web =
         /// </summary>
         abstract member visible: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(visible: bool) : BarProp = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type BaseAudioContextEventMap =
         abstract member statechange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(statechange: Web.Event) : BaseAudioContextEventMap = nativeOnly
 
     module BaseAudioContextEventMap =
 
@@ -19841,6 +21347,13 @@ module Web =
         abstract member message: Web.MessageEvent with get, set
         abstract member messageerror: Web.MessageEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (message: Web.MessageEvent, messageerror: Web.MessageEvent)
+            : BroadcastChannelEventMap
+            =
+            nativeOnly
+
     module BroadcastChannelEventMap =
 
         [<AllowNullLiteral>]
@@ -20067,6 +21580,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ByteLengthQueuingStrategy/size)
         /// </summary>
         abstract member size: chunk: obj -> float
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (highWaterMark: float, size: Web.QueuingStrategySize<obj>)
+            : ByteLengthQueuingStrategy
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>CDATASection</c>** interface represents a CDATA section that can be used within XML to include extended portions of unescaped text. When inside a CDATA section, the symbols < and & don't need escaping as they normally do.
@@ -20358,6 +21878,42 @@ module Web =
         /// </summary>
         abstract member system: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                additiveSymbols: string,
+                fallback: string,
+                name: string,
+                negative: string,
+                pad: string,
+                prefix: string,
+                range: string,
+                speakAs: string,
+                suffix: string,
+                symbols: string,
+                system: string,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSCounterStyleRule
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>CSSFontFaceDescriptors</c>** interface represents a CSS declaration block for an
     /// </summary>
@@ -20409,6 +21965,32 @@ module Web =
         /// </summary>
         abstract member fontFamily: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                fontFamily: string,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSFontFeatureValuesRule
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>CSSFontPaletteValuesRule</c>** interface represents an
     /// </summary>
@@ -20438,6 +22020,35 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSFontPaletteValuesRule/overrideColors)
         /// </summary>
         abstract member overrideColors: string with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                basePalette: string,
+                fontFamily: string,
+                name: string,
+                overrideColors: string,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSFontPaletteValuesRule
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>CSSGroupingRule</c>** interface of the CSS Object Model represents any CSS at-rule that contains other rules nested within it.
@@ -20614,6 +22225,32 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSLayerStatementRule/nameList)
         /// </summary>
         abstract member nameList: ReadonlyArray<string> with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                nameList: ReadonlyArray<string>,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSLayerStatementRule
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>CSSMathClamp</c>** interface of the CSS Typed Object Model API represents the CSS clamp() function. It inherits properties and methods from its parent CSSNumericValue.
@@ -20802,6 +22439,33 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSNamespaceRule/prefix)
         /// </summary>
         abstract member prefix: string with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                namespaceURI: string,
+                prefix: string,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSNamespaceRule
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>CSSNestedDeclarations</c>** interface of the CSS Rule API is used to group nested CSSRules.
@@ -21325,6 +22989,35 @@ module Web =
         /// </summary>
         abstract member syntax: string with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                inherits: bool,
+                name: string,
+                syntax: string,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet,
+                ?initialValue: string
+            )
+            : CSSPropertyRule
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>CSSRotate</c>** interface of the CSS Typed Object Model API represents the rotate value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
     ///
@@ -21405,6 +23098,31 @@ module Web =
         abstract member SUPPORTS_RULE: int with get
         abstract member COUNTER_STYLE_RULE: int with get
         abstract member FONT_FEATURE_VALUES_RULE: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSRule
+            =
+            nativeOnly
 
     /// <summary>
     /// A **<c>CSSRuleList</c>** represents an ordered collection of read-only CSSRule objects.
@@ -25047,6 +26765,13 @@ module Web =
         /// </summary>
         abstract member variable: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (variable: string, ?fallback: Web.CSSUnparsedValue)
+            : CSSVariableReferenceValue
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>CSSViewTransitionRule</c>** interface represents a CSS
     /// </summary>
@@ -25062,6 +26787,33 @@ module Web =
         /// The **<c>types</c>** read-only property of the CSSViewTransitionRule interface returns an array containing the associated
         /// </summary>
         abstract member types: ReadonlyArray<string> with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                cssText: string,
+                ``type``: float,
+                STYLE_RULE: int,
+                CHARSET_RULE: int,
+                IMPORT_RULE: int,
+                MEDIA_RULE: int,
+                FONT_FACE_RULE: int,
+                PAGE_RULE: int,
+                MARGIN_RULE: int,
+                NAMESPACE_RULE: int,
+                KEYFRAMES_RULE: int,
+                KEYFRAME_RULE: int,
+                SUPPORTS_RULE: int,
+                COUNTER_STYLE_RULE: int,
+                FONT_FEATURE_VALUES_RULE: int,
+                navigation: string,
+                types: ReadonlyArray<string>,
+                ?parentRule: Web.CSSRule,
+                ?parentStyleSheet: Web.CSSStyleSheet
+            )
+            : CSSViewTransitionRule
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>Cache</c>** interface provides a persistent storage mechanism for Request / Response object pairs that are cached in long lived memory. How long a Cache object lives is browser dependent, but a single origin's scripts can typically rely on the presence of a previously populated Cache object. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
@@ -25533,6 +27285,13 @@ module Web =
         /// </summary>
         abstract member globalCompositeOperation: Web.GlobalCompositeOperation with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (globalAlpha: float, globalCompositeOperation: Web.GlobalCompositeOperation)
+            : CanvasCompositing
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CanvasDrawImage =
@@ -25875,6 +27634,9 @@ module Web =
         /// </summary>
         abstract member filter: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(filter: string) : CanvasFilters = nativeOnly
+
     /// <summary>
     /// The **<c>CanvasGradient</c>** interface represents an opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient(), CanvasRenderingContext2D.createConicGradient() or CanvasRenderingContext2D.createRadialGradient().
     ///
@@ -25940,6 +27702,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/imageSmoothingQuality)
         /// </summary>
         abstract member imageSmoothingQuality: Web.ImageSmoothingQuality with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (imageSmoothingEnabled: bool, imageSmoothingQuality: Web.ImageSmoothingQuality)
+            : CanvasImageSmoothing
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -26162,6 +27931,13 @@ module Web =
         /// </summary>
         abstract member shadowOffsetY: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (shadowBlur: float, shadowColor: string, shadowOffsetX: float, shadowOffsetY: float)
+            : CanvasShadowStyles
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type CanvasState =
@@ -26245,6 +28021,25 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/wordSpacing)
         /// </summary>
         abstract member wordSpacing: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                direction: Web.CanvasDirection,
+                font: string,
+                fontKerning: Web.CanvasFontKerning,
+                fontStretch: Web.CanvasFontStretch,
+                fontVariantCaps: Web.CanvasFontVariantCaps,
+                lang: string,
+                letterSpacing: string,
+                textAlign: Web.CanvasTextAlign,
+                textBaseline: Web.CanvasTextBaseline,
+                textRendering: Web.CanvasTextRendering,
+                wordSpacing: string
+            )
+            : CanvasTextDrawingStyles
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -26565,6 +28360,10 @@ module Web =
         abstract member cancel: Web.Event with get, set
         abstract member close: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(cancel: Web.Event, close: Web.Event) : CloseWatcherEventMap =
+            nativeOnly
+
     module CloseWatcherEventMap =
 
         [<AllowNullLiteral>]
@@ -26850,6 +28649,16 @@ module Web =
         /// </summary>
         abstract member writable: Web.WritableStream<Web.BufferSource> with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                readable: Web.ReadableStream<JS.Uint8Array>,
+                writable: Web.WritableStream<Web.BufferSource>
+            )
+            : CompressionStream
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ConstantSourceNode</c>** interface—part of the Web Audio API—represents an audio source (based upon AudioScheduledSourceNode) whose output is single unchanging value. This makes it useful for cases in which you need a constant value coming in from an audio source. In addition, it can be used like a constructible AudioParam by automating the value of its offset or by connecting another node to it; see Controlling multiple parameters with ConstantSourceNode.
     ///
@@ -27091,6 +28900,9 @@ module Web =
     [<Interface>]
     type CookieStoreEventMap =
         abstract member change: Web.CookieChangeEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(change: Web.CookieChangeEvent) : CookieStoreEventMap = nativeOnly
 
     module CookieStoreEventMap =
 
@@ -27393,6 +29205,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CountQueuingStrategy/size)
         /// </summary>
         abstract member size: chunk: obj -> float
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (highWaterMark: float, size: Web.QueuingStrategySize)
+            : CountQueuingStrategy
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>Credential</c>** interface of the Credential Management API provides information about an entity (usually a user) normally as a prerequisite to a trust decision.
@@ -28661,6 +30480,16 @@ module Web =
         /// </summary>
         abstract member writable: Web.WritableStream<Web.BufferSource> with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                readable: Web.ReadableStream<JS.Uint8Array>,
+                writable: Web.WritableStream<Web.BufferSource>
+            )
+            : DecompressionStream
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>DelayNode</c>** interface represents a delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output.
     ///
@@ -28740,6 +30569,10 @@ module Web =
         /// </summary>
         abstract member z: float option with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?x: float, ?y: float, ?z: float) : DeviceMotionEventAcceleration =
+            nativeOnly
+
     /// <summary>
     /// A **<c>DeviceMotionEventRotationRate</c>** interface of the Device Orientation Events provides information about the rate at which the device is rotating around all three axes.
     /// Available only in secure contexts.
@@ -28767,6 +30600,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DeviceMotionEventRotationRate/gamma)
         /// </summary>
         abstract member gamma: float option with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?alpha: float, ?beta: float, ?gamma: float)
+            : DeviceMotionEventRotationRate
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>DeviceOrientationEvent</c>** interface of the Device Orientation Events provides web developers with information from the physical orientation of the device running the web page.
@@ -28825,6 +30665,127 @@ module Web =
         abstract member pointerlockerror: Web.Event with get, set
         abstract member readystatechange: Web.Event with get, set
         abstract member visibilitychange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                DOMContentLoaded: Web.Event,
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                pointerlockchange: Web.Event,
+                pointerlockerror: Web.Event,
+                readystatechange: Web.Event,
+                visibilitychange: Web.Event
+            )
+            : DocumentEventMap
+            =
+            nativeOnly
 
     module DocumentEventMap =
 
@@ -30660,6 +32621,13 @@ module Web =
     type DocumentPictureInPictureEventMap =
         abstract member enter: Web.DocumentPictureInPictureEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (enter: Web.DocumentPictureInPictureEvent)
+            : DocumentPictureInPictureEventMap
+            =
+            nativeOnly
+
     module DocumentPictureInPictureEventMap =
 
         [<AllowNullLiteral>]
@@ -30888,6 +32856,13 @@ module Web =
     type DocumentTimeline =
         inherit Web.AnimationTimeline
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?currentTime: Web.CSSNumberish, ?duration: Web.CSSNumberish)
+            : DocumentTimeline
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>DocumentType</c>** interface represents a Node containing a doctype.
     ///
@@ -31000,6 +32975,9 @@ module Web =
         abstract member MIN_EXT: int with get
         abstract member MAX_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(MIN_EXT: int, MAX_EXT: int) : EXT_blend_minmax = nativeOnly
+
     /// <summary>
     /// The **<c>EXT_color_buffer_float</c>** extension is part of WebGL and adds the ability to render a variety of floating point formats.
     ///
@@ -31021,6 +32999,18 @@ module Web =
         abstract member RGB16F_EXT: int with get
         abstract member FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: int with get
         abstract member UNSIGNED_NORMALIZED_EXT: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                RGBA16F_EXT: int,
+                RGB16F_EXT: int,
+                FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: int,
+                UNSIGNED_NORMALIZED_EXT: int
+            )
+            : EXT_color_buffer_half_float
+            =
+            nativeOnly
 
     /// <summary>
     /// The WebGL API's **<c>EXT_float_blend</c>** extension allows blending and draw buffers with 32-bit floating-point components.
@@ -31053,6 +33043,18 @@ module Web =
         abstract member SRGB8_ALPHA8_EXT: int with get
         abstract member FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                SRGB_EXT: int,
+                SRGB_ALPHA_EXT: int,
+                SRGB8_ALPHA8_EXT: int,
+                FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT: int
+            )
+            : EXT_sRGB
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>EXT_shader_texture_lod</c>** extension is part of the WebGL API and adds additional texture functions to the OpenGL ES Shading Language which provide the shader writer with explicit control of LOD (Level of detail).
     ///
@@ -31075,6 +33077,18 @@ module Web =
         abstract member COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT: int with get
         abstract member COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                COMPRESSED_RGBA_BPTC_UNORM_EXT: int,
+                COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT: int,
+                COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT: int,
+                COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT: int
+            )
+            : EXT_texture_compression_bptc
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>EXT_texture_compression_rgtc</c>** extension is part of the WebGL API and exposes 4 RGTC compressed texture formats. RGTC is a block-based texture compression format suited for unsigned and signed red and red-green textures (Red-Green Texture Compression).
     ///
@@ -31088,6 +33102,18 @@ module Web =
         abstract member COMPRESSED_RED_GREEN_RGTC2_EXT: int with get
         abstract member COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                COMPRESSED_RED_RGTC1_EXT: int,
+                COMPRESSED_SIGNED_RED_RGTC1_EXT: int,
+                COMPRESSED_RED_GREEN_RGTC2_EXT: int,
+                COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT: int
+            )
+            : EXT_texture_compression_rgtc
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>EXT_texture_filter_anisotropic</c>** extension is part of the WebGL API and exposes two constants for anisotropic filtering (AF).
     ///
@@ -31098,6 +33124,13 @@ module Web =
     type EXT_texture_filter_anisotropic =
         abstract member TEXTURE_MAX_ANISOTROPY_EXT: int with get
         abstract member MAX_TEXTURE_MAX_ANISOTROPY_EXT: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (TEXTURE_MAX_ANISOTROPY_EXT: int, MAX_TEXTURE_MAX_ANISOTROPY_EXT: int)
+            : EXT_texture_filter_anisotropic
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>EXT_texture_norm16</c>** extension is part of the WebGL API and provides a set of new 16-bit signed normalized and unsigned normalized formats (fixed-point texture, renderbuffer and texture buffer).
@@ -31116,11 +33149,34 @@ module Web =
         abstract member RGB16_SNORM_EXT: int with get
         abstract member RGBA16_SNORM_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                R16_EXT: int,
+                RG16_EXT: int,
+                RGB16_EXT: int,
+                RGBA16_EXT: int,
+                R16_SNORM_EXT: int,
+                RG16_SNORM_EXT: int,
+                RGB16_SNORM_EXT: int,
+                RGBA16_SNORM_EXT: int
+            )
+            : EXT_texture_norm16
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ElementEventMap =
         abstract member fullscreenchange: Web.Event with get, set
         abstract member fullscreenerror: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (fullscreenchange: Web.Event, fullscreenerror: Web.Event)
+            : ElementEventMap
+            =
+            nativeOnly
 
     module ElementEventMap =
 
@@ -31896,6 +33952,18 @@ module Web =
         /// </summary>
         abstract member isContentEditable: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                contentEditable: string,
+                enterKeyHint: string,
+                inputMode: string,
+                isContentEditable: bool
+            )
+            : ElementContentEditable
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ElementInternals</c>** interface of the Document Object Model gives web developers a way to allow custom elements to fully participate in HTML forms. It provides utilities for working with these elements in the same way you would work with any standard HTML form element, and also exposes the Accessibility Object Model to the element.
     ///
@@ -32305,6 +34373,13 @@ module Web =
         abstract member error: Web.Event with get, set
         abstract member message: Web.MessageEvent with get, set
         abstract member ``open``: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.Event, message: Web.MessageEvent, ``open``: Web.Event)
+            : EventSourceEventMap
+            =
+            nativeOnly
 
     module EventSourceEventMap =
 
@@ -32779,6 +34854,20 @@ module Web =
         abstract member loadstart: Web.ProgressEvent<Web.FileReader> with get, set
         abstract member progress: Web.ProgressEvent<Web.FileReader> with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.ProgressEvent<Web.FileReader>,
+                error: Web.ProgressEvent<Web.FileReader>,
+                load: Web.ProgressEvent<Web.FileReader>,
+                loadend: Web.ProgressEvent<Web.FileReader>,
+                loadstart: Web.ProgressEvent<Web.FileReader>,
+                progress: Web.ProgressEvent<Web.FileReader>
+            )
+            : FileReaderEventMap
+            =
+            nativeOnly
+
     module FileReaderEventMap =
 
         [<AllowNullLiteral>]
@@ -33068,6 +35157,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystem/root)
         /// </summary>
         abstract member root: Web.FileSystemDirectoryEntry with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, root: Web.FileSystemDirectoryEntry) : FileSystem =
+            nativeOnly
 
     /// <summary>
     /// The **<c>FileSystemDirectoryEntry</c>** interface of the File and Directory Entries API represents a directory in a file system. It provides methods which make it possible to access and manipulate the files in a directory, as well as to access the entries within the directory.
@@ -33487,6 +35580,17 @@ module Web =
         abstract member loadingdone: Web.FontFaceSetLoadEvent with get, set
         abstract member loadingerror: Web.FontFaceSetLoadEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                loading: Web.FontFaceSetLoadEvent,
+                loadingdone: Web.FontFaceSetLoadEvent,
+                loadingerror: Web.FontFaceSetLoadEvent
+            )
+            : FontFaceSetEventMap
+            =
+            nativeOnly
+
     module FontFaceSetEventMap =
 
         [<AllowNullLiteral>]
@@ -33732,6 +35836,9 @@ module Web =
         /// </summary>
         abstract member fonts: Web.FontFaceSet with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(fonts: Web.FontFaceSet) : FontFaceSource = nativeOnly
+
     /// <summary>
     /// The **<c>FormData</c>** interface provides a way to construct a set of key/value pairs representing form fields and their values, which can be sent using the fetch(), XMLHttpRequest.send() or navigator.sendBeacon() methods. It uses the same format a form would use if the encoding type were set to "multipart/form-data".
     ///
@@ -33958,6 +36065,21 @@ module Web =
         /// </summary>
         abstract member vendor: string with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                architecture: string,
+                description: string,
+                device: string,
+                isFallbackAdapter: bool,
+                subgroupMaxSize: float,
+                subgroupMinSize: float,
+                vendor: string
+            )
+            : GPUAdapterInfo
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>GPUBindGroup</c>** interface of the WebGPU API is based on a GPUBindGroupLayout and defines a set of resources to be bound together in a group and how those resources are used in shader stages.
     /// Available only in secure contexts.
@@ -34125,6 +36247,9 @@ module Web =
     [<Interface>]
     type GPUCommandBuffer =
         inherit Web.GPUObjectBase
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUCommandBuffer = nativeOnly
 
     /// <summary>
     /// The **<c>GPUCommandEncoder</c>** interface of the WebGPU API represents an encoder that collects a sequence of GPU commands to be issued to the GPU.
@@ -34351,6 +36476,13 @@ module Web =
         /// </summary>
         abstract member messages: ReadonlyArray<Web.GPUCompilationMessage> with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (messages: ReadonlyArray<Web.GPUCompilationMessage>)
+            : GPUCompilationInfo
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>GPUCompilationMessage</c>** interface of the WebGPU API represents a single informational, warning, or error message generated by the GPU shader module compiler.
     /// Available only in secure contexts.
@@ -34396,6 +36528,20 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCompilationMessage/type)
         /// </summary>
         abstract member ``type``: Web.GPUCompilationMessageType with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                length: float,
+                lineNum: float,
+                linePos: float,
+                message: string,
+                offset: float,
+                ``type``: Web.GPUCompilationMessageType
+            )
+            : GPUCompilationMessage
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>GPUComputePassEncoder</c>** interface of the WebGPU API encodes commands related to controlling the compute shader stage, as issued by a GPUComputePipeline. It forms part of the overall encoding activity of a GPUCommandEncoder.
@@ -34474,6 +36620,10 @@ module Web =
     [<Interface>]
     type GPUDeviceEventMap =
         abstract member uncapturederror: Web.GPUUncapturedErrorEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(uncapturederror: Web.GPUUncapturedErrorEvent) : GPUDeviceEventMap =
+            nativeOnly
 
     module GPUDeviceEventMap =
 
@@ -34842,6 +36992,10 @@ module Web =
         /// </summary>
         abstract member reason: Web.GPUDeviceLostReason with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(message: string, reason: Web.GPUDeviceLostReason) : GPUDeviceLostInfo =
+            nativeOnly
+
     /// <summary>
     /// The **<c>GPUError</c>** interface of the WebGPU API is the base interface for errors surfaced by GPUDevice.popErrorScope and the uncapturederror event.
     /// Available only in secure contexts.
@@ -34872,6 +37026,9 @@ module Web =
     type GPUExternalTexture =
         inherit Web.GPUObjectBase
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUExternalTexture = nativeOnly
+
     /// <summary>
     /// The **<c>GPUInternalError</c>** interface of the WebGPU API describes an application error indicating that an operation failed for a system or implementation-specific reason, even when all validation requirements were satisfied.
     /// Available only in secure contexts.
@@ -34883,6 +37040,9 @@ module Web =
     type GPUInternalError =
         inherit Web.GPUError
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(message: string) : GPUInternalError = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUObjectBase =
@@ -34890,6 +37050,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUBindGroup/label)
         /// </summary>
         abstract member label: string with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUObjectBase = nativeOnly
 
     /// <summary>
     /// The **<c>GPUOutOfMemoryError</c>** interface of the WebGPU API describes an out-of-memory (oom) error indicating that there was not enough free memory to complete the requested operation.
@@ -34901,6 +37064,9 @@ module Web =
     [<Interface>]
     type GPUOutOfMemoryError =
         inherit Web.GPUError
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(message: string) : GPUOutOfMemoryError = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -34937,6 +37103,9 @@ module Web =
     [<Interface>]
     type GPUPipelineLayout =
         inherit Web.GPUObjectBase
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUPipelineLayout = nativeOnly
 
     /// <summary>
     /// The **<c>GPUQuerySet</c>** interface of the WebGPU API is used to record the results of queries on passes, such as occlusion or timestamp queries.
@@ -35113,6 +37282,9 @@ module Web =
     [<Interface>]
     type GPURenderBundle =
         inherit Web.GPUObjectBase
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPURenderBundle = nativeOnly
 
     /// <summary>
     /// The **<c>GPURenderBundleEncoder</c>** interface of the WebGPU API is used to pre-record bundles of commands.
@@ -35315,6 +37487,9 @@ module Web =
     type GPUSampler =
         inherit Web.GPUObjectBase
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(label: string) : GPUSampler = nativeOnly
+
     /// <summary>
     /// The **<c>GPUShaderModule</c>** interface of the WebGPU API represents an internal shader module object, a container for WGSL shader code that can be submitted to the GPU for execution by a pipeline.
     /// Available only in secure contexts.
@@ -35482,6 +37657,49 @@ module Web =
         /// </summary>
         abstract member minUniformBufferOffsetAlignment: float with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                maxBindGroups: float,
+                maxBindGroupsPlusVertexBuffers: float,
+                maxBindingsPerBindGroup: float,
+                maxBufferSize: float,
+                maxColorAttachmentBytesPerSample: float,
+                maxColorAttachments: float,
+                maxComputeInvocationsPerWorkgroup: float,
+                maxComputeWorkgroupSizeX: float,
+                maxComputeWorkgroupSizeY: float,
+                maxComputeWorkgroupSizeZ: float,
+                maxComputeWorkgroupStorageSize: float,
+                maxComputeWorkgroupsPerDimension: float,
+                maxDynamicStorageBuffersPerPipelineLayout: float,
+                maxDynamicUniformBuffersPerPipelineLayout: float,
+                maxInterStageShaderVariables: float,
+                maxSampledTexturesPerShaderStage: float,
+                maxSamplersPerShaderStage: float,
+                maxStorageBufferBindingSize: float,
+                maxStorageBuffersInFragmentStage: float,
+                maxStorageBuffersInVertexStage: float,
+                maxStorageBuffersPerShaderStage: float,
+                maxStorageTexturesInFragmentStage: float,
+                maxStorageTexturesInVertexStage: float,
+                maxStorageTexturesPerShaderStage: float,
+                maxTextureArrayLayers: float,
+                maxTextureDimension1D: float,
+                maxTextureDimension2D: float,
+                maxTextureDimension3D: float,
+                maxUniformBufferBindingSize: float,
+                maxUniformBuffersPerShaderStage: float,
+                maxVertexAttributes: float,
+                maxVertexBufferArrayStride: float,
+                maxVertexBuffers: float,
+                minStorageBufferOffsetAlignment: float,
+                minUniformBufferOffsetAlignment: float
+            )
+            : GPUSupportedLimits
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>GPUTexture</c>** interface of the WebGPU API represents a container used to store 1D, 2D, or 3D arrays of data, such as images, to use in GPU rendering operations.
     /// Available only in secure contexts.
@@ -35594,6 +37812,9 @@ module Web =
     [<Interface>]
     type GPUValidationError =
         inherit Web.GPUError
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(message: string) : GPUValidationError = nativeOnly
 
     /// <summary>
     /// The **<c>GainNode</c>** interface represents a change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels.
@@ -35766,6 +37987,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CompressionStream/writable)
         /// </summary>
         abstract member writable: Web.WritableStream with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (readable: Web.ReadableStream, writable: Web.WritableStream)
+            : GenericTransformStream
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>Geolocation</c>** interface represents an object able to obtain the position of the device programmatically. It gives Web content access to the location of the device. This allows a website or app to offer customized results based on the user's location.
@@ -36036,6 +38264,120 @@ module Web =
         abstract member webkitanimationstart: Web.Event with get, set
         abstract member webkittransitionend: Web.Event with get, set
         abstract member wheel: Web.WheelEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent
+            )
+            : GlobalEventHandlersEventMap
+            =
+            nativeOnly
 
     module GlobalEventHandlersEventMap =
 
@@ -37833,6 +40175,142 @@ module Web =
     type HTMLBodyElementEventMap =
         inherit Web.HTMLElementEventMap
         inherit Web.WindowEventHandlersEventMap
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                afterprint: Web.Event,
+                beforeprint: Web.Event,
+                beforeunload: Web.BeforeUnloadEvent,
+                gamepadconnected: Web.GamepadEvent,
+                gamepaddisconnected: Web.GamepadEvent,
+                hashchange: Web.HashChangeEvent,
+                languagechange: Web.Event,
+                message: Web.MessageEvent,
+                messageerror: Web.MessageEvent,
+                offline: Web.Event,
+                online: Web.Event,
+                pagehide: Web.PageTransitionEvent,
+                pagereveal: Web.PageRevealEvent,
+                pageshow: Web.PageTransitionEvent,
+                pageswap: Web.PageSwapEvent,
+                popstate: Web.PopStateEvent,
+                rejectionhandled: Web.PromiseRejectionEvent,
+                storage: Web.StorageEvent,
+                unhandledrejection: Web.PromiseRejectionEvent,
+                unload: Web.Event
+            )
+            : HTMLBodyElementEventMap
+            =
+            nativeOnly
 
     module HTMLBodyElementEventMap =
 
@@ -40406,6 +42884,122 @@ module Web =
         inherit Web.ElementEventMap
         inherit Web.GlobalEventHandlersEventMap
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent
+            )
+            : HTMLElementEventMap
+            =
+            nativeOnly
+
     module HTMLElementEventMap =
 
         [<AllowNullLiteral>]
@@ -42192,6 +44786,142 @@ module Web =
     type HTMLFrameSetElementEventMap =
         inherit Web.HTMLElementEventMap
         inherit Web.WindowEventHandlersEventMap
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                afterprint: Web.Event,
+                beforeprint: Web.Event,
+                beforeunload: Web.BeforeUnloadEvent,
+                gamepadconnected: Web.GamepadEvent,
+                gamepaddisconnected: Web.GamepadEvent,
+                hashchange: Web.HashChangeEvent,
+                languagechange: Web.Event,
+                message: Web.MessageEvent,
+                messageerror: Web.MessageEvent,
+                offline: Web.Event,
+                online: Web.Event,
+                pagehide: Web.PageTransitionEvent,
+                pagereveal: Web.PageRevealEvent,
+                pageshow: Web.PageTransitionEvent,
+                pageswap: Web.PageSwapEvent,
+                popstate: Web.PopStateEvent,
+                rejectionhandled: Web.PromiseRejectionEvent,
+                storage: Web.StorageEvent,
+                unhandledrejection: Web.PromiseRejectionEvent,
+                unload: Web.Event
+            )
+            : HTMLFrameSetElementEventMap
+            =
+            nativeOnly
 
     module HTMLFrameSetElementEventMap =
 
@@ -45786,6 +48516,124 @@ module Web =
         inherit Web.HTMLElementEventMap
         abstract member encrypted: Web.MediaEncryptedEvent with get, set
         abstract member waitingforkey: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                encrypted: Web.MediaEncryptedEvent,
+                waitingforkey: Web.Event
+            )
+            : HTMLMediaElementEventMap
+            =
+            nativeOnly
 
     module HTMLMediaElementEventMap =
 
@@ -54084,6 +56932,126 @@ module Web =
         abstract member enterpictureinpicture: Web.PictureInPictureEvent with get, set
         abstract member leavepictureinpicture: Web.PictureInPictureEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                encrypted: Web.MediaEncryptedEvent,
+                waitingforkey: Web.Event,
+                enterpictureinpicture: Web.PictureInPictureEvent,
+                leavepictureinpicture: Web.PictureInPictureEvent
+            )
+            : HTMLVideoElementEventMap
+            =
+            nativeOnly
+
     module HTMLVideoElementEventMap =
 
         [<AllowNullLiteral>]
@@ -54945,6 +57913,26 @@ module Web =
         /// </summary>
         abstract member username: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                hash: string,
+                host: string,
+                hostname: string,
+                hreflang: string,
+                origin: string,
+                password: string,
+                pathname: string,
+                port: string,
+                protocol: string,
+                search: string,
+                ``type``: string,
+                username: string
+            )
+            : HyperlinkElementUtils
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>IDBCursor</c>** interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database.
     ///
@@ -55104,6 +58092,18 @@ module Web =
         abstract member close: Web.Event with get, set
         abstract member error: Web.Event with get, set
         abstract member versionchange: Web.IDBVersionChangeEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.Event,
+                close: Web.Event,
+                error: Web.Event,
+                versionchange: Web.IDBVersionChangeEvent
+            )
+            : IDBDatabaseEventMap
+            =
+            nativeOnly
 
     module IDBDatabaseEventMap =
 
@@ -56471,6 +59471,18 @@ module Web =
         abstract member blocked: Web.IDBVersionChangeEvent with get, set
         abstract member upgradeneeded: Web.IDBVersionChangeEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                error: Web.Event,
+                success: Web.Event,
+                blocked: Web.IDBVersionChangeEvent,
+                upgradeneeded: Web.IDBVersionChangeEvent
+            )
+            : IDBOpenDBRequestEventMap
+            =
+            nativeOnly
+
     module IDBOpenDBRequestEventMap =
 
         [<AllowNullLiteral>]
@@ -56671,6 +59683,9 @@ module Web =
     type IDBRequestEventMap =
         abstract member error: Web.Event with get, set
         abstract member success: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(error: Web.Event, success: Web.Event) : IDBRequestEventMap = nativeOnly
 
     module IDBRequestEventMap =
 
@@ -56897,6 +59912,13 @@ module Web =
         abstract member abort: Web.Event with get, set
         abstract member complete: Web.Event with get, set
         abstract member error: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (abort: Web.Event, complete: Web.Event, error: Web.Event)
+            : IDBTransactionEventMap
+            =
+            nativeOnly
 
     module IDBTransactionEventMap =
 
@@ -57428,6 +60450,13 @@ module Web =
         /// </summary>
         abstract member selected: bool with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (animated: bool, frameCount: float, repetitionCount: float, selected: bool)
+            : ImageTrack
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ImageTrackList</c>** interface of the WebCodecs API represents a list of image tracks.
     /// Available only in secure contexts.
@@ -57637,6 +60666,21 @@ module Web =
         /// </summary>
         abstract member time: Web.DOMHighResTimeStamp with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                boundingClientRect: Web.DOMRectReadOnly,
+                intersectionRatio: float,
+                intersectionRect: Web.DOMRectReadOnly,
+                isIntersecting: bool,
+                target: Web.Element,
+                time: Web.DOMHighResTimeStamp,
+                ?rootBounds: Web.DOMRectReadOnly
+            )
+            : IntersectionObserverEntry
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>KHR_parallel_shader_compile</c>** extension is part of the WebGL API and enables a non-blocking poll operation, so that compile/link status availability (COMPLETION_STATUS_KHR) can be queried without potentially incurring stalls. In other words you can check the status of your shaders compiling without blocking the runtime.
     ///
@@ -57646,6 +60690,9 @@ module Web =
     [<Interface>]
     type KHR_parallel_shader_compile =
         abstract member COMPLETION_STATUS_KHR: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(COMPLETION_STATUS_KHR: int) : KHR_parallel_shader_compile = nativeOnly
 
     /// <summary>
     /// **<c>KeyboardEvent</c>** objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. The event type (keydown, keypress, or keyup) identifies what kind of keyboard activity occurred.
@@ -57874,6 +60921,9 @@ module Web =
         /// </summary>
         abstract member sheet: Web.CSSStyleSheet option with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?sheet: Web.CSSStyleSheet) : LinkStyle = nativeOnly
+
     /// <summary>
     /// The **<c>Location</c>** interface represents the location (URL) of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively.
     ///
@@ -58048,6 +61098,9 @@ module Web =
     [<Interface>]
     type MIDIAccessEventMap =
         abstract member statechange: Web.MIDIConnectionEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(statechange: Web.MIDIConnectionEvent) : MIDIAccessEventMap = nativeOnly
 
     module MIDIAccessEventMap =
 
@@ -58272,6 +61325,13 @@ module Web =
     type MIDIInputEventMap =
         inherit Web.MIDIPortEventMap
         abstract member midimessage: Web.MIDIMessageEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (statechange: Web.MIDIConnectionEvent, midimessage: Web.MIDIMessageEvent)
+            : MIDIInputEventMap
+            =
+            nativeOnly
 
     module MIDIInputEventMap =
 
@@ -58680,6 +61740,9 @@ module Web =
     type MIDIPortEventMap =
         abstract member statechange: Web.MIDIConnectionEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(statechange: Web.MIDIConnectionEvent) : MIDIPortEventMap = nativeOnly
+
     module MIDIPortEventMap =
 
         [<AllowNullLiteral>]
@@ -58920,6 +61983,122 @@ module Web =
     type MathMLElementEventMap =
         inherit Web.ElementEventMap
         inherit Web.GlobalEventHandlersEventMap
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent
+            )
+            : MathMLElementEventMap
+            =
+            nativeOnly
 
     module MathMLElementEventMap =
 
@@ -59495,6 +62674,9 @@ module Web =
     type MediaDevicesEventMap =
         abstract member devicechange: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(devicechange: Web.Event) : MediaDevicesEventMap = nativeOnly
+
     module MediaDevicesEventMap =
 
         [<AllowNullLiteral>]
@@ -59770,6 +62952,20 @@ module Web =
         abstract member MEDIA_ERR_DECODE: int with get
         abstract member MEDIA_ERR_SRC_NOT_SUPPORTED: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                code: float,
+                message: string,
+                MEDIA_ERR_ABORTED: int,
+                MEDIA_ERR_NETWORK: int,
+                MEDIA_ERR_DECODE: int,
+                MEDIA_ERR_SRC_NOT_SUPPORTED: int
+            )
+            : MediaError
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>MediaKeyMessageEvent</c>** interface of the Encrypted Media Extensions API contains the content and related data when the content decryption module generates a message for the session.
     /// Available only in secure contexts.
@@ -59798,6 +62994,13 @@ module Web =
     type MediaKeySessionEventMap =
         abstract member keystatuseschange: Web.Event with get, set
         abstract member message: Web.MediaKeyMessageEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (keystatuseschange: Web.Event, message: Web.MediaKeyMessageEvent)
+            : MediaKeySessionEventMap
+            =
+            nativeOnly
 
     module MediaKeySessionEventMap =
 
@@ -60221,10 +63424,20 @@ module Web =
         /// </summary>
         abstract member title: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (album: string, artist: string, artwork: ReadonlyArray<Web.MediaImage>, title: string)
+            : MediaMetadata
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type MediaQueryListEventMap =
         abstract member change: Web.MediaQueryListEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(change: Web.MediaQueryListEvent) : MediaQueryListEventMap = nativeOnly
 
     module MediaQueryListEventMap =
 
@@ -60463,6 +63676,20 @@ module Web =
         abstract member resume: Web.Event with get, set
         abstract member start: Web.Event with get, set
         abstract member stop: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                dataavailable: Web.BlobEvent,
+                error: Web.ErrorEvent,
+                pause: Web.Event,
+                resume: Web.Event,
+                start: Web.Event,
+                stop: Web.Event
+            )
+            : MediaRecorderEventMap
+            =
+            nativeOnly
 
     module MediaRecorderEventMap =
 
@@ -60796,6 +64023,13 @@ module Web =
         abstract member sourceended: Web.Event with get, set
         abstract member sourceopen: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (sourceclose: Web.Event, sourceended: Web.Event, sourceopen: Web.Event)
+            : MediaSourceEventMap
+            =
+            nativeOnly
+
     module MediaSourceEventMap =
 
         [<AllowNullLiteral>]
@@ -61060,6 +64294,13 @@ module Web =
     type MediaStreamEventMap =
         abstract member addtrack: Web.MediaStreamTrackEvent with get, set
         abstract member removetrack: Web.MediaStreamTrackEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (addtrack: Web.MediaStreamTrackEvent, removetrack: Web.MediaStreamTrackEvent)
+            : MediaStreamEventMap
+            =
+            nativeOnly
 
     module MediaStreamEventMap =
 
@@ -61342,6 +64583,13 @@ module Web =
         abstract member ended: Web.Event with get, set
         abstract member mute: Web.Event with get, set
         abstract member unmute: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (ended: Web.Event, mute: Web.Event, unmute: Web.Event)
+            : MediaStreamTrackEventMap
+            =
+            nativeOnly
 
     module MediaStreamTrackEventMap =
 
@@ -61657,6 +64905,10 @@ module Web =
         /// </summary>
         abstract member port2: Web.MessagePort with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(port1: Web.MessagePort, port2: Web.MessagePort) : MessageChannel =
+            nativeOnly
+
     /// <summary>
     /// The **<c>MessageEvent</c>** interface represents a message received by a target object.
     ///
@@ -61726,6 +64978,13 @@ module Web =
     type MessageEventTargetEventMap =
         abstract member message: Web.MessageEvent with get, set
         abstract member messageerror: Web.MessageEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (message: Web.MessageEvent, messageerror: Web.MessageEvent)
+            : MessageEventTargetEventMap
+            =
+            nativeOnly
 
     module MessageEventTargetEventMap =
 
@@ -61830,6 +65089,13 @@ module Web =
         inherit Web.MessageEventTargetEventMap
         abstract member message: Web.MessageEvent with get, set
         abstract member messageerror: Web.MessageEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (message: Web.MessageEvent, messageerror: Web.MessageEvent)
+            : MessagePortEventMap
+            =
+            nativeOnly
 
     module MessagePortEventMap =
 
@@ -62067,6 +65333,13 @@ module Web =
         /// </summary>
         [<Obsolete>]
         abstract member ``type``: string with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (description: string, enabledPlugin: Web.Plugin, suffixes: string, ``type``: string)
+            : MimeType
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>MimeTypeArray</c>** interface returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by the deprecated Navigator.mimeTypes property.
@@ -62343,6 +65616,23 @@ module Web =
         /// </summary>
         abstract member ``type``: Web.MutationRecordType with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                addedNodes: Web.NodeList,
+                removedNodes: Web.NodeList,
+                target: Web.Node,
+                ``type``: Web.MutationRecordType,
+                ?attributeName: string,
+                ?attributeNamespace: string,
+                ?nextSibling: Web.Node,
+                ?oldValue: string,
+                ?previousSibling: Web.Node
+            )
+            : MutationRecord
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>NamedNodeMap</c>** interface represents a collection of Attr objects. Objects inside a NamedNodeMap are not in any particular order, unlike NodeList, although they may be accessed by an index as in an array.
     ///
@@ -62505,6 +65795,18 @@ module Web =
         abstract member navigate: Web.NavigateEvent with get, set
         abstract member navigateerror: Web.ErrorEvent with get, set
         abstract member navigatesuccess: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                currententrychange: Web.NavigationCurrentEntryChangeEvent,
+                navigate: Web.NavigateEvent,
+                navigateerror: Web.ErrorEvent,
+                navigatesuccess: Web.Event
+            )
+            : NavigationEventMap
+            =
+            nativeOnly
 
     module NavigationEventMap =
 
@@ -62915,6 +66217,9 @@ module Web =
     type NavigationHistoryEntryEventMap =
         abstract member dispose: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(dispose: Web.Event) : NavigationHistoryEntryEventMap = nativeOnly
+
     module NavigationHistoryEntryEventMap =
 
         [<AllowNullLiteral>]
@@ -63237,6 +66542,18 @@ module Web =
         /// </summary>
         abstract member navigationType: Web.NavigationType with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                committed: JS.Promise<unit>,
+                finished: JS.Promise<unit>,
+                from: Web.NavigationHistoryEntry,
+                navigationType: Web.NavigationType
+            )
+            : NavigationTransition
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>Navigator</c>** interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.
     ///
@@ -63511,6 +66828,9 @@ module Web =
         /// </summary>
         abstract member webdriver: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(webdriver: bool) : NavigatorAutomationInformation = nativeOnly
+
     /// <summary>
     /// Available only in secure contexts.
     /// </summary>
@@ -63533,6 +66853,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/hardwareConcurrency)
         /// </summary>
         abstract member hardwareConcurrency: float with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(hardwareConcurrency: float) : NavigatorConcurrentHardware = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -63564,6 +66887,9 @@ module Web =
         /// </summary>
         abstract member cookieEnabled: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(cookieEnabled: bool) : NavigatorCookies = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type NavigatorGPU =
@@ -63573,6 +66899,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/gpu)
         /// </summary>
         abstract member gpu: Web.GPU with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(gpu: Web.GPU) : NavigatorGPU = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -63614,6 +66943,23 @@ module Web =
         /// </summary>
         abstract member vendorSub: string with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                appCodeName: string,
+                appName: string,
+                appVersion: string,
+                platform: string,
+                product: string,
+                productSub: string,
+                userAgent: string,
+                vendor: string,
+                vendorSub: string
+            )
+            : NavigatorID
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type NavigatorLanguage =
@@ -63626,6 +66972,13 @@ module Web =
         /// </summary>
         abstract member languages: ReadonlyArray<string> with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (language: string, languages: ReadonlyArray<string>)
+            : NavigatorLanguage
+            =
+            nativeOnly
+
     /// <summary>
     /// Available only in secure contexts.
     /// </summary>
@@ -63636,6 +66989,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/locks)
         /// </summary>
         abstract member locks: Web.LockManager with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(locks: Web.LockManager) : NavigatorLocks = nativeOnly
 
     /// <summary>
     /// The **<c>NavigatorLogin</c>** interface of the Federated Credential Management (FedCM) API defines login functionality for federated identity providers (IdPs). Specifically, it enables a federated identity provider (IdP) to set its login status when a user signs into or out of the IdP.
@@ -63660,6 +67016,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/onLine)
         /// </summary>
         abstract member onLine: bool with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(onLine: bool) : NavigatorOnLine = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -63691,6 +67050,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/storage)
         /// </summary>
         abstract member storage: Web.StorageManager with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(storage: Web.StorageManager) : NavigatorStorage = nativeOnly
 
     /// <summary>
     /// The DOM **<c>Node</c>** interface is an abstract base class upon which many other DOM API objects are based, thus letting those object types be used similarly and often interchangeably. As an abstract class, there is no such thing as a plain Node object. All objects that implement Node functionality are based on one of its subclasses. Most notable are Document, Element, and DocumentFragment.
@@ -64076,6 +67438,13 @@ module Web =
         /// </summary>
         abstract member previousElementSibling: Web.Element option with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?nextElementSibling: Web.Element, ?previousElementSibling: Web.Element)
+            : NonDocumentTypeChildNode
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type NonElementParentNode =
@@ -64093,6 +67462,13 @@ module Web =
         abstract member close: Web.Event with get, set
         abstract member error: Web.Event with get, set
         abstract member show: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (click: Web.Event, close: Web.Event, error: Web.Event, show: Web.Event)
+            : NotificationEventMap
+            =
+            nativeOnly
 
     module NotificationEventMap =
 
@@ -64460,6 +67836,10 @@ module Web =
     type OES_standard_derivatives =
         abstract member FRAGMENT_SHADER_DERIVATIVE_HINT_OES: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(FRAGMENT_SHADER_DERIVATIVE_HINT_OES: int) : OES_standard_derivatives =
+            nativeOnly
+
     /// <summary>
     /// The **<c>OES_texture_float</c>** extension is part of the WebGL API and exposes floating-point pixel types for textures.
     ///
@@ -64487,6 +67867,9 @@ module Web =
     [<Interface>]
     type OES_texture_half_float =
         abstract member HALF_FLOAT_OES: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(HALF_FLOAT_OES: int) : OES_texture_half_float = nativeOnly
 
     /// <summary>
     /// The **<c>OES_texture_half_float_linear</c>** extension is part of the WebGL API and allows linear filtering with half floating-point pixel types for textures.
@@ -64586,6 +67969,13 @@ module Web =
     type OfflineAudioContextEventMap =
         inherit Web.BaseAudioContextEventMap
         abstract member complete: Web.OfflineAudioCompletionEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (statechange: Web.Event, complete: Web.OfflineAudioCompletionEvent)
+            : OfflineAudioContextEventMap
+            =
+            nativeOnly
 
     module OfflineAudioContextEventMap =
 
@@ -64805,6 +68195,13 @@ module Web =
     type OffscreenCanvasEventMap =
         abstract member contextlost: Web.Event with get, set
         abstract member contextrestored: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (contextlost: Web.Event, contextrestored: Web.Event)
+            : OffscreenCanvasEventMap
+            =
+            nativeOnly
 
     module OffscreenCanvasEventMap =
 
@@ -65381,6 +68778,13 @@ module Web =
         /// </summary>
         abstract member presentationTime: Web.DOMHighResTimeStamp option with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (paintTime: Web.DOMHighResTimeStamp, ?presentationTime: Web.DOMHighResTimeStamp)
+            : PaintTimingMixin
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>PannerNode</c>** interface defines an audio-processing object that represents the location, direction, and behavior of an audio source signal in a simulated physical space. This AudioNode uses right-hand Cartesian coordinates to describe the source's position as a vector and its orientation as a 3D directional cone.
     ///
@@ -65752,6 +69156,17 @@ module Web =
         abstract member shippingaddresschange: Web.PaymentRequestUpdateEvent with get, set
         abstract member shippingoptionchange: Web.PaymentRequestUpdateEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                paymentmethodchange: Web.PaymentMethodChangeEvent,
+                shippingaddresschange: Web.PaymentRequestUpdateEvent,
+                shippingoptionchange: Web.PaymentRequestUpdateEvent
+            )
+            : PaymentRequestEventMap
+            =
+            nativeOnly
+
     module PaymentRequestEventMap =
 
         [<AllowNullLiteral>]
@@ -66041,6 +69456,13 @@ module Web =
     type PaymentResponseEventMap =
         abstract member payerdetailchange: Web.PaymentRequestUpdateEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (payerdetailchange: Web.PaymentRequestUpdateEvent)
+            : PaymentResponseEventMap
+            =
+            nativeOnly
+
     module PaymentResponseEventMap =
 
         [<AllowNullLiteral>]
@@ -66294,6 +69716,9 @@ module Web =
     [<Interface>]
     type PerformanceEventMap =
         abstract member resourcetimingbufferfull: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(resourcetimingbufferfull: Web.Event) : PerformanceEventMap = nativeOnly
 
     module PerformanceEventMap =
 
@@ -67239,6 +70664,9 @@ module Web =
     type PermissionStatusEventMap =
         abstract member change: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(change: Web.Event) : PermissionStatusEventMap = nativeOnly
+
     module PermissionStatusEventMap =
 
         [<AllowNullLiteral>]
@@ -67469,6 +70897,9 @@ module Web =
     [<Interface>]
     type PictureInPictureWindowEventMap =
         abstract member resize: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(resize: Web.Event) : PictureInPictureWindowEventMap = nativeOnly
 
     module PictureInPictureWindowEventMap =
 
@@ -67876,6 +71307,13 @@ module Web =
         /// </summary>
         abstract member popoverTargetElement: Web.Element option with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (popoverTargetAction: string, ?popoverTargetElement: Web.Element)
+            : PopoverTargetAttributes
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ProcessingInstruction</c>** interface represents a processing instruction; that is, a Node which embeds an instruction targeting a specific application but that can be ignored by any other applications which don't recognize the instruction.
     ///
@@ -68035,6 +71473,9 @@ module Web =
         /// </summary>
         abstract member pushManager: Web.PushManager with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(pushManager: Web.PushManager) : PushManagerAttribute = nativeOnly
+
     /// <summary>
     /// The **<c>PushSubscription</c>** interface of the Push API provides a subscription's URL endpoint along with the public key and secrets that should be used for encrypting push messages to this subscription. This information must be passed to the application server, using any desired application-specific method.
     /// Available only in secure contexts.
@@ -68103,6 +71544,13 @@ module Web =
         /// </summary>
         abstract member userVisibleOnly: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (userVisibleOnly: bool, ?applicationServerKey: obj)
+            : PushSubscriptionOptions
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>RTCCertificate</c>** interface of the WebRTC API provides an object representing a certificate that an RTCPeerConnection uses to authenticate.
     ///
@@ -68128,6 +71576,10 @@ module Web =
     [<Interface>]
     type RTCDTMFSenderEventMap =
         abstract member tonechange: Web.RTCDTMFToneChangeEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(tonechange: Web.RTCDTMFToneChangeEvent) : RTCDTMFSenderEventMap =
+            nativeOnly
 
     module RTCDTMFSenderEventMap =
 
@@ -68354,6 +71806,20 @@ module Web =
         abstract member error: Web.RTCErrorEvent with get, set
         abstract member message: Web.MessageEvent with get, set
         abstract member ``open``: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                bufferedamountlow: Web.Event,
+                close: Web.Event,
+                closing: Web.Event,
+                error: Web.RTCErrorEvent,
+                message: Web.MessageEvent,
+                ``open``: Web.Event
+            )
+            : RTCDataChannelEventMap
+            =
+            nativeOnly
 
     module RTCDataChannelEventMap =
 
@@ -68683,6 +72149,13 @@ module Web =
     type RTCDtlsTransportEventMap =
         abstract member error: Web.RTCErrorEvent with get, set
         abstract member statechange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.RTCErrorEvent, statechange: Web.Event)
+            : RTCDtlsTransportEventMap
+            =
+            nativeOnly
 
     module RTCDtlsTransportEventMap =
 
@@ -69116,12 +72589,30 @@ module Web =
         /// </summary>
         abstract member remote: Web.RTCIceCandidate with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (local: Web.RTCIceCandidate, remote: Web.RTCIceCandidate)
+            : RTCIceCandidatePair
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCIceTransportEventMap =
         abstract member gatheringstatechange: Web.Event with get, set
         abstract member selectedcandidatepairchange: Web.Event with get, set
         abstract member statechange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                gatheringstatechange: Web.Event,
+                selectedcandidatepairchange: Web.Event,
+                statechange: Web.Event
+            )
+            : RTCIceTransportEventMap
+            =
+            nativeOnly
 
     module RTCIceTransportEventMap =
 
@@ -69355,6 +72846,23 @@ module Web =
         abstract member negotiationneeded: Web.Event with get, set
         abstract member signalingstatechange: Web.Event with get, set
         abstract member track: Web.RTCTrackEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                connectionstatechange: Web.Event,
+                datachannel: Web.RTCDataChannelEvent,
+                icecandidate: Web.RTCPeerConnectionIceEvent,
+                icecandidateerror: Web.RTCPeerConnectionIceErrorEvent,
+                iceconnectionstatechange: Web.Event,
+                icegatheringstatechange: Web.Event,
+                negotiationneeded: Web.Event,
+                signalingstatechange: Web.Event,
+                track: Web.RTCTrackEvent
+            )
+            : RTCPeerConnectionEventMap
+            =
+            nativeOnly
 
     module RTCPeerConnectionEventMap =
 
@@ -70108,6 +73616,9 @@ module Web =
     type RTCSctpTransportEventMap =
         abstract member statechange: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(statechange: Web.Event) : RTCSctpTransportEventMap = nativeOnly
+
     module RTCSctpTransportEventMap =
 
         [<AllowNullLiteral>]
@@ -70800,6 +74311,13 @@ module Web =
         abstract member connecting: Web.Event with get, set
         abstract member disconnect: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (connect: Web.Event, connecting: Web.Event, disconnect: Web.Event)
+            : RemotePlaybackEventMap
+            =
+            nativeOnly
+
     module RemotePlaybackEventMap =
 
         [<AllowNullLiteral>]
@@ -71209,6 +74727,19 @@ module Web =
         /// </summary>
         abstract member target: Web.Element with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                borderBoxSize: ReadonlyArray<Web.ResizeObserverSize>,
+                contentBoxSize: ReadonlyArray<Web.ResizeObserverSize>,
+                contentRect: Web.DOMRectReadOnly,
+                devicePixelContentBoxSize: ReadonlyArray<Web.ResizeObserverSize>,
+                target: Web.Element
+            )
+            : ResizeObserverEntry
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ResizeObserverSize</c>** interface of the Resize Observer API is used by the ResizeObserverEntry interface to access the box sizing properties of the element being observed.
     ///
@@ -71229,6 +74760,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserverSize/inlineSize)
         /// </summary>
         abstract member inlineSize: float with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(blockSize: float, inlineSize: float) : ResizeObserverSize = nativeOnly
 
     /// <summary>
     /// The **<c>Response</c>** interface of the Fetch API represents the response to a request.
@@ -72070,6 +75604,10 @@ module Web =
         /// </summary>
         abstract member baseVal: Web.SVGAngle with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: Web.SVGAngle, baseVal: Web.SVGAngle) : SVGAnimatedAngle =
+            nativeOnly
+
     /// <summary>
     /// The **<c>SVGAnimatedBoolean</c>** interface is used for attributes of type boolean which can be animated.
     ///
@@ -72090,6 +75628,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedBoolean/baseVal)
         /// </summary>
         abstract member baseVal: bool with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: bool, baseVal: bool) : SVGAnimatedBoolean = nativeOnly
 
     /// <summary>
     /// The **<c>SVGAnimatedEnumeration</c>** interface describes attribute values which are constants from a particular enumeration and which can be animated.
@@ -72112,6 +75653,9 @@ module Web =
         /// </summary>
         abstract member baseVal: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: float, baseVal: float) : SVGAnimatedEnumeration = nativeOnly
+
     /// <summary>
     /// The **<c>SVGAnimatedInteger</c>** interface is used for attributes of basic type <integer> which can be animated.
     ///
@@ -72132,6 +75676,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedInteger/baseVal)
         /// </summary>
         abstract member baseVal: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: float, baseVal: float) : SVGAnimatedInteger = nativeOnly
 
     /// <summary>
     /// The **<c>SVGAnimatedLength</c>** interface represents attributes of type <length> which can be animated.
@@ -72154,6 +75701,10 @@ module Web =
         /// </summary>
         abstract member baseVal: Web.SVGLength with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: Web.SVGLength, baseVal: Web.SVGLength) : SVGAnimatedLength =
+            nativeOnly
+
     /// <summary>
     /// The **<c>SVGAnimatedLengthList</c>** interface is used for attributes of type SVGLengthList which can be animated.
     ///
@@ -72174,6 +75725,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedLengthList/baseVal)
         /// </summary>
         abstract member baseVal: Web.SVGLengthList with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (animVal: Web.SVGLengthList, baseVal: Web.SVGLengthList)
+            : SVGAnimatedLengthList
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SVGAnimatedNumber</c>** interface represents attributes of type <number> which can be animated.
@@ -72196,6 +75754,9 @@ module Web =
         /// </summary>
         abstract member baseVal: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: float, baseVal: float) : SVGAnimatedNumber = nativeOnly
+
     /// <summary>
     /// The **<c>SVGAnimatedNumberList</c>** interface represents a list of attributes of type <number> which can be animated.
     ///
@@ -72217,6 +75778,13 @@ module Web =
         /// </summary>
         abstract member baseVal: Web.SVGNumberList with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (animVal: Web.SVGNumberList, baseVal: Web.SVGNumberList)
+            : SVGAnimatedNumberList
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SVGAnimatedPoints =
@@ -72228,6 +75796,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPolygonElement/points)
         /// </summary>
         abstract member points: Web.SVGPointList with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (animatedPoints: Web.SVGPointList, points: Web.SVGPointList)
+            : SVGAnimatedPoints
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SVGAnimatedPreserveAspectRatio</c>** interface represents attributes of type SVGPreserveAspectRatio which can be animated.
@@ -72250,6 +75825,13 @@ module Web =
         /// </summary>
         abstract member baseVal: Web.SVGPreserveAspectRatio with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (animVal: Web.SVGPreserveAspectRatio, baseVal: Web.SVGPreserveAspectRatio)
+            : SVGAnimatedPreserveAspectRatio
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>SVGAnimatedRect</c>** interface represents an SVGRect attribute that can be animated.
     ///
@@ -72270,6 +75852,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedRect/baseVal)
         /// </summary>
         abstract member baseVal: Web.SVGRect with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: Web.SVGRect, baseVal: Web.SVGRect) : SVGAnimatedRect =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SVGAnimatedString</c>** interface represents string attributes which can be animated from each SVG declaration. You need to create SVG attribute before doing anything else, everything should be declared inside this.
@@ -72292,6 +75878,9 @@ module Web =
         /// </summary>
         abstract member baseVal: string with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(animVal: string, baseVal: string) : SVGAnimatedString = nativeOnly
+
     /// <summary>
     /// The **<c>SVGAnimatedTransformList</c>** interface represents attributes which take a list of numbers and which can be animated.
     ///
@@ -72312,6 +75901,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedTransformList/baseVal)
         /// </summary>
         abstract member baseVal: Web.SVGTransformList with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (animVal: Web.SVGTransformList, baseVal: Web.SVGTransformList)
+            : SVGAnimatedTransformList
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SVGAnimationElement</c>** interface is the base interface for all of the animation element interfaces: SVGAnimateElement, SVGSetElement, SVGAnimateColorElement, SVGAnimateMotionElement and SVGAnimateTransformElement.
@@ -73441,6 +77037,122 @@ module Web =
     type SVGElementEventMap =
         inherit Web.ElementEventMap
         inherit Web.GlobalEventHandlersEventMap
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent
+            )
+            : SVGElementEventMap
+            =
+            nativeOnly
 
     module SVGElementEventMap =
 
@@ -79084,6 +82796,19 @@ module Web =
         /// </summary>
         abstract member y: Web.SVGAnimatedLength with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                height: Web.SVGAnimatedLength,
+                result: Web.SVGAnimatedString,
+                width: Web.SVGAnimatedLength,
+                x: Web.SVGAnimatedLength,
+                y: Web.SVGAnimatedLength
+            )
+            : SVGFilterPrimitiveStandardAttributes
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SVGFitToViewBox =
@@ -79095,6 +82820,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGMarkerElement/viewBox)
         /// </summary>
         abstract member viewBox: Web.SVGAnimatedRect with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (preserveAspectRatio: Web.SVGAnimatedPreserveAspectRatio, viewBox: Web.SVGAnimatedRect)
+            : SVGFitToViewBox
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SVGForeignObjectElement</c>** interface provides access to the properties of <foreignObject> elements, as well as methods to manipulate them.
@@ -82415,6 +86147,30 @@ module Web =
         abstract member SVG_MEETORSLICE_MEET: int with get
         abstract member SVG_MEETORSLICE_SLICE: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                align: float,
+                meetOrSlice: float,
+                SVG_PRESERVEASPECTRATIO_UNKNOWN: int,
+                SVG_PRESERVEASPECTRATIO_NONE: int,
+                SVG_PRESERVEASPECTRATIO_XMINYMIN: int,
+                SVG_PRESERVEASPECTRATIO_XMIDYMIN: int,
+                SVG_PRESERVEASPECTRATIO_XMAXYMIN: int,
+                SVG_PRESERVEASPECTRATIO_XMINYMID: int,
+                SVG_PRESERVEASPECTRATIO_XMIDYMID: int,
+                SVG_PRESERVEASPECTRATIO_XMAXYMID: int,
+                SVG_PRESERVEASPECTRATIO_XMINYMAX: int,
+                SVG_PRESERVEASPECTRATIO_XMIDYMAX: int,
+                SVG_PRESERVEASPECTRATIO_XMAXYMAX: int,
+                SVG_MEETORSLICE_UNKNOWN: int,
+                SVG_MEETORSLICE_MEET: int,
+                SVG_MEETORSLICE_SLICE: int
+            )
+            : SVGPreserveAspectRatio
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>SVGRadialGradientElement</c>** interface corresponds to the <RadialGradient> element.
     ///
@@ -82824,6 +86580,142 @@ module Web =
     type SVGSVGElementEventMap =
         inherit Web.SVGElementEventMap
         inherit Web.WindowEventHandlersEventMap
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                fullscreenchange: Web.Event,
+                fullscreenerror: Web.Event,
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                afterprint: Web.Event,
+                beforeprint: Web.Event,
+                beforeunload: Web.BeforeUnloadEvent,
+                gamepadconnected: Web.GamepadEvent,
+                gamepaddisconnected: Web.GamepadEvent,
+                hashchange: Web.HashChangeEvent,
+                languagechange: Web.Event,
+                message: Web.MessageEvent,
+                messageerror: Web.MessageEvent,
+                offline: Web.Event,
+                online: Web.Event,
+                pagehide: Web.PageTransitionEvent,
+                pagereveal: Web.PageRevealEvent,
+                pageshow: Web.PageTransitionEvent,
+                pageswap: Web.PageSwapEvent,
+                popstate: Web.PopStateEvent,
+                rejectionhandled: Web.PromiseRejectionEvent,
+                storage: Web.StorageEvent,
+                unhandledrejection: Web.PromiseRejectionEvent,
+                unload: Web.Event
+            )
+            : SVGSVGElementEventMap
+            =
+            nativeOnly
 
     module SVGSVGElementEventMap =
 
@@ -83359,10 +87251,12 @@ module Web =
         abstract member getElementById: elementId: string -> Web.Element option
 
         abstract member getEnclosureList:
-            rect: Web.SVGRect * referenceElement: Web.SVGElement option -> Web.NodeListOf<obj>
+            rect: Web.SVGRect * referenceElement: Web.SVGElement option ->
+                Web.NodeListOf<SVGSVGElement.getEnclosureList>
 
         abstract member getIntersectionList:
-            rect: Web.SVGRect * referenceElement: Web.SVGElement option -> Web.NodeListOf<obj>
+            rect: Web.SVGRect * referenceElement: Web.SVGElement option ->
+                Web.NodeListOf<SVGSVGElement.getIntersectionList>
 
         /// <summary>
         /// The **<c>pauseAnimations()</c>** method of the SVGSVGElement interface suspends (i.e., pauses) all currently running animations that are defined within the SVG document fragment corresponding to this <svg> element, causing the animation clock corresponding to this document fragment to stand still until it is unpaused.
@@ -84829,6 +88723,13 @@ module Web =
         /// </summary>
         abstract member systemLanguage: Web.SVGStringList with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (requiredExtensions: Web.SVGStringList, systemLanguage: Web.SVGStringList)
+            : SVGTests
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>SVGTextContentElement</c>** interface is implemented by elements that support rendering child text content. It is inherited by various text-related interfaces, such as SVGTextElement, SVGTSpanElement, and SVGTextPathElement.
     ///
@@ -85944,6 +89845,9 @@ module Web =
         /// </summary>
         abstract member href: Web.SVGAnimatedString with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(href: Web.SVGAnimatedString) : SVGURIReference = nativeOnly
+
     /// <summary>
     /// The **<c>SVGUnitTypes</c>** interface defines a commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes.
     ///
@@ -85955,6 +89859,17 @@ module Web =
         abstract member SVG_UNIT_TYPE_UNKNOWN: int with get
         abstract member SVG_UNIT_TYPE_USERSPACEONUSE: int with get
         abstract member SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                SVG_UNIT_TYPE_UNKNOWN: int,
+                SVG_UNIT_TYPE_USERSPACEONUSE: int,
+                SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: int
+            )
+            : SVGUnitTypes
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SVGUseElement</c>** interface corresponds to the <use> element.
@@ -86512,10 +90427,28 @@ module Web =
         /// </summary>
         abstract member width: float with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                availHeight: float,
+                availWidth: float,
+                colorDepth: float,
+                height: float,
+                orientation: Web.ScreenOrientation,
+                pixelDepth: float,
+                width: float
+            )
+            : Screen
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ScreenOrientationEventMap =
         abstract member change: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(change: Web.Event) : ScreenOrientationEventMap = nativeOnly
 
     module ScreenOrientationEventMap =
 
@@ -86728,6 +90661,10 @@ module Web =
     type ScriptProcessorNodeEventMap =
         abstract member audioprocess: Web.AudioProcessingEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(audioprocess: Web.AudioProcessingEvent) : ScriptProcessorNodeEventMap =
+            nativeOnly
+
     module ScriptProcessorNodeEventMap =
 
         [<AllowNullLiteral>]
@@ -86939,6 +90876,18 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ScrollTimeline/source)
         /// </summary>
         abstract member source: Web.Element option with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                axis: Web.ScrollAxis,
+                ?currentTime: Web.CSSNumberish,
+                ?duration: Web.CSSNumberish,
+                ?source: Web.Element
+            )
+            : ScrollTimeline
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>SecurityPolicyViolationEvent</c>** interface inherits from Event, and represents the event object of a securitypolicyviolation event sent on an Element, Document, or worker when its Content Security Policy (CSP) is violated.
@@ -87214,6 +91163,10 @@ module Web =
         abstract member connect: Web.Event with get, set
         abstract member disconnect: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(connect: Web.Event, disconnect: Web.Event) : SerialPortEventMap =
+            nativeOnly
+
     module SerialPortEventMap =
 
         [<AllowNullLiteral>]
@@ -87464,6 +91417,13 @@ module Web =
         inherit Web.AbstractWorkerEventMap
         abstract member statechange: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.ErrorEvent, statechange: Web.Event)
+            : ServiceWorkerEventMap
+            =
+            nativeOnly
+
     module ServiceWorkerEventMap =
 
         [<AllowNullLiteral>]
@@ -87681,6 +91641,13 @@ module Web =
         abstract member controllerchange: Web.Event with get, set
         abstract member message: Web.MessageEvent with get, set
         abstract member messageerror: Web.MessageEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (controllerchange: Web.Event, message: Web.MessageEvent, messageerror: Web.MessageEvent)
+            : ServiceWorkerContainerEventMap
+            =
+            nativeOnly
 
     module ServiceWorkerContainerEventMap =
 
@@ -87964,6 +91931,10 @@ module Web =
     type ServiceWorkerRegistrationEventMap =
         abstract member updatefound: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(updatefound: Web.Event) : ServiceWorkerRegistrationEventMap =
+            nativeOnly
+
     module ServiceWorkerRegistrationEventMap =
 
         [<AllowNullLiteral>]
@@ -88227,6 +92198,9 @@ module Web =
     [<Interface>]
     type ShadowRootEventMap =
         abstract member slotchange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(slotchange: Web.Event) : ShadowRootEventMap = nativeOnly
 
     module ShadowRootEventMap =
 
@@ -88643,6 +92617,9 @@ module Web =
         /// </summary>
         abstract member assignedSlot: Web.HTMLSlotElement option with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(?assignedSlot: Web.HTMLSlotElement) : Slottable = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SourceBufferEventMap =
@@ -88651,6 +92628,19 @@ module Web =
         abstract member update: Web.Event with get, set
         abstract member updateend: Web.Event with get, set
         abstract member updatestart: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.Event,
+                error: Web.Event,
+                update: Web.Event,
+                updateend: Web.Event,
+                updatestart: Web.Event
+            )
+            : SourceBufferEventMap
+            =
+            nativeOnly
 
     module SourceBufferEventMap =
 
@@ -88928,6 +92918,13 @@ module Web =
         abstract member addsourcebuffer: Web.Event with get, set
         abstract member removesourcebuffer: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (addsourcebuffer: Web.Event, removesourcebuffer: Web.Event)
+            : SourceBufferListEventMap
+            =
+            nativeOnly
+
     module SourceBufferListEventMap =
 
         [<AllowNullLiteral>]
@@ -89143,6 +93140,10 @@ module Web =
         /// </summary>
         abstract member transcript: string with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(confidence: float, transcript: string) : SpeechRecognitionAlternative =
+            nativeOnly
+
     /// <summary>
     /// The **<c>SpeechRecognitionErrorEvent</c>** interface of the Web Speech API represents error messages from the recognition service.
     /// Available only in secure contexts.
@@ -89251,6 +93252,9 @@ module Web =
     [<Interface>]
     type SpeechSynthesisEventMap =
         abstract member voiceschanged: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(voiceschanged: Web.Event) : SpeechSynthesisEventMap = nativeOnly
 
     module SpeechSynthesisEventMap =
 
@@ -89548,6 +93552,21 @@ module Web =
         abstract member pause: Web.SpeechSynthesisEvent with get, set
         abstract member resume: Web.SpeechSynthesisEvent with get, set
         abstract member start: Web.SpeechSynthesisEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                boundary: Web.SpeechSynthesisEvent,
+                ``end``: Web.SpeechSynthesisEvent,
+                error: Web.SpeechSynthesisErrorEvent,
+                mark: Web.SpeechSynthesisEvent,
+                pause: Web.SpeechSynthesisEvent,
+                resume: Web.SpeechSynthesisEvent,
+                start: Web.SpeechSynthesisEvent
+            )
+            : SpeechSynthesisUtteranceEventMap
+            =
+            nativeOnly
 
     module SpeechSynthesisUtteranceEventMap =
 
@@ -89851,6 +93870,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechSynthesisVoice/voiceURI)
         /// </summary>
         abstract member voiceURI: string with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (``default``: bool, lang: string, localService: bool, name: string, voiceURI: string)
+            : SpeechSynthesisVoice
+            =
+            nativeOnly
 
     /// <summary>
     /// The DOM **<c>StaticRange</c>** interface extends AbstractRange to provide a method to specify a range of content in the DOM whose contents don't update to reflect changes which occur within the DOM tree.
@@ -91714,6 +95740,13 @@ module Web =
         inherit Web.AbortSignalEventMap
         abstract member prioritychange: Web.TaskPriorityChangeEvent with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (abort: Web.Event, prioritychange: Web.TaskPriorityChangeEvent)
+            : TaskSignalEventMap
+            =
+            nativeOnly
+
     module TaskSignalEventMap =
 
         [<AllowNullLiteral>]
@@ -91968,6 +96001,10 @@ module Web =
         /// </summary>
         abstract member ignoreBOM: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(encoding: string, fatal: bool, ignoreBOM: bool) : TextDecoderCommon =
+            nativeOnly
+
     /// <summary>
     /// The **<c>TextDecoderStream</c>** interface of the Encoding API converts a stream of text in a binary encoding, such as UTF-8 etc., to a stream of strings. It is the streaming equivalent of TextDecoder. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
     ///
@@ -91986,6 +96023,19 @@ module Web =
         /// The **<c>writable</c>** read-only property of the TextDecoderStream interface returns a WritableStream that accepts binary data, in the form of ArrayBuffer, TypedArray, or DataView chunks (SharedArrayBuffer and its views are also allowed), to be decoded into strings.
         /// </summary>
         abstract member writable: Web.WritableStream<Web.BufferSource> with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                encoding: string,
+                fatal: bool,
+                ignoreBOM: bool,
+                readable: Web.ReadableStream<string>,
+                writable: Web.WritableStream<Web.BufferSource>
+            )
+            : TextDecoderStream
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>TextEncoder</c>** interface enables you to encode a JavaScript string using UTF-8.
@@ -92021,6 +96071,9 @@ module Web =
         /// </summary>
         abstract member encoding: string with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(encoding: string) : TextEncoderCommon = nativeOnly
+
     /// <summary>
     /// The **<c>TextEncoderStream</c>** interface of the Encoding API converts a stream of strings into bytes in the UTF-8 encoding. It is the streaming equivalent of TextEncoder. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
     ///
@@ -92039,6 +96092,17 @@ module Web =
         /// The **<c>writable</c>** read-only property of the TextEncoderStream interface returns a WritableStream that accepts strings to be encoded into binary data.
         /// </summary>
         abstract member writable: Web.WritableStream<string> with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                encoding: string,
+                readable: Web.ReadableStream<JS.Uint8Array>,
+                writable: Web.WritableStream<string>
+            )
+            : TextEncoderStream
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>TextEvent</c>** interface is a legacy UI event interface for reporting changes to text UI elements.
@@ -92148,10 +96212,33 @@ module Web =
         /// </summary>
         abstract member width: float with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                actualBoundingBoxAscent: float,
+                actualBoundingBoxDescent: float,
+                actualBoundingBoxLeft: float,
+                actualBoundingBoxRight: float,
+                alphabeticBaseline: float,
+                emHeightAscent: float,
+                emHeightDescent: float,
+                fontBoundingBoxAscent: float,
+                fontBoundingBoxDescent: float,
+                hangingBaseline: float,
+                ideographicBaseline: float,
+                width: float
+            )
+            : TextMetrics
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type TextTrackEventMap =
         abstract member cuechange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(cuechange: Web.Event) : TextTrackEventMap = nativeOnly
 
     module TextTrackEventMap =
 
@@ -92398,6 +96485,9 @@ module Web =
     type TextTrackCueEventMap =
         abstract member enter: Web.Event with get, set
         abstract member exit: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(enter: Web.Event, exit: Web.Event) : TextTrackCueEventMap = nativeOnly
 
     module TextTrackCueEventMap =
 
@@ -92649,6 +96739,13 @@ module Web =
         abstract member addtrack: Web.TrackEvent with get, set
         abstract member change: Web.Event with get, set
         abstract member removetrack: Web.TrackEvent with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (addtrack: Web.TrackEvent, change: Web.Event, removetrack: Web.TrackEvent)
+            : TextTrackListEventMap
+            =
+            nativeOnly
 
     module TextTrackListEventMap =
 
@@ -93131,6 +97228,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TransformStream/writable)
         /// </summary>
         abstract member writable: Web.WritableStream<'I> with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (readable: Web.ReadableStream<'O>, writable: Web.WritableStream<'I>)
+            : TransformStream<'I, 'O>
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>TransformStreamDefaultController</c>** interface of the Streams API provides methods to manipulate the associated ReadableStream and WritableStream.
@@ -93646,6 +97750,9 @@ module Web =
         /// </summary>
         abstract member isActive: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(hasBeenActive: bool, isActive: bool) : UserActivation = nativeOnly
+
     /// <summary>
     /// The **<c>VTTCue</c>** interface of the WebVTT API represents a cue that can be added to the text track associated with a particular video (or other media).
     ///
@@ -93919,6 +98026,22 @@ module Web =
         /// </summary>
         abstract member width: float with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                id: string,
+                lines: float,
+                regionAnchorX: float,
+                regionAnchorY: float,
+                scroll: Web.ScrollSetting,
+                viewportAnchorX: float,
+                viewportAnchorY: float,
+                width: float
+            )
+            : VTTRegion
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ValidityState</c>** interface represents the validity states that an element can be in, with respect to constraint validation. Together, they help explain why an element's value fails to validate, if it's not valid.
     ///
@@ -93994,6 +98117,25 @@ module Web =
         /// </summary>
         abstract member valueMissing: bool with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                badInput: bool,
+                customError: bool,
+                patternMismatch: bool,
+                rangeOverflow: bool,
+                rangeUnderflow: bool,
+                stepMismatch: bool,
+                tooLong: bool,
+                tooShort: bool,
+                typeMismatch: bool,
+                valid: bool,
+                valueMissing: bool
+            )
+            : ValidityState
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>VideoColorSpace</c>** interface of the WebCodecs API represents the color space of a video.
     ///
@@ -94037,6 +98179,9 @@ module Web =
     [<Interface>]
     type VideoDecoderEventMap =
         abstract member dequeue: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(dequeue: Web.Event) : VideoDecoderEventMap = nativeOnly
 
     module VideoDecoderEventMap =
 
@@ -94267,6 +98412,9 @@ module Web =
     [<Interface>]
     type VideoEncoderEventMap =
         abstract member dequeue: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(dequeue: Web.Event) : VideoEncoderEventMap = nativeOnly
 
     module VideoEncoderEventMap =
 
@@ -94625,6 +98773,18 @@ module Web =
         /// </summary>
         abstract member totalVideoFrames: float with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                corruptedVideoFrames: float,
+                creationTime: Web.DOMHighResTimeStamp,
+                droppedVideoFrames: float,
+                totalVideoFrames: float
+            )
+            : VideoPlaybackQuality
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>ViewTimeline</c>** interface of the Web Animations API represents a view progress timeline (see CSS scroll-driven animations for more details).
     ///
@@ -94652,6 +98812,21 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTimeline/subject)
         /// </summary>
         abstract member subject: Web.Element with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                axis: Web.ScrollAxis,
+                endOffset: Web.CSSNumericValue,
+                startOffset: Web.CSSNumericValue,
+                subject: Web.Element,
+                ?currentTime: Web.CSSNumberish,
+                ?duration: Web.CSSNumberish,
+                ?source: Web.Element
+            )
+            : ViewTimeline
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>ViewTransition</c>** interface of the View Transition API represents an active view transition, and provides functionality to react to the transition reaching different states (e.g., ready to run the animation, or animation finished) or skip the transition altogether.
@@ -94709,6 +98884,13 @@ module Web =
         abstract member resize: Web.Event with get, set
         abstract member scroll: Web.Event with get, set
         abstract member scrollend: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (resize: Web.Event, scroll: Web.Event, scrollend: Web.Event)
+            : VisualViewportEventMap
+            =
+            nativeOnly
 
     module VisualViewportEventMap =
 
@@ -94960,6 +99142,17 @@ module Web =
         abstract member FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: int with get
         abstract member UNSIGNED_NORMALIZED_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                RGBA32F_EXT: int,
+                FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: int,
+                UNSIGNED_NORMALIZED_EXT: int
+            )
+            : WEBGL_color_buffer_float
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WEBGL_compressed_texture_astc</c>** extension is part of the WebGL API and exposes Adaptive Scalable Texture Compression (ASTC) compressed texture formats to WebGL.
     ///
@@ -95022,6 +99215,24 @@ module Web =
         abstract member COMPRESSED_RGBA8_ETC2_EAC: int with get
         abstract member COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                COMPRESSED_R11_EAC: int,
+                COMPRESSED_SIGNED_R11_EAC: int,
+                COMPRESSED_RG11_EAC: int,
+                COMPRESSED_SIGNED_RG11_EAC: int,
+                COMPRESSED_RGB8_ETC2: int,
+                COMPRESSED_SRGB8_ETC2: int,
+                COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2: int,
+                COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: int,
+                COMPRESSED_RGBA8_ETC2_EAC: int,
+                COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: int
+            )
+            : WEBGL_compressed_texture_etc
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WEBGL_compressed_texture_etc1</c>** extension is part of the WebGL API and exposes the ETC1 compressed texture format.
     ///
@@ -95031,6 +99242,10 @@ module Web =
     [<Interface>]
     type WEBGL_compressed_texture_etc1 =
         abstract member COMPRESSED_RGB_ETC1_WEBGL: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(COMPRESSED_RGB_ETC1_WEBGL: int) : WEBGL_compressed_texture_etc1 =
+            nativeOnly
 
     /// <summary>
     /// The **<c>WEBGL_compressed_texture_pvrtc</c>** extension is part of the WebGL API and exposes four PVRTC compressed texture formats.
@@ -95045,6 +99260,18 @@ module Web =
         abstract member COMPRESSED_RGBA_PVRTC_4BPPV1_IMG: int with get
         abstract member COMPRESSED_RGBA_PVRTC_2BPPV1_IMG: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                COMPRESSED_RGB_PVRTC_4BPPV1_IMG: int,
+                COMPRESSED_RGB_PVRTC_2BPPV1_IMG: int,
+                COMPRESSED_RGBA_PVRTC_4BPPV1_IMG: int,
+                COMPRESSED_RGBA_PVRTC_2BPPV1_IMG: int
+            )
+            : WEBGL_compressed_texture_pvrtc
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WEBGL_compressed_texture_s3tc</c>** extension is part of the WebGL API and exposes four S3TC compressed texture formats.
     ///
@@ -95057,6 +99284,18 @@ module Web =
         abstract member COMPRESSED_RGBA_S3TC_DXT1_EXT: int with get
         abstract member COMPRESSED_RGBA_S3TC_DXT3_EXT: int with get
         abstract member COMPRESSED_RGBA_S3TC_DXT5_EXT: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                COMPRESSED_RGB_S3TC_DXT1_EXT: int,
+                COMPRESSED_RGBA_S3TC_DXT1_EXT: int,
+                COMPRESSED_RGBA_S3TC_DXT3_EXT: int,
+                COMPRESSED_RGBA_S3TC_DXT5_EXT: int
+            )
+            : WEBGL_compressed_texture_s3tc
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>WEBGL_compressed_texture_s3tc_srgb</c>** extension is part of the WebGL API and exposes four S3TC compressed texture formats for the sRGB colorspace.
@@ -95071,6 +99310,18 @@ module Web =
         abstract member COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT: int with get
         abstract member COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT: int with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                COMPRESSED_SRGB_S3TC_DXT1_EXT: int,
+                COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT: int,
+                COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT: int,
+                COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT: int
+            )
+            : WEBGL_compressed_texture_s3tc_srgb
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WEBGL_debug_renderer_info</c>** extension is part of the WebGL API and exposes two constants with information about the graphics driver for debugging purposes.
     ///
@@ -95081,6 +99332,13 @@ module Web =
     type WEBGL_debug_renderer_info =
         abstract member UNMASKED_VENDOR_WEBGL: int with get
         abstract member UNMASKED_RENDERER_WEBGL: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (UNMASKED_VENDOR_WEBGL: int, UNMASKED_RENDERER_WEBGL: int)
+            : WEBGL_debug_renderer_info
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>WEBGL_debug_shaders</c>** extension is part of the WebGL API and exposes a method to debug shaders from privileged contexts.
@@ -95106,6 +99364,9 @@ module Web =
     [<Interface>]
     type WEBGL_depth_texture =
         abstract member UNSIGNED_INT_24_8_WEBGL: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(UNSIGNED_INT_24_8_WEBGL: int) : WEBGL_depth_texture = nativeOnly
 
     /// <summary>
     /// The **<c>WEBGL_draw_buffers</c>** extension is part of the WebGL API and enables a fragment shader to write to several textures, which is useful for deferred shading, for example.
@@ -96045,6 +100306,9 @@ module Web =
     [<Interface>]
     type WakeLockSentinelEventMap =
         abstract member release: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(release: Web.Event) : WakeLockSentinelEventMap = nativeOnly
 
     module WakeLockSentinelEventMap =
 
@@ -99185,6 +103449,13 @@ module Web =
         /// </summary>
         abstract member ``type``: Web.GLenum with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, size: Web.GLint, ``type``: Web.GLenum)
+            : WebGLActiveInfo
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WebGLBuffer</c>** interface is part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors.
     ///
@@ -101131,6 +105402,13 @@ module Web =
         /// </summary>
         abstract member rangeMin: Web.GLint with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (precision: Web.GLint, rangeMax: Web.GLint, rangeMin: Web.GLint)
+            : WebGLShaderPrecisionFormat
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WebGLSync</c>** interface is part of the WebGL 2 API and is used to synchronize activities between the GPU and the application.
     ///
@@ -101190,6 +105468,13 @@ module Web =
         abstract member error: Web.Event with get, set
         abstract member message: Web.MessageEvent with get, set
         abstract member ``open``: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (close: Web.CloseEvent, error: Web.Event, message: Web.MessageEvent, ``open``: Web.Event)
+            : WebSocketEventMap
+            =
+            nativeOnly
 
     module WebSocketEventMap =
 
@@ -101567,6 +105852,13 @@ module Web =
         /// </summary>
         abstract member writable: Web.WritableStream with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (readable: Web.ReadableStream, writable: Web.WritableStream)
+            : WebTransportBidirectionalStream
+            =
+            nativeOnly
+
     /// <summary>
     /// The **<c>WebTransportDatagramDuplexStream</c>** interface of the WebTransport API represents a duplex stream that can be used for unreliable transport of datagrams between client and server. Provides access to a ReadableStream for reading incoming datagrams, a WritableStream for writing outgoing datagrams, and various settings and statistics related to the stream.
     /// Available only in secure contexts.
@@ -101618,6 +105910,21 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/writable)
         /// </summary>
         abstract member writable: Web.WritableStream with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                incomingHighWaterMark: float,
+                maxDatagramSize: float,
+                outgoingHighWaterMark: float,
+                readable: Web.ReadableStream,
+                writable: Web.WritableStream,
+                ?incomingMaxAge: float,
+                ?outgoingMaxAge: float
+            )
+            : WebTransportDatagramDuplexStream
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>WebTransportError</c>** interface of the WebTransport API represents an error related to the API, which can arise from server errors, network connection problems, or client-initiated abort operations (for example, arising from a WritableStream.abort() call).
@@ -101731,6 +106038,145 @@ module Web =
         abstract member gamepadconnected: Web.GamepadEvent with get, set
         abstract member gamepaddisconnected: Web.GamepadEvent with get, set
         abstract member orientationchange: Web.Event with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.UIEvent,
+                animationcancel: Web.AnimationEvent,
+                animationend: Web.AnimationEvent,
+                animationiteration: Web.AnimationEvent,
+                animationstart: Web.AnimationEvent,
+                auxclick: Web.PointerEvent,
+                beforeinput: Web.InputEvent,
+                beforematch: Web.Event,
+                beforetoggle: Web.ToggleEvent,
+                blur: Web.FocusEvent,
+                cancel: Web.Event,
+                canplay: Web.Event,
+                canplaythrough: Web.Event,
+                change: Web.Event,
+                click: Web.PointerEvent,
+                close: Web.Event,
+                command: Web.Event,
+                compositionend: Web.CompositionEvent,
+                compositionstart: Web.CompositionEvent,
+                compositionupdate: Web.CompositionEvent,
+                contextlost: Web.Event,
+                contextmenu: Web.PointerEvent,
+                contextrestored: Web.Event,
+                copy: Web.ClipboardEvent,
+                cuechange: Web.Event,
+                cut: Web.ClipboardEvent,
+                dblclick: Web.MouseEvent,
+                drag: Web.DragEvent,
+                dragend: Web.DragEvent,
+                dragenter: Web.DragEvent,
+                dragleave: Web.DragEvent,
+                dragover: Web.DragEvent,
+                dragstart: Web.DragEvent,
+                drop: Web.DragEvent,
+                durationchange: Web.Event,
+                emptied: Web.Event,
+                ended: Web.Event,
+                error: Web.ErrorEvent,
+                focus: Web.FocusEvent,
+                focusin: Web.FocusEvent,
+                focusout: Web.FocusEvent,
+                formdata: Web.FormDataEvent,
+                gotpointercapture: Web.PointerEvent,
+                input: Web.InputEvent,
+                invalid: Web.Event,
+                keydown: Web.KeyboardEvent,
+                keypress: Web.KeyboardEvent,
+                keyup: Web.KeyboardEvent,
+                load: Web.Event,
+                loadeddata: Web.Event,
+                loadedmetadata: Web.Event,
+                loadstart: Web.Event,
+                lostpointercapture: Web.PointerEvent,
+                mousedown: Web.MouseEvent,
+                mouseenter: Web.MouseEvent,
+                mouseleave: Web.MouseEvent,
+                mousemove: Web.MouseEvent,
+                mouseout: Web.MouseEvent,
+                mouseover: Web.MouseEvent,
+                mouseup: Web.MouseEvent,
+                paste: Web.ClipboardEvent,
+                pause: Web.Event,
+                play: Web.Event,
+                playing: Web.Event,
+                pointercancel: Web.PointerEvent,
+                pointerdown: Web.PointerEvent,
+                pointerenter: Web.PointerEvent,
+                pointerleave: Web.PointerEvent,
+                pointermove: Web.PointerEvent,
+                pointerout: Web.PointerEvent,
+                pointerover: Web.PointerEvent,
+                pointerrawupdate: Web.Event,
+                pointerup: Web.PointerEvent,
+                progress: Web.ProgressEvent,
+                ratechange: Web.Event,
+                reset: Web.Event,
+                resize: Web.UIEvent,
+                scroll: Web.Event,
+                scrollend: Web.Event,
+                securitypolicyviolation: Web.SecurityPolicyViolationEvent,
+                seeked: Web.Event,
+                seeking: Web.Event,
+                select: Web.Event,
+                selectionchange: Web.Event,
+                selectstart: Web.Event,
+                slotchange: Web.Event,
+                stalled: Web.Event,
+                submit: Web.SubmitEvent,
+                suspend: Web.Event,
+                timeupdate: Web.Event,
+                toggle: Web.ToggleEvent,
+                touchcancel: Web.TouchEvent,
+                touchend: Web.TouchEvent,
+                touchmove: Web.TouchEvent,
+                touchstart: Web.TouchEvent,
+                transitioncancel: Web.TransitionEvent,
+                transitionend: Web.TransitionEvent,
+                transitionrun: Web.TransitionEvent,
+                transitionstart: Web.TransitionEvent,
+                volumechange: Web.Event,
+                waiting: Web.Event,
+                webkitanimationend: Web.Event,
+                webkitanimationiteration: Web.Event,
+                webkitanimationstart: Web.Event,
+                webkittransitionend: Web.Event,
+                wheel: Web.WheelEvent,
+                afterprint: Web.Event,
+                beforeprint: Web.Event,
+                beforeunload: Web.BeforeUnloadEvent,
+                hashchange: Web.HashChangeEvent,
+                languagechange: Web.Event,
+                message: Web.MessageEvent,
+                messageerror: Web.MessageEvent,
+                offline: Web.Event,
+                online: Web.Event,
+                pagehide: Web.PageTransitionEvent,
+                pagereveal: Web.PageRevealEvent,
+                pageshow: Web.PageTransitionEvent,
+                pageswap: Web.PageSwapEvent,
+                popstate: Web.PopStateEvent,
+                rejectionhandled: Web.PromiseRejectionEvent,
+                storage: Web.StorageEvent,
+                unhandledrejection: Web.PromiseRejectionEvent,
+                unload: Web.Event,
+                DOMContentLoaded: Web.Event,
+                devicemotion: Web.DeviceMotionEvent,
+                deviceorientation: Web.DeviceOrientationEvent,
+                deviceorientationabsolute: Web.DeviceOrientationEvent,
+                gamepadconnected: Web.GamepadEvent,
+                gamepaddisconnected: Web.GamepadEvent,
+                orientationchange: Web.Event
+            )
+            : WindowEventMap
+            =
+            nativeOnly
 
     module WindowEventMap =
 
@@ -102824,6 +107270,34 @@ module Web =
         abstract member unhandledrejection: Web.PromiseRejectionEvent with get, set
         abstract member unload: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                afterprint: Web.Event,
+                beforeprint: Web.Event,
+                beforeunload: Web.BeforeUnloadEvent,
+                gamepadconnected: Web.GamepadEvent,
+                gamepaddisconnected: Web.GamepadEvent,
+                hashchange: Web.HashChangeEvent,
+                languagechange: Web.Event,
+                message: Web.MessageEvent,
+                messageerror: Web.MessageEvent,
+                offline: Web.Event,
+                online: Web.Event,
+                pagehide: Web.PageTransitionEvent,
+                pagereveal: Web.PageRevealEvent,
+                pageshow: Web.PageTransitionEvent,
+                pageswap: Web.PageSwapEvent,
+                popstate: Web.PopStateEvent,
+                rejectionhandled: Web.PromiseRejectionEvent,
+                storage: Web.StorageEvent,
+                unhandledrejection: Web.PromiseRejectionEvent,
+                unload: Web.Event
+            )
+            : WindowEventHandlersEventMap
+            =
+            nativeOnly
+
     module WindowEventHandlersEventMap =
 
         [<AllowNullLiteral>]
@@ -103053,6 +107527,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/localStorage)
         /// </summary>
         abstract member localStorage: Web.Storage with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(localStorage: Web.Storage) : WindowLocalStorage = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -103374,11 +107851,21 @@ module Web =
         /// </summary>
         abstract member sessionStorage: Web.Storage with get
 
+        [<ParamObject; Emit("$0")>]
+        static member Create(sessionStorage: Web.Storage) : WindowSessionStorage = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type WorkerEventMap =
         inherit Web.AbstractWorkerEventMap
         inherit Web.MessageEventTargetEventMap
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.ErrorEvent, message: Web.MessageEvent, messageerror: Web.MessageEvent)
+            : WorkerEventMap
+            =
+            nativeOnly
 
     module WorkerEventMap =
 
@@ -103890,6 +108377,22 @@ module Web =
         inherit Web.XMLHttpRequestEventTargetEventMap
         abstract member readystatechange: Web.Event with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                error: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                load: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                loadend: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                loadstart: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                progress: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                timeout: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                readystatechange: Web.Event
+            )
+            : XMLHttpRequestEventMap
+            =
+            nativeOnly
+
     module XMLHttpRequestEventMap =
 
         [<AllowNullLiteral>]
@@ -104303,6 +108806,21 @@ module Web =
         abstract member loadstart: Web.ProgressEvent<Web.XMLHttpRequestEventTarget> with get, set
         abstract member progress: Web.ProgressEvent<Web.XMLHttpRequestEventTarget> with get, set
         abstract member timeout: Web.ProgressEvent<Web.XMLHttpRequestEventTarget> with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                abort: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                error: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                load: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                loadend: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                loadstart: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                progress: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>,
+                timeout: Web.ProgressEvent<Web.XMLHttpRequestEventTarget>
+            )
+            : XMLHttpRequestEventTargetEventMap
+            =
+            nativeOnly
 
     module XMLHttpRequestEventTargetEventMap =
 
@@ -105669,6 +110187,9 @@ module Web =
             /// </summary>
             abstract member exports: Web.WebAssembly_.Exports with get
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(exports: Web.WebAssembly_.Exports) : Instance = nativeOnly
+
         /// <summary>
         /// The **<c>WebAssembly.LinkError</c>** object indicates an error during module instantiation (besides traps from the start function).
         /// </summary>
@@ -105806,12 +110327,26 @@ module Web =
             abstract member kind: Web.WebAssembly_.ImportExportKind with get, set
             abstract member name: string with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (kind: Web.WebAssembly_.ImportExportKind, name: string)
+                : ModuleExportDescriptor
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ModuleImportDescriptor =
             abstract member kind: Web.WebAssembly_.ImportExportKind with get, set
             abstract member ``module``: string with get, set
             abstract member name: string with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (kind: Web.WebAssembly_.ImportExportKind, ``module``: string, name: string)
+                : ModuleImportDescriptor
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -105853,6 +110388,21 @@ module Web =
             abstract member i64: bigint with get, set
             abstract member v128: obj with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    anyfunc: Action,
+                    externref: obj,
+                    f32: float,
+                    f64: float,
+                    i32: float,
+                    i64: bigint,
+                    v128: obj
+                )
+                : ValueTypeMap
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type WebAssemblyCompileOptions =
@@ -105871,6 +110421,13 @@ module Web =
         type WebAssemblyInstantiatedSource =
             abstract member instance: Web.WebAssembly_.Instance with get, set
             abstract member ``module``: Web.WebAssembly_.Module with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (instance: Web.WebAssembly_.Instance, ``module``: Web.WebAssembly_.Module)
+                : WebAssemblyInstantiatedSource
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -106454,6 +111011,126 @@ module Web =
         abstract member video: Web.HTMLVideoElement with get, set
         abstract member wbr: Web.HTMLElement with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                a: Web.HTMLAnchorElement,
+                abbr: Web.HTMLElement,
+                address: Web.HTMLElement,
+                area: Web.HTMLAreaElement,
+                article: Web.HTMLElement,
+                aside: Web.HTMLElement,
+                audio: Web.HTMLAudioElement,
+                b: Web.HTMLElement,
+                ``base``: Web.HTMLBaseElement,
+                bdi: Web.HTMLElement,
+                bdo: Web.HTMLElement,
+                blockquote: Web.HTMLQuoteElement,
+                body: Web.HTMLBodyElement,
+                br: Web.HTMLBRElement,
+                button: Web.HTMLButtonElement,
+                canvas: Web.HTMLCanvasElement,
+                caption: Web.HTMLTableCaptionElement,
+                cite: Web.HTMLElement,
+                code: Web.HTMLElement,
+                col: Web.HTMLTableColElement,
+                colgroup: Web.HTMLTableColElement,
+                data: Web.HTMLDataElement,
+                datalist: Web.HTMLDataListElement,
+                dd: Web.HTMLElement,
+                del: Web.HTMLModElement,
+                details: Web.HTMLDetailsElement,
+                dfn: Web.HTMLElement,
+                dialog: Web.HTMLDialogElement,
+                div: Web.HTMLDivElement,
+                dl: Web.HTMLDListElement,
+                dt: Web.HTMLElement,
+                em: Web.HTMLElement,
+                embed: Web.HTMLEmbedElement,
+                fieldset: Web.HTMLFieldSetElement,
+                figcaption: Web.HTMLElement,
+                figure: Web.HTMLElement,
+                footer: Web.HTMLElement,
+                form: Web.HTMLFormElement,
+                h1: Web.HTMLHeadingElement,
+                h2: Web.HTMLHeadingElement,
+                h3: Web.HTMLHeadingElement,
+                h4: Web.HTMLHeadingElement,
+                h5: Web.HTMLHeadingElement,
+                h6: Web.HTMLHeadingElement,
+                head: Web.HTMLHeadElement,
+                header: Web.HTMLElement,
+                hgroup: Web.HTMLElement,
+                hr: Web.HTMLHRElement,
+                html: Web.HTMLHtmlElement,
+                i: Web.HTMLElement,
+                iframe: Web.HTMLIFrameElement,
+                img: Web.HTMLImageElement,
+                input: Web.HTMLInputElement,
+                ins: Web.HTMLModElement,
+                kbd: Web.HTMLElement,
+                label: Web.HTMLLabelElement,
+                legend: Web.HTMLLegendElement,
+                li: Web.HTMLLIElement,
+                link: Web.HTMLLinkElement,
+                main: Web.HTMLElement,
+                map: Web.HTMLMapElement,
+                mark: Web.HTMLElement,
+                menu: Web.HTMLMenuElement,
+                meta: Web.HTMLMetaElement,
+                meter: Web.HTMLMeterElement,
+                nav: Web.HTMLElement,
+                noscript: Web.HTMLElement,
+                ``object``: Web.HTMLObjectElement,
+                ol: Web.HTMLOListElement,
+                optgroup: Web.HTMLOptGroupElement,
+                option: Web.HTMLOptionElement,
+                output: Web.HTMLOutputElement,
+                p: Web.HTMLParagraphElement,
+                picture: Web.HTMLPictureElement,
+                pre: Web.HTMLPreElement,
+                progress: Web.HTMLProgressElement,
+                q: Web.HTMLQuoteElement,
+                rp: Web.HTMLElement,
+                rt: Web.HTMLElement,
+                ruby: Web.HTMLElement,
+                s: Web.HTMLElement,
+                samp: Web.HTMLElement,
+                script: Web.HTMLScriptElement,
+                search: Web.HTMLElement,
+                section: Web.HTMLElement,
+                select: Web.HTMLSelectElement,
+                slot: Web.HTMLSlotElement,
+                small: Web.HTMLElement,
+                source: Web.HTMLSourceElement,
+                span: Web.HTMLSpanElement,
+                strong: Web.HTMLElement,
+                style: Web.HTMLStyleElement,
+                sub: Web.HTMLElement,
+                summary: Web.HTMLElement,
+                sup: Web.HTMLElement,
+                table: Web.HTMLTableElement,
+                tbody: Web.HTMLTableSectionElement,
+                td: Web.HTMLTableCellElement,
+                template: Web.HTMLTemplateElement,
+                textarea: Web.HTMLTextAreaElement,
+                tfoot: Web.HTMLTableSectionElement,
+                th: Web.HTMLTableCellElement,
+                thead: Web.HTMLTableSectionElement,
+                time: Web.HTMLTimeElement,
+                title: Web.HTMLTitleElement,
+                tr: Web.HTMLTableRowElement,
+                track: Web.HTMLTrackElement,
+                u: Web.HTMLElement,
+                ul: Web.HTMLUListElement,
+                var: Web.HTMLElement,
+                video: Web.HTMLVideoElement,
+                wbr: Web.HTMLElement
+            )
+            : HTMLElementTagNameMap
+            =
+            nativeOnly
+
     module HTMLElementTagNameMap =
 
         [<AllowNullLiteral>]
@@ -106832,6 +111509,43 @@ module Web =
         abstract member tt: Web.HTMLElement with get, set
         abstract member xmp: Web.HTMLPreElement with get, set
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                acronym: Web.HTMLElement,
+                applet: Web.HTMLUnknownElement,
+                basefont: Web.HTMLElement,
+                bgsound: Web.HTMLUnknownElement,
+                big: Web.HTMLElement,
+                blink: Web.HTMLUnknownElement,
+                center: Web.HTMLElement,
+                dir: Web.HTMLDirectoryElement,
+                font: Web.HTMLFontElement,
+                frame: Web.HTMLFrameElement,
+                frameset: Web.HTMLFrameSetElement,
+                isindex: Web.HTMLUnknownElement,
+                keygen: Web.HTMLUnknownElement,
+                listing: Web.HTMLPreElement,
+                marquee: Web.HTMLMarqueeElement,
+                menuitem: Web.HTMLElement,
+                multicol: Web.HTMLUnknownElement,
+                nextid: Web.HTMLUnknownElement,
+                nobr: Web.HTMLElement,
+                noembed: Web.HTMLElement,
+                noframes: Web.HTMLElement,
+                param: Web.HTMLParamElement,
+                plaintext: Web.HTMLElement,
+                rb: Web.HTMLElement,
+                rtc: Web.HTMLElement,
+                spacer: Web.HTMLUnknownElement,
+                strike: Web.HTMLElement,
+                tt: Web.HTMLElement,
+                xmp: Web.HTMLPreElement
+            )
+            : HTMLElementDeprecatedTagNameMap
+            =
+            nativeOnly
+
     module HTMLElementDeprecatedTagNameMap =
 
         [<AllowNullLiteral>]
@@ -106994,6 +111708,77 @@ module Web =
         abstract member tspan: Web.SVGTSpanElement with get, set
         abstract member ``use``: Web.SVGUseElement with get, set
         abstract member view: Web.SVGViewElement with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                a: Web.SVGAElement,
+                animate: Web.SVGAnimateElement,
+                animateMotion: Web.SVGAnimateMotionElement,
+                animateTransform: Web.SVGAnimateTransformElement,
+                circle: Web.SVGCircleElement,
+                clipPath: Web.SVGClipPathElement,
+                defs: Web.SVGDefsElement,
+                desc: Web.SVGDescElement,
+                ellipse: Web.SVGEllipseElement,
+                feBlend: Web.SVGFEBlendElement,
+                feColorMatrix: Web.SVGFEColorMatrixElement,
+                feComponentTransfer: Web.SVGFEComponentTransferElement,
+                feComposite: Web.SVGFECompositeElement,
+                feConvolveMatrix: Web.SVGFEConvolveMatrixElement,
+                feDiffuseLighting: Web.SVGFEDiffuseLightingElement,
+                feDisplacementMap: Web.SVGFEDisplacementMapElement,
+                feDistantLight: Web.SVGFEDistantLightElement,
+                feDropShadow: Web.SVGFEDropShadowElement,
+                feFlood: Web.SVGFEFloodElement,
+                feFuncA: Web.SVGFEFuncAElement,
+                feFuncB: Web.SVGFEFuncBElement,
+                feFuncG: Web.SVGFEFuncGElement,
+                feFuncR: Web.SVGFEFuncRElement,
+                feGaussianBlur: Web.SVGFEGaussianBlurElement,
+                feImage: Web.SVGFEImageElement,
+                feMerge: Web.SVGFEMergeElement,
+                feMergeNode: Web.SVGFEMergeNodeElement,
+                feMorphology: Web.SVGFEMorphologyElement,
+                feOffset: Web.SVGFEOffsetElement,
+                fePointLight: Web.SVGFEPointLightElement,
+                feSpecularLighting: Web.SVGFESpecularLightingElement,
+                feSpotLight: Web.SVGFESpotLightElement,
+                feTile: Web.SVGFETileElement,
+                feTurbulence: Web.SVGFETurbulenceElement,
+                filter: Web.SVGFilterElement,
+                foreignObject: Web.SVGForeignObjectElement,
+                g: Web.SVGGElement,
+                image: Web.SVGImageElement,
+                line: Web.SVGLineElement,
+                linearGradient: Web.SVGLinearGradientElement,
+                marker: Web.SVGMarkerElement,
+                mask: Web.SVGMaskElement,
+                metadata: Web.SVGMetadataElement,
+                mpath: Web.SVGMPathElement,
+                path: Web.SVGPathElement,
+                pattern: Web.SVGPatternElement,
+                polygon: Web.SVGPolygonElement,
+                polyline: Web.SVGPolylineElement,
+                radialGradient: Web.SVGRadialGradientElement,
+                rect: Web.SVGRectElement,
+                script: Web.SVGScriptElement,
+                set: Web.SVGSetElement,
+                stop: Web.SVGStopElement,
+                style: Web.SVGStyleElement,
+                svg: Web.SVGSVGElement,
+                switch: Web.SVGSwitchElement,
+                symbol: Web.SVGSymbolElement,
+                text: Web.SVGTextElement,
+                textPath: Web.SVGTextPathElement,
+                title: Web.SVGTitleElement,
+                tspan: Web.SVGTSpanElement,
+                ``use``: Web.SVGUseElement,
+                view: Web.SVGViewElement
+            )
+            : SVGElementTagNameMap
+            =
+            nativeOnly
 
     module SVGElementTagNameMap =
 
@@ -107231,6 +112016,45 @@ module Web =
         abstract member munder: Web.MathMLElement with get, set
         abstract member munderover: Web.MathMLElement with get, set
         abstract member semantics: Web.MathMLElement with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                a: Web.MathMLElement,
+                annotation: Web.MathMLElement,
+                ``annotation-xml``: Web.MathMLElement,
+                maction: Web.MathMLElement,
+                math: Web.MathMLElement,
+                merror: Web.MathMLElement,
+                mfrac: Web.MathMLElement,
+                mi: Web.MathMLElement,
+                mmultiscripts: Web.MathMLElement,
+                mn: Web.MathMLElement,
+                mo: Web.MathMLElement,
+                mover: Web.MathMLElement,
+                mpadded: Web.MathMLElement,
+                mphantom: Web.MathMLElement,
+                mprescripts: Web.MathMLElement,
+                mroot: Web.MathMLElement,
+                mrow: Web.MathMLElement,
+                ms: Web.MathMLElement,
+                mspace: Web.MathMLElement,
+                msqrt: Web.MathMLElement,
+                mstyle: Web.MathMLElement,
+                msub: Web.MathMLElement,
+                msubsup: Web.MathMLElement,
+                msup: Web.MathMLElement,
+                mtable: Web.MathMLElement,
+                mtd: Web.MathMLElement,
+                mtext: Web.MathMLElement,
+                mtr: Web.MathMLElement,
+                munder: Web.MathMLElement,
+                munderover: Web.MathMLElement,
+                semantics: Web.MathMLElement
+            )
+            : MathMLElementTagNameMap
+            =
+            nativeOnly
 
     module MathMLElementTagNameMap =
 
@@ -108313,7 +113137,86 @@ module Web =
 
     type TimerHandler = U2<string, Action>
 
-    type Transferable = obj
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type Transferable =
+        | Case1 of Web.OffscreenCanvas
+        | Case2 of Web.ImageBitmap
+        | Case3 of Web.MessagePort
+        | Case4 of Web.MediaSourceHandle
+        | Case5 of Web.ReadableStream
+        | Case6 of Web.WritableStream
+        | Case7 of Web.TransformStream
+        | Case8 of Web.AudioData
+        | Case9 of Web.VideoFrame
+        | Case10 of Web.RTCDataChannel
+        | Case11 of obj
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.OffscreenCanvas) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.OffscreenCanvas) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageBitmap) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageBitmap) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.MessagePort) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.MessagePort) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.MediaSourceHandle) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.MediaSourceHandle) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ReadableStream) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ReadableStream) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WritableStream) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WritableStream) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.TransformStream) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.TransformStream) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.AudioData) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.AudioData) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.VideoFrame) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.VideoFrame) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.RTCDataChannel) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.RTCDataChannel) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: obj) : Transferable = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: obj) : Transferable = nativeOnly
 
     type URLPatternInput = U2<string, Web.URLPatternInit>
 
@@ -110829,6 +115732,172 @@ module Web =
 
                 [<ParamObject; Emit("$0")>]
                 static member Create(mode: string) : options = nativeOnly
+
+    module SVGSVGElement =
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type getEnclosureList =
+            | Case1 of Web.SVGCircleElement
+            | Case2 of Web.SVGEllipseElement
+            | Case3 of Web.SVGImageElement
+            | Case4 of Web.SVGLineElement
+            | Case5 of Web.SVGPathElement
+            | Case6 of Web.SVGPolygonElement
+            | Case7 of Web.SVGPolylineElement
+            | Case8 of Web.SVGRectElement
+            | Case9 of Web.SVGTextElement
+            | Case10 of Web.SVGUseElement
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGCircleElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGCircleElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGEllipseElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGEllipseElement) : getEnclosureList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGImageElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGImageElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGLineElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGLineElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGPathElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGPathElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGPolygonElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGPolygonElement) : getEnclosureList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGPolylineElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGPolylineElement) : getEnclosureList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGRectElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGRectElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGTextElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGTextElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGUseElement) : getEnclosureList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGUseElement) : getEnclosureList = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type getIntersectionList =
+            | Case1 of Web.SVGCircleElement
+            | Case2 of Web.SVGEllipseElement
+            | Case3 of Web.SVGImageElement
+            | Case4 of Web.SVGLineElement
+            | Case5 of Web.SVGPathElement
+            | Case6 of Web.SVGPolygonElement
+            | Case7 of Web.SVGPolylineElement
+            | Case8 of Web.SVGRectElement
+            | Case9 of Web.SVGTextElement
+            | Case10 of Web.SVGUseElement
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGCircleElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGCircleElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGEllipseElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGEllipseElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGImageElement) : getIntersectionList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGImageElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGLineElement) : getIntersectionList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGLineElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGPathElement) : getIntersectionList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGPathElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGPolygonElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGPolygonElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGPolylineElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGPolylineElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGRectElement) : getIntersectionList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGRectElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGTextElement) : getIntersectionList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGTextElement) : getIntersectionList =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.SVGUseElement) : getIntersectionList = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.SVGUseElement) : getIntersectionList = nativeOnly
 
     module StylePropertyMapReadOnly =
 

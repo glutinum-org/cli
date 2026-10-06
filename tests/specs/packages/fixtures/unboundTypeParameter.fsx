@@ -40,6 +40,8 @@ module UnboundTypeParameter =
     type Options<'TQueryFnData, 'TQueryKey, 'TPageParam> =
         abstract member queryKey: 'TQueryKey with get, set
         abstract member persister: (UnboundTypeParameter.QueryFunction<'TQueryFnData, 'TQueryKey, obj> -> 'TQueryFnData) option with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (queryKey: 'TQueryKey, ?persister: (UnboundTypeParameter.QueryFunction<'TQueryFnData, 'TQueryKey, obj> -> 'TQueryFnData)) : Options<'TQueryFnData, 'TQueryKey, 'TPageParam> = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]

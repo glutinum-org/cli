@@ -10,6 +10,8 @@ module ExternalDependency =
     [<Interface>]
     type Logger =
         abstract member stream: obj with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (stream: obj) : Logger = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

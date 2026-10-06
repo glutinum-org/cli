@@ -8,17 +8,23 @@ open System
 [<Interface>]
 type Base =
     abstract member kind: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: string) : Base = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Req<'G, 'S> =
     abstract member g: 'G with get, set
     abstract member s: 'S with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (g: 'G, s: 'S) : Req<'G, 'S> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type ServerOptions<'Server, 'Logger> =
     abstract member frameworkErrors: ServerOptions.frameworkErrors<Base, 'Server> option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?frameworkErrors: ServerOptions.frameworkErrors<Base, 'Server>) : ServerOptions<'Server, 'Logger> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Node =
     abstract member kind: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (kind: float) : Node = nativeOnly
 
 type Visitor<'TIn, 'TOut> =
     delegate of node: 'TIn -> 'TOut

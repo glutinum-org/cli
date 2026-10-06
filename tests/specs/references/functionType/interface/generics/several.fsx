@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type MyObject2<'A, 'B> =
     abstract member foo: MyObject2.foo<'A, 'B> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (foo: MyObject2.foo<'A, 'B>) : MyObject2<'A, 'B> = nativeOnly
 
 module MyObject2 =
 

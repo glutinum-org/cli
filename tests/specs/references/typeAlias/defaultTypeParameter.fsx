@@ -14,11 +14,15 @@ type Exports =
 [<Interface>]
 type Options =
     abstract member debug: bool option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?debug: bool) : Options = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Scale<'O> =
     abstract member options: 'O with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (options: 'O) : Scale<'O> = nativeOnly
 
 type CategoryScale<'O> =
     Scale<'O>
@@ -28,6 +32,8 @@ type CategoryScale<'O> =
 type Pair<'A, 'B> =
     abstract member first: 'A with get, set
     abstract member second: 'B with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (first: 'A, second: 'B) : Pair<'A, 'B> = nativeOnly
 
 type CategoryScale =
     CategoryScale<Options>

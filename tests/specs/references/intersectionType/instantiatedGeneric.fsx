@@ -8,12 +8,16 @@ open System
 [<Interface>]
 type Options =
     abstract member selector: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (selector: string) : Options = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type RegistrationType<'RO> =
     abstract member ``method``: string with get, set
     abstract member options: 'RO with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (``method``: string, options: 'RO) : RegistrationType<'RO> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -26,6 +30,8 @@ type DynamicFeature<'RO> =
 [<Interface>]
 type SendFeature<'T> =
     abstract member send: 'T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (send: 'T) : SendFeature<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

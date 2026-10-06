@@ -15,6 +15,8 @@ type Exports =
 type Todo =
     abstract member title: string with get, set
     abstract member description: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (title: string, description: string) : Todo = nativeOnly
 
 module Exports =
 

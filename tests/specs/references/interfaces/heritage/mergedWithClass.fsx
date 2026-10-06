@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Base =
     abstract member id: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (id: string) : Base = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

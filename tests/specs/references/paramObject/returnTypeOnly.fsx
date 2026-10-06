@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Stats =
     abstract member size: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (size: float) : Stats = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

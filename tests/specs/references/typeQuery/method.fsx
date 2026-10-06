@@ -29,6 +29,8 @@ type Api =
 [<Interface>]
 type UsesSignature =
     abstract member runner: (string -> bool) with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (runner: (string -> bool)) : UsesSignature = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -10,6 +10,8 @@ type MyObject =
     abstract member random: MyObject.random with get, set
     abstract member onDone: (float -> unit) option with get, set
     abstract member log: System.Delegate with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (random: MyObject.random, log: System.Delegate, ?onDone: (float -> unit)) : MyObject = nativeOnly
 
 [<AutoOpen>]
 module MyObjectExtensions =
@@ -23,8 +25,15 @@ module MyObjectExtensions =
 type Child =
     inherit MyObject
     abstract member name: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (random: Child.random, log: System.Delegate, name: string, ?onDone: (float -> unit)) : Child = nativeOnly
 
 module MyObject =
+
+    type random =
+        delegate of min: float * max: float -> float
+
+module Child =
 
     type random =
         delegate of min: float * max: float -> float

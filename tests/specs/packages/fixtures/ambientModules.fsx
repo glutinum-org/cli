@@ -53,6 +53,8 @@ module NodeLike =
             [<Interface>]
             type ReadableStream =
                 abstract member locked: bool with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create (locked: bool) : ReadableStream = nativeOnly
 
     module util =
 

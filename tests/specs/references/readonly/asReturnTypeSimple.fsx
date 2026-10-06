@@ -8,11 +8,15 @@ open System
 [<Interface>]
 type TerminalOptions =
     abstract member prefix: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (prefix: string) : TerminalOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Foo =
     abstract member terminal: Foo.terminal with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (terminal: Foo.terminal) : Foo = nativeOnly
 
 module Foo =
 

@@ -9,6 +9,8 @@ open System
 type HighlightResult =
     abstract member value: string with get, set
     abstract member secondBest: HighlightResult.secondBest option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: string, ?secondBest: HighlightResult.secondBest_1) : HighlightResult = nativeOnly
 
 module HighlightResult =
 
@@ -29,6 +31,14 @@ module HighlightResult =
             abstract member secondBest: obj option with get, set
             [<ParamObject; Emit("$0")>]
             static member Create (value: string, ?secondBest: obj) : secondBest = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type secondBest_1 =
+        abstract member value: string with get, set
+        abstract member secondBest: HighlightResult.secondBest.secondBest option with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (value: string, ?secondBest: HighlightResult.secondBest.secondBest) : secondBest_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

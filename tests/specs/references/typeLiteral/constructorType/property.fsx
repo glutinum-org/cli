@@ -8,11 +8,15 @@ open System
 [<Interface>]
 type Instance =
     abstract member level: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: float) : Instance = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Registry =
     abstract member instanceType: Registry.instanceType with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (instanceType: Registry.instanceType) : Registry = nativeOnly
 
 module Registry =
 

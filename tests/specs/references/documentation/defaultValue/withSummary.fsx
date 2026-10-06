@@ -13,6 +13,8 @@ type Logger =
     /// <c>[timestamp]</c>
     /// </summary>
     abstract member prefix: string option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?prefix: string) : Logger = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

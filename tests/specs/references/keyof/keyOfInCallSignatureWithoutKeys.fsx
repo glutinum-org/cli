@@ -23,6 +23,8 @@ type Get<'Key when 'Key :> obj> =
 [<Interface>]
 type Ctx =
     abstract member get<'Key>: key: Empty.Key<'Key> -> 'Key
+    [<ParamObject; Emit("$0")>]
+    static member Create (get: Get) : Ctx = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

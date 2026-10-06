@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type ContextVariableMap =
     abstract member metric: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (metric: string) : ContextVariableMap = nativeOnly
 
 module ContextVariableMap =
 
@@ -29,6 +31,8 @@ type Get<'Key when 'Key :> obj> =
 [<Interface>]
 type Ctx =
     abstract member get<'Key>: key: ContextVariableMap.Key<'Key> -> 'Key
+    [<ParamObject; Emit("$0")>]
+    static member Create (get: Get) : Ctx = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

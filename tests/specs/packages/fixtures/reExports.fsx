@@ -62,6 +62,8 @@ module ReExports =
             [<Interface>]
             type Node =
                 abstract member kind: ReExports.compiler.compiler_.Kind with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create (kind: ReExports.compiler.compiler_.Kind) : Node = nativeOnly
 
     module formatter =
 

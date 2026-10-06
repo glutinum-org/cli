@@ -4629,12 +4629,7 @@ let private aliasOfUtilityType (scope: AliasScope) (utilityType: GlueUtilityType
             : GlueInterface)
 
         let creates =
-            if
-                ParamObjectCandidate.isCandidate
-                    context.State.ParamObjects
-                    context.TypeMemory
-                    candidate
-            then
+            if ParamObjectCandidate.isCandidate context.TypeMemory candidate then
                 let returnType =
                     ({
                         Name = scope.Name
@@ -4705,9 +4700,7 @@ let private aliasOfTypeLiteral (scope: AliasScope) (typeLiteralInfo: GlueTypeLit
         : GlueInterface)
 
     let creates =
-        if
-            ParamObjectCandidate.isCandidate context.State.ParamObjects context.TypeMemory candidate
-        then
+        if ParamObjectCandidate.isCandidate context.TypeMemory candidate then
             let returnType =
                 ({
                     Name = scope.Name
@@ -5294,10 +5287,7 @@ let private transformToFsharp
         function
 
         | GlueType.Interface interfaceInfo when
-            ParamObjectCandidate.isCandidate
-                context.State.ParamObjects
-                context.TypeMemory
-                interfaceInfo
+            ParamObjectCandidate.isCandidate context.TypeMemory interfaceInfo
             ->
             let fsharpInterface = transformInterface context interfaceInfo
 

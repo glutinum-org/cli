@@ -29,6 +29,8 @@ type StaggerParams =
 type ReturnedParams =
     abstract member a: string option with get, set
     abstract member b: float option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?a: string, ?b: float) : ReturnedParams = nativeOnly
 
 module StaggerParams =
 

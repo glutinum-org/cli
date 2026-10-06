@@ -16,6 +16,8 @@ type Exports =
 [<Interface>]
 type Holder<'T> =
     abstract member value: 'T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: 'T) : Holder<'T> = nativeOnly
 
 module ns_ =
 

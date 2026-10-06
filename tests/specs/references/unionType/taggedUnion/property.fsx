@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Props =
     abstract member shape: Props.shape with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (shape: Props.shape) : Props = nativeOnly
 
 module Props =
 

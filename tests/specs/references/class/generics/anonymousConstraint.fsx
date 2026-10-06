@@ -14,11 +14,15 @@ type Exports =
 [<Interface>]
 type Options =
     abstract member selector: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (selector: string) : Options = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type NotifyingFeature<'P> =
     abstract member onNotificationSent: 'P with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (onNotificationSent: 'P) : NotifyingFeature<'P> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -34,12 +38,16 @@ type TextDocumentLanguageFeature<'PO, 'RO> =
 [<Interface>]
 type SendFeature<'T> =
     abstract member send: 'T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (send: 'T) : SendFeature<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type CM<'C, 'S> =
     abstract member client: 'C with get, set
     abstract member server: 'S with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (client: 'C, server: 'S) : CM<'C, 'S> = nativeOnly
 
 type CM =
     CM<string option, string option>

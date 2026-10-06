@@ -21,6 +21,8 @@ type Options =
 [<Interface>]
 type Instance =
     abstract member level: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: float) : Instance = nativeOnly
 
 module Exports =
 

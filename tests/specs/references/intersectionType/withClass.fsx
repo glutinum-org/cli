@@ -19,12 +19,16 @@ type Stream =
 [<Interface>]
 type WithInterface =
     abstract member other: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (other: string) : WithInterface = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Holder =
     abstract member classAndLiteral: Holder.classAndLiteral with get, set
     abstract member interfaceAndInterface: Holder.interfaceAndInterface with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (classAndLiteral: Holder.classAndLiteral, interfaceAndInterface: Holder.interfaceAndInterface) : Holder = nativeOnly
 
 module Holder =
 

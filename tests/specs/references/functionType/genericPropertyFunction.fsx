@@ -8,11 +8,15 @@ open System
 [<Interface>]
 type Story =
     abstract member id: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (id: string) : Story = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Args =
     abstract member mount: Args.mount<obj> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (mount: Args.mount<obj>) : Args = nativeOnly
 
 module Args =
 

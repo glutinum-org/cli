@@ -13,6 +13,8 @@ type Options<'T> =
 [<Interface>]
 type Literal<'T> =
     abstract member factory: Literal.factory<'T> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (factory: Literal.factory<'T>) : Literal<'T> = nativeOnly
 
 module Options =
 

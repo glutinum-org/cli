@@ -9,6 +9,8 @@ open System
 type OptionsInline =
     abstract member users: OptionsInline.users with get, set
     abstract member firstName: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (users: OptionsInline.users, firstName: string) : OptionsInline = nativeOnly
 
 module OptionsInline =
 

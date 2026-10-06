@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Context =
     abstract member id: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (id: float) : Context = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

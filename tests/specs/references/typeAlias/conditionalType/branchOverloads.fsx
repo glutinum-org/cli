@@ -18,11 +18,15 @@ type Exports =
 [<Interface>]
 type ElementHandle<'T> =
     abstract member element: 'T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (element: 'T) : ElementHandle<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type JSHandle<'T> =
     abstract member value: 'T with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: 'T) : JSHandle<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

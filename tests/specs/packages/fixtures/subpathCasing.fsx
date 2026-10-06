@@ -19,6 +19,8 @@ module SubpathCasing =
     [<Interface>]
     type Options =
         abstract member verbose: bool with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (verbose: bool) : Options = nativeOnly
 
     module Fs =
 

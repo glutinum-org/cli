@@ -9,16 +9,22 @@ open System
 type TypeMap =
     abstract member string: string with get, set
     abstract member number: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (string: string, number: float) : TypeMap = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Picker<'K> =
     abstract member key: 'K with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (key: 'K) : Picker<'K> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Holder =
     abstract member picker: Picker<string> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (picker: Picker<string>) : Holder = nativeOnly
 
 type Picker =
     Picker<Picker.K>

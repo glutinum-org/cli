@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type FuseSortFunctionItem =
     abstract member ``#dd``: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (``#dd``: string) : FuseSortFunctionItem = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

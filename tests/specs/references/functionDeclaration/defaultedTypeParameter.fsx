@@ -20,6 +20,8 @@ type Exports =
 [<Interface>]
 type LayerGroup<'P> =
     abstract member count: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (count: float) : LayerGroup<'P> = nativeOnly
 
 type LayerGroup =
     LayerGroup<obj>

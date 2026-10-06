@@ -9,6 +9,8 @@ open System
 type Mixed<'T, 'U> =
     abstract member value: 'T with get, set
     abstract member other: 'U with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (value: 'T, other: 'U) : Mixed<'T, 'U> = nativeOnly
 
 type Mixed<'T> =
     Mixed<'T, float>

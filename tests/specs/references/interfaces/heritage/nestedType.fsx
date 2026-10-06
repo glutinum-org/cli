@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type IAge<'A> =
     abstract member years: 'A with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (years: 'A) : IAge<'A> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

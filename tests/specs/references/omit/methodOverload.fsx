@@ -9,6 +9,8 @@ open System
 type ScreenshotOptions =
     abstract member base64: bool option with get, set
     abstract member save: bool option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?base64: bool, ?save: bool) : ScreenshotOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

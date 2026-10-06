@@ -8,12 +8,16 @@ open System
 [<Interface>]
 type PointGroupOptions =
     abstract member dotSize: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (dotSize: float) : PointGroupOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Options =
     abstract member minDistance: float option with get, set
     abstract member dotSize: float option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?dotSize: float, ?minDistance: float) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

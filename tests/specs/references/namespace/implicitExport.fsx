@@ -26,6 +26,8 @@ module Settings_ =
     [<Interface>]
     type Options =
         abstract member debug: bool with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (debug: bool) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type IntrinsicElements =
     abstract member var: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (var: string) : IntrinsicElements = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

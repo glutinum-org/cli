@@ -8,11 +8,15 @@ open System
 [<Interface>]
 type Stdio =
     abstract member command: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (command: string) : Stdio = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Http =
     abstract member uri: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (uri: string) : Http = nativeOnly
 
 type ServerDefinition =
     U2<Stdio, Http>

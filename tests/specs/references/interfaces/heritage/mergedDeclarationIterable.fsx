@@ -15,6 +15,8 @@ type Element =
     /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/tagName)
     /// </summary>
     abstract member tagName: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (tagName: string) : Element = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

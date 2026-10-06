@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Test =
     abstract member callback: (Test.callback.``params`` -> unit) with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (callback: (Test.callback.``params`` -> unit)) : Test = nativeOnly
 
 module Test =
 

@@ -12,6 +12,8 @@ open Glutinum.Types.TypeScript
 type RecordEntryObject =
     abstract member v: string with get, set
     abstract member n: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (v: string, n: float) : RecordEntryObject = nativeOnly
 
 type RecordEntryArrayItem =
     ReadonlyArray<RecordEntryArrayItem.ReadonlyArray.ReturnType>

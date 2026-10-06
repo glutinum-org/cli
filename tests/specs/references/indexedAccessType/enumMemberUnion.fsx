@@ -19,6 +19,8 @@ type SyntaxKind =
 [<Interface>]
 type MetaProperty =
     abstract member keywordToken: U2<SyntaxKind, SyntaxKind> with get
+    [<ParamObject; Emit("$0")>]
+    static member Create (keywordToken: U2<SyntaxKind, SyntaxKind>) : MetaProperty = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

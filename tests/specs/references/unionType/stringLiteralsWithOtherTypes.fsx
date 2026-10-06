@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Foo =
     abstract member a: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (a: string) : Foo = nativeOnly
 
 [<RequireQualifiedAccess>]
 [<Erase(CaseRules.None)>]
@@ -81,6 +83,8 @@ type WithBooleanLiteralAndUndefined =
 [<Interface>]
 type Props =
     abstract member colorScale: Props.colorScale option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?colorScale: Props.colorScale) : Props = nativeOnly
 
 module WithTypeLiteral =
 

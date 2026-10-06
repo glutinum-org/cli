@@ -21,6 +21,10 @@ type Exports =
 type BaseOptions =
     abstract member debug: bool option with get, set
     abstract member level: U2<string, float> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: string, ?debug: bool) : BaseOptions = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: float, ?debug: bool) : BaseOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

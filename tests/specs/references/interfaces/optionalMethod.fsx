@@ -14,6 +14,8 @@ type Compare =
 [<Interface>]
 type InParamObject =
     abstract member options: InParamObject.options with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (options: InParamObject.options) : InParamObject = nativeOnly
 
 module InParamObject =
 

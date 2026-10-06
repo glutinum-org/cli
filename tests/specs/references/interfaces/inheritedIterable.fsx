@@ -10,6 +10,8 @@ type Iterable<'T> = Collections.Generic.IEnumerable<'T>
 [<Interface>]
 type Node =
     abstract member nodeName: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (nodeName: string) : Node = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

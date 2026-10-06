@@ -15,6 +15,8 @@ type Base =
 [<Interface>]
 type BaseEventMap =
     abstract member change: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (change: string) : BaseEventMap = nativeOnly
 
 module BaseEventMap =
 
@@ -41,6 +43,8 @@ type Derived =
 type DerivedEventMap =
     inherit BaseEventMap
     abstract member click: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (change: string, click: float) : DerivedEventMap = nativeOnly
 
 module DerivedEventMap =
 

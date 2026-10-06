@@ -12,6 +12,8 @@ type Payload =
 type Events =
     abstract member cleared: obj with get, set
     abstract member started: obj with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (cleared: Payload, started: unit) : Events = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

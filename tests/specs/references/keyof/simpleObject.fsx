@@ -9,6 +9,8 @@ open System
 type Point =
     abstract member x: float with get, set
     abstract member y: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (x: float, y: float) : Point = nativeOnly
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]

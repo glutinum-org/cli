@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Value =
     abstract member raw: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (raw: string) : Value = nativeOnly
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]

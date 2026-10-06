@@ -16,6 +16,8 @@ type Exports =
 [<Interface>]
 type User =
     abstract member name: string with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (name: string) : User = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

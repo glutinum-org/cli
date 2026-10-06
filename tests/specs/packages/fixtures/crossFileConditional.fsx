@@ -17,6 +17,8 @@ module CrossFileConditional =
         [<Interface>]
         type Schema =
             abstract member body: obj with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (body: obj) : Schema = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]

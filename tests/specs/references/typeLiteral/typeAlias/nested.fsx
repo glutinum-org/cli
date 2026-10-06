@@ -8,6 +8,8 @@ open System
 [<Interface>]
 type Animal =
     abstract member name: Animal.name with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (name: Animal.name) : Animal = nativeOnly
 
 module Animal =
 

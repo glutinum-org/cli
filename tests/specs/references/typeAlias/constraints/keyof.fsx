@@ -18,6 +18,8 @@ type TypeMap =
     abstract member string: string with get, set
     abstract member number: float with get, set
     abstract member bool: bool with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (string: string, number: float, bool: bool) : TypeMap = nativeOnly
 
 module TypeMap =
 

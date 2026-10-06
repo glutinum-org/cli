@@ -34,6 +34,8 @@ type WithTypeLiteralAndUndefined =
 [<Interface>]
 type Props =
     abstract member size: Props.size option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?size: Props.size) : Props = nativeOnly
 
 module WithTypeLiteralAndUndefined =
 

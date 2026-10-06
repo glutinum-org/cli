@@ -26,6 +26,8 @@ module constants_ =
 [<Interface>]
 type Dl =
     abstract member flags: constants_.Exports with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (flags: constants_.Exports) : Dl = nativeOnly
 
 type Flags =
     constants_.Exports

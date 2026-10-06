@@ -15,12 +15,16 @@ type Exports =
 type Link =
     abstract member href: string with get, set
     abstract member title: string option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (href: string, ?title: string) : Link = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Image =
     abstract member href: string with get, set
     abstract member title: string option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (href: string, ?title: string) : Image = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
