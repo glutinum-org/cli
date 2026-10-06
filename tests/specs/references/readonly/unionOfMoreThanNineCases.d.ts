@@ -9,10 +9,6 @@ export interface H { h: string }
 export interface I { i: string }
 export interface J { j: string }
 
-export type Big = A | B | C | D | E | F | G | H | I | J;
-
-export declare function f(value: A | B | C | D | E | F | G | H | I | J | undefined): void;
-
-export interface Holder {
-    value: A | B | C | D | E | F | G | H | I | J;
+export interface Stack {
+    readonly frames: readonly Readonly<A | B | C | D | E | F | G | H | I | J>[];
 }

@@ -205,12 +205,25 @@ module private UtilityType =
 
     /// `Readonly<A | B>`: a union of the read-only interfaces
     let private readonlyUnion (context: TransformContext) (interfaces: GlueInterface list) =
-        let name, context = sanitizeNameAndPushScope $"U{interfaces.Length}" context
+        let isLarge = interfaces.Length > 9
 
-        let cases =
+        let name =
+            if isLarge then
+                context.NewTypeName()
+            else
+                $"U{interfaces.Length}"
+
+        // An erased union takes the scope itself
+        let caseContext =
+            if isLarge then
+                context
+            else
+                sanitizeNameAndPushScope name context |> snd
+
+        let caseTypes =
             interfaces
             |> List.map (fun glueInterface ->
-                let context = context.PushScope $"ReadOnly{glueInterface.Name}"
+                let context = caseContext.PushScope $"ReadOnly{glueInterface.Name}"
                 let initialInterface = transformInterface context glueInterface
 
                 let adaptedInterface =
@@ -228,19 +241,23 @@ module private UtilityType =
                     Name = context.FullName
                 }
                 |> FSharpType.Interface
-                |> FSharpUnionCase.Typed
             )
 
-        ({
-            Attributes = []
-            Name = name
-            Cases = cases
-            IsOptional = false
-            TypeParameters = []
-            Constants = []
-        }
-        : FSharpUnion)
-        |> FSharpType.Union
+        if isLarge then
+            erasedUnion name [] caseTypes |> FSharpType.Union |> context.ExposeType
+
+            referenceToExposed context name []
+        else
+            ({
+                Attributes = []
+                Name = name
+                Cases = caseTypes |> List.map FSharpUnionCase.Typed
+                IsOptional = false
+                TypeParameters = []
+                Constants = []
+            }
+            : FSharpUnion)
+            |> FSharpType.Union
 
     /// `Readonly<T>` used as a type: the interface is exposed to the scope and referenced
     let transformReadOnlyInline (context: TransformContext) (readonlyInfo: GlueReadonly) =
@@ -385,6 +402,44 @@ let private (|RememberedTypeLiteral|_|) (context: TransformContext) (glueType: G
         context.TypeLiteralsMemory.TryReference(id, context.Root)
     | _ -> None
 
+/// Fable.Core stops at `U9`, a larger union is an erased union of its own with a case per type
+let private erasedUnion
+    (name: string)
+    (typeParameters: FSharpTypeParameter list)
+    (caseTypes: FSharpType list)
+    : FSharpUnion
+    =
+    {
+        Attributes = [ FSharpAttribute.RequireQualifiedAccess; FSharpAttribute.Erase ]
+        Name = name
+        Cases =
+            caseTypes
+            |> List.mapi (fun index caseType ->
+                FSharpUnionCase.Field($"Case%i{index + 1}", caseType)
+            )
+        IsOptional = false
+        TypeParameters = typeParameters
+        Constants = []
+    }
+
+/// The reference to a type exposed in the scope under `name`
+let private referenceToExposed
+    (context: TransformContext)
+    (name: string)
+    (typeParameterNames: string list)
+    =
+    let fullName = context.ReferenceName name
+
+    ({
+        Name = fullName
+        FullName = fullName
+        ModulePath = []
+        TypeArguments = typeParameterNames |> List.map FSharpType.TypeParameter
+        Type = FSharpType.Discard
+    }
+    : FSharpTypeReference)
+    |> FSharpType.TypeReference
+
 let private transformUnionType (context: TransformContext) (cases: GlueType list) : FSharpType =
     let optionalTypes, others =
         cases
@@ -406,12 +461,6 @@ let private transformUnionType (context: TransformContext) (cases: GlueType list
         match optionalTypes with
         | [] -> FSharpType.Object
         | optionalType :: _ -> transformType context optionalType
-    // Fable.Core stops at U9
-    else if others.Length > 9 then
-        if isOptional then
-            FSharpType.Option FSharpType.Object
-        else
-            FSharpType.Object
     // Don't wrap in a U1 if there is only one case
     else if others.Length = 1 then
         transformType context others.Head
@@ -438,27 +487,30 @@ let private transformUnionType (context: TransformContext) (cases: GlueType list
             |> Option.map withTypeParameters
             |> Option.iter context.ExposeType
 
-            let fullName = context.ReferenceName name
-
-            ({
-                Name = fullName
-                FullName = fullName
-                ModulePath = []
-                TypeArguments = typeParameterNames |> List.map FSharpType.TypeParameter
-                Type = FSharpType.Discard
-            }
-            : FSharpTypeReference)
-            |> FSharpType.TypeReference
+            referenceToExposed context name typeParameterNames
 
         | None ->
+            let isLarge = others.Length > 9
+
             // The anonymous types of the cases are named under the union as written
-            let _, context = sanitizeNameAndPushScope $"U{others.Length}" context
+            let name =
+                if isLarge then
+                    context.NewTypeName()
+                else
+                    $"U{others.Length}"
+
+            // An erased union takes the scope itself
+            let caseContext =
+                if isLarge then
+                    context
+                else
+                    sanitizeNameAndPushScope name context |> snd
 
             // `Intl.Locale | string` with both cases mapped to `obj` is one `obj`
             let caseTypes =
                 others
                 |> List.mapi (fun index caseType ->
-                    let context = context.PushScope $"Case%i{index + 1}"
+                    let context = caseContext.PushScope $"Case%i{index + 1}"
 
                     transformType context caseType
                 )
@@ -466,6 +518,19 @@ let private transformUnionType (context: TransformContext) (cases: GlueType list
 
             match caseTypes with
             | [ single ] -> single
+            | _ when isLarge ->
+                let typeParameterNames = others |> List.collect typeParameterNames |> List.distinct
+
+                erasedUnion name (declaredTypeParameters typeParameterNames) caseTypes
+                |> FSharpType.Union
+                |> context.ExposeType
+
+                let reference = referenceToExposed context name typeParameterNames
+
+                if isOptional then
+                    FSharpType.Option reference
+                else
+                    reference
             | _ ->
                 let cases = caseTypes |> List.map FSharpUnionCase.Typed
 
@@ -4429,6 +4494,16 @@ let private aliasOfUnion (scope: AliasScope) (cases: GlueType list) (unionType: 
             transformType (context.PushScope "Value") single
             |> FSharpType.Option
             |> aliasOf scope
+        | _, others when others.Length > 9 ->
+            let caseTypes =
+                others
+                |> List.mapi (fun index caseType ->
+                    transformType (context.PushScope $"Case%i{index + 1}") caseType
+                )
+                |> List.distinct
+
+            erasedUnion scope.Name scope.TypeParameters.Value.TypeParameters caseTypes
+            |> FSharpType.Union
         | _ -> transformType context unionType |> aliasOf scope
 
 /// `type Value = Foo[keyof Foo]` is the union of the member types
