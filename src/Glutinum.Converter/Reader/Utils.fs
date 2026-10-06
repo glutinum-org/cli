@@ -135,14 +135,18 @@ let entityNameText (node: Ts.Node) : string =
     else
         identifierText node
 
-/// Identity of an anonymous type, a node synthesized by `typeToTypeNode` has none
-let typeLiteralId (node: Ts.Node) : string option =
-    // A node synthesized by `typeToTypeNode` has a negative position, or in TypeScript 6 a
-    // position without a source file
+/// A node synthesized by `typeToTypeNode` has a negative position, or in TypeScript 6 a
+/// position without a source file; the checker throws when given one as enclosing declaration
+let enclosingDeclarationOf (node: Ts.Node) : Ts.Node option =
     if node.pos < 0 || isNull (node.getSourceFile ()) then
         None
     else
-        Some $"{String.normalizePath (node.getSourceFile().fileName)}:{node.pos}"
+        Some node
+
+/// Identity of an anonymous type, a node synthesized by `typeToTypeNode` has none
+let typeLiteralId (node: Ts.Node) : string option =
+    enclosingDeclarationOf node
+    |> Option.map (fun node -> $"{String.normalizePath (node.getSourceFile().fileName)}:{node.pos}")
 
 /// Identifiers synthesized by <c>typeToTypeNode</c> carry their symbol, they can't be resolved by position
 let symbolAtLocation (checker: Ts.TypeChecker) (node: Ts.Node) : Ts.Symbol option =

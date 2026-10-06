@@ -34,6 +34,7 @@ const fixtures = [
     "reExportedConstraint",
     "reExportedValueAndType",
     "iteratorObjectBase",
+    "nestedAliasApplication",
 ]
 
 const footer = `

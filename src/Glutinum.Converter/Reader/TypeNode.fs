@@ -88,14 +88,13 @@ let private readInstantiatedMember
     else
         let flags = typeNodeBuilderFlags
 
-        // A node synthesized by `typeToTypeNode` can't be given back to the checker
-        let enclosingDeclaration =
-            if contextNode.pos < 0 then
-                None
-            else
-                Some contextNode
-
-        match checker.typeToTypeNode (instantiatedType, enclosingDeclaration, Some flags) with
+        match
+            checker.typeToTypeNode (
+                instantiatedType,
+                enclosingDeclarationOf contextNode,
+                Some flags
+            )
+        with
         | None -> declaredMember
         | Some typeNode ->
             let previousContext = reader.SyntheticContext
@@ -531,7 +530,7 @@ let private tryResolveDeferred
             |> Option.bind (fun resolved ->
                 checker.typeToTypeNode (
                     resolved,
-                    Some(typeNode :> Ts.Node),
+                    enclosingDeclarationOf typeNode,
                     Some typeNodeBuilderFlags
                 )
             )

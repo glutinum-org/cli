@@ -25,7 +25,7 @@ let readIndexedAccessType
     // TypeScript 6 throws inside `typeToTypeNode` on a symbol whose declaration has no source file
     let tryTypeToTypeNode (typ: Ts.Type) (flags: Ts.NodeBuilderFlags) : Ts.TypeNode option =
         try
-            reader.checker.typeToTypeNode (typ, Some node, Some flags)
+            reader.checker.typeToTypeNode (typ, enclosingDeclarationOf node, Some flags)
         with _ ->
             None
 
