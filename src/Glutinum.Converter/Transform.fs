@@ -3775,9 +3775,16 @@ module private TypeParameter =
         | FSharpType.Delegate _
         | FSharpType.TypeExtension _ -> typ
 
+    // `options?: Options` with `Options extends X | undefined` sealed to `X option` is `?options: X`
     and mapFsharpParameter (seadledTypes: SealedTypeInfo list) (parameter: FSharpParameter) =
+        let typ = mapFSharpType seadledTypes parameter.Type
+
         { parameter with
-            Type = mapFSharpType seadledTypes parameter.Type
+            Type =
+                if parameter.IsOptional then
+                    tryUnwrapOption typ |> Option.defaultValue typ
+                else
+                    typ
         }
 
 type private TransformTypeParametersResult =
