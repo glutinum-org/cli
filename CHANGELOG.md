@@ -1,5 +1,5 @@
 ---
-last_commit_released: f7edba103bf435df7b4f7be955725218d61f7e5a
+last_commit_released: 25e4e950d6172c66305950971f9e7b1340592cc5
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,21 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.4 - 2026-10-07
+
+### 🚀 Features
+
+* Generate an erased union for a union above nine cases ([c0d3387](https://github.com/glutinum-org/cli/commit/c0d3387458b6ae1245f6d2e413955151e0337331))
+* Generate Create for every interface made of properties ([d458929](https://github.com/glutinum-org/cli/commit/d45892922c5e3554fce201c7b8d4d2e65ffc73bd))
+
+### 🐞 Bug Fixes
+
+* Give the checker no enclosing declaration without a source file ([db92a4e](https://github.com/glutinum-org/cli/commit/db92a4efcc5c2d9b75073bbe86d9a818c1dfc048))
+* Unwrap the option of an optional parameter sealed to a nullable constraint ([d6d2f1f](https://github.com/glutinum-org/cli/commit/d6d2f1f3cf17dff4227c163b86ff050c36d9cc4d))
+* Print one erased cast for the typed array names Fable.Core shares ([25e4e95](https://github.com/glutinum-org/cli/commit/25e4e950d6172c66305950971f9e7b1340592cc5))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/f7edba103bf435df7b4f7be955725218d61f7e5a..25e4e950d6172c66305950971f9e7b1340592cc5)</small></strong>
 
 ## 1.0.0-beta.3 - 2026-10-02
 
