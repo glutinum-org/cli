@@ -9029,14 +9029,6 @@ module Node =
                 nativeOnly
 
             [<Emit("$0")>]
-            static member op_Implicit(value: JS.Uint8ClampedArray) : TypedArray<'TArrayBuffer> =
-                nativeOnly
-
-            [<Emit("$0")>]
-            static member op_ErasedCast(value: JS.Uint8ClampedArray) : TypedArray<'TArrayBuffer> =
-                nativeOnly
-
-            [<Emit("$0")>]
             static member op_Implicit(value: JS.Uint16Array) : TypedArray<'TArrayBuffer> =
                 nativeOnly
 
