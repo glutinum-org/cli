@@ -5140,6 +5140,15 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/http2/secureserversessionoptions/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/http2/secureserversessionoptions/pskcallback/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/http2/secureserversessionoptions/snicallback/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/http2/secureserversessionoptions/snicallback/cb/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/http2/serverhttp2session/</loc>
   </url>
   <url>
@@ -10954,6 +10963,21 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptor/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptor/headers/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptor/headers/u2/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptor/headers/u2/case1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptor/headers/u2/case2/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptor/headers/u2/case2/headers/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/mock-agent/pendinginterceptorsformatter/</loc>
   </url>
   <url>
@@ -11713,6 +11737,9 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/notation/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/roundingincrement/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/roundingmode/</loc>
   </url>
   <url>
@@ -11920,6 +11947,9 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/notation/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/roundingincrement/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/roundingmode/</loc>
   </url>
   <url>
@@ -12098,6 +12128,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/notation/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/roundingincrement/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/roundingmode/</loc>
@@ -21941,6 +21974,12 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/svgsvgelement/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/svgsvgelement/getenclosurelist/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/svgsvgelement/getintersectionlist/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/svgsvgelementeventmap/</loc>
