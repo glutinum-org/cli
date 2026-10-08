@@ -50,6 +50,10 @@ type CompileCodeResult =
 type Msg =
     | FailedToCopyFSharpCode of exn
     | CodeCopied of unit
+    /// Copy the code shown, generated from a package rather than from the editor
+    | CopyDisplayedCode
+    /// Report the code shown, `source` tells where it was generated from
+    | ReportDisplayedCode of source: string
     // Compile code can be requested from different sources
     // - Source code changed
     // - User clicking the "Copy F# code" button
@@ -200,6 +204,38 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
 
     | CompileCode source ->
         Compiling, Cmd.OfFunc.perform generateFile (currentTsCode, source) CompileCodeResult
+
+    | CopyDisplayedCode ->
+        match model with
+        | Success data ->
+            model,
+            Cmd.OfPromise.either
+                copyFSharpCodeToClipboard
+                data.FSharpCode
+                CodeCopied
+                FailedToCopyFSharpCode
+
+        | Errored _
+        | Compiling ->
+            model,
+            Toast.message "Can't copy F# code to clipboard because generation failed"
+            |> Toast.position Toast.TopRight
+            |> Toast.timeout (TimeSpan.FromSeconds 1.5)
+            |> Toast.error
+
+    | ReportDisplayedCode source ->
+        let compilationResult =
+            match model with
+            | Success data -> CompilationResult.Success(data.FSharpCode, data.Warnings, data.Errors)
+            | Errored message -> CompilationResult.Error message
+            | Compiling -> CompilationResult.Error "The generation is still running"
+
+        model,
+        reportIssue
+            {
+                TypeScriptCode = source
+                CompilationResult = compilationResult
+            }
 
     | FailedToCopyFSharpCode _ ->
         model,

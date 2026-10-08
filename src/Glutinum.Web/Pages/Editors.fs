@@ -111,8 +111,32 @@ let private showPackageResult (result: Glutinum.Converter.Packages.GenerationRes
         FSharpAST = FSharpAST.ofResult result.FSharpAST result.Warnings result.Errors
     }
 
+/// Where the code shown in package mode comes from, for an issue report
+let private packageSource (package: Package.Model) =
+    match package.Status with
+    | Package.Generated(installed, _) ->
+        $"// Generated from the npm package %s{installed.name}@%s{installed.version}"
+    | _ -> "// Generated from an npm package"
+
 let update msg model =
     match msg with
+    | FSharpCodeMsg(FSharpCode.CompileCode source) when model.Mode = Mode.Package ->
+        let displayedCodeMsg =
+            match source with
+            | FSharpCode.CompilationSource.CopyFSharpCode -> Some FSharpCode.CopyDisplayedCode
+            | FSharpCode.CompilationSource.ReportIssue ->
+                Some(FSharpCode.ReportDisplayedCode(packageSource model.Package))
+            | FSharpCode.CompilationSource.EditorChanged -> None
+
+        match displayedCodeMsg with
+        | Some fsharpMsg ->
+            let updatedModel, cmd =
+                FSharpCode.update fsharpMsg model.FSharpCode model.TypeScriptCode
+
+            { model with FSharpCode = updatedModel }, Cmd.map FSharpCodeMsg cmd
+
+        | None -> model, Cmd.none
+
     | FSharpCodeMsg fsharpMsg ->
         let updatedModel, cmd =
             FSharpCode.update fsharpMsg model.FSharpCode model.TypeScriptCode
