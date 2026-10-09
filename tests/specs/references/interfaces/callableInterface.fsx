@@ -8,7 +8,7 @@ open System
 /// Called for each event
 /// </summary>
 type EventListener =
-    delegate of evt: Event -> unit
+    Event -> unit
 
 type Mapper<'T, 'U> =
     delegate of value: 'T * index: float -> 'U

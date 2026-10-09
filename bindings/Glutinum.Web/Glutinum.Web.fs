@@ -34526,7 +34526,7 @@ module Web =
     type EventCounts =
         abstract member forEach: callbackfn: EventCounts.forEach.callbackfn * ?thisArg: obj -> unit
 
-    type EventListener = delegate of evt: Web.Event -> unit
+    type EventListener = Web.Event -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -111466,9 +111466,9 @@ module Web =
         /// </summary>
         abstract member warn: [<ParamArray>] data: obj[] -> unit
 
-    type AudioDataOutputCallback = delegate of output: Web.AudioData -> unit
+    type AudioDataOutputCallback = Web.AudioData -> unit
 
-    type BlobCallback = delegate of blob: Web.Blob option -> unit
+    type BlobCallback = Web.Blob option -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -111476,9 +111476,9 @@ module Web =
         [<EmitConstructor>]
         abstract member Create: [<ParamArray>] ``params``: obj[] -> Web.HTMLElement
 
-    type DecodeErrorCallback = delegate of error: Web.DOMException -> unit
+    type DecodeErrorCallback = Web.DOMException -> unit
 
-    type DecodeSuccessCallback = delegate of decodedData: Web.AudioBuffer -> unit
+    type DecodeSuccessCallback = Web.AudioBuffer -> unit
 
     type EncodedAudioChunkOutputCallback =
         delegate of output: Web.EncodedAudioChunk * ?metadata: Web.EncodedAudioChunkMetadata -> unit
@@ -111486,41 +111486,40 @@ module Web =
     type EncodedVideoChunkOutputCallback =
         delegate of chunk: Web.EncodedVideoChunk * ?metadata: Web.EncodedVideoChunkMetadata -> unit
 
-    type ErrorCallback = delegate of err: Web.DOMException -> unit
+    type ErrorCallback = Web.DOMException -> unit
 
-    type FileCallback = delegate of file: Web.File -> unit
+    type FileCallback = Web.File -> unit
 
-    type FileSystemEntriesCallback = delegate of entries: ResizeArray<Web.FileSystemEntry> -> unit
+    type FileSystemEntriesCallback = ResizeArray<Web.FileSystemEntry> -> unit
 
-    type FileSystemEntryCallback = delegate of entry: Web.FileSystemEntry -> unit
+    type FileSystemEntryCallback = Web.FileSystemEntry -> unit
 
-    type FrameRequestCallback = delegate of time: Web.DOMHighResTimeStamp -> unit
+    type FrameRequestCallback = Web.DOMHighResTimeStamp -> unit
 
-    type FunctionStringCallback = delegate of data: string -> unit
+    type FunctionStringCallback = string -> unit
 
-    type IdleRequestCallback = delegate of deadline: Web.IdleDeadline -> unit
+    type IdleRequestCallback = Web.IdleDeadline -> unit
 
     type IntersectionObserverCallback =
         delegate of
             entries: ResizeArray<Web.IntersectionObserverEntry> * observer: Web.IntersectionObserver ->
                 unit
 
-    type LockGrantedCallback<'T> = delegate of lock: Web.Lock option -> 'T
+    type LockGrantedCallback<'T> = Web.Lock option -> 'T
 
-    type MediaSessionActionHandler = delegate of details: Web.MediaSessionActionDetails -> unit
+    type MediaSessionActionHandler = Web.MediaSessionActionDetails -> unit
 
     type MutationCallback =
         delegate of
             mutations: ResizeArray<Web.MutationRecord> * observer: Web.MutationObserver -> unit
 
-    type NavigationInterceptHandler = delegate of unit -> U2<unit, obj>
+    type NavigationInterceptHandler = unit -> U2<unit, obj>
 
-    type NavigationPrecommitHandler =
-        delegate of controller: Web.NavigationPrecommitController -> U2<unit, obj>
+    type NavigationPrecommitHandler = Web.NavigationPrecommitController -> U2<unit, obj>
 
-    type NotificationPermissionCallback = delegate of permission: Web.NotificationPermission -> unit
+    type NotificationPermissionCallback = Web.NotificationPermission -> unit
 
-    type OnBeforeUnloadEventHandlerNonNull = delegate of event: Web.Event -> string option
+    type OnBeforeUnloadEventHandlerNonNull = Web.Event -> string option
 
     type OnErrorEventHandlerNonNull =
         delegate of
@@ -111535,18 +111534,17 @@ module Web =
         delegate of
             entries: Web.PerformanceObserverEntryList * observer: Web.PerformanceObserver -> unit
 
-    type PositionCallback = delegate of position: Web.GeolocationPosition -> unit
+    type PositionCallback = Web.GeolocationPosition -> unit
 
-    type PositionErrorCallback = delegate of positionError: Web.GeolocationPositionError -> unit
+    type PositionErrorCallback = Web.GeolocationPositionError -> unit
 
-    type QueuingStrategySize<'T> = delegate of chunk: 'T -> float
+    type QueuingStrategySize<'T> = 'T -> float
 
-    type RTCPeerConnectionErrorCallback = delegate of error: Web.DOMException -> unit
+    type RTCPeerConnectionErrorCallback = Web.DOMException -> unit
 
-    type RTCSessionDescriptionCallback =
-        delegate of description: Web.RTCSessionDescriptionInit -> unit
+    type RTCSessionDescriptionCallback = Web.RTCSessionDescriptionInit -> unit
 
-    type RemotePlaybackAvailabilityCallback = delegate of available: bool -> unit
+    type RemotePlaybackAvailabilityCallback = bool -> unit
 
     type ReportingObserverCallback =
         delegate of reports: ResizeArray<Web.Report> * observer: Web.ReportingObserver -> unit
@@ -111555,46 +111553,41 @@ module Web =
         delegate of
             entries: ResizeArray<Web.ResizeObserverEntry> * observer: Web.ResizeObserver -> unit
 
-    type SchedulerPostTaskCallback = delegate of unit -> unit
+    type SchedulerPostTaskCallback = unit -> unit
 
-    type TransformerFlushCallback<'O> =
-        delegate of controller: Web.TransformStreamDefaultController<'O> -> U2<unit, obj>
+    type TransformerFlushCallback<'O> = Web.TransformStreamDefaultController<'O> -> U2<unit, obj>
 
-    type TransformerStartCallback<'O> =
-        delegate of controller: Web.TransformStreamDefaultController<'O> -> unit
+    type TransformerStartCallback<'O> = Web.TransformStreamDefaultController<'O> -> unit
 
     type TransformerTransformCallback<'I, 'O> =
         delegate of
             chunk: 'I * controller: Web.TransformStreamDefaultController<'O> -> U2<unit, obj>
 
-    type UnderlyingSinkAbortCallback = delegate of ?reason: obj -> U2<unit, obj>
+    type UnderlyingSinkAbortCallback = obj option -> U2<unit, obj>
 
-    type UnderlyingSinkCloseCallback = delegate of unit -> U2<unit, obj>
+    type UnderlyingSinkCloseCallback = unit -> U2<unit, obj>
 
-    type UnderlyingSinkStartCallback =
-        delegate of controller: Web.WritableStreamDefaultController -> unit
+    type UnderlyingSinkStartCallback = Web.WritableStreamDefaultController -> unit
 
     type UnderlyingSinkWriteCallback<'W> =
         delegate of chunk: 'W * controller: Web.WritableStreamDefaultController -> U2<unit, obj>
 
-    type UnderlyingSourceCancelCallback = delegate of ?reason: obj -> U2<unit, obj>
+    type UnderlyingSourceCancelCallback = obj option -> U2<unit, obj>
 
-    type UnderlyingSourcePullCallback<'R> =
-        delegate of controller: Web.ReadableStreamController<'R> -> U2<unit, obj>
+    type UnderlyingSourcePullCallback<'R> = Web.ReadableStreamController<'R> -> U2<unit, obj>
 
-    type UnderlyingSourceStartCallback<'R> =
-        delegate of controller: Web.ReadableStreamController<'R> -> unit
+    type UnderlyingSourceStartCallback<'R> = Web.ReadableStreamController<'R> -> unit
 
-    type VideoFrameOutputCallback = delegate of output: Web.VideoFrame -> unit
+    type VideoFrameOutputCallback = Web.VideoFrame -> unit
 
     type VideoFrameRequestCallback =
         delegate of now: Web.DOMHighResTimeStamp * metadata: Web.VideoFrameCallbackMetadata -> unit
 
-    type ViewTransitionUpdateCallback = delegate of unit -> unit
+    type ViewTransitionUpdateCallback = unit -> unit
 
-    type VoidFunction = delegate of unit -> unit
+    type VoidFunction = unit -> unit
 
-    type WebCodecsErrorCallback = delegate of error: Web.DOMException -> unit
+    type WebCodecsErrorCallback = Web.DOMException -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]

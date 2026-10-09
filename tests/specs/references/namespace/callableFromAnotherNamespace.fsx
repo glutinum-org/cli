@@ -20,13 +20,6 @@ module _DOLLAR_dbx_ =
         [<Emit("$0.not")>]
         abstract member not: dbx_.not
 
-    [<AutoOpen>]
-    module ExportsExtensions =
-
-        type Exports with
-            member inline this.not(e: dbx_.Expression) : dbx_.Expression =
-                this.not.Invoke(e)
-
 module dbx_ =
 
     [<AllowNullLiteral>]
@@ -35,7 +28,7 @@ module dbx_ =
         abstract member build: unit -> string
 
     type not =
-        delegate of e: Expression -> Expression
+        Expression -> Expression
 
 (***)
 #r "nuget: Fable.Core"

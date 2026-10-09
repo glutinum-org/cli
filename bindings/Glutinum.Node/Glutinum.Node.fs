@@ -9562,13 +9562,13 @@ module Node =
             | resolve
             | reject
 
-        type BeforeExitListener = delegate of code: float -> unit
+        type BeforeExitListener = float -> unit
 
-        type DisconnectListener = delegate of unit -> unit
+        type DisconnectListener = unit -> unit
 
-        type ExitListener = delegate of code: float -> unit
+        type ExitListener = float -> unit
 
-        type RejectionHandledListener = delegate of promise: JS.Promise<obj> -> unit
+        type RejectionHandledListener = JS.Promise<obj> -> unit
 
         type UncaughtExceptionListener =
             delegate of error: Exception * origin: Node.NodeJS.UncaughtExceptionOrigin -> unit
@@ -9579,19 +9579,19 @@ module Node =
         /// </summary>
         type UnhandledRejectionListener = delegate of reason: obj * promise: JS.Promise<obj> -> unit
 
-        type WarningListener = delegate of warning: Exception -> unit
+        type WarningListener = Exception -> unit
 
         type MessageListener =
             delegate of message: obj * sendHandle: Node.child_process.SendHandle -> unit
 
-        type SignalsListener = delegate of signal: Node.NodeJS.Signals -> unit
+        type SignalsListener = Node.NodeJS.Signals -> unit
 
         type MultipleResolveListener =
             delegate of
                 ``type``: Node.NodeJS.MultipleResolveType * promise: JS.Promise<obj> * value: obj ->
                     unit
 
-        type WorkerListener = delegate of worker: Node.worker_threads.Worker -> unit
+        type WorkerListener = Node.worker_threads.Worker -> unit
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -88378,7 +88378,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
         type TimeLike = U3<string, float, Date>
 
-        type NoParamCallback = delegate of err: Node.NodeJS.ErrnoException option -> unit
+        type NoParamCallback = Node.NodeJS.ErrnoException option -> unit
 
         [<RequireQualifiedAccess>]
         [<Erase(CaseRules.None)>]
@@ -154149,7 +154149,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// <c>Promise</c>, in which case it will be awaited before the main application thread
             /// execution resumes.
             /// </summary>
-            type InitializeHook<'Data> = delegate of data: 'Data -> U2<unit, JS.Promise<unit>>
+            type InitializeHook<'Data> = 'Data -> U2<unit, JS.Promise<unit>>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -165034,16 +165034,6 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("node:process"); Emit("$0.addListener($1...)")>]
             static member addListener
-                (event: string, listener: Node.NodeJS.ExitListener)
-                : Node.NodeJS.Process
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Alias for <c>emitter.on(eventName, listener)</c>.
-            /// </summary>
-            [<ImportDefault("node:process"); Emit("$0.addListener($1...)")>]
-            static member addListener
                 (event: string, listener: Node.NodeJS.RejectionHandledListener)
                 : Node.NodeJS.Process
                 =
@@ -165669,41 +165659,6 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("node:process"); Emit("$0.on($1...)")>]
             static member on
-                (event: string, listener: Node.NodeJS.ExitListener)
-                : Node.NodeJS.Process
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Adds the <c>listener</c> function to the end of the listeners array for the event
-            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
-            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
-            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
-            ///
-            /// <code lang="js">
-            /// server.on('connection', (stream) => {
-            ///   console.log('someone connected!');
-            /// });
-            /// </code>
-            ///
-            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
-            ///
-            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
-            /// event listener to the beginning of the listeners array.
-            ///
-            /// <code lang="js">
-            /// import { EventEmitter } from 'node:events';
-            /// const myEE = new EventEmitter();
-            /// myEE.on('foo', () => console.log('a'));
-            /// myEE.prependListener('foo', () => console.log('b'));
-            /// myEE.emit('foo');
-            /// // Prints:
-            /// //   b
-            /// //   a
-            /// </code>
-            /// </summary>
-            [<ImportDefault("node:process"); Emit("$0.on($1...)")>]
-            static member on
                 (event: string, listener: Node.NodeJS.RejectionHandledListener)
                 : Node.NodeJS.Process
                 =
@@ -166115,39 +166070,6 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("node:process"); Emit("$0.once($1...)")>]
             static member once
-                (event: string, listener: Node.NodeJS.ExitListener)
-                : Node.NodeJS.Process
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
-            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
-            ///
-            /// <code lang="js">
-            /// server.once('connection', (stream) => {
-            ///   console.log('Ah, we have our first user!');
-            /// });
-            /// </code>
-            ///
-            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
-            ///
-            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
-            /// event listener to the beginning of the listeners array.
-            ///
-            /// <code lang="js">
-            /// import { EventEmitter } from 'node:events';
-            /// const myEE = new EventEmitter();
-            /// myEE.once('foo', () => console.log('a'));
-            /// myEE.prependOnceListener('foo', () => console.log('b'));
-            /// myEE.emit('foo');
-            /// // Prints:
-            /// //   b
-            /// //   a
-            /// </code>
-            /// </summary>
-            [<ImportDefault("node:process"); Emit("$0.once($1...)")>]
-            static member once
                 (event: string, listener: Node.NodeJS.RejectionHandledListener)
                 : Node.NodeJS.Process
                 =
@@ -166508,27 +166430,6 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("node:process"); Emit("$0.prependListener($1...)")>]
             static member prependListener
-                (event: string, listener: Node.NodeJS.ExitListener)
-                : Node.NodeJS.Process
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
-            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
-            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
-            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
-            ///
-            /// <code lang="js">
-            /// server.prependListener('connection', (stream) => {
-            ///   console.log('someone connected!');
-            /// });
-            /// </code>
-            ///
-            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
-            /// </summary>
-            [<ImportDefault("node:process"); Emit("$0.prependListener($1...)")>]
-            static member prependListener
                 (event: string, listener: Node.NodeJS.RejectionHandledListener)
                 : Node.NodeJS.Process
                 =
@@ -166736,25 +166637,6 @@ SocketAddress.parse($0)""")>]
             [<ImportDefault("node:process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener
                 (event: string, listener: Node.NodeJS.DisconnectListener)
-                : Node.NodeJS.Process
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
-            /// listener is removed, and then invoked.
-            ///
-            /// <code lang="js">
-            /// server.prependOnceListener('connection', (stream) => {
-            ///   console.log('Ah, we have our first user!');
-            /// });
-            /// </code>
-            ///
-            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
-            /// </summary>
-            [<ImportDefault("node:process"); Emit("$0.prependOnceListener($1...)")>]
-            static member prependOnceListener
-                (event: string, listener: Node.NodeJS.ExitListener)
                 : Node.NodeJS.Process
                 =
                 nativeOnly
@@ -170267,7 +170149,7 @@ SocketAddress.parse($0)""")>]
 
         type ReadLine = Node.readline.Interface
 
-        type Completer = delegate of line: string -> Node.readline.CompleterResult
+        type Completer = string -> Node.readline.CompleterResult
 
         type AsyncCompleter = delegate of line: string * callback: AsyncCompleter.callback -> unit
 
@@ -170623,9 +170505,8 @@ SocketAddress.parse($0)""")>]
                 abstract member rollback: unit -> Readline
 
             type Completer =
-                delegate of
-                    line: string ->
-                        U2<Node.readline.CompleterResult, JS.Promise<Node.readline.CompleterResult>>
+                string
+                    -> U2<Node.readline.CompleterResult, JS.Promise<Node.readline.CompleterResult>>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -170960,9 +170841,9 @@ SocketAddress.parse($0)""")>]
             delegate of
                 evalCmd: string * context: Node.vm.Context * file: string * cb: REPLEval.cb -> unit
 
-        type REPLWriter = delegate of obj: obj -> string
+        type REPLWriter = obj -> string
 
-        type REPLCommandAction = delegate of text: string -> unit
+        type REPLCommandAction = string -> unit
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -174870,7 +174751,7 @@ SocketAddress.parse($0)""")>]
                 =
                 nativeOnly
 
-        type ComposeFnParam = delegate of source: obj -> unit
+        type ComposeFnParam = obj -> unit
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -190027,7 +189908,7 @@ Duplex.fromWeb($0, $1)""")>]
                         ?options: Node.stream.Stream_.FinishedOptions ->
                             JS.Promise<unit>
 
-            type PipelineSourceFunction<'T> = delegate of unit -> U2<Iterable<'T>, obj>
+            type PipelineSourceFunction<'T> = unit -> U2<Iterable<'T>, obj>
 
             type PipelineSource<'T> =
                 U4<
@@ -190047,10 +189928,13 @@ Duplex.fromWeb($0, $1)""")>]
                     Node.stream.Stream_.PipelineTransform<obj, 'T>
                  >
 
-            type PipelineDestinationIterableFunction<'T> = delegate of source: obj -> unit
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type PipelineDestinationIterableFunction<'T> = interface end
 
-            type PipelineDestinationPromiseFunction<'T, 'P> =
-                delegate of source: obj -> JS.Promise<'P>
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type PipelineDestinationPromiseFunction<'T, 'P> = interface end
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -191288,44 +191172,40 @@ Duplex.fromWeb($0, $1)""")>]
                  >
 
             type ReadableByteStreamControllerCallback =
-                delegate of
-                    controller: Node.stream.web.ReadableByteStreamController -> U2<unit, obj>
+                Node.stream.web.ReadableByteStreamController -> U2<unit, obj>
 
-            type UnderlyingSinkAbortCallback = delegate of ?reason: obj -> U2<unit, obj>
+            type UnderlyingSinkAbortCallback = obj option -> U2<unit, obj>
 
-            type UnderlyingSinkCloseCallback = delegate of unit -> U2<unit, obj>
+            type UnderlyingSinkCloseCallback = unit -> U2<unit, obj>
 
             type UnderlyingSinkStartCallback =
-                delegate of controller: Node.stream.web.WritableStreamDefaultController -> unit
+                Node.stream.web.WritableStreamDefaultController -> unit
 
             type UnderlyingSinkWriteCallback<'W> =
                 delegate of
                     chunk: 'W * controller: Node.stream.web.WritableStreamDefaultController ->
                         U2<unit, obj>
 
-            type UnderlyingSourceCancelCallback = delegate of ?reason: obj -> U2<unit, obj>
+            type UnderlyingSourceCancelCallback = obj option -> U2<unit, obj>
 
             type UnderlyingSourcePullCallback<'R> =
-                delegate of
-                    controller: Node.stream.web.ReadableStreamController<'R> -> U2<unit, obj>
+                Node.stream.web.ReadableStreamController<'R> -> U2<unit, obj>
 
             type UnderlyingSourceStartCallback<'R> =
-                delegate of controller: Node.stream.web.ReadableStreamController<'R> -> unit
+                Node.stream.web.ReadableStreamController<'R> -> unit
 
             type TransformerFlushCallback<'O> =
-                delegate of
-                    controller: Node.stream.web.TransformStreamDefaultController<'O> ->
-                        U2<unit, obj>
+                Node.stream.web.TransformStreamDefaultController<'O> -> U2<unit, obj>
 
             type TransformerStartCallback<'O> =
-                delegate of controller: Node.stream.web.TransformStreamDefaultController<'O> -> unit
+                Node.stream.web.TransformStreamDefaultController<'O> -> unit
 
             type TransformerTransformCallback<'I, 'O> =
                 delegate of
                     chunk: 'I * controller: Node.stream.web.TransformStreamDefaultController<'O> ->
                         U2<unit, obj>
 
-            type TransformerCancelCallback = delegate of reason: obj -> U2<unit, obj>
+            type TransformerCancelCallback = obj -> U2<unit, obj>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -191391,7 +191271,7 @@ Duplex.fromWeb($0, $1)""")>]
                     =
                     nativeOnly
 
-            type ReadableStreamErrorCallback = delegate of reason: obj -> U2<unit, obj>
+            type ReadableStreamErrorCallback = obj -> U2<unit, obj>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -191643,7 +191523,7 @@ Duplex.fromWeb($0, $1)""")>]
                     =
                     nativeOnly
 
-            type QueuingStrategySize<'T> = delegate of chunk: 'T -> float
+            type QueuingStrategySize<'T> = 'T -> float
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -193009,7 +192889,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// <summary>
             /// The type of a suite test function. The argument to this function is a <see href="SuiteContext">SuiteContext</see> object.
             /// </summary>
-            type SuiteFn = delegate of s: Node.test.test_.SuiteContext -> U2<unit, JS.Promise<unit>>
+            type SuiteFn = Node.test.test_.SuiteContext -> U2<unit, JS.Promise<unit>>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -214005,18 +213885,18 @@ URL.parse($0, $1)""")>]
         /// The before callback will be called 0 to N times. The before callback will typically be called 0 times if no continuation was ever made for the promise.
         /// The before callback may be called many times in the case where many continuations have been made from the same promise.
         /// </summary>
-        type Before = delegate of promise: JS.Promise<obj> -> unit
+        type Before = JS.Promise<obj> -> unit
 
         /// <summary>
         /// Called immediately after a promise continuation executes. This may be after a <c>then()</c>, <c>catch()</c>, or <c>finally()</c> handler or before an await after another await.
         /// </summary>
-        type After = delegate of promise: JS.Promise<obj> -> unit
+        type After = JS.Promise<obj> -> unit
 
         /// <summary>
         /// Called when the promise receives a resolution or rejection value. This may occur synchronously in the case of <see href="Promise.resolve()">Promise.resolve()</see> or
         /// <see href="Promise.reject()">Promise.reject()</see>.
         /// </summary>
-        type Settled = delegate of promise: JS.Promise<obj> -> unit
+        type Settled = JS.Promise<obj> -> unit
 
         /// <summary>
         /// Key events in the lifetime of a promise have been categorized into four areas: creation of a promise, before/after a continuation handler is called or
@@ -214115,7 +213995,7 @@ URL.parse($0, $1)""")>]
                 =
                 nativeOnly
 
-        type StartupSnapshotCallbackFn = delegate of args: obj -> unit
+        type StartupSnapshotCallbackFn = obj -> unit
 
         module startupSnapshot_ =
 
@@ -216879,7 +216759,7 @@ URL.parse($0, $1)""")>]
                     =
                     nativeOnly
 
-            type EventListener = delegate of evt: Node.web_globals.events.Event -> unit
+            type EventListener = Node.web_globals.events.Event -> unit
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -227263,9 +227143,7 @@ module UndiciTypes =
                 inherit UndiciTypes.dispatcher.Dispatcher
 
             type DispatcherComposeInterceptor =
-                delegate of
-                    dispatch: DispatcherComposeInterceptor.dispatch ->
-                        DispatcherComposeInterceptor.ReturnType
+                DispatcherComposeInterceptor.dispatch -> DispatcherComposeInterceptor.ReturnType
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -227838,9 +227716,7 @@ module UndiciTypes =
                     nativeOnly
 
             type StreamFactory =
-                delegate of
-                    data: UndiciTypes.dispatcher.Dispatcher_.StreamFactoryData ->
-                        Node.stream.Stream_.Writable
+                UndiciTypes.dispatcher.Dispatcher_.StreamFactoryData -> Node.stream.Stream_.Writable
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -227879,9 +227755,8 @@ module UndiciTypes =
                 abstract member onBodySent: DispatchHandlers.onBodySent option with get, set
 
             type PipelineHandler =
-                delegate of
-                    data: UndiciTypes.dispatcher.Dispatcher_.PipelineHandlerData ->
-                        Node.stream.Stream_.Readable
+                UndiciTypes.dispatcher.Dispatcher_.PipelineHandlerData
+                    -> Node.stream.Stream_.Readable
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -227912,7 +227787,7 @@ module UndiciTypes =
                 abstract member text: unit -> JS.Promise<string>
 
             type DispatchInterceptor =
-                delegate of dispatch: DispatchInterceptor.dispatch -> DispatchInterceptor.ReturnType
+                DispatchInterceptor.dispatch -> DispatchInterceptor.ReturnType
 
             module DispatcherComposeInterceptor =
 
@@ -230358,14 +230233,12 @@ module UndiciTypes =
                     nativeOnly
 
             type MockResponseDataHandler<'TData> =
-                delegate of
-                    opts: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions ->
-                        U3<'TData, Node.Buffer, string>
+                UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions
+                    -> U3<'TData, Node.Buffer, string>
 
             type MockReplyOptionsCallback<'TData> =
-                delegate of
-                    opts: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions ->
-                        MockReplyOptionsCallback.ReturnType<'TData>
+                UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions
+                    -> MockReplyOptionsCallback.ReturnType<'TData>
 
             type MockDispatch<'TData> = MockDispatch<'TData, Exception>
 
@@ -230654,7 +230527,7 @@ module UndiciTypes =
         type EventListenerObject =
             abstract member handleEvent: ``object``: Node.Event -> unit
 
-        type EventListener = delegate of evt: Node.Event -> unit
+        type EventListener = Node.Event -> unit
 
     module pool_stats =
 
@@ -231102,7 +230975,7 @@ module UndiciTypes =
                     =
                     nativeOnly
 
-            type OnRetryCallback = delegate of ?result: Exception -> unit
+            type OnRetryCallback = Exception option -> unit
 
             type RetryCallback =
                 delegate of

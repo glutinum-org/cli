@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 type GreetFunction =
-    delegate of a: string -> unit
+    string -> unit
 
 (***)
 #r "nuget: Fable.Core"

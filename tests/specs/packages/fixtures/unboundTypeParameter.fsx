@@ -22,8 +22,10 @@ module UnboundTypeParameter =
     type QueryFunctionContext<'TQueryKey, 'TPageParam> =
         interface end
 
+    [<AllowNullLiteral>]
+    [<Interface>]
     type QueryFunction<'T, 'TQueryKey, 'TPageParam> =
-        delegate of context: obj -> 'T
+        interface end
 
     [<AllowNullLiteral>]
     [<Interface>]

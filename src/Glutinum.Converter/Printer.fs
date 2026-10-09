@@ -869,7 +869,13 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
     printer.Unindent
 
 let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
-    let aliasedType = printType aliasInfo.Type
+    let aliasedType =
+        let text = printType aliasInfo.Type
+
+        match aliasInfo.Type with
+        | FSharpType.Function _ when text.StartsWith "(" && text.EndsWith ")" ->
+            text.Substring(1, text.Length - 2)
+        | _ -> text
 
     let usageText =
         aliasInfo.TypeParameters

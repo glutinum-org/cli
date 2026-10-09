@@ -17,7 +17,7 @@ type DayJs =
     interface end
 
 type PluginFunc =
-    delegate of c: DayJs -> unit
+    DayJs -> unit
 
 (***)
 #r "nuget: Fable.Core"

@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 type Callback<'Param, 'AtomType> =
-    delegate of event: Callback.event<'Param, 'AtomType> -> unit
+    Callback.event<'Param, 'AtomType> -> unit
 
 module Callback =
 

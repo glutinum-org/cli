@@ -26,7 +26,7 @@ type NodeListOf<'TNode> =
     abstract member item: index: float -> 'TNode
 
 type Logger =
-    delegate of message: string -> unit
+    string -> unit
 
 [<AllowNullLiteral>]
 [<Interface>]

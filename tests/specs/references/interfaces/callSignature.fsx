@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 type MyObject =
-    delegate of name: string -> unit
+    string -> unit
 
 (***)
 #r "nuget: Fable.Core"

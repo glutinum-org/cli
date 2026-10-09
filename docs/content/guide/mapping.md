@@ -98,6 +98,7 @@ type T =
 <tr><td><code>T | undefined</code>, <code>T | null</code></td><td><code>T option</code></td></tr>
 <tr><td><code>(a: A) => R</code></td><td><code>A -> R</code></td></tr>
 <tr><td><code>(a: A, b: B) => R</code></td><td>a <code>delegate of a: A * b: B -> R</code></td></tr>
+<tr><td><code>type F = (a: A) => R</code></td><td><code>type F = A -> R</code></td></tr>
 <tr><td><code>{ x: T }</code> in a parameter</td><td>a class with a <code>ParamObject</code> constructor</td></tr>
 <tr><td><code>{ x: T }</code> elsewhere</td><td>an interface in the module of the parent</td></tr>
 <tr><td><code>Date</code></td><td><code>Date</code> of <code>Glutinum.Types</code>, built with <code>Date.Create</code></td></tr>

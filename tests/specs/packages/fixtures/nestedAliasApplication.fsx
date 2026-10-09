@@ -7,7 +7,7 @@ open System
 module NestedAliasApplication =
 
     type Callback<'T> =
-        delegate of event: 'T -> unit
+        'T -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]

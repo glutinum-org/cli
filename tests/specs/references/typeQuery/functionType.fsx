@@ -11,7 +11,7 @@ type Exports =
     static member log () : unit = nativeOnly
 
 type PluginFunc =
-    delegate of c: (unit -> unit) -> unit
+    (unit -> unit) -> unit
 
 (***)
 #r "nuget: Fable.Core"

@@ -544,6 +544,27 @@ let private transformUnionType (context: TransformContext) (cases: GlueType list
                 }
                 |> FSharpType.Union
 
+/// A named function type follows the rule of the anonymous ones: with one parameter it is
+/// an F# lambda, when F# can abbreviate it, with several a delegate
+let private isLambdaSignature
+    (parameters: GlueParameter list)
+    (ownTypeParameters: FSharpTypeParameter list)
+    (declaredTypeParameters: FSharpTypeParameter list)
+    =
+    // An abbreviation declares no constraint, a lambda no type parameter of its own
+    let hasConstraint =
+        declaredTypeParameters
+        |> List.exists (
+            function
+            | FSharpTypeParameter.FSharpTypeParameter { Constraint = Some _ } -> true
+            | _ -> false
+        )
+
+    parameters.Length <= 1
+    && not (parameters |> List.exists _.IsSpread)
+    && ownTypeParameters.IsEmpty
+    && not hasConstraint
+
 let private transformFunctionType
     (context: TransformContext)
     (functionTypeInfo: GlueFunctionType)
@@ -3076,20 +3097,50 @@ let private tryTransformCallableInterface
         |> exposeSpecializedAlias name [] []
         |> List.iter context.ExposeType
 
-        ({
-            XmlDoc = xmlDocInfo.XmlDoc
-            Name = name
-            TypeParameters = typeParameters.TypeParameters
-            Parameters =
+        let ownTypeParameters = transformTypeParameters context callSignature.TypeParameters
+
+        if
+            isLambdaSignature
                 callSignature.Parameters
-                |> List.map (transformParameter context)
-                |> requiredBeforeParamArray
-            ReturnType =
-                transformCallbackReturnType (context.PushScope "ReturnType") callSignature.Type
-        }
-        : FSharpDelegate)
-        |> FSharpType.Delegate
-        |> Some
+                ownTypeParameters.TypeParameters
+                typeParameters.TypeParameters
+        then
+            ({
+                Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
+                Name = name
+                XmlDoc = xmlDocInfo.XmlDoc
+                Type =
+                    ({
+                        Parameters =
+                            callSignature.Parameters |> List.map (transformParameter context)
+                        ReturnType =
+                            transformCallbackReturnType
+                                (context.PushScope "ReturnType")
+                                callSignature.Type
+                    }
+                    : FSharpFunctionType)
+                    |> FSharpType.Function
+                TypeParameters = typeParameters.TypeParameters
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
+            |> Some
+        else
+
+            ({
+                XmlDoc = xmlDocInfo.XmlDoc
+                Name = name
+                TypeParameters = typeParameters.TypeParameters
+                Parameters =
+                    callSignature.Parameters
+                    |> List.map (transformParameter context)
+                    |> requiredBeforeParamArray
+                ReturnType =
+                    transformCallbackReturnType (context.PushScope "ReturnType") callSignature.Type
+            }
+            : FSharpDelegate)
+            |> FSharpType.Delegate
+            |> Some
 
     // `interface RequestHandler<P> extends core.RequestHandler<P> {}` is the delegate it extends
     | [], [ GlueType.TypeReference typeReference as heritage ] when
@@ -4663,25 +4714,42 @@ let private aliasOfFunctionType (scope: AliasScope) (functionType: GlueFunctionT
         |> List.filter (fun typeParameter -> not (declaredNames.Contains typeParameter.Name))
         |> transformTypeParameters context
 
-    ({
-        XmlDoc = scope.XmlDoc.XmlDoc
-        Name = scope.Name
-        TypeParameters =
-            scope.TypeParameters.Value.TypeParameters @ ownTypeParameters.TypeParameters
-        Parameters =
+    let declaredTypeParameters = scope.TypeParameters.Value.TypeParameters
+
+    if
+        isLambdaSignature
             functionType.Parameters
-            |> List.map (
-                transformParameter context
-                >> TypeParameter.mapFsharpParameter ownTypeParameters.SealedTypes
-            )
-            |> requiredBeforeParamArray
-        // The scope keeps an anonymous return type from taking the name of the delegate
-        ReturnType =
-            transformCallbackReturnType (context.PushScope "ReturnType") functionType.Type
-            |> TypeParameter.mapFSharpType ownTypeParameters.SealedTypes
-    }
-    : FSharpDelegate)
-    |> FSharpType.Delegate
+            ownTypeParameters.TypeParameters
+            declaredTypeParameters
+    then
+        ({
+            Parameters = functionType.Parameters |> List.map (transformParameter context)
+            ReturnType =
+                transformCallbackReturnType (context.PushScope "ReturnType") functionType.Type
+        }
+        : FSharpFunctionType)
+        |> FSharpType.Function
+        |> aliasOf scope
+    else
+
+        ({
+            XmlDoc = scope.XmlDoc.XmlDoc
+            Name = scope.Name
+            TypeParameters = declaredTypeParameters @ ownTypeParameters.TypeParameters
+            Parameters =
+                functionType.Parameters
+                |> List.map (
+                    transformParameter context
+                    >> TypeParameter.mapFsharpParameter ownTypeParameters.SealedTypes
+                )
+                |> requiredBeforeParamArray
+            // The scope keeps an anonymous return type from taking the name of the delegate
+            ReturnType =
+                transformCallbackReturnType (context.PushScope "ReturnType") functionType.Type
+                |> TypeParameter.mapFSharpType ownTypeParameters.SealedTypes
+        }
+        : FSharpDelegate)
+        |> FSharpType.Delegate
 
 /// `type Options = { ... }` is an interface, with a `Create` when it is a plain data object
 let private aliasOfTypeLiteral (scope: AliasScope) (typeLiteralInfo: GlueTypeLiteral) =

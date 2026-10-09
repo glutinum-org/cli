@@ -10,8 +10,10 @@ type Exports =
     [<Import("extend", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member extend<'T> (plugin: PluginFunc<'T>) : unit = nativeOnly
 
+[<AllowNullLiteral>]
+[<Interface>]
 type PluginFunc<'T> =
-    delegate of unit -> unit
+    interface end
 
 type PluginFunc =
     PluginFunc<obj>

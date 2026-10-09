@@ -12,7 +12,7 @@ type Node =
     static member Create (kind: float) : Node = nativeOnly
 
 type Visitor<'TIn, 'TOut> =
-    delegate of node: 'TIn -> 'TOut
+    'TIn -> 'TOut
 
 type Visitor<'TIn> =
     Visitor<'TIn, 'TIn option>

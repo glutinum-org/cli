@@ -28,7 +28,7 @@ type Event =
     static member Create (``type``: string) : Event = nativeOnly
 
 type EventListener =
-    delegate of evt: Event -> unit
+    Event -> unit
 
 [<AllowNullLiteral>]
 [<Interface>]

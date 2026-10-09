@@ -100,7 +100,7 @@ jsOptions<MapOptions> (fun options -> options.zoom <- Some 13)
 
 ## Callbacks
 
-A function type with one parameter is an F# lambda. With several it is a delegate, and F# converts a lambda to it at the call site:
+A function type with one parameter is an F# lambda. With several it is a delegate, and F# converts a lambda to it at the call site. A named function type, `type Handler = (event: Event) => void`, follows the same rule:
 
 ```fsharp
 app.get ("/users", RequestHandler(fun request response -> response.json users))
