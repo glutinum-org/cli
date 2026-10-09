@@ -1,5 +1,5 @@
 ---
-last_commit_released: ef5678e05c1cc95590a4afe7d63c3133d9a70d3f
+last_commit_released: e1058ae6bee597cc187ed10925d0cf9529f279bb
 name: Glutinum.Web
 ---
 
@@ -12,6 +12,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0-beta.7 - 2026-10-09
+
+### 🐞 Bug Fixes
+
+* Constructs found by compiling 21 candidate packages ([e1058ae](https://github.com/glutinum-org/cli/commit/e1058ae6bee597cc187ed10925d0cf9529f279bb))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/ef5678e05c1cc95590a4afe7d63c3133d9a70d3f..e1058ae6bee597cc187ed10925d0cf9529f279bb)</small></strong>
 
 ## 1.0.0-beta.6 - 2026-10-09
 
