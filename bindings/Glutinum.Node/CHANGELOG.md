@@ -1,5 +1,5 @@
 ---
-last_commit_released: 25e4e950d6172c66305950971f9e7b1340592cc5
+last_commit_released: 9612425df7d3dc823d984920fb0505f00e954a2b
 name: Glutinum.Node
 ---
 
@@ -12,6 +12,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0-beta.5 - 2026-10-09
+
+### 🐞 Bug Fixes
+
+* Import or global attribute on the class types, a type test needs the class ([9612425](https://github.com/glutinum-org/cli/commit/9612425df7d3dc823d984920fb0505f00e954a2b))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/25e4e950d6172c66305950971f9e7b1340592cc5..9612425df7d3dc823d984920fb0505f00e954a2b)</small></strong>
 
 ## 1.0.0-beta.4 - 2026-10-07
 
