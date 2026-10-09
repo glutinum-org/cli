@@ -23,12 +23,17 @@ let private declarationKey (glueType: GlueType) =
 
 /// A name declared in the file wins over a re-export, and the first re-export wins over the others
 let private dropShadowedReExports (types: GlueType list) =
+    // A class is a type and a value, it shadows a re-export of either
     let localKeys =
         types
-        |> List.choose (fun glueType ->
+        |> List.collect (fun glueType ->
             match glueType with
-            | GlueType.ReExport _ -> None
-            | _ -> declarationKey glueType
+            | GlueType.ReExport _ -> []
+            | _ ->
+                match declarationKey glueType with
+                | Some("class", name) -> [ "class", name; "type", name; "value", name ]
+                | Some key -> [ key ]
+                | None -> []
         )
         |> set
 
@@ -283,26 +288,6 @@ let readPackages
         let hoistedSpecifiers = ResizeArray<string * string>()
         let hoistedTypes = ResizeArray<GlueType>()
 
-        let rec withoutValues (types: GlueType list) =
-            types
-            |> List.choose (
-                function
-                | GlueType.ClassDeclaration info ->
-                    Some(GlueType.ClassDeclaration { info with IsExported = false })
-                | GlueType.FunctionDeclaration _
-                | GlueType.Variable _
-                | GlueType.ExportDefault(GlueType.FunctionDeclaration _)
-                | GlueType.ExportDefault(GlueType.Variable _) -> None
-                | GlueType.ModuleDeclaration info ->
-                    Some(
-                        GlueType.ModuleDeclaration
-                            { info with
-                                Types = withoutValues info.Types
-                            }
-                    )
-                | glueType -> Some glueType
-            )
-
         let withoutUnexported (fileName: string) (types: GlueType list) =
             let isUnexported (name: string) =
                 if packageContext.IsImportable(fileName, name) then
@@ -325,12 +310,7 @@ let readPackages
                     && not (info.Name.StartsWith "\"" || info.Name.StartsWith "'")
                     && isUnexported info.Name
                     ->
-                    Some(
-                        GlueType.ModuleDeclaration
-                            { info with
-                                Types = withoutValues info.Types
-                            }
-                    )
+                    Some(GlueType.ModuleDeclaration { info with IsExported = false })
                 | glueType -> Some glueType
             )
 
@@ -463,6 +443,7 @@ let readPackages
                         IsTopLevel = false
                         IsNamespace = false
                         IsGlobal = true
+                        IsExported = true
                         IsRecursive = false
                         Types = List.ofSeq globals
                     }

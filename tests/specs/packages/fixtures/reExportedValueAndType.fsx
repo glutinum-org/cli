@@ -10,7 +10,7 @@ module ReExportedValueAndType =
     [<Erase>]
     type Exports =
         [<Import("EventType", "re-exported-value-and-type")>]
-        static member inline EventType: Exports.EventType__.Type = nativeOnly
+        static member inline EventType: ReExportedValueAndType.Exports.EventType__.Type = nativeOnly
         [<Import("App", "re-exported-value-and-type"); EmitConstructor>]
         static member App () : App = nativeOnly
 

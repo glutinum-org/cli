@@ -35,6 +35,10 @@ const fixtures = [
     "reExportedValueAndType",
     "iteratorObjectBase",
     "nestedAliasApplication",
+    "classShadowsReExport",
+    "typeNamedLikePackage",
+    "typeofUnexportedNamespace",
+    "externalLibNamespace",
 ]
 
 const footer = `

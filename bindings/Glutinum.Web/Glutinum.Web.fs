@@ -28256,7 +28256,6 @@ module Web =
     [<Interface>]
     [<Global("CharacterData")>]
     type CharacterData =
-        inherit Web.Node
         inherit Web.ChildNode
         inherit Web.NonDocumentTypeChildNode
         /// <summary>
@@ -31296,7 +31295,6 @@ module Web =
     [<Interface>]
     [<Global("Document")>]
     type Document =
-        inherit Web.Node
         inherit Web.DocumentOrShadowRoot
         inherit Web.FontFaceSource
         inherit Web.GlobalEventHandlers
@@ -32691,7 +32689,6 @@ module Web =
     [<Interface>]
     [<Global("DocumentFragment")>]
     type DocumentFragment =
-        inherit Web.Node
         inherit Web.NonElementParentNode
         inherit Web.ParentNode
         /// <summary>
@@ -33028,7 +33025,6 @@ module Web =
     [<Interface>]
     [<Global("DocumentType")>]
     type DocumentType =
-        inherit Web.Node
         inherit Web.ChildNode
         /// <summary>
         /// The read-only **<c>name</c>** property of the DocumentType returns the type of the document.
@@ -33361,7 +33357,6 @@ module Web =
     [<Interface>]
     [<Global("Element")>]
     type Element =
-        inherit Web.Node
         inherit Web.ARIAMixin
         inherit Web.Animatable
         inherit Web.ChildNode
@@ -43598,7 +43593,6 @@ module Web =
         inherit Web.ElementContentEditable
         inherit Web.GlobalEventHandlers
         inherit Web.HTMLOrSVGElement
-        inherit Web.HTMLOrSVGOrMathMLElement
         /// <summary>
         /// The **<c>HTMLElement.accessKey</c>** property sets the keystroke which a user can press to jump to a given element.
         ///
@@ -78008,7 +78002,6 @@ module Web =
         inherit Web.ElementCSSInlineStyle
         inherit Web.GlobalEventHandlers
         inherit Web.HTMLOrSVGElement
-        inherit Web.HTMLOrSVGOrMathMLElement
 
         /// <summary>
         /// The **<c>className</c>** property of the Element interface gets and sets the value of the class attribute of the specified element.
@@ -110657,7 +110650,7 @@ module Web =
             /// The **<c>WebAssembly.CompileError</c>** object indicates an error during WebAssembly decoding or validation.
             /// </summary>
             [<Emit("$0.CompileError")>]
-            abstract member CompileError: Exports.CompileError.Type
+            abstract member CompileError: Web.WebAssembly_.Exports.CompileError.Type
 
             /// <summary>
             /// The **<c>WebAssembly.Exception</c>** object represents a runtime exception thrown from WebAssembly to JavaScript, or thrown from JavaScript to a WebAssembly exception handler.
@@ -110665,7 +110658,7 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Exception)
             /// </summary>
             [<Emit("$0.Exception")>]
-            abstract member Exception: Exports.Exception.Type
+            abstract member Exception: Web.WebAssembly_.Exports.Exception.Type
 
             /// <summary>
             /// A **<c>WebAssembly.Global</c>** object represents a global variable instance, accessible from both JavaScript and importable/exportable across one or more WebAssembly.Module instances. This allows dynamic linking of multiple modules.
@@ -110673,7 +110666,7 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Global)
             /// </summary>
             [<Emit("$0.Global")>]
-            abstract member Global: Exports.Global.Type<obj>
+            abstract member Global: Web.WebAssembly_.Exports.Global.Type<obj>
 
             /// <summary>
             /// A **<c>WebAssembly.Instance</c>** object is a stateful, executable instance of a WebAssembly.Module. Instance objects contain all the Exported WebAssembly functions that allow calling into WebAssembly code from JavaScript.
@@ -110681,13 +110674,13 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Instance)
             /// </summary>
             [<Emit("$0.Instance")>]
-            abstract member Instance: Exports.Instance.Type
+            abstract member Instance: Web.WebAssembly_.Exports.Instance.Type
 
             /// <summary>
             /// The **<c>WebAssembly.LinkError</c>** object indicates an error during module instantiation (besides traps from the start function).
             /// </summary>
             [<Emit("$0.LinkError")>]
-            abstract member LinkError: Exports.LinkError.Type
+            abstract member LinkError: Web.WebAssembly_.Exports.LinkError.Type
 
             /// <summary>
             /// The **<c>WebAssembly.Memory</c>** object is a resizable ArrayBuffer or SharedArrayBuffer that holds raw bytes of memory accessed by a WebAssembly.Instance.
@@ -110695,7 +110688,7 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Memory)
             /// </summary>
             [<Emit("$0.Memory")>]
-            abstract member Memory: Exports.Memory.Type
+            abstract member Memory: Web.WebAssembly_.Exports.Memory.Type
 
             /// <summary>
             /// A **<c>WebAssembly.Module</c>** object contains stateless WebAssembly code that has already been compiled by the browser — this can be efficiently shared with Workers, and instantiated multiple times.
@@ -110703,13 +110696,13 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Module)
             /// </summary>
             [<Emit("$0.Module")>]
-            abstract member Module: Exports.Module.Type
+            abstract member Module: Web.WebAssembly_.Exports.Module.Type
 
             /// <summary>
             /// The **<c>WebAssembly.RuntimeError</c>** object is the error type that is thrown whenever WebAssembly specifies a trap.
             /// </summary>
             [<Emit("$0.RuntimeError")>]
-            abstract member RuntimeError: Exports.RuntimeError.Type
+            abstract member RuntimeError: Web.WebAssembly_.Exports.RuntimeError.Type
 
             /// <summary>
             /// The **<c>WebAssembly.Table</c>** object is a JavaScript wrapper object — an array-like structure representing a WebAssembly table, which stores homogeneous references. A table created by JavaScript or in WebAssembly code will be accessible and mutable from both JavaScript and WebAssembly.
@@ -110717,7 +110710,7 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Table)
             /// </summary>
             [<Emit("$0.Table")>]
-            abstract member Table: Exports.Table.Type
+            abstract member Table: Web.WebAssembly_.Exports.Table.Type
 
             /// <summary>
             /// The **<c>WebAssembly.Tag</c>** object defines a type of a WebAssembly exception that can be thrown to/from WebAssembly code.
@@ -110725,7 +110718,7 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Tag)
             /// </summary>
             [<Emit("$0.Tag")>]
-            abstract member Tag: Exports.Tag.Type
+            abstract member Tag: Web.WebAssembly_.Exports.Tag.Type
 
             [<Emit("$0.JSTag")>]
             abstract member JSTag: Web.WebAssembly_.Tag

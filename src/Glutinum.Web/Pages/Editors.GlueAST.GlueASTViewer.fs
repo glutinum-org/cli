@@ -397,6 +397,7 @@ type GlueASTViewer =
                     ASTViewer.renderKeyValue "IsNamespace" (string moduleDeclaration.IsNamespace)
                     ASTViewer.renderKeyValue "IsRecursive" (string moduleDeclaration.IsRecursive)
                     ASTViewer.renderKeyValue "IsGlobal" (string moduleDeclaration.IsGlobal)
+                    ASTViewer.renderKeyValue "IsExported" (string moduleDeclaration.IsExported)
                     moduleDeclaration.Types
                     |> List.map GlueASTViewer.GlueType
                     |> ASTViewer.renderNode "Types"

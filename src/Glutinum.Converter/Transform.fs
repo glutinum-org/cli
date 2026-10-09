@@ -901,29 +901,6 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         ->
         FSharpType.Object
 
-    // `formatRelative: FormatRelativeFn` where `type FormatRelativeFn = <T>(...) => ...` is a
-    // generic delegate, a property can't be generic
-    | GlueType.TypeReference typeReference when
-        typeReference.TypeArguments.IsEmpty
-        && not
-            (Conditionals.genericDelegateTypeParameters
-                context.State.Conditionals
-                typeReference.FullName)
-                .IsEmpty
-        ->
-        let ownNames =
-            Conditionals.genericDelegateTypeParameters
-                context.State.Conditionals
-                typeReference.FullName
-
-        transformType
-            context
-            (GlueType.TypeReference
-                { typeReference with
-                    TypeArguments =
-                        ownNames |> List.map (fun _ -> GlueType.Primitive GluePrimitive.Any)
-                })
-
     // `FlatArray<A, D>` has no counterpart, the type arguments go with it
     | GlueType.TypeReference typeReference when
         mapTypeNameToFableCoreAwareName context typeReference = "obj"
@@ -3342,7 +3319,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             [
                 // `extends Ops<"float">, Ops<"int">` are one instantiation once the literals are `string`
                 yield!
-                    inheritance
+                    Heritage.withoutBasesOfBases context.TypeMemory inheritance
                     |> List.map (transformType (context.PushScope "Extends"))
                     |> List.filter isInheritableType
                     |> List.distinct
@@ -4706,26 +4683,21 @@ let private aliasOfUtilityType (scope: AliasScope) (utilityType: GlueUtilityType
 let private aliasOfFunctionType (scope: AliasScope) (functionType: GlueFunctionType) =
     let context = scope.Context
 
-    let declaredNames = scope.Declaration.TypeParameters |> List.map _.Name |> set
+    // An F# abbreviation or delegate cannot declare the type parameters of the function itself
+    let ownDefaults = ownTypeParameterDefaults functionType
 
-    // `type Event = <T>(body: T) => void` declares its own type parameters
-    let ownTypeParameters =
-        functionType.TypeParameters
-        |> List.filter (fun typeParameter -> not (declaredNames.Contains typeParameter.Name))
-        |> transformTypeParameters context
+    let parameters =
+        functionType.Parameters
+        |> List.map (GlueSubstitution.substituteParameter ownDefaults)
+
+    let returnType = GlueSubstitution.substitute ownDefaults functionType.Type
 
     let declaredTypeParameters = scope.TypeParameters.Value.TypeParameters
 
-    if
-        isLambdaSignature
-            functionType.Parameters
-            ownTypeParameters.TypeParameters
-            declaredTypeParameters
-    then
+    if isLambdaSignature parameters [] declaredTypeParameters then
         ({
-            Parameters = functionType.Parameters |> List.map (transformParameter context)
-            ReturnType =
-                transformCallbackReturnType (context.PushScope "ReturnType") functionType.Type
+            Parameters = parameters |> List.map (transformParameter context)
+            ReturnType = transformCallbackReturnType (context.PushScope "ReturnType") returnType
         }
         : FSharpFunctionType)
         |> FSharpType.Function
@@ -4735,18 +4707,11 @@ let private aliasOfFunctionType (scope: AliasScope) (functionType: GlueFunctionT
         ({
             XmlDoc = scope.XmlDoc.XmlDoc
             Name = scope.Name
-            TypeParameters = declaredTypeParameters @ ownTypeParameters.TypeParameters
+            TypeParameters = declaredTypeParameters
             Parameters =
-                functionType.Parameters
-                |> List.map (
-                    transformParameter context
-                    >> TypeParameter.mapFsharpParameter ownTypeParameters.SealedTypes
-                )
-                |> requiredBeforeParamArray
+                parameters |> List.map (transformParameter context) |> requiredBeforeParamArray
             // The scope keeps an anonymous return type from taking the name of the delegate
-            ReturnType =
-                transformCallbackReturnType (context.PushScope "ReturnType") functionType.Type
-                |> TypeParameter.mapFSharpType ownTypeParameters.SealedTypes
+            ReturnType = transformCallbackReturnType (context.PushScope "ReturnType") returnType
         }
         : FSharpDelegate)
         |> FSharpType.Delegate
@@ -5421,7 +5386,7 @@ let private transformToFsharp
 
         | GlueType.FileModule fileModule ->
             let name = Naming.sanitizeTypeName fileModule.Name
-            context.TypeLiteralsMemory.EnterModule name
+            context.TypeLiteralsMemory.EnterFileModule name
 
             let types =
                 transform
@@ -5640,7 +5605,8 @@ let private transform
             match glueType with
             | GlueType.ClassDeclaration _ -> true
             | GlueType.Variable _ -> true
-            | GlueType.ModuleDeclaration info -> not info.IsGlobal && applyModuleDeclaration info
+            | GlueType.ModuleDeclaration info ->
+                not info.IsGlobal && info.IsExported && applyModuleDeclaration info
             | GlueType.ExportDefault exportedType ->
                 // Capture default export of classes here so we can keep
                 // generate their actual bindings

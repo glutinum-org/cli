@@ -121,7 +121,19 @@ type TypeLiteralsMemory() =
     // A name is qualified inside its F# module, modules merged later share the count
     let moduleKey () = String.concat "." modulePath
 
+    let mutable rootIsFileModule = false
+
     member _.EnterModule(name: string) = modulePath.Add name
+
+    member _.EnterFileModule(name: string) =
+        rootIsFileModule <- modulePath.Count = 0
+        modulePath.Add name
+
+    member _.RootModuleName =
+        if modulePath.Count = 0 then
+            None
+        else
+            Some modulePath.[0]
 
     member _.LeaveModule() =
         modulePath.RemoveAt(modulePath.Count - 1)
@@ -197,10 +209,23 @@ type TypeLiteralsMemory() =
 
     /// The qualified name to reference the type named `name` by `GetTypeName` in `fullName`
     member _.ReferenceName(fullName: string, name: string) =
-        match assigned.TryGetValue $"{moduleKey ()}|{fullName}/{name}" with
-        | true, (fullName, 0) -> fullName
-        | true, (fullName, index) -> withCountSuffix fullName index
-        | false, _ -> fullName
+        let qualified =
+            match assigned.TryGetValue $"{moduleKey ()}|{fullName}/{name}" with
+            | true, (fullName, 0) -> fullName
+            | true, (fullName, index) -> withCountSuffix fullName index
+            | false, _ -> fullName
+
+        // Inside `type Exports` of a nested module, F# resolves `Exports.f` to an enclosing `Exports` module
+        let rootDepth =
+            if rootIsFileModule then
+                1
+            else
+                0
+
+        if modulePath.Count <= rootDepth then
+            qualified
+        else
+            $"{moduleKey ()}.{qualified}"
 
 /// Where the top-level declarations come from at runtime
 [<RequireQualifiedAccess>]
@@ -363,6 +388,9 @@ type TransformContext
         // F# compiles `module Formatter` beside `type Formatter` as `FormatterModule`
         let scopeName =
             if this.SiblingTypeNames.Contains(scopeName + "Module") then
+                scopeName + "_"
+            // `Dexie.Table` inside a module named like the root module resolves to that module
+            elif typeLiteralsMemory.RootModuleName = Some(Naming.sanitizeTypeName scopeName) then
                 scopeName + "_"
             else
                 scopeName

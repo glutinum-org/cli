@@ -25,7 +25,7 @@ module ns_ =
     [<Erase>]
     type Exports =
         [<Emit("$0.make")>]
-        abstract member make: Exports.make.Type<obj>
+        abstract member make: ns_.Exports.make.Type<obj>
 
     module Exports =
 

@@ -18,7 +18,7 @@ module settings_ =
     [<Erase>]
     type Exports =
         [<Emit("$0.current")>]
-        abstract member current: Exports.current.Type
+        abstract member current: settings_.Exports.current.Type
 
     module Exports =
 

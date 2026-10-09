@@ -1591,9 +1591,9 @@ module TypeScript =
             /// </param>
             [<Emit("$0.construct($1...)")>]
             abstract member construct<'A, 'R> :
-                target: Exports.construct.target<'R, 'A> *
+                target: TypeScript.Reflect.Exports.construct.target<'R, 'A> *
                 argumentsList: Exports.construct.argumentsList<obj> *
-                ?newTarget: Exports.construct.newTarget ->
+                ?newTarget: TypeScript.Reflect.Exports.construct.newTarget ->
                     'R
 
             [<Emit("$0.construct($1...)")>]
@@ -1616,7 +1616,9 @@ module TypeScript =
             /// </param>
             [<Emit("$0.defineProperty($1...)")>]
             abstract member defineProperty:
-                target: obj * propertyKey: string * attributes: Exports.defineProperty.attributes ->
+                target: obj *
+                propertyKey: string *
+                attributes: TypeScript.Reflect.Exports.defineProperty.attributes ->
                     bool
 
             /// <summary>
@@ -1634,7 +1636,9 @@ module TypeScript =
             /// </param>
             [<Emit("$0.defineProperty($1...)")>]
             abstract member defineProperty:
-                target: obj * propertyKey: float * attributes: Exports.defineProperty.attributes ->
+                target: obj *
+                propertyKey: float *
+                attributes: TypeScript.Reflect.Exports.defineProperty.attributes ->
                     bool
 
             /// <summary>
@@ -1652,7 +1656,9 @@ module TypeScript =
             /// </param>
             [<Emit("$0.defineProperty($1...)")>]
             abstract member defineProperty:
-                target: obj * propertyKey: obj * attributes: Exports.defineProperty.attributes ->
+                target: obj *
+                propertyKey: obj *
+                attributes: TypeScript.Reflect.Exports.defineProperty.attributes ->
                     bool
 
             /// <summary>
@@ -1672,7 +1678,7 @@ module TypeScript =
             abstract member defineProperty:
                 target: obj *
                 propertyKey: TypeScript.PropertyKey *
-                attributes: Exports.defineProperty.attributes ->
+                attributes: TypeScript.Reflect.Exports.defineProperty.attributes ->
                     bool
 
             /// <summary>
@@ -1912,7 +1918,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member find<'S> :
-                        predicate: Exports.apply.argumentsList.find.predicate<'T> * ?thisArg: obj ->
+                        predicate: TypeScript.Reflect.Exports.apply.argumentsList.find.predicate<'T> *
+                        ?thisArg: obj ->
                             'S option
 
                     /// <summary>
@@ -1920,7 +1927,9 @@ module TypeScript =
                     /// otherwise.
                     /// </summary>
                     abstract member find:
-                        predicate: Exports.apply.argumentsList.find.predicate_1<'T> * ?thisArg: obj ->
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.find.predicate_1<'T> *
+                        ?thisArg: obj ->
                             'T option
 
                     /// <summary>
@@ -1937,7 +1946,9 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member findIndex:
-                        predicate: Exports.apply.argumentsList.findIndex.predicate * ?thisArg: obj ->
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.findIndex.predicate *
+                        ?thisArg: obj ->
                             float
 
                     /// <summary>
@@ -1945,7 +1956,8 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: string *
-                        ?options: Exports.apply.argumentsList.toLocaleString.options ->
+                        ?options:
+                            TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options ->
                             string
 
                     /// <summary>
@@ -1953,7 +1965,8 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: ResizeArray<string> *
-                        ?options: Exports.apply.argumentsList.toLocaleString.options ->
+                        ?options:
+                            TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options ->
                             string
 
                     /// <summary>
@@ -1961,7 +1974,8 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: U2<string, ResizeArray<string>> *
-                        ?options: Exports.apply.argumentsList.toLocaleString.options ->
+                        ?options:
+                            TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options ->
                             string
 
                     /// <summary>
@@ -2005,7 +2019,8 @@ module TypeScript =
                     /// thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member flatMap<'U, 'This> :
-                        callback: Exports.apply.argumentsList.flatMap.callback * ?thisArg: 'This ->
+                        callback: TypeScript.Reflect.Exports.apply.argumentsList.flatMap.callback *
+                        ?thisArg: 'This ->
                             ResizeArray<'U>
 
                     /// <summary>
@@ -2038,7 +2053,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member findLast<'S> :
-                        predicate: Exports.apply.argumentsList.findLast.predicate<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.findLast.predicate<'T> *
                         ?thisArg: obj ->
                             'S option
 
@@ -2047,7 +2063,8 @@ module TypeScript =
                     /// otherwise.
                     /// </summary>
                     abstract member findLast:
-                        predicate: Exports.apply.argumentsList.findLast.predicate_1<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.findLast.predicate_1<'T> *
                         ?thisArg: obj ->
                             'T option
 
@@ -2065,7 +2082,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member findLastIndex:
-                        predicate: Exports.apply.argumentsList.findLastIndex.predicate *
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.findLastIndex.predicate *
                         ?thisArg: obj ->
                             float
 
@@ -2086,7 +2104,8 @@ module TypeScript =
                     /// </code>
                     /// </param>
                     abstract member toSorted:
-                        ?compareFn: Exports.apply.argumentsList.toSorted.compareFn ->
+                        ?compareFn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.toSorted.compareFn ->
                             ResizeArray<obj>
 
                     /// <summary>
@@ -2218,7 +2237,9 @@ module TypeScript =
                     /// If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member every:
-                        predicate: Exports.apply.argumentsList.every.predicate<'T> * ?thisArg: obj ->
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.every.predicate<'T> *
+                        ?thisArg: obj ->
                             bool
 
                     /// <summary>
@@ -2234,7 +2255,9 @@ module TypeScript =
                     /// If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member every:
-                        predicate: Exports.apply.argumentsList.every.predicate_1<'T> * ?thisArg: obj ->
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.every.predicate_1<'T> *
+                        ?thisArg: obj ->
                             bool
 
                     /// <summary>
@@ -2250,7 +2273,8 @@ module TypeScript =
                     /// If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member some:
-                        predicate: Exports.apply.argumentsList.some.predicate * ?thisArg: obj ->
+                        predicate: TypeScript.Reflect.Exports.apply.argumentsList.some.predicate *
+                        ?thisArg: obj ->
                             bool
 
                     /// <summary>
@@ -2263,7 +2287,9 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member forEach:
-                        callbackfn: Exports.apply.argumentsList.forEach.callbackfn * ?thisArg: obj ->
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.forEach.callbackfn *
+                        ?thisArg: obj ->
                             unit
 
                     /// <summary>
@@ -2276,7 +2302,8 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member map<'U> :
-                        callbackfn: Exports.apply.argumentsList.map.callbackfn * ?thisArg: obj ->
+                        callbackfn: TypeScript.Reflect.Exports.apply.argumentsList.map.callbackfn *
+                        ?thisArg: obj ->
                             ResizeArray<'U>
 
                     /// <summary>
@@ -2289,7 +2316,9 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member filter<'S> :
-                        predicate: Exports.apply.argumentsList.filter.predicate<'T> * ?thisArg: obj ->
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.filter.predicate<'T> *
+                        ?thisArg: obj ->
                             ResizeArray<'S>
 
                     /// <summary>
@@ -2302,7 +2331,8 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member filter:
-                        predicate: Exports.apply.argumentsList.filter.predicate_1<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.apply.argumentsList.filter.predicate_1<'T> *
                         ?thisArg: obj ->
                             ResizeArray<'T>
 
@@ -2316,13 +2346,16 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduce:
-                        callbackfn: Exports.apply.argumentsList.reduce.callbackfn<'T> -> 'T
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.reduce.callbackfn<'T> ->
+                            'T
 
                     /// <summary>
                     /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
                     /// </summary>
                     abstract member reduce:
-                        callbackfn: Exports.apply.argumentsList.reduce.callbackfn<'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.reduce.callbackfn<'T> *
                         initialValue: 'T ->
                             'T
 
@@ -2336,7 +2369,11 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduce<'U> :
-                        callbackfn: Exports.apply.argumentsList.reduce.callbackfn_1<'U, 'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.reduce.callbackfn_1<
+                                'U,
+                                'T
+                             > *
                         initialValue: 'U ->
                             'U
 
@@ -2350,13 +2387,16 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduceRight:
-                        callbackfn: Exports.apply.argumentsList.reduceRight.callbackfn<'T> -> 'T
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.reduceRight.callbackfn<'T> ->
+                            'T
 
                     /// <summary>
                     /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
                     /// </summary>
                     abstract member reduceRight:
-                        callbackfn: Exports.apply.argumentsList.reduceRight.callbackfn<'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.reduceRight.callbackfn<'T> *
                         initialValue: 'T ->
                             'T
 
@@ -2370,7 +2410,11 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduceRight<'U> :
-                        callbackfn: Exports.apply.argumentsList.reduceRight.callbackfn_1<'U, 'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.apply.argumentsList.reduceRight.callbackfn_1<
+                                'U,
+                                'T
+                             > *
                         initialValue: 'U ->
                             'U
 
@@ -2397,41 +2441,41 @@ module TypeScript =
                             abstract member numberingSystem: string option with get, set
 
                             abstract member compactDisplay:
-                                Exports.apply.argumentsList.toLocaleString.options.compactDisplay option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.compactDisplay option with get, set
 
                             abstract member notation:
-                                Exports.apply.argumentsList.toLocaleString.options.notation option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.notation option with get, set
 
                             abstract member signDisplay: obj option with get, set
                             abstract member unit: string option with get, set
 
                             abstract member unitDisplay:
-                                Exports.apply.argumentsList.toLocaleString.options.unitDisplay option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.unitDisplay option with get, set
 
                             abstract member currencySign:
-                                Exports.apply.argumentsList.toLocaleString.options.currencySign option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.currencySign option with get, set
 
                             abstract member roundingPriority:
-                                Exports.apply.argumentsList.toLocaleString.options.roundingPriority option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.roundingPriority option with get, set
 
                             abstract member roundingIncrement:
-                                Exports.apply.argumentsList.toLocaleString.options.roundingIncrement option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.roundingIncrement option with get, set
 
                             abstract member roundingMode:
-                                Exports.apply.argumentsList.toLocaleString.options.roundingMode option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.roundingMode option with get, set
 
                             abstract member trailingZeroDisplay:
-                                Exports.apply.argumentsList.toLocaleString.options.trailingZeroDisplay option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.trailingZeroDisplay option with get, set
 
                             abstract member localeMatcher:
-                                Exports.apply.argumentsList.toLocaleString.options.localeMatcher option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.localeMatcher option with get, set
 
                             abstract member style: obj option with get, set
                             abstract member currency: string option with get, set
                             abstract member currencyDisplay: obj option with get, set
 
                             abstract member useGrouping:
-                                Exports.apply.argumentsList.toLocaleString.options.useGrouping option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.useGrouping option with get, set
 
                             abstract member minimumIntegerDigits: float option with get, set
                             abstract member minimumFractionDigits: float option with get, set
@@ -2441,49 +2485,49 @@ module TypeScript =
                             abstract member calendar: string option with get, set
 
                             abstract member dayPeriod:
-                                Exports.apply.argumentsList.toLocaleString.options.dayPeriod option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.dayPeriod option with get, set
 
                             abstract member dateStyle:
-                                Exports.apply.argumentsList.toLocaleString.options.dateStyle option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.dateStyle option with get, set
 
                             abstract member timeStyle:
-                                Exports.apply.argumentsList.toLocaleString.options.timeStyle option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.timeStyle option with get, set
 
                             abstract member hourCycle:
-                                Exports.apply.argumentsList.toLocaleString.options.hourCycle option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.hourCycle option with get, set
 
                             abstract member formatMatcher:
-                                Exports.apply.argumentsList.toLocaleString.options.formatMatcher option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.formatMatcher option with get, set
 
                             abstract member fractionalSecondDigits:
-                                Exports.apply.argumentsList.toLocaleString.options.fractionalSecondDigits option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.fractionalSecondDigits option with get, set
 
                             abstract member weekday:
-                                Exports.apply.argumentsList.toLocaleString.options.weekday option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.weekday option with get, set
 
                             abstract member era:
-                                Exports.apply.argumentsList.toLocaleString.options.era option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.era option with get, set
 
                             abstract member year:
-                                Exports.apply.argumentsList.toLocaleString.options.year option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.year option with get, set
 
                             abstract member month:
-                                Exports.apply.argumentsList.toLocaleString.options.month option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.month option with get, set
 
                             abstract member day:
-                                Exports.apply.argumentsList.toLocaleString.options.day option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.day option with get, set
 
                             abstract member hour:
-                                Exports.apply.argumentsList.toLocaleString.options.hour option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.hour option with get, set
 
                             abstract member minute:
-                                Exports.apply.argumentsList.toLocaleString.options.minute option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.minute option with get, set
 
                             abstract member second:
-                                Exports.apply.argumentsList.toLocaleString.options.second option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.second option with get, set
 
                             abstract member timeZoneName:
-                                Exports.apply.argumentsList.toLocaleString.options.timeZoneName option with get, set
+                                TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.timeZoneName option with get, set
 
                             abstract member hour12: bool option with get, set
                             abstract member timeZone: string option with get, set
@@ -2493,30 +2537,30 @@ module TypeScript =
                                 (
                                     ?numberingSystem: string,
                                     ?compactDisplay:
-                                        Exports.apply.argumentsList.toLocaleString.options.compactDisplay,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.compactDisplay,
                                     ?notation:
-                                        Exports.apply.argumentsList.toLocaleString.options.notation,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.notation,
                                     ?signDisplay: obj,
                                     ?unit: string,
                                     ?unitDisplay:
-                                        Exports.apply.argumentsList.toLocaleString.options.unitDisplay,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.unitDisplay,
                                     ?currencySign:
-                                        Exports.apply.argumentsList.toLocaleString.options.currencySign,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.currencySign,
                                     ?roundingPriority:
-                                        Exports.apply.argumentsList.toLocaleString.options.roundingPriority,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.roundingPriority,
                                     ?roundingIncrement:
-                                        Exports.apply.argumentsList.toLocaleString.options.roundingIncrement,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.roundingIncrement,
                                     ?roundingMode:
-                                        Exports.apply.argumentsList.toLocaleString.options.roundingMode,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.roundingMode,
                                     ?trailingZeroDisplay:
-                                        Exports.apply.argumentsList.toLocaleString.options.trailingZeroDisplay,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.trailingZeroDisplay,
                                     ?localeMatcher:
-                                        Exports.apply.argumentsList.toLocaleString.options.localeMatcher,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.localeMatcher,
                                     ?style: obj,
                                     ?currency: string,
                                     ?currencyDisplay: obj,
                                     ?useGrouping:
-                                        Exports.apply.argumentsList.toLocaleString.options.useGrouping,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.useGrouping,
                                     ?minimumIntegerDigits: float,
                                     ?minimumFractionDigits: float,
                                     ?maximumFractionDigits: float,
@@ -2524,30 +2568,35 @@ module TypeScript =
                                     ?maximumSignificantDigits: float,
                                     ?calendar: string,
                                     ?dayPeriod:
-                                        Exports.apply.argumentsList.toLocaleString.options.dayPeriod,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.dayPeriod,
                                     ?dateStyle:
-                                        Exports.apply.argumentsList.toLocaleString.options.dateStyle,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.dateStyle,
                                     ?timeStyle:
-                                        Exports.apply.argumentsList.toLocaleString.options.timeStyle,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.timeStyle,
                                     ?hourCycle:
-                                        Exports.apply.argumentsList.toLocaleString.options.hourCycle,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.hourCycle,
                                     ?formatMatcher:
-                                        Exports.apply.argumentsList.toLocaleString.options.formatMatcher,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.formatMatcher,
                                     ?fractionalSecondDigits:
-                                        Exports.apply.argumentsList.toLocaleString.options.fractionalSecondDigits,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.fractionalSecondDigits,
                                     ?weekday:
-                                        Exports.apply.argumentsList.toLocaleString.options.weekday,
-                                    ?era: Exports.apply.argumentsList.toLocaleString.options.era,
-                                    ?year: Exports.apply.argumentsList.toLocaleString.options.year,
-                                    ?month: Exports.apply.argumentsList.toLocaleString.options.month,
-                                    ?day: Exports.apply.argumentsList.toLocaleString.options.day,
-                                    ?hour: Exports.apply.argumentsList.toLocaleString.options.hour,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.weekday,
+                                    ?era:
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.era,
+                                    ?year:
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.year,
+                                    ?month:
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.month,
+                                    ?day:
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.day,
+                                    ?hour:
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.hour,
                                     ?minute:
-                                        Exports.apply.argumentsList.toLocaleString.options.minute,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.minute,
                                     ?second:
-                                        Exports.apply.argumentsList.toLocaleString.options.second,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.second,
                                     ?timeZoneName:
-                                        Exports.apply.argumentsList.toLocaleString.options.timeZoneName,
+                                        TypeScript.Reflect.Exports.apply.argumentsList.toLocaleString.options.timeZoneName,
                                     ?hour12: bool,
                                     ?timeZone: string
                                 )
@@ -2876,7 +2925,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member find<'S> :
-                        predicate: Exports.construct.argumentsList.find.predicate<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.find.predicate<'T> *
                         ?thisArg: obj ->
                             'S option
 
@@ -2885,7 +2935,8 @@ module TypeScript =
                     /// otherwise.
                     /// </summary>
                     abstract member find:
-                        predicate: Exports.construct.argumentsList.find.predicate_1<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.find.predicate_1<'T> *
                         ?thisArg: obj ->
                             'T option
 
@@ -2903,7 +2954,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member findIndex:
-                        predicate: Exports.construct.argumentsList.findIndex.predicate *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.findIndex.predicate *
                         ?thisArg: obj ->
                             float
 
@@ -2912,7 +2964,8 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: string *
-                        ?options: Exports.construct.argumentsList.toLocaleString.options ->
+                        ?options:
+                            TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options ->
                             string
 
                     /// <summary>
@@ -2920,7 +2973,8 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: ResizeArray<string> *
-                        ?options: Exports.construct.argumentsList.toLocaleString.options ->
+                        ?options:
+                            TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options ->
                             string
 
                     /// <summary>
@@ -2928,7 +2982,8 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: U2<string, ResizeArray<string>> *
-                        ?options: Exports.construct.argumentsList.toLocaleString.options ->
+                        ?options:
+                            TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options ->
                             string
 
                     /// <summary>
@@ -2972,7 +3027,9 @@ module TypeScript =
                     /// thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member flatMap<'U, 'This> :
-                        callback: Exports.construct.argumentsList.flatMap.callback * ?thisArg: 'This ->
+                        callback:
+                            TypeScript.Reflect.Exports.construct.argumentsList.flatMap.callback *
+                        ?thisArg: 'This ->
                             ResizeArray<'U>
 
                     /// <summary>
@@ -3005,7 +3062,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member findLast<'S> :
-                        predicate: Exports.construct.argumentsList.findLast.predicate<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.findLast.predicate<'T> *
                         ?thisArg: obj ->
                             'S option
 
@@ -3014,7 +3072,10 @@ module TypeScript =
                     /// otherwise.
                     /// </summary>
                     abstract member findLast:
-                        predicate: Exports.construct.argumentsList.findLast.predicate_1<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.findLast.predicate_1<
+                                'T
+                             > *
                         ?thisArg: obj ->
                             'T option
 
@@ -3032,7 +3093,8 @@ module TypeScript =
                     /// predicate. If it is not provided, undefined is used instead.
                     /// </param>
                     abstract member findLastIndex:
-                        predicate: Exports.construct.argumentsList.findLastIndex.predicate *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.findLastIndex.predicate *
                         ?thisArg: obj ->
                             float
 
@@ -3053,7 +3115,8 @@ module TypeScript =
                     /// </code>
                     /// </param>
                     abstract member toSorted:
-                        ?compareFn: Exports.construct.argumentsList.toSorted.compareFn ->
+                        ?compareFn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.toSorted.compareFn ->
                             ResizeArray<obj>
 
                     /// <summary>
@@ -3185,7 +3248,8 @@ module TypeScript =
                     /// If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member every:
-                        predicate: Exports.construct.argumentsList.every.predicate<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.every.predicate<'T> *
                         ?thisArg: obj ->
                             bool
 
@@ -3202,7 +3266,8 @@ module TypeScript =
                     /// If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member every:
-                        predicate: Exports.construct.argumentsList.every.predicate_1<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.every.predicate_1<'T> *
                         ?thisArg: obj ->
                             bool
 
@@ -3219,7 +3284,8 @@ module TypeScript =
                     /// If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member some:
-                        predicate: Exports.construct.argumentsList.some.predicate * ?thisArg: obj ->
+                        predicate: TypeScript.Reflect.Exports.construct.argumentsList.some.predicate *
+                        ?thisArg: obj ->
                             bool
 
                     /// <summary>
@@ -3232,7 +3298,8 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member forEach:
-                        callbackfn: Exports.construct.argumentsList.forEach.callbackfn *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.forEach.callbackfn *
                         ?thisArg: obj ->
                             unit
 
@@ -3246,7 +3313,9 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member map<'U> :
-                        callbackfn: Exports.construct.argumentsList.map.callbackfn * ?thisArg: obj ->
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.map.callbackfn *
+                        ?thisArg: obj ->
                             ResizeArray<'U>
 
                     /// <summary>
@@ -3259,7 +3328,8 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member filter<'S> :
-                        predicate: Exports.construct.argumentsList.filter.predicate<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.filter.predicate<'T> *
                         ?thisArg: obj ->
                             ResizeArray<'S>
 
@@ -3273,7 +3343,8 @@ module TypeScript =
                     /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
                     /// </param>
                     abstract member filter:
-                        predicate: Exports.construct.argumentsList.filter.predicate_1<'T> *
+                        predicate:
+                            TypeScript.Reflect.Exports.construct.argumentsList.filter.predicate_1<'T> *
                         ?thisArg: obj ->
                             ResizeArray<'T>
 
@@ -3287,13 +3358,16 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduce:
-                        callbackfn: Exports.construct.argumentsList.reduce.callbackfn<'T> -> 'T
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.reduce.callbackfn<'T> ->
+                            'T
 
                     /// <summary>
                     /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
                     /// </summary>
                     abstract member reduce:
-                        callbackfn: Exports.construct.argumentsList.reduce.callbackfn<'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.reduce.callbackfn<'T> *
                         initialValue: 'T ->
                             'T
 
@@ -3307,7 +3381,11 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduce<'U> :
-                        callbackfn: Exports.construct.argumentsList.reduce.callbackfn_1<'U, 'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.reduce.callbackfn_1<
+                                'U,
+                                'T
+                             > *
                         initialValue: 'U ->
                             'U
 
@@ -3321,13 +3399,20 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduceRight:
-                        callbackfn: Exports.construct.argumentsList.reduceRight.callbackfn<'T> -> 'T
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.reduceRight.callbackfn<
+                                'T
+                             > ->
+                            'T
 
                     /// <summary>
                     /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
                     /// </summary>
                     abstract member reduceRight:
-                        callbackfn: Exports.construct.argumentsList.reduceRight.callbackfn<'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.reduceRight.callbackfn<
+                                'T
+                             > *
                         initialValue: 'T ->
                             'T
 
@@ -3341,7 +3426,11 @@ module TypeScript =
                     /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
                     /// </param>
                     abstract member reduceRight<'U> :
-                        callbackfn: Exports.construct.argumentsList.reduceRight.callbackfn_1<'U, 'T> *
+                        callbackfn:
+                            TypeScript.Reflect.Exports.construct.argumentsList.reduceRight.callbackfn_1<
+                                'U,
+                                'T
+                             > *
                         initialValue: 'U ->
                             'U
 
@@ -3374,41 +3463,41 @@ module TypeScript =
                             abstract member numberingSystem: string option with get, set
 
                             abstract member compactDisplay:
-                                Exports.construct.argumentsList.toLocaleString.options.compactDisplay option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.compactDisplay option with get, set
 
                             abstract member notation:
-                                Exports.construct.argumentsList.toLocaleString.options.notation option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.notation option with get, set
 
                             abstract member signDisplay: obj option with get, set
                             abstract member unit: string option with get, set
 
                             abstract member unitDisplay:
-                                Exports.construct.argumentsList.toLocaleString.options.unitDisplay option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.unitDisplay option with get, set
 
                             abstract member currencySign:
-                                Exports.construct.argumentsList.toLocaleString.options.currencySign option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.currencySign option with get, set
 
                             abstract member roundingPriority:
-                                Exports.construct.argumentsList.toLocaleString.options.roundingPriority option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.roundingPriority option with get, set
 
                             abstract member roundingIncrement:
-                                Exports.construct.argumentsList.toLocaleString.options.roundingIncrement option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.roundingIncrement option with get, set
 
                             abstract member roundingMode:
-                                Exports.construct.argumentsList.toLocaleString.options.roundingMode option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.roundingMode option with get, set
 
                             abstract member trailingZeroDisplay:
-                                Exports.construct.argumentsList.toLocaleString.options.trailingZeroDisplay option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.trailingZeroDisplay option with get, set
 
                             abstract member localeMatcher:
-                                Exports.construct.argumentsList.toLocaleString.options.localeMatcher option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.localeMatcher option with get, set
 
                             abstract member style: obj option with get, set
                             abstract member currency: string option with get, set
                             abstract member currencyDisplay: obj option with get, set
 
                             abstract member useGrouping:
-                                Exports.construct.argumentsList.toLocaleString.options.useGrouping option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.useGrouping option with get, set
 
                             abstract member minimumIntegerDigits: float option with get, set
                             abstract member minimumFractionDigits: float option with get, set
@@ -3418,49 +3507,49 @@ module TypeScript =
                             abstract member calendar: string option with get, set
 
                             abstract member dayPeriod:
-                                Exports.construct.argumentsList.toLocaleString.options.dayPeriod option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.dayPeriod option with get, set
 
                             abstract member dateStyle:
-                                Exports.construct.argumentsList.toLocaleString.options.dateStyle option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.dateStyle option with get, set
 
                             abstract member timeStyle:
-                                Exports.construct.argumentsList.toLocaleString.options.timeStyle option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.timeStyle option with get, set
 
                             abstract member hourCycle:
-                                Exports.construct.argumentsList.toLocaleString.options.hourCycle option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.hourCycle option with get, set
 
                             abstract member formatMatcher:
-                                Exports.construct.argumentsList.toLocaleString.options.formatMatcher option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.formatMatcher option with get, set
 
                             abstract member fractionalSecondDigits:
-                                Exports.construct.argumentsList.toLocaleString.options.fractionalSecondDigits option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.fractionalSecondDigits option with get, set
 
                             abstract member weekday:
-                                Exports.construct.argumentsList.toLocaleString.options.weekday option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.weekday option with get, set
 
                             abstract member era:
-                                Exports.construct.argumentsList.toLocaleString.options.era option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.era option with get, set
 
                             abstract member year:
-                                Exports.construct.argumentsList.toLocaleString.options.year option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.year option with get, set
 
                             abstract member month:
-                                Exports.construct.argumentsList.toLocaleString.options.month option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.month option with get, set
 
                             abstract member day:
-                                Exports.construct.argumentsList.toLocaleString.options.day option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.day option with get, set
 
                             abstract member hour:
-                                Exports.construct.argumentsList.toLocaleString.options.hour option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.hour option with get, set
 
                             abstract member minute:
-                                Exports.construct.argumentsList.toLocaleString.options.minute option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.minute option with get, set
 
                             abstract member second:
-                                Exports.construct.argumentsList.toLocaleString.options.second option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.second option with get, set
 
                             abstract member timeZoneName:
-                                Exports.construct.argumentsList.toLocaleString.options.timeZoneName option with get, set
+                                TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.timeZoneName option with get, set
 
                             abstract member hour12: bool option with get, set
                             abstract member timeZone: string option with get, set
@@ -3470,30 +3559,30 @@ module TypeScript =
                                 (
                                     ?numberingSystem: string,
                                     ?compactDisplay:
-                                        Exports.construct.argumentsList.toLocaleString.options.compactDisplay,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.compactDisplay,
                                     ?notation:
-                                        Exports.construct.argumentsList.toLocaleString.options.notation,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.notation,
                                     ?signDisplay: obj,
                                     ?unit: string,
                                     ?unitDisplay:
-                                        Exports.construct.argumentsList.toLocaleString.options.unitDisplay,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.unitDisplay,
                                     ?currencySign:
-                                        Exports.construct.argumentsList.toLocaleString.options.currencySign,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.currencySign,
                                     ?roundingPriority:
-                                        Exports.construct.argumentsList.toLocaleString.options.roundingPriority,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.roundingPriority,
                                     ?roundingIncrement:
-                                        Exports.construct.argumentsList.toLocaleString.options.roundingIncrement,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.roundingIncrement,
                                     ?roundingMode:
-                                        Exports.construct.argumentsList.toLocaleString.options.roundingMode,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.roundingMode,
                                     ?trailingZeroDisplay:
-                                        Exports.construct.argumentsList.toLocaleString.options.trailingZeroDisplay,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.trailingZeroDisplay,
                                     ?localeMatcher:
-                                        Exports.construct.argumentsList.toLocaleString.options.localeMatcher,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.localeMatcher,
                                     ?style: obj,
                                     ?currency: string,
                                     ?currencyDisplay: obj,
                                     ?useGrouping:
-                                        Exports.construct.argumentsList.toLocaleString.options.useGrouping,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.useGrouping,
                                     ?minimumIntegerDigits: float,
                                     ?minimumFractionDigits: float,
                                     ?maximumFractionDigits: float,
@@ -3501,33 +3590,35 @@ module TypeScript =
                                     ?maximumSignificantDigits: float,
                                     ?calendar: string,
                                     ?dayPeriod:
-                                        Exports.construct.argumentsList.toLocaleString.options.dayPeriod,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.dayPeriod,
                                     ?dateStyle:
-                                        Exports.construct.argumentsList.toLocaleString.options.dateStyle,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.dateStyle,
                                     ?timeStyle:
-                                        Exports.construct.argumentsList.toLocaleString.options.timeStyle,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.timeStyle,
                                     ?hourCycle:
-                                        Exports.construct.argumentsList.toLocaleString.options.hourCycle,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.hourCycle,
                                     ?formatMatcher:
-                                        Exports.construct.argumentsList.toLocaleString.options.formatMatcher,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.formatMatcher,
                                     ?fractionalSecondDigits:
-                                        Exports.construct.argumentsList.toLocaleString.options.fractionalSecondDigits,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.fractionalSecondDigits,
                                     ?weekday:
-                                        Exports.construct.argumentsList.toLocaleString.options.weekday,
-                                    ?era: Exports.construct.argumentsList.toLocaleString.options.era,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.weekday,
+                                    ?era:
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.era,
                                     ?year:
-                                        Exports.construct.argumentsList.toLocaleString.options.year,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.year,
                                     ?month:
-                                        Exports.construct.argumentsList.toLocaleString.options.month,
-                                    ?day: Exports.construct.argumentsList.toLocaleString.options.day,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.month,
+                                    ?day:
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.day,
                                     ?hour:
-                                        Exports.construct.argumentsList.toLocaleString.options.hour,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.hour,
                                     ?minute:
-                                        Exports.construct.argumentsList.toLocaleString.options.minute,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.minute,
                                     ?second:
-                                        Exports.construct.argumentsList.toLocaleString.options.second,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.second,
                                     ?timeZoneName:
-                                        Exports.construct.argumentsList.toLocaleString.options.timeZoneName,
+                                        TypeScript.Reflect.Exports.construct.argumentsList.toLocaleString.options.timeZoneName,
                                     ?hour12: bool,
                                     ?timeZone: string
                                 )

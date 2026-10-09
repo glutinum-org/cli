@@ -17,6 +17,7 @@ let isInheritableType (typ: FSharpType) =
     | FSharpType.TypeReference typeReference ->
         not (typeReference.Name.StartsWith "JS.")
         && typeReference.Name <> "Action"
+        && typeReference.Name <> "RegExp"
         && not (primitiveNames.Contains typeReference.Name)
     | _ -> true
 
@@ -144,6 +145,40 @@ let private tryFindBase (typeMemory: GlueType list) (typeReference: GlueTypeRefe
                 Members = found |> List.collect _.Members
                 HeritageClauses = found |> List.collect _.HeritageClauses
             }
+
+/// F# rejects an interface inherited twice with different type arguments (FS3360)
+let withoutBasesOfBases (typeMemory: GlueType list) (heritageClauses: GlueType list) =
+    let rec basesBelow (visited: Set<string>) (clause: GlueType) : Set<string> =
+        match clause with
+        | GlueType.TypeReference typeReference when
+            typeReference.FullName <> "" && not (visited.Contains typeReference.FullName)
+            ->
+            match tryFindBase typeMemory typeReference with
+            | Some declaration ->
+                (visited, declaration.HeritageClauses)
+                ||> List.fold (fun acc baseClause ->
+                    match baseClause with
+                    | GlueType.TypeReference baseReference when baseReference.FullName <> "" ->
+                        basesBelow (acc.Add baseReference.FullName) baseClause
+                    | _ -> acc
+                )
+            | None -> visited
+        | _ -> visited
+
+    let indexed = heritageClauses |> List.indexed
+
+    indexed
+    |> List.filter (fun (index, clause) ->
+        match clause with
+        | GlueType.TypeReference typeReference when typeReference.FullName <> "" ->
+            indexed
+            |> List.forall (fun (otherIndex, other) ->
+                otherIndex = index
+                || not ((basesBelow Set.empty other).Contains typeReference.FullName)
+            )
+        | _ -> true
+    )
+    |> List.map snd
 
 let private memberName (glueMember: GlueMember) =
     match glueMember with

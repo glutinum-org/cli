@@ -134,6 +134,14 @@ type PackageContext =
                 | _ -> None
         )
 
+    member this.IsExternalLibFile(fileName: string) =
+        let fileName = String.normalizePath fileName
+
+        this.Externals
+        |> List.exists (fun external ->
+            external.LibFilePrefixes |> List.exists (fun prefix -> fileName.Contains prefix)
+        )
+
     member this.IsExternal(fileName: string) =
         (this.TryFindPackage fileName).IsNone
         && (this.TryFindExternalModulePath fileName).IsNone

@@ -13,6 +13,15 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
     | Ts.SyntaxKind.KeyOfKeyword ->
         let operandNode = removeParenthesizedType node.``type``
 
+        let arrayKeys =
+            GlueType.Union(
+                GlueTypeUnion
+                    [
+                        GlueType.Primitive GluePrimitive.String
+                        GlueType.Primitive GluePrimitive.Number
+                    ]
+            )
+
         match operandNode.kind with
         | Ts.SyntaxKind.TypeReference ->
             let typeReferenceNode = operandNode :?> Ts.TypeReferenceNode
@@ -70,6 +79,13 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
                         GlueType.Primitive GluePrimitive.Symbol
                     ]
             )
+
+        // `keyof any[]` and `keyof readonly any[]` are the indices and the names of the array members
+        | Ts.SyntaxKind.ArrayType -> arrayKeys
+        | Ts.SyntaxKind.TypeOperator when
+            (operandNode :?> Ts.TypeOperatorNode).``type``.kind = Ts.SyntaxKind.ArrayType
+            ->
+            arrayKeys
 
         | _ ->
             Report.readerError (

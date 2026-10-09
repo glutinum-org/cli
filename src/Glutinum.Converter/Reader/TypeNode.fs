@@ -790,6 +790,11 @@ module UtilityType =
 
         | HasTypeFlags Ts.TypeFlags.Conditional -> GlueType.Primitive GluePrimitive.Any
 
+        | HasTypeFlags Ts.TypeFlags.Object ->
+            match reader.checker.typeToTypeNode (typ, None, Some typeNodeBuilderFlags) with
+            | Some typeNode -> reader.ReadTypeNode typeNode
+            | None -> GlueType.Primitive GluePrimitive.Any
+
         | _ ->
             Report.readerError (
                 "Exclude",
@@ -1151,7 +1156,7 @@ module UtilityType =
                 | _ -> None
             | None -> None
 
-        match reader.checker.typeToTypeNode (typ, None, None) with
+        match reader.checker.typeToTypeNode (typ, None, Some typeNodeBuilderFlags) with
         | Some typeNode ->
             (match reader.ReadTypeNode typeNode with
              | GlueType.TypeLiteral info when info.Id.IsNone ->
@@ -1170,7 +1175,7 @@ module UtilityType =
         =
         let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
 
-        match reader.checker.typeToTypeNode (typ, None, None) with
+        match reader.checker.typeToTypeNode (typ, None, Some typeNodeBuilderFlags) with
         | Some typeNode ->
             reader.ReadTypeNode typeNode
             |> GlueUtilityType.ThisParameterType
@@ -2023,7 +2028,7 @@ let private readExpressionWithTypeArguments
                         Naming.sanitizeTypeName name
                 // The name of the declaration, not of an import alias
                 FullName =
-                    match symbolOpt |> Option.bind (resolveAlias checker) with
+                    match symbolOpt |> Option.bind (resolveValueAlias checker) with
                     | Some symbol -> checker.getFullyQualifiedName symbol
                     | None -> getFullNameOrEmpty checker expression.expression
                 ModulePath =
@@ -2359,6 +2364,24 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         |> GlueType.ConstructorType
 
     | Ts.SyntaxKind.NeverKeyword -> GlueType.Primitive GluePrimitive.Never
+
+    // `type Uppercase<S extends string> = intrinsic` is a string, `type NoInfer<T> = intrinsic` is `T`
+    | Ts.SyntaxKind.IntrinsicKeyword ->
+        let typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
+            if isNull typeNode.parent then
+                None
+            else
+                typeNode.parent?typeParameters
+
+        match typeParameters with
+        | Some typeParameters when typeParameters.Count = 1 ->
+            let typeParameter = typeParameters.[0]
+
+            match typeParameter.``constraint`` with
+            | Some constraintNode when constraintNode.kind = Ts.SyntaxKind.StringKeyword ->
+                GlueType.Primitive GluePrimitive.String
+            | _ -> GlueType.TypeParameter(identifierText typeParameter.name)
+        | _ -> GlueType.Primitive GluePrimitive.Any
 
     | _ ->
         Report.readerError ("type node", $"Unsupported kind %s{typeNode.kind.Name}", typeNode)

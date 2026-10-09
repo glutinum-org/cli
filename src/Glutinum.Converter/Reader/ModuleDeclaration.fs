@@ -23,6 +23,19 @@ let readModuleDeclaration
         isBodyOfDottedName
         || children |> Seq.exists (fun node -> node.kind = Ts.SyntaxKind.NamespaceKeyword)
 
+    let isAmbientModule =
+        (unbox<Ts.Node> declaration.name).kind = Ts.SyntaxKind.StringLiteral
+
+    let isExportAssigned =
+        declaration.getSourceFile().statements
+        |> Seq.exists (fun statement ->
+            statement.kind = Ts.SyntaxKind.ExportAssignment
+            && (let expression: Ts.Node = (statement :?> Ts.ExportAssignment).expression
+
+                expression.kind = Ts.SyntaxKind.Identifier
+                && Utils.identifierText expression = name.getText ())
+        )
+
     let types =
         children
         |> Seq.choose (fun child ->
@@ -40,7 +53,22 @@ let readModuleDeclaration
                             statement
                     )
                 )
-                |> List.map reader.ReadNode
+                |> List.collect (fun statement ->
+                    match statement.kind with
+                    | Ts.SyntaxKind.ExportDeclaration ->
+                        let exportDeclaration = statement :?> Ts.ExportDeclaration
+
+                        match exportDeclaration.exportClause with
+                        | Some exportClause when
+                            exportDeclaration.moduleSpecifier.IsNone
+                            && exportClause?kind = Ts.SyntaxKind.NamedExports
+                            ->
+                            let namedExports: Ts.NamedExports = !!exportClause
+
+                            namedExports.elements |> Seq.toList |> List.map reader.ReadNode
+                        | _ -> []
+                    | _ -> [ reader.ReadNode statement ]
+                )
                 |> Some
 
             | Ts.SyntaxKind.ModuleDeclaration -> reader.ReadNode child |> List.singleton |> Some
@@ -57,6 +85,11 @@ let readModuleDeclaration
         IsTopLevel = Utils.isTopLevelModuleDeclaration reader.PackageContext declaration
         IsNamespace = isNamespace
         IsGlobal = reader.PackageContext.IsSome && Utils.isGlobalAugmentation declaration
+        IsExported =
+            isAmbientModule
+            || isBodyOfDottedName
+            || isExportAssigned
+            || Utils.isExportedDeclaration declaration (Set.singleton (name.getText ()))
         IsRecursive = false
         Types = types
     }

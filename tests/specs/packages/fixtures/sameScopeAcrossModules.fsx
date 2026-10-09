@@ -10,7 +10,7 @@ module SameScopeAcrossModules =
     [<Erase>]
     type Exports =
         [<Import("config", "same-scope-across-modules")>]
-        static member inline config: Exports.config__.Type = nativeOnly
+        static member inline config: SameScopeAcrossModules.Exports.config__.Type = nativeOnly
 
     module utils =
 
@@ -18,7 +18,7 @@ module SameScopeAcrossModules =
         [<Erase>]
         type Exports =
             [<Import("config", "same-scope-across-modules/utils")>]
-            static member inline config: Exports.config__.Type = nativeOnly
+            static member inline config: SameScopeAcrossModules.utils.Exports.config__.Type = nativeOnly
 
         module Exports =
 

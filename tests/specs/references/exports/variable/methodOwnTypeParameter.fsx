@@ -18,7 +18,7 @@ module ns_ =
     [<Erase>]
     type Exports =
         [<Emit("$0.helpers")>]
-        abstract member helpers: Exports.helpers.Type
+        abstract member helpers: ns_.Exports.helpers.Type
 
     module Exports =
 

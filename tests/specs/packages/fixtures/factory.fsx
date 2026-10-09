@@ -18,7 +18,7 @@ module Factory =
         [<Import("animator", "factory")>]
         static member inline animator: Factory.Animator = nativeOnly
         [<Import("Colors", "factory")>]
-        static member inline Colors: Exports.Colors__.Type = nativeOnly
+        static member inline Colors: Factory.Exports.Colors__.Type = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]

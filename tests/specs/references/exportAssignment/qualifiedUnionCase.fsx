@@ -30,7 +30,7 @@ module ts_ =
             [<Emit("$0.tryConvertScriptKindName($1...)")>]
             abstract member tryConvertScriptKindName: scriptKindName: ScriptKind -> ScriptKind
             [<Emit("$0.tryConvertScriptKindName($1...)")>]
-            abstract member tryConvertScriptKindName: scriptKindName: Exports.tryConvertScriptKindName.scriptKindName -> ScriptKind
+            abstract member tryConvertScriptKindName: scriptKindName: ts_.server.Exports.tryConvertScriptKindName.scriptKindName -> ScriptKind
             [<Emit("$0.convertScriptKindName($1...)")>]
             abstract member convertScriptKindName: scriptKindName: ts_.server.protocol.ScriptKindName -> ScriptKind
 

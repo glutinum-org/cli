@@ -38,6 +38,16 @@ module ExportsMap =
             type mode =
                 float
 
+            module mode_ =
+
+                [<AbstractClass>]
+                [<Erase>]
+                type Exports =
+                    [<Emit("$0.fast")>]
+                    abstract member fast: float
+                    [<Emit("$0.slow")>]
+                    abstract member slow: float
+
     module utils =
 
         [<AbstractClass>]

@@ -30,7 +30,8 @@ let readParameters
         let name =
             match nameNode.kind with
             | Ts.SyntaxKind.Identifier -> identifierText nameNode
-            | Ts.SyntaxKind.ObjectBindingPattern -> $"arg%i{index}"
+            | Ts.SyntaxKind.ObjectBindingPattern
+            | Ts.SyntaxKind.ArrayBindingPattern -> $"arg%i{index}"
             | _ ->
                 Report.readerError ("name", $"Unsupported kind %s{nameNode.kind.Name}", nameNode)
                 |> reader.Warnings.Add

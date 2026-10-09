@@ -258,6 +258,8 @@ type GlueModuleDeclaration =
         IsNamespace: bool
         /// `global { }`: the declarations are globals of the package
         IsGlobal: bool
+        /// `declare namespace x_exports { export { a } }` of a bundled file is reached through `typeof` only
+        IsExported: bool
         IsRecursive: bool
         Types: GlueType list
     }

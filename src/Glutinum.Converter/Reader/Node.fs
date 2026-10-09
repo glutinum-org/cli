@@ -39,7 +39,14 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
         |> Option.bind (fun target ->
             match target.declarations with
             | Some declarations when declarations.Count > 0 ->
-                let declaration = reader.ReadNode declarations.[0]
+                let declaration = declarations.[0]
+
+                // The symbol of `const lcov` declares the `VariableDeclaration`, not its statement
+                let declaration =
+                    if declaration.kind = Ts.SyntaxKind.VariableDeclaration then
+                        reader.ReadNode declaration.parent.parent
+                    else
+                        reader.ReadNode declaration
 
                 // `export { wm as WebMidi }` is imported as `WebMidi`
                 match exportSpecifier.propertyName with

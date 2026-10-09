@@ -119,27 +119,6 @@ let isInterfaceDeclaration (state: State) (fullName: string) =
     else
         false
 
-/// The type parameters of the function type `type Fn = <T>(value: T) => T` aliases
-let genericDelegateTypeParameters (state: State) (fullName: string) : string list =
-    match state.AllAliases.TryFind fullName with
-    | Some alias when alias.TypeParameters.IsEmpty ->
-        match alias.Type with
-        | GlueType.FunctionType functionType ->
-            functionType.TypeParameters
-            |> List.filter (fun typeParameter ->
-                List.contains typeParameter.Name functionType.OwnTypeParameterNames
-                // `<T extends object>` is sealed to `obj`, the delegate is not generic
-                && (
-                    match typeParameter.Constraint with
-                    | None
-                    | Some(GlueType.TypeReference _) -> true
-                    | Some _ -> false
-                )
-            )
-            |> List.map _.Name
-        | _ -> []
-    | _ -> []
-
 /// `T["start"] extends Date ? T["start"] : Date` is `Date` whatever `T` is
 let private tryCollapse (resolve: GlueType -> GlueType) (conditionalType: GlueConditionalType) =
     let trueType =

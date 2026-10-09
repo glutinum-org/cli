@@ -511,6 +511,12 @@ let resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
             None
     | _ -> Some symbol
 
+/// `type X` beside `export { x as X }` is one symbol flagged both `TypeAlias` and `Alias`
+let resolveValueAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+    match symbol.flags with
+    | HasSymbolFlags Ts.SymbolFlags.Type -> Some symbol
+    | _ -> resolveAlias checker symbol
+
 /// `Omit<LabelOption, "rotate">` where `interface LabelOption<T = Params>`: `T` is `Params`
 let defaultTypeArguments
     (reader: ITypeScriptReader)
@@ -580,8 +586,13 @@ let declaredName (symbol: Ts.Symbol) =
 
 /// Name of the declaration behind an `import { X as Y }` alias, `None` for a non-renamed symbol
 let importedName (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+    let isType =
+        match symbol.flags with
+        | HasSymbolFlags Ts.SymbolFlags.Type -> true
+        | _ -> false
+
     match symbol.flags with
-    | HasSymbolFlags Ts.SymbolFlags.Alias ->
+    | HasSymbolFlags Ts.SymbolFlags.Alias when not isType ->
         match resolveAlias checker symbol with
         | Some target when target.name = "default" -> declaredName target
         | Some target when target.name <> symbol.name && target.name <> "export=" ->
@@ -937,6 +948,8 @@ let isGlobalScriptOfPackage (packageContext: PackageContext option) (sourceFile:
         not (ts.isExternalModule sourceFile)
         && (promotedAmbientModule sourceFile).IsNone
         && not (packageContext.IsEntryFile sourceFile.fileName)
+        // `declare namespace WebAssembly` of the DOM lib is the `WebAssembly_` module of Glutinum.Web
+        && not (packageContext.IsExternalLibFile sourceFile.fileName)
     | None -> false
 
 let private isAmbientModuleDeclaration (node: Ts.Node) =
