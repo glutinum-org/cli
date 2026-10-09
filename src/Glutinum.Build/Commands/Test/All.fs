@@ -3,6 +3,7 @@ module Build.Commands.Test.All
 open Spectre.Console.Cli
 open Build.Commands.Test.Specs
 open Build.Commands.Test.Bindings
+open Build.Commands.Test.Converter
 
 type AllTestSettings() =
     inherit CommandSettings()
@@ -17,5 +18,6 @@ type AllTestCommand() =
         if exitCode <> 0 then
             exitCode
         else
+            runConverterTests ()
             runBindingsTests ()
             0

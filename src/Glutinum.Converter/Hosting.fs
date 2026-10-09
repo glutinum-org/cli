@@ -443,7 +443,7 @@ module Resolve =
                     && compareVersions version [| lower[0]; lower[1] + 1; 0 |] < 0
                 | _ -> compareVersions version lower >= 0 && compareVersions version upper < 0
 
-    let private satisfiesRange (version: string) (range: string) : bool =
+    let satisfiesRange (version: string) (range: string) : bool =
         let parsed = parseVersion version
 
         range.Split([| "||" |], StringSplitOptions.None)
@@ -452,7 +452,7 @@ module Resolve =
             |> Array.forall (fun comparator -> satisfiesComparator parsed comparator)
         )
 
-    let private applyTypesVersions (typesVersions: obj) (file: string) : string =
+    let applyTypesVersions (typesVersions: obj) (file: string) : string =
         if isNullish typesVersions then
             file
         else

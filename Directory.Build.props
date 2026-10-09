@@ -16,6 +16,9 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Authors>Maxime Mangel</Authors>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Glutinum.Converter'">
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
     <!-- Packages common to all the projects
             Excepts Glutinum.Build which is isolated from the others -->
     <ItemGroup Condition="'$(PackageId)'!='Glutinum.Build'">

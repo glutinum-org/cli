@@ -93,11 +93,6 @@ let private reExportedNames
                      )
          ))
 
-let private resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
-    match symbol.flags with
-    | HasSymbolFlags Ts.SymbolFlags.Alias -> checker.getAliasedSymbol symbol
-    | _ -> symbol
-
 /// The declaration `export default` of the file points to
 let private defaultExportOf (program: Ts.Program) (checker: Ts.TypeChecker) (fileName: string) =
     program.getSourceFile fileName
@@ -106,7 +101,7 @@ let private defaultExportOf (program: Ts.Program) (checker: Ts.TypeChecker) (fil
         checker.getExportsOfModule moduleSymbol
         |> Seq.tryFind (fun exported -> exported.name = "default")
     )
-    |> Option.map (resolveAlias checker)
+    |> Option.map (fun symbol -> resolveAlias checker symbol |> Option.defaultValue symbol)
 
 /// The declarations a public entry of the package exports, keyed by the declaring file and the
 /// exported name, with the subpath to import each from, and the name each entry exports the
@@ -139,7 +134,9 @@ let private reExportedSymbols
                         let exportName = exportedSymbol.name
 
                         // `export { x } from "./x.js"` exports an alias, the declaration is behind it
-                        let exportedSymbol = resolveAlias checker exportedSymbol
+                        let exportedSymbol =
+                            resolveAlias checker exportedSymbol
+                            |> Option.defaultValue exportedSymbol
 
                         match exportedSymbol.declarations with
                         | None -> acc
@@ -205,7 +202,10 @@ let private declaredNames
             // `export { alpha } from "./shared.js"` and `export default _default` are aliases,
             // the declaration behind each tells the file
             |> Seq.filter (fun exportedSymbol ->
-                match (resolveAlias checker exportedSymbol).declarations with
+                match
+                    (resolveAlias checker exportedSymbol |> Option.defaultValue exportedSymbol)
+                        .declarations
+                with
                 | Some declarations ->
                     declarations
                     |> Seq.exists (fun declaration ->

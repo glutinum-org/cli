@@ -1127,9 +1127,9 @@ type private ExportScope =
         /// The members of the object of `export = yargs` by name, with the object: they are
         /// reached through the default import, `import { alias } from "yargs"` may not exist at
         /// runtime. Filled as the exports are read.
-        ExportEqualsMembers: Dictionary<string, string>
+        ExportEqualsMembers: Map<string, string>
         /// `export = yargs` of a callable object: calling the default import
-        ExportEqualsCalls: HashSet<string>
+        ExportEqualsCalls: Set<string>
     }
 
 /// What one export adds to the `Exports` type
@@ -1140,6 +1140,10 @@ type private ExportMembers =
         Names: Set<string>
         /// Declarations read next, before the exports left
         Prepended: GlueType list
+        /// The members of the `export =` object the export adds, with the object
+        ExportEqualsMembers: (string * string) list
+        /// The callable `export =` objects the export adds
+        ExportEqualsCalls: string list
     }
 
 let private exportMembers (members: FSharpMember list) (names: Set<string>) =
@@ -1147,14 +1151,16 @@ let private exportMembers (members: FSharpMember list) (names: Set<string>) =
         Members = members
         Names = names
         Prepended = []
+        ExportEqualsMembers = []
+        ExportEqualsCalls = []
     }
 
 /// The attributes of a member of the `export =` object, reached through the default import
 let private throughDefault (scope: ExportScope) (memberName: string) (emit: string) =
-    match scope.ExportEqualsMembers.TryGetValue memberName with
-    | true, objectName when scope.IsTopLevel ->
+    match Map.tryFind memberName scope.ExportEqualsMembers with
+    | Some objectName when scope.IsTopLevel ->
         let emit =
-            if scope.ExportEqualsCalls.Contains memberName then
+            if Set.contains memberName scope.ExportEqualsCalls then
                 "$0($1...)"
             else
                 emit
@@ -1446,13 +1452,11 @@ let private exportModule
                     not (scope.DeclaredValueNames.Contains info.Name)
                     && not (seenNames.Contains info.Name)
                     ->
-                    scope.ExportEqualsMembers.[info.Name] <- moduleDeclaration.Name
                     Some(GlueType.FunctionDeclaration info)
                 | GlueType.Variable info when
                     not (scope.DeclaredValueNames.Contains info.Name)
                     && not (seenNames.Contains info.Name)
                     ->
-                    scope.ExportEqualsMembers.[info.Name] <- moduleDeclaration.Name
                     Some(GlueType.Variable info)
                 | _ -> None
             )
@@ -1499,6 +1503,9 @@ let private exportModule
         Members = [ FSharpMember.Property property ]
         Names = Set.singleton mangledName
         Prepended = namespaceValues
+        ExportEqualsMembers =
+            namespaceValues |> List.map (fun value -> value.Name, moduleDeclaration.Name)
+        ExportEqualsCalls = []
     }
 
 /// `export = path` of a variable at the top level: the whole import is the object, its members
@@ -1611,13 +1618,6 @@ let private exportEqualsVariable
             | _ -> []
         )
 
-    for memberExport in memberExports do
-        scope.ExportEqualsMembers.[memberExport.Name] <- name
-
-    if not calls.IsEmpty then
-        scope.ExportEqualsMembers.[name] <- name
-        scope.ExportEqualsCalls.Add name |> ignore
-
     {
         // The object is the function when it is callable
         Members =
@@ -1627,6 +1627,18 @@ let private exportEqualsVariable
                 []
         Names = Set.singleton name
         Prepended = calls @ memberExports
+        ExportEqualsMembers =
+            [
+                for memberExport in memberExports do
+                    yield memberExport.Name, name
+                if not calls.IsEmpty then
+                    yield name, name
+            ]
+        ExportEqualsCalls =
+            if calls.IsEmpty then
+                []
+            else
+                [ name ]
     }
 
 /// `export default Errors` of a namespace: its members through the default import
@@ -1779,17 +1791,22 @@ let private transformExports
                     | _ -> None
                 )
                 |> set
-            ExportEqualsMembers = Dictionary<string, string>()
-            ExportEqualsCalls = HashSet<string>()
+            ExportEqualsMembers = Map.empty
+            ExportEqualsCalls = Set.empty
         }
 
-    let rec apply (acc: FSharpMember list) (seenNames: Set<string>) (glueTypes: GlueType list) =
+    let rec apply
+        (scope: ExportScope)
+        (acc: FSharpMember list)
+        (seenNames: Set<string>)
+        (glueTypes: GlueType list)
+        =
         match glueTypes with
         | [] -> acc
         | GlueType.ExportDefault(GlueType.Variable { Name = name }) :: tail when
             scope.DefaultExportedDeclarations.Contains name
             ->
-            apply acc seenNames tail
+            apply scope acc seenNames tail
         | head :: tail ->
             let added =
                 match head with
@@ -1830,9 +1847,24 @@ let private transformExports
 
                 | glueType -> failwithf "Could not generate exportMembers for: %A" glueType
 
-            apply (acc @ added.Members) (Set.union seenNames added.Names) (added.Prepended @ tail)
+            let scope =
+                { scope with
+                    ExportEqualsMembers =
+                        (scope.ExportEqualsMembers, added.ExportEqualsMembers)
+                        ||> List.fold (fun acc (memberName, objectName) ->
+                            Map.add memberName objectName acc
+                        )
+                    ExportEqualsCalls =
+                        Set.union scope.ExportEqualsCalls (set added.ExportEqualsCalls)
+                }
 
-    let members = apply [] Set.empty sortedExports
+            apply
+                scope
+                (acc @ added.Members)
+                (Set.union seenNames added.Names)
+                (added.Prepended @ tail)
+
+    let members = apply scope [] Set.empty sortedExports
 
     {
         XmlDoc = []

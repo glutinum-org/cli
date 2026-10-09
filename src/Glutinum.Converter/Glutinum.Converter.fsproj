@@ -28,6 +28,12 @@
     <Compile Include="Reader/Parameters.fs" />
     <Compile Include="Reader/TypeAliasDeclaration.fs" />
     <Compile Include="Reader/TypeQueryNode.fs" />
+    <Compile Include="Reader/MemberTypes.fs" />
+    <Compile Include="Reader/Deferred.fs" />
+    <Compile Include="Reader/UtilityType.fs" />
+    <Compile Include="Reader/IntersectionTypeNode.fs" />
+    <Compile Include="Reader/ExpressionWithTypeArguments.fs" />
+    <Compile Include="Reader/ConditionalTypeNode.fs" />
     <Compile Include="Reader/TypeNode.fs" />
     <Compile Include="Reader/TypeOperatorNode.fs" />
     <Compile Include="Reader/TypeParameters.fs" />

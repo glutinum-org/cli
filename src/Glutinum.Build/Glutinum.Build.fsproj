@@ -20,6 +20,7 @@
     <Compile Include="Commands/CommanderBinding.fs" />
     <Compile Include="Commands/Test/Specs.fs" />
     <Compile Include="Commands/Test/Bindings.fs" />
+    <Compile Include="Commands/Test/Converter.fs" />
     <Compile Include="Commands/Test/All.fs" />
     <Compile Include="Commands/Release.fs" />
     <Compile Include="Commands/Web.fs" />

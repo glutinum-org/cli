@@ -425,46 +425,35 @@ let readHeritageClauses
         )
     | None -> []
 
-/// <summary>
-/// Determine if the type is from the ES5 library
-///
-/// This is to detect native utility types usage
-/// </summary>
-/// <param name="symbolOpt"></param>
-/// <returns>
-/// <c>True</c> if the type is from the ES5 library otherwise <c>False</c>
-/// </returns>
+/// The first declaration of the symbol, a declaration synthesized by the checker has no parent
+let private libDeclaration (symbolOpt: Ts.Symbol option) =
+    symbolOpt
+    |> Option.bind (fun symbol -> symbol.declarations)
+    |> Option.bind (fun declarations ->
+        if declarations.Count = 0 || isNull declarations[0].parent then
+            None
+        else
+            Some declarations[0]
+    )
+
+/// `Omit`, `Partial` and the other utility types are declared at the top of `lib.es5.d.ts`
 let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
     match symbolOpt with
-    | None -> false
-    | Some symbol ->
-        match symbol.declarations with
-        | None ->
-            // For some reason, I can't seem to resolve the actual symbol for some Es5 types
-            // So, we make a naive fallback checking the name of the symbol
-            [ "Iterable"; "IterableIterator" ] |> List.contains symbol.name
-        | Some declarations ->
-            // A declaration synthesized by the checker has no parent
-            if declarations.Count = 0 || isNull declarations[0].parent then
-                false
-            else
-                match declarations[0].parent.kind with
-                | Ts.SyntaxKind.SourceFile ->
-                    let sourceFile = declarations[0].parent :?> Ts.SourceFile
-
-                    sourceFile.fileName.EndsWith("/lib.es5.d.ts")
-                | _ -> false
+    // Some ES5 symbols can't be resolved to their declaration, their name stands for them
+    | Some symbol when symbol.declarations.IsNone ->
+        [ "Iterable"; "IterableIterator" ] |> List.contains symbol.name
+    | _ ->
+        match libDeclaration symbolOpt with
+        | Some declaration when declaration.parent.kind = Ts.SyntaxKind.SourceFile ->
+            (declaration.parent :?> Ts.SourceFile).fileName.EndsWith("/lib.es5.d.ts")
+        | _ -> false
 
 /// `PromiseConstructor` of `lib.es2015.promise.d.ts`: a type of the ECMAScript libraries
 let isFromEsLib (symbolOpt: Ts.Symbol option) =
-    match symbolOpt with
+    match libDeclaration symbolOpt with
+    | Some declaration ->
+        (String.normalizePath (declaration.getSourceFile().fileName)).Contains "/lib/lib.es"
     | None -> false
-    | Some symbol ->
-        match symbol.declarations with
-        | Some declarations when declarations.Count > 0 ->
-            let fileName = String.normalizePath (declarations[0].getSourceFile().fileName)
-            fileName.Contains "/lib/lib.es"
-        | _ -> false
 
 /// Library types the converter maps to an existing F# type, kept even when declared outside the packages
 let knownExternalTypeNames =
@@ -1168,3 +1157,15 @@ module Type =
 let isPrivateMember (modifiers: Ts.NodeArray<Ts.ModifierLike> option) (name: Ts.Identifier) =
     ModifierUtil.HasModifier(modifiers, Ts.SyntaxKind.PrivateKeyword)
     || name.kind = Ts.SyntaxKind.PrivateIdentifier
+
+/// The node a reference lands at, the reference itself unless members are read for another declaration
+let landingOf (reader: ITypeScriptReader) (node: Ts.Node) : Ts.Node =
+    if reader.InProgress.Landing.Count = 0 then
+        node
+    else
+        reader.InProgress.Landing.[reader.InProgress.Landing.Count - 1]
+
+let isLibraryName (reader: ITypeScriptReader) (name: string) =
+    match reader.PackageContext with
+    | Some packageContext -> packageContext.IsLibraryName name
+    | None -> false

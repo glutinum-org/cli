@@ -10,6 +10,7 @@ open Build.Commands.Web
 open Build.Commands.Docs
 open Build.Commands.Test.Specs
 open Build.Commands.Test.Bindings
+open Build.Commands.Test.Converter
 open Build.Commands.Test.All
 open Build.Commands.Release
 open Build.Commands.Lint
@@ -84,6 +85,11 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
                     .WithDescription(
                         "Run the Glutinum.Node and Glutinum.Web bindings in Node and Chromium"
                     )
+                |> ignore
+
+                test
+                    .AddCommand<ConverterTestCommand>("converter")
+                    .WithDescription("Run the unit tests of Glutinum.Converter in Node")
                 |> ignore
 
                 test.SetDefaultCommand<AllTestCommand>()
