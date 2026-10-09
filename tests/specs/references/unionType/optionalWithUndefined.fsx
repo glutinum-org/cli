@@ -40,6 +40,7 @@ type PartialSettings =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Store", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Store =
     abstract member value: U2<string, ResizeArray<string>> option with get, set
 

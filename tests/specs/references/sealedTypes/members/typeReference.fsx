@@ -17,6 +17,7 @@ type Thenable<'T> =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Log3", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Log3<'T, 'R1, 'R2> =
     abstract member info: data: Thenable<'T> -> U2<'R1, 'R2>
     abstract member info: data: float -> U2<'R1, 'R2>

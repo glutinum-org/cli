@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Class", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Class =
     [<Emit("""import { Class } from "REPLACE_ME_WITH_MODULE_NAME";
 Class.extend($0)""")>]

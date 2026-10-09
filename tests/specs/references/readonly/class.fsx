@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Foo", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Foo =
     abstract member bar: string with get, set
     abstract member foo: unit -> unit

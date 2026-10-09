@@ -14,11 +14,13 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Configuration", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Configuration =
     interface end
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Logger", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Logger<'T, 'B> =
     interface end
 

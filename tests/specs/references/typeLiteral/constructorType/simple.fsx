@@ -18,6 +18,7 @@ type ClientLikeCtr =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Pool", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Pool =
     abstract member Client: ClientLikeCtr with get, set
 

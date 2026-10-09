@@ -26,6 +26,7 @@ type Context =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Signature", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Signature =
     abstract member toText: arg0: Context * data: string * ?arg2: LogOptions -> string
 

@@ -28,6 +28,7 @@ type ParentNode =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Query", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Query =
     abstract member find<'E>: selectors: string -> 'E
     abstract member find: selectors: string -> Element

@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("MyClass", "REPLACE_ME_WITH_MODULE_NAME")>]
 type MyClass =
     abstract member contains: otherBoundsOrLatLng: MyClass -> bool
     abstract member contains: otherBoundsOrLatLng: string -> bool

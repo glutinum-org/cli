@@ -14,6 +14,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<ImportDefault("REPLACE_ME_WITH_MODULE_NAME")>]
 type Client =
     abstract member health: unit -> bool
 

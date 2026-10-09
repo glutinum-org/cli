@@ -14,6 +14,7 @@ module SubpathEntries =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Import("Scope", "subpath-entries")>]
     type Scope =
         abstract member revert: unit -> unit
 

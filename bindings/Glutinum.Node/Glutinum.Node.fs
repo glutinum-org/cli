@@ -26602,6 +26602,7 @@ module Node =
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("AsyncResource", "node:async_hooks")>]
         type AsyncResource =
             /// <summary>
             /// Binds the given function to the current execution context.
@@ -26711,6 +26712,7 @@ AsyncResource.bind($0, $1, $2)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("AsyncLocalStorage", "node:async_hooks")>]
         type AsyncLocalStorage<'T> =
             /// <summary>
             /// Binds the given function to the current execution context.
@@ -27269,6 +27271,7 @@ AsyncLocalStorage.snapshot()""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Blob", "node:buffer")>]
         type Blob =
             /// <summary>
             /// The total size of the <c>Blob</c> in bytes.
@@ -27350,6 +27353,7 @@ AsyncLocalStorage.snapshot()""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("File", "node:buffer")>]
         type File =
             inherit Node.buffer.Blob
             /// <summary>
@@ -28736,6 +28740,7 @@ AsyncLocalStorage.snapshot()""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ChildProcess", "node:child_process")>]
         type ChildProcess =
             inherit Node.events.EventEmitter
             /// <summary>
@@ -36328,6 +36333,7 @@ AsyncLocalStorage.snapshot()""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Worker", "node:cluster")>]
         type Worker =
             inherit Node.events.EventEmitter
             /// <summary>
@@ -48887,6 +48893,7 @@ AsyncLocalStorage.snapshot()""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Certificate", "node:crypto")>]
         type Certificate =
             /// <summary>
             /// <code lang="js">
@@ -49524,6 +49531,7 @@ Certificate.verifySpkac($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Hash", "node:crypto")>]
         type Hash =
             inherit Node.stream.Stream_.Transform
             /// <summary>
@@ -49733,6 +49741,7 @@ Certificate.verifySpkac($0)""")>]
         [<AllowNullLiteral>]
         [<Interface>]
         [<Obsolete("Since v20.13.0 Calling `Hmac` class directly with `Hmac()` or `new Hmac()` is deprecated due to being internals, not intended for public use. Please use the {@link createHmac} method to create Hmac instances.")>]
+        [<Import("Hmac", "node:crypto")>]
         type Hmac =
             inherit Node.stream.Stream_.Transform
             /// <summary>
@@ -49995,6 +50004,7 @@ Certificate.verifySpkac($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("KeyObject", "node:crypto")>]
         type KeyObject =
             /// <summary>
             /// Example: Converting a <c>CryptoKey</c> instance to a <c>KeyObject</c>:
@@ -50505,6 +50515,7 @@ KeyObject.from($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Cipher", "node:crypto")>]
         type Cipher =
             inherit Node.stream.Stream_.Transform
             /// <summary>
@@ -51048,6 +51059,7 @@ KeyObject.from($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Decipher", "node:crypto")>]
         type Decipher =
             inherit Node.stream.Stream_.Transform
             /// <summary>
@@ -51866,6 +51878,7 @@ KeyObject.from($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Sign", "node:crypto")>]
         type Sign =
             inherit Node.stream.Stream_.Writable
             /// <summary>
@@ -52173,6 +52186,7 @@ KeyObject.from($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Verify", "node:crypto")>]
         type Verify =
             inherit Node.stream.Stream_.Writable
             /// <summary>
@@ -52623,6 +52637,7 @@ KeyObject.from($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("DiffieHellman", "node:crypto")>]
         type DiffieHellman =
             /// <summary>
             /// Generates private and public Diffie-Hellman key values unless they have been
@@ -53108,6 +53123,7 @@ KeyObject.from($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ECDH", "node:crypto")>]
         type ECDH =
             /// <summary>
             /// Converts the EC Diffie-Hellman public key specified by <c>key</c> and <c>curve</c> to the
@@ -54014,6 +54030,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("X509Certificate", "node:crypto")>]
         type X509Certificate =
             /// <summary>
             /// Will be \<c>true\</c> if this is a Certificate Authority (CA) certificate.
@@ -58021,6 +58038,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Socket", "node:dgram")>]
         type Socket =
             inherit Node.events.EventEmitter
 
@@ -62327,6 +62345,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Channel", "node:diagnostics_channel")>]
         type Channel<'StoreType, 'ContextType> =
             abstract member name: U2<string, obj> with get
             /// <summary>
@@ -62768,6 +62787,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("TracingChannel", "node:diagnostics_channel")>]
         type TracingChannel<'StoreType, 'ContextType> =
             inherit Node.diagnostics_channel.TracingChannelCollection
             abstract member start: Node.diagnostics_channel.Channel<'StoreType, 'ContextType> with get, set
@@ -65281,6 +65301,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Resolver", "node:dns")>]
         type Resolver =
             /// <summary>
             /// Cancel all outstanding DNS queries made by this resolver. The corresponding
@@ -65925,6 +65946,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("Resolver", "node:dns/promises")>]
             type Resolver =
                 /// <summary>
                 /// Cancel all outstanding DNS queries made by this resolver. The corresponding
@@ -66507,6 +66529,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Domain", "node:domain")>]
         type Domain =
             inherit Node.events.EventEmitter
             /// <summary>
@@ -66803,6 +66826,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<ImportDefault("node:events")>]
         type EventEmitter<'T> =
             inherit Node.NodeJS.EventEmitter<'T>
 
@@ -88481,6 +88505,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Stats", "node:fs")>]
         type Stats =
             inherit Node.fs.StatsBase<float>
 
@@ -88558,6 +88583,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("StatsFs", "node:fs")>]
         type StatsFs =
             inherit Node.fs.StatsFsBase<float>
 
@@ -88614,6 +88640,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Dirent", "node:fs")>]
         type Dirent<'Name> =
             /// <summary>
             /// Returns <c>true</c> if the <c>fs.Dirent</c> object describes a regular file.
@@ -88685,6 +88712,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Dir", "node:fs")>]
         type Dir =
             /// <summary>
             /// The read-only path of this directory as was provided to <see href="opendir">opendir</see>,<see href="opendirSync">opendirSync</see>, or <c>fsPromises.opendir()</c>.
@@ -89517,6 +89545,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ReadStream", "node:fs")>]
         type ReadStream =
             inherit Node.stream.Stream_.Readable
             abstract member close: ?callback: (Node.NodeJS.ErrnoException option -> unit) -> unit
@@ -89745,6 +89774,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("WriteStream", "node:fs")>]
         type WriteStream =
             inherit Node.stream.Stream_.Writable
             /// <summary>
@@ -107336,6 +107366,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Server", "node:http")>]
         type Server<'Request, 'Response> =
             inherit Node.net.Server
 
@@ -109519,6 +109550,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("OutgoingMessage", "node:http")>]
         type OutgoingMessage<'Request> =
             inherit Node.stream.Stream_.Writable
             abstract member req: 'Request with get
@@ -109929,6 +109961,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ServerResponse", "node:http")>]
         type ServerResponse<'Request> =
             inherit Node.http.OutgoingMessage<'Request>
             /// <summary>
@@ -110260,6 +110293,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ClientRequest", "node:http")>]
         type ClientRequest =
             inherit Node.http.OutgoingMessage
 
@@ -113135,6 +113169,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("IncomingMessage", "node:http")>]
         type IncomingMessage =
             inherit Node.stream.Stream_.Readable
 
@@ -113453,6 +113488,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Agent", "node:http")>]
         type Agent =
             inherit Node.events.EventEmitter
             /// <summary>
@@ -133435,6 +133471,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Http2ServerRequest", "node:http2")>]
         type Http2ServerRequest =
             inherit Node.stream.Stream_.Readable
             /// <summary>
@@ -136061,6 +136098,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Http2ServerResponse", "node:http2")>]
         type Http2ServerResponse<'Request> =
             inherit Node.stream.Stream_.Writable
 
@@ -145514,6 +145552,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Agent", "node:https")>]
         type Agent =
             inherit Node.events.EventEmitter
             abstract member options: Node.https.AgentOptions with get, set
@@ -145625,6 +145664,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Server", "node:https")>]
         type Server<'Request, 'Response> =
             inherit Node.http.Server<'Request, 'Response>
             inherit Node.tls.Server
@@ -149055,6 +149095,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Session", "node:inspector")>]
         type Session =
             inherit Node.events.EventEmitter
             /// <summary>
@@ -149626,6 +149667,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("Session", "node:inspector/promises")>]
             type Session =
                 inherit Node.events.EventEmitter
                 /// <summary>
@@ -153188,6 +153230,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<ImportDefault("node:module")>]
         type Module =
             inherit Node.NodeJS.Module
 
@@ -155149,6 +155192,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Socket", "node:net")>]
         type Socket =
             inherit Node.stream.Stream_.Duplex
             /// <summary>
@@ -158323,6 +158367,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Server", "node:net")>]
         type Server =
             inherit Node.events.EventEmitter
 
@@ -160102,6 +160147,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("BlockList", "node:net")>]
         type BlockList =
             /// <summary>
             /// Adds a rule to block the given IP address.
@@ -160348,6 +160394,7 @@ BlockList.isBlockList($0)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("SocketAddress", "node:net")>]
         type SocketAddress =
             /// <summary>
             /// Either \<c>'ipv4'\</c> or \<c>'ipv6'\</c>.
@@ -162171,6 +162218,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceEntry", "node:perf_hooks")>]
         type PerformanceEntry =
             /// <summary>
             /// The total number of milliseconds elapsed for this entry. This value will not
@@ -162205,6 +162253,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceMark", "node:perf_hooks")>]
         type PerformanceMark =
             inherit Node.perf_hooks.PerformanceEntry
             abstract member detail: obj with get
@@ -162216,6 +162265,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceMeasure", "node:perf_hooks")>]
         type PerformanceMeasure =
             inherit Node.perf_hooks.PerformanceEntry
             abstract member detail: obj with get
@@ -162251,6 +162301,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceNodeTiming", "node:perf_hooks")>]
         type PerformanceNodeTiming =
             inherit Node.perf_hooks.PerformanceEntry
             /// <summary>
@@ -162620,6 +162671,7 @@ SocketAddress.parse($0)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceObserverEntryList", "node:perf_hooks")>]
         type PerformanceObserverEntryList =
             /// <summary>
             /// Returns a list of <c>PerformanceEntry</c> objects in chronological order
@@ -162768,6 +162820,7 @@ SocketAddress.parse($0)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceObserver", "node:perf_hooks")>]
         type PerformanceObserver =
             inherit Node.async_hooks.AsyncResource
             /// <summary>
@@ -162848,6 +162901,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("PerformanceResourceTiming", "node:perf_hooks")>]
         type PerformanceResourceTiming =
             inherit Node.perf_hooks.PerformanceEntry
             /// <summary>
@@ -168205,6 +168259,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Interface", "node:readline")>]
         type Interface =
             inherit Node.events.EventEmitter
             abstract member terminal: bool with get
@@ -170434,6 +170489,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("Interface", "node:readline/promises")>]
             type Interface =
                 inherit Node.readline.Interface
                 /// <summary>
@@ -170512,6 +170568,7 @@ SocketAddress.parse($0)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("Readline", "node:readline/promises")>]
             type Readline =
                 /// <summary>
                 /// The <c>rl.clearLine()</c> method adds to the internal list of pending action an
@@ -170938,6 +170995,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("REPLServer", "node:repl")>]
         type REPLServer =
             inherit Node.readline.Interface
             /// <summary>
@@ -173082,6 +173140,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Recoverable", "node:repl")>]
         type Recoverable =
             abstract member err: Exception with get, set
 
@@ -173706,6 +173765,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("DatabaseSync", "node:sqlite")>]
         type DatabaseSync =
             /// <summary>
             /// Registers a new aggregate function with the SQLite database. This method is a wrapper around
@@ -174052,6 +174112,7 @@ SocketAddress.parse($0)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("StatementSync", "node:sqlite")>]
         type StatementSync =
             /// <summary>
             /// This method executes a prepared statement and returns all results as an array of
@@ -174813,6 +174874,7 @@ SocketAddress.parse($0)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<ImportDefault("node:stream")>]
         type Stream =
             inherit Node.events.EventEmitter
             abstract member pipe<'T> : destination: 'T * ?options: Stream.pipe.options -> 'T
@@ -191341,6 +191403,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ReadableStream", "node:stream/web")>]
             type ReadableStream<'R> =
                 abstract member locked: bool with get
                 abstract member cancel: ?reason: obj -> JS.Promise<unit>
@@ -191401,6 +191464,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ReadableStreamDefaultReader", "node:stream/web")>]
             type ReadableStreamDefaultReader<'R> =
                 inherit Node.stream.web.ReadableStreamGenericReader
 
@@ -191414,6 +191478,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ReadableStreamBYOBReader", "node:stream/web")>]
             type ReadableStreamBYOBReader =
                 inherit Node.stream.web.ReadableStreamGenericReader
 
@@ -191434,6 +191499,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ReadableStreamBYOBRequest", "node:stream/web")>]
             type ReadableStreamBYOBRequest =
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest/view)
@@ -191450,6 +191516,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ReadableByteStreamController", "node:stream/web")>]
             type ReadableByteStreamController =
                 abstract member byobRequest: Node.stream.web.ReadableStreamBYOBRequest option with get
                 abstract member desiredSize: float option with get
@@ -191459,6 +191526,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ReadableStreamDefaultController", "node:stream/web")>]
             type ReadableStreamDefaultController<'R> =
                 abstract member desiredSize: float option with get
                 abstract member close: unit -> unit
@@ -191494,6 +191562,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("TransformStream", "node:stream/web")>]
             type TransformStream<'I, 'O> =
                 abstract member readable: Node.stream.web.ReadableStream<'O> with get
                 abstract member writable: Node.stream.web.WritableStream<'I> with get
@@ -191510,6 +191579,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("TransformStreamDefaultController", "node:stream/web")>]
             type TransformStreamDefaultController<'O> =
                 abstract member desiredSize: float option with get
                 abstract member enqueue: chunk: 'O -> unit
@@ -191523,6 +191593,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("WritableStream", "node:stream/web")>]
             type WritableStream<'W> =
                 abstract member locked: bool with get
                 abstract member abort: ?reason: obj -> JS.Promise<unit>
@@ -191537,6 +191608,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("WritableStreamDefaultWriter", "node:stream/web")>]
             type WritableStreamDefaultWriter<'W> =
                 abstract member closed: JS.Promise<unit> with get
                 abstract member desiredSize: float option with get
@@ -191554,6 +191626,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("WritableStreamDefaultController", "node:stream/web")>]
             type WritableStreamDefaultController =
                 abstract member error: ?e: obj -> unit
 
@@ -191595,6 +191668,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("ByteLengthQueuingStrategy", "node:stream/web")>]
             type ByteLengthQueuingStrategy =
                 inherit Node.stream.web.QueuingStrategy<obj>
                 abstract member highWaterMark: float with get
@@ -191613,6 +191687,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("CountQueuingStrategy", "node:stream/web")>]
             type CountQueuingStrategy =
                 inherit Node.stream.web.QueuingStrategy
                 abstract member highWaterMark: float with get
@@ -191627,6 +191702,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("TextEncoderStream", "node:stream/web")>]
             type TextEncoderStream =
                 /// <summary>
                 /// Returns "utf-8".
@@ -191660,6 +191736,7 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("TextDecoderStream", "node:stream/web")>]
             type TextDecoderStream =
                 /// <summary>
                 /// Returns encoding's name, lower cased.
@@ -191701,12 +191778,14 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("CompressionStream", "node:stream/web")>]
             type CompressionStream =
                 abstract member readable: Node.stream.web.ReadableStream with get
                 abstract member writable: Node.stream.web.WritableStream with get
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("DecompressionStream", "node:stream/web")>]
             type DecompressionStream =
                 abstract member writable: Node.stream.web.WritableStream with get
                 abstract member readable: Node.stream.web.ReadableStream with get
@@ -192051,6 +192130,7 @@ Duplex.fromWeb($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("StringDecoder", "node:string_decoder")>]
         type StringDecoder =
             /// <summary>
             /// Returns a decoded string, ensuring that any incomplete multibyte characters at
@@ -200796,11 +200876,13 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("SpecReporter", "node:test/reporters")>]
             type SpecReporter =
                 inherit Node.stream.Stream_.Transform
 
             [<AllowNullLiteral>]
             [<Interface>]
+            [<Import("LcovReporter", "node:test/reporters")>]
             type LcovReporter =
                 inherit Node.stream.Stream_.Transform
 
@@ -202074,6 +202156,7 @@ Duplex.fromWeb($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("TLSSocket", "node:tls")>]
         type TLSSocket =
             inherit Node.net.Socket
             /// <summary>
@@ -203835,6 +203918,7 @@ Duplex.fromWeb($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Server", "node:tls")>]
         type Server =
             inherit Node.net.Server
 
@@ -206078,6 +206162,7 @@ Duplex.fromWeb($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ReadStream", "node:tty")>]
         type ReadStream =
             inherit Node.net.Socket
             /// <summary>
@@ -206122,6 +206207,7 @@ Duplex.fromWeb($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("WriteStream", "node:tty")>]
         type WriteStream =
             inherit Node.net.Socket
             /// <summary>
@@ -207884,6 +207970,7 @@ Duplex.fromWeb($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("URL", "node:url")>]
         type URL =
             /// <summary>
             /// Creates a <c>'blob:nodedata:...'</c> URL string that represents the given <c>Blob</c> object and can be used to retrieve the <c>Blob</c> later.
@@ -208315,6 +208402,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("URLSearchParams", "node:url")>]
         type URLSearchParams =
             inherit Iterable<string * string>
             /// <summary>
@@ -211306,6 +211394,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("TextDecoder", "node:util")>]
         type TextDecoder =
             /// <summary>
             /// The encoding supported by the <c>TextDecoder</c> instance.
@@ -211386,6 +211475,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("TextEncoder", "node:util")>]
         type TextEncoder =
             /// <summary>
             /// The encoding supported by the <c>TextEncoder</c> instance. Always set to <c>'utf-8'</c>.
@@ -211629,6 +211719,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("MIMEType", "node:util")>]
         type MIMEType =
             /// <summary>
             /// Gets and sets the type portion of the MIME.
@@ -211700,6 +211791,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("MIMEParams", "node:util")>]
         type MIMEParams =
             /// <summary>
             /// Remove all name-value pairs whose name is <c>name</c>.
@@ -213605,6 +213697,7 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Serializer", "node:v8")>]
         type Serializer =
             /// <summary>
             /// Writes out a header, which includes the serialization format version.
@@ -213662,11 +213755,13 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("DefaultSerializer", "node:v8")>]
         type DefaultSerializer =
             inherit Node.v8.Serializer
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Deserializer", "node:v8")>]
         type Deserializer =
             /// <summary>
             /// Reads and validates a header (including the format version).
@@ -213722,6 +213817,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("DefaultDeserializer", "node:v8")>]
         type DefaultDeserializer =
             inherit Node.v8.Deserializer
 
@@ -213730,6 +213826,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("GCProfiler", "node:v8")>]
         type GCProfiler =
             /// <summary>
             /// Start collecting GC data.
@@ -215645,6 +215742,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Script", "node:vm")>]
         type Script =
             /// <summary>
             /// Runs the compiled code contained by the <c>vm.Script</c> object within the given <c>contextifiedObject</c> and returns the result. Running code does not have access
@@ -216043,6 +216141,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Module", "node:vm")>]
         type Module =
             /// <summary>
             /// If the <c>module.status</c> is <c>'errored'</c>, this property contains the exception
@@ -216223,6 +216322,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("SourceTextModule", "node:vm")>]
         type SourceTextModule =
             inherit Node.vm.Module
 
@@ -216315,6 +216415,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("SyntheticModule", "node:vm")>]
         type SyntheticModule =
             inherit Node.vm.Module
             /// <summary>
@@ -216584,6 +216685,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("WASI", "node:wasi")>]
         type WASI =
             /// <summary>
             /// Return an import object that can be passed to <c>WebAssembly.instantiate()</c> if no other WASM imports are needed beyond those provided by WASI.
@@ -217475,6 +217577,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("MessageChannel", "node:worker_threads")>]
         type MessageChannel =
             abstract member port1: Node.worker_threads.MessagePort with get
             abstract member port2: Node.worker_threads.MessagePort with get
@@ -217517,6 +217620,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("MessagePort", "node:worker_threads")>]
         type MessagePort =
             inherit Node.EventTarget
             inherit Node.events.EventEmitter_.NodeEventTarget
@@ -217900,6 +218004,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Worker", "node:worker_threads")>]
         type Worker =
             inherit Node.events.EventEmitter
             /// <summary>
@@ -221535,6 +221640,7 @@ URL.parse($0, $1)""")>]
         /// </summary>
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("BroadcastChannel", "node:worker_threads")>]
         type BroadcastChannel =
             inherit Node.NodeJS.RefCounted
             inherit Node.EventTarget
@@ -223169,30 +223275,35 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("BrotliCompress", "node:zlib")>]
         type BrotliCompress =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("BrotliDecompress", "node:zlib")>]
         type BrotliDecompress =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Gzip", "node:zlib")>]
         type Gzip =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Gunzip", "node:zlib")>]
         type Gunzip =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Deflate", "node:zlib")>]
         type Deflate =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
@@ -223201,6 +223312,7 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Inflate", "node:zlib")>]
         type Inflate =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
@@ -223208,6 +223320,7 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("DeflateRaw", "node:zlib")>]
         type DeflateRaw =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
@@ -223216,6 +223329,7 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("InflateRaw", "node:zlib")>]
         type InflateRaw =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
@@ -223223,18 +223337,21 @@ URL.parse($0, $1)""")>]
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Unzip", "node:zlib")>]
         type Unzip =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ZstdCompress", "node:zlib")>]
         type ZstdCompress =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("ZstdDecompress", "node:zlib")>]
         type ZstdDecompress =
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib

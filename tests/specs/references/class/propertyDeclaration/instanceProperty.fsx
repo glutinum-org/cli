@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Fuse", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Fuse =
     abstract member version: string with get, set
 

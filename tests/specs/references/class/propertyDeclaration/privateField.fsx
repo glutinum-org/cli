@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("SettingsContainer", "REPLACE_ME_WITH_MODULE_NAME")>]
 type SettingsContainer =
     interface end
 

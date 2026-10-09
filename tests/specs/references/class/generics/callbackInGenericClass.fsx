@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("LinkedMap", "REPLACE_ME_WITH_MODULE_NAME")>]
 type LinkedMap<'K, 'V> =
     abstract member forEach: callbackfn: LinkedMap.forEach.callbackfn<'K, 'V> * ?thisArg: obj -> unit
 

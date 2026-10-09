@@ -14,11 +14,13 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Options", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Options =
     interface end
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("User", "REPLACE_ME_WITH_MODULE_NAME")>]
 type User<'T> =
     interface end
 

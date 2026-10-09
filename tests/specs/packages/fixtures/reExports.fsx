@@ -113,6 +113,7 @@ module ReExports =
 
         [<AllowNullLiteral>]
         [<Interface>]
+        [<Import("Logger", "re-exports/logger.js")>]
         type Logger =
             abstract member log: message: string -> unit
 

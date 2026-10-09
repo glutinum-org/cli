@@ -27,6 +27,7 @@ type AxisOptions =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Chart", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Chart =
     interface end
 

@@ -14,6 +14,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("DataTransfer", "REPLACE_ME_WITH_MODULE_NAME")>]
 type DataTransfer =
     inherit Iterable<string>
 

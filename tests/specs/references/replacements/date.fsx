@@ -17,6 +17,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("MyDate", "REPLACE_ME_WITH_MODULE_NAME")>]
 type MyDate =
     abstract member toDate: unit -> Date
 

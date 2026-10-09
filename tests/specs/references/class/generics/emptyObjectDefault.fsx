@@ -22,6 +22,7 @@ type Collection<'StoreType, 'ContextType> =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("TracingChannel", "REPLACE_ME_WITH_MODULE_NAME")>]
 type TracingChannel<'StoreType, 'ContextType> =
     inherit Collection<'StoreType, 'ContextType>
     abstract member start: 'StoreType with get, set
@@ -35,6 +36,7 @@ type TracingChannel =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Named", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Named<'Options> =
     abstract member options: 'Options with get, set
 

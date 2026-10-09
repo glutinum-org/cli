@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("DayJs", "REPLACE_ME_WITH_MODULE_NAME")>]
 type DayJs =
     interface end
 

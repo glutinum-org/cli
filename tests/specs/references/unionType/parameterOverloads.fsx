@@ -67,6 +67,7 @@ type EventTarget =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Reader", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Reader =
     interface end
 

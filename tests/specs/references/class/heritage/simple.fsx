@@ -14,11 +14,13 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("CoreTableState", "REPLACE_ME_WITH_MODULE_NAME")>]
 type CoreTableState =
     interface end
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("TableState", "REPLACE_ME_WITH_MODULE_NAME")>]
 type TableState =
     inherit CoreTableState
 

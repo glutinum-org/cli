@@ -14,6 +14,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Type2", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Type2<'A> =
     interface end
 
@@ -27,6 +28,7 @@ type Task =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Type1", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Type1<'A> =
     interface end
 

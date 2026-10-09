@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Log", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Log<'T, 'R1, 'R2> =
     abstract member info: data: ('T * float) -> U2<'R1, 'R2>
 

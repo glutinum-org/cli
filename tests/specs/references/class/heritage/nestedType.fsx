@@ -16,17 +16,20 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("IAge", "REPLACE_ME_WITH_MODULE_NAME")>]
 type IAge<'A> =
     abstract member years: 'A with get, set
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("User", "REPLACE_ME_WITH_MODULE_NAME")>]
 type User<'Bag, 'Age> =
     abstract member bag: 'Bag with get, set
     abstract member age: IAge<'Age> with get, set
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("IUser", "REPLACE_ME_WITH_MODULE_NAME")>]
 type IUser<'Bag> =
     inherit User<'Bag, float>
 

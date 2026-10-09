@@ -14,11 +14,13 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("LanguageModelError", "vscode")>]
 type LanguageModelError =
     interface end
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Logger", "vscode")>]
 type Logger =
     interface end
 

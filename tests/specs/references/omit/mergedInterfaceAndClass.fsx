@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("DiffieHellman", "REPLACE_ME_WITH_MODULE_NAME")>]
 type DiffieHellman =
     abstract member setPublicKey: publicKey: string -> unit
     abstract member setPublicKey: publicKey: string * encoding: string -> unit

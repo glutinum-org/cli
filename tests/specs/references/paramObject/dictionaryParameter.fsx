@@ -23,6 +23,7 @@ type Options =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Service", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Service =
     abstract member create: unit -> JS.Promise<string>
     abstract member create: bodyParams: Service.create.bodyParams * ?options: Options -> JS.Promise<string>

@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Dayjs", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Dayjs =
     abstract member locale: preset: string -> Dayjs
     abstract member locale: preset: obj -> Dayjs

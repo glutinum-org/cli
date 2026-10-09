@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Type3", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Type3<'A, 'B, 'C> =
     interface end
 

@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Logger", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Logger =
     interface end
 

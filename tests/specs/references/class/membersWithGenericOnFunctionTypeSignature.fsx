@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Test", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Test =
     abstract member parseArg: Test.parseArg<obj> option with get, set
 

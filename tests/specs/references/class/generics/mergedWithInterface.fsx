@@ -18,6 +18,7 @@ type EventMap =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("EventEmitter", "REPLACE_ME_WITH_MODULE_NAME")>]
 type EventEmitter<'T> =
     abstract member on: event: string -> EventEmitter<'T>
     abstract member emit: event: string -> bool

@@ -19,6 +19,7 @@ type Internal =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Public", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Public =
     abstract member inner: Internal with get, set
 

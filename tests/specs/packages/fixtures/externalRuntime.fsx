@@ -26,6 +26,7 @@ module DomLibUser =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Import("Panel", "dom-lib-user")>]
     type Panel =
         inherit Glutinum.Web.EventTarget
         abstract member render: unit -> unit

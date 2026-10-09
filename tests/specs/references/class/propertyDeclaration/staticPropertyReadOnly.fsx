@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Fuse", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Fuse =
     [<Emit("""import { Fuse } from "REPLACE_ME_WITH_MODULE_NAME";
 Fuse.version{{=$0}}""")>]

@@ -14,6 +14,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Headers", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Headers =
     [<Emit("""import { Headers } from "REPLACE_ME_WITH_MODULE_NAME";
 Headers.parseParameters($0)""")>]

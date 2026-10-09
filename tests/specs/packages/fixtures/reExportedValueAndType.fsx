@@ -16,6 +16,7 @@ module ReExportedValueAndType =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Import("App", "re-exported-value-and-type")>]
     type App =
         abstract member on: eventType: ReExportedValueAndType.EventType -> unit
         abstract member last: unit -> ReExportedValueAndType.EventType

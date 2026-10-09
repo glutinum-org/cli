@@ -14,12 +14,14 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("User", "REPLACE_ME_WITH_MODULE_NAME")>]
 type User<'A, 'B> =
     abstract member a: 'A with get, set
     abstract member b: 'B with get, set
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("IUser", "REPLACE_ME_WITH_MODULE_NAME")>]
 type IUser<'A> =
     inherit User<'A, string>
 

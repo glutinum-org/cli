@@ -30,6 +30,7 @@ type Listener1<'K, 'T> =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("EventEmitter", "REPLACE_ME_WITH_MODULE_NAME")>]
 type EventEmitter<'T> =
     abstract member on<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
     abstract member on<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>

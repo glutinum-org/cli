@@ -16,6 +16,7 @@ type Exports =
 /// </summary>
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Disposable", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Disposable =
     interface end
 

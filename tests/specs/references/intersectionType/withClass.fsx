@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Stream", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Stream =
     abstract member write: chunk: string -> bool
 

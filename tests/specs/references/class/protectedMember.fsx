@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Service", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Service =
     abstract member get: path: string -> JS.Promise<string>
 

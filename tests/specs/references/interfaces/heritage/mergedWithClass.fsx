@@ -19,6 +19,7 @@ type Base =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Session", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Session =
     inherit Base
     abstract member ``open``: unit -> unit

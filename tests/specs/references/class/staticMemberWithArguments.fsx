@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Hello", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Hello =
     [<Emit("""import { Hello } from "REPLACE_ME_WITH_MODULE_NAME";
 Hello.SayHelloTo($0)""")>]

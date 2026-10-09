@@ -19,6 +19,7 @@ type IAge<'A> =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("User", "REPLACE_ME_WITH_MODULE_NAME")>]
 type User<'Bag, 'Age> =
     abstract member bag: 'Bag with get, set
     abstract member age: IAge<'Age> with get, set

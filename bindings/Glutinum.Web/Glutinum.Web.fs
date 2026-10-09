@@ -17816,6 +17816,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AbortController")>]
     type AbortController =
         /// <summary>
         /// The **<c>signal</c>** read-only property of the AbortController interface returns an AbortSignal object instance, which can be used to communicate with/abort an asynchronous operation as desired.
@@ -17857,6 +17858,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AbortSignal")>]
     type AbortSignal =
         inherit Web.EventTarget
         /// <summary>
@@ -18045,6 +18047,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AbstractRange")>]
     type AbstractRange =
         /// <summary>
         /// The read-only **<c>collapsed</c>** property of the AbstractRange interface returns true if the range's start position and end position are the same.
@@ -18191,6 +18194,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AnalyserNode")>]
     type AnalyserNode =
         inherit Web.AudioNode
         /// <summary>
@@ -18336,6 +18340,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Animation")>]
     type Animation =
         inherit Web.EventTarget
         /// <summary>
@@ -18632,6 +18637,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AnimationEffect")>]
     type AnimationEffect =
         /// <summary>
         /// The **<c>getComputedTiming()</c>** method of the AnimationEffect interface returns the calculated timing properties for this animation effect.
@@ -18659,6 +18665,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AnimationEvent")>]
     type AnimationEvent =
         inherit Web.Event
         /// <summary>
@@ -18699,6 +18706,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AnimationPlaybackEvent")>]
     type AnimationPlaybackEvent =
         inherit Web.Event
         /// <summary>
@@ -18721,6 +18729,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AnimationTimeline")>]
     type AnimationTimeline =
         /// <summary>
         /// The **<c>currentTime</c>** read-only property of the Web Animations API's AnimationTimeline interface returns the timeline's current time in milliseconds, or null if the timeline is inactive.
@@ -18749,6 +18758,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Attr")>]
     type Attr =
         inherit Web.Node
         /// <summary>
@@ -18812,6 +18822,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioBuffer")>]
     type AudioBuffer =
         /// <summary>
         /// The **<c>duration</c>** property of the AudioBuffer interface returns a double representing the duration, in seconds, of the PCM data stored in the buffer.
@@ -18868,6 +18879,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioBufferSourceNode")>]
     type AudioBufferSourceNode =
         inherit Web.AudioNode
         /// <summary>
@@ -19091,6 +19103,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioContext")>]
     type AudioContext =
         inherit Web.BaseAudioContext
         /// <summary>
@@ -19317,6 +19330,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioData")>]
     type AudioData =
         /// <summary>
         /// The **<c>duration</c>** read-only property of the AudioData interface returns the duration in microseconds of this AudioData object.
@@ -19409,6 +19423,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioDecoder")>]
     type AudioDecoder =
         inherit Web.EventTarget
         /// <summary>
@@ -19621,6 +19636,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioDestinationNode")>]
     type AudioDestinationNode =
         inherit Web.AudioNode
         /// <summary>
@@ -19658,6 +19674,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioEncoder")>]
     type AudioEncoder =
         inherit Web.EventTarget
         /// <summary>
@@ -19870,6 +19887,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioListener")>]
     type AudioListener =
         /// <summary>
         /// The **<c>forwardX</c>** read-only property of the AudioListener interface is an AudioParam representing the x value of the direction vector defining the forward direction the listener is pointing in.
@@ -19946,6 +19964,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioNode")>]
     type AudioNode =
         inherit Web.EventTarget
         /// <summary>
@@ -20052,6 +20071,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioParam")>]
     type AudioParam =
         abstract member automationRate: Web.AutomationRate with get, set
         /// <summary>
@@ -20161,6 +20181,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioParamMap")>]
     type AudioParamMap =
         abstract member forEach:
             callbackfn: AudioParamMap.forEach.callbackfn * ?thisArg: obj -> unit
@@ -20171,6 +20192,7 @@ module Web =
     [<Obsolete("As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and is soon to be replaced by AudioWorklet.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioProcessingEvent)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioProcessingEvent")>]
     type AudioProcessingEvent =
         inherit Web.Event
 
@@ -20219,6 +20241,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioScheduledSourceNode")>]
     type AudioScheduledSourceNode =
         inherit Web.AudioNode
         /// <summary>
@@ -20406,6 +20429,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioWorklet")>]
     type AudioWorklet =
         inherit Web.Worklet
 
@@ -20437,6 +20461,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AudioWorkletNode")>]
     type AudioWorkletNode =
         inherit Web.AudioNode
         /// <summary>
@@ -20620,6 +20645,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AuthenticatorAssertionResponse")>]
     type AuthenticatorAssertionResponse =
         inherit Web.AuthenticatorResponse
         /// <summary>
@@ -20656,6 +20682,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AuthenticatorAttestationResponse")>]
     type AuthenticatorAttestationResponse =
         inherit Web.AuthenticatorResponse
         /// <summary>
@@ -20697,6 +20724,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("AuthenticatorResponse")>]
     type AuthenticatorResponse =
         /// <summary>
         /// The **<c>clientDataJSON</c>** property of the AuthenticatorResponse interface stores a JSON string in an ArrayBuffer, representing the client data that was passed to navigator.credentials.create() or navigator.credentials.get(). This property is only accessed on one of the child objects of AuthenticatorResponse, specifically AuthenticatorAttestationResponse or AuthenticatorAssertionResponse.
@@ -20715,6 +20743,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("BarProp")>]
     type BarProp =
         /// <summary>
         /// The **<c>visible</c>** read-only property of the BarProp interface returns true if the user interface element it represents is visible.
@@ -20753,6 +20782,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("BaseAudioContext")>]
     type BaseAudioContext =
         inherit Web.EventTarget
         /// <summary>
@@ -21156,6 +21186,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("BeforeUnloadEvent")>]
     type BeforeUnloadEvent =
         inherit Web.Event
 
@@ -21172,6 +21203,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("BiquadFilterNode")>]
     type BiquadFilterNode =
         inherit Web.AudioNode
         /// <summary>
@@ -21223,6 +21255,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Blob")>]
     type Blob =
         /// <summary>
         /// The **<c>size</c>** read-only property of the Blob interface returns the size of the Blob or File in bytes.
@@ -21274,6 +21307,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("BlobEvent")>]
     type BlobEvent =
         inherit Web.Event
         /// <summary>
@@ -21376,6 +21410,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("BroadcastChannel")>]
     type BroadcastChannel =
         inherit Web.EventTarget
         /// <summary>
@@ -21568,6 +21603,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ByteLengthQueuingStrategy")>]
     type ByteLengthQueuingStrategy =
         inherit Web.QueuingStrategy<obj>
         /// <summary>
@@ -21595,6 +21631,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CDATASection")>]
     type CDATASection =
         inherit Web.Text
 
@@ -21605,6 +21642,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSAnimation")>]
     type CSSAnimation =
         inherit Web.Animation
         /// <summary>
@@ -21775,6 +21813,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSConditionRule")>]
     type CSSConditionRule =
         inherit Web.CSSGroupingRule
         /// <summary>
@@ -21789,6 +21828,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSContainerRule")>]
     type CSSContainerRule =
         inherit Web.CSSConditionRule
         /// <summary>
@@ -21809,6 +21849,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSCounterStyleRule")>]
     type CSSCounterStyleRule =
         inherit Web.CSSRule
         /// <summary>
@@ -21919,6 +21960,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSFontFaceDescriptors")>]
     type CSSFontFaceDescriptors =
         inherit Web.CSSStyleDeclarationBase
         abstract member ``font-display``: string with get, set
@@ -21944,6 +21986,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSFontFaceRule")>]
     type CSSFontFaceRule =
         inherit Web.CSSRule
         /// <summary>
@@ -21956,6 +21999,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSFontFeatureValuesRule")>]
     type CSSFontFeatureValuesRule =
         inherit Web.CSSRule
         /// <summary>
@@ -21996,6 +22040,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSFontPaletteValuesRule")>]
     type CSSFontPaletteValuesRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22057,6 +22102,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSGroupingRule")>]
     type CSSGroupingRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22085,6 +22131,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSImageValue")>]
     type CSSImageValue =
         inherit Web.CSSStyleValue
 
@@ -22093,6 +22140,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSImportRule")>]
     type CSSImportRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22121,6 +22169,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSKeyframeRule")>]
     type CSSKeyframeRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22139,6 +22188,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSKeyframesRule")>]
     type CSSKeyframesRule =
         inherit Web.CSSRule
         inherit Iterable<Web.CSSKeyframeRule>
@@ -22189,6 +22239,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSKeywordValue")>]
     type CSSKeywordValue =
         inherit Web.CSSStyleValue
         /// <summary>
@@ -22203,6 +22254,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSLayerBlockRule")>]
     type CSSLayerBlockRule =
         inherit Web.CSSGroupingRule
         /// <summary>
@@ -22217,6 +22269,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSLayerStatementRule")>]
     type CSSLayerStatementRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22259,6 +22312,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathClamp")>]
     type CSSMathClamp =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22287,6 +22341,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathInvert")>]
     type CSSMathInvert =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22303,6 +22358,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathMax")>]
     type CSSMathMax =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22319,6 +22375,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathMin")>]
     type CSSMathMin =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22335,6 +22392,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathNegate")>]
     type CSSMathNegate =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22351,6 +22409,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathProduct")>]
     type CSSMathProduct =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22367,6 +22426,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathSum")>]
     type CSSMathSum =
         inherit Web.CSSMathValue
         /// <summary>
@@ -22383,6 +22443,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMathValue")>]
     type CSSMathValue =
         inherit Web.CSSNumericValue
         /// <summary>
@@ -22399,6 +22460,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMatrixComponent")>]
     type CSSMatrixComponent =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -22413,6 +22475,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSMediaRule")>]
     type CSSMediaRule =
         inherit Web.CSSConditionRule
         /// <summary>
@@ -22425,6 +22488,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSNamespaceRule")>]
     type CSSNamespaceRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22474,6 +22538,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSNestedDeclarations")>]
     type CSSNestedDeclarations =
         inherit Web.CSSRule
         /// <summary>
@@ -22490,6 +22555,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSNumericArray")>]
     type CSSNumericArray =
         inherit Iterable<Web.CSSNumericValue>
         /// <summary>
@@ -22516,6 +22582,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSNumericValue")>]
     type CSSNumericValue =
         inherit Web.CSSStyleValue
         /// <summary>
@@ -22584,6 +22651,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSPageDescriptors")>]
     type CSSPageDescriptors =
         inherit Web.CSSStyleDeclarationBase
         /// <summary>
@@ -22632,6 +22700,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSPageRule")>]
     type CSSPageRule =
         inherit Web.CSSGroupingRule
         /// <summary>
@@ -22652,6 +22721,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSPerspective")>]
     type CSSPerspective =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -22666,6 +22736,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSPositionTryDescriptors")>]
     type CSSPositionTryDescriptors =
         inherit Web.CSSStyleDeclarationBase
         /// <summary>
@@ -22954,6 +23025,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSPositionTryRule")>]
     type CSSPositionTryRule =
         inherit Web.CSSRule
         /// <summary>
@@ -22970,6 +23042,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSPropertyRule")>]
     type CSSPropertyRule =
         inherit Web.CSSRule
         /// <summary>
@@ -23025,6 +23098,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSRotate")>]
     type CSSRotate =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -23059,6 +23133,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSRule")>]
     type CSSRule =
         /// <summary>
         /// The **<c>cssText</c>** property of the CSSRule interface returns the actual text of a CSSStyleSheet style-rule.
@@ -23131,6 +23206,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSRuleList")>]
     type CSSRuleList =
         inherit Iterable<Web.CSSRule>
         /// <summary>
@@ -23156,6 +23232,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSScale")>]
     type CSSScale =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -23182,6 +23259,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSScopeRule")>]
     type CSSScopeRule =
         inherit Web.CSSGroupingRule
         /// <summary>
@@ -23200,6 +23278,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSSkew")>]
     type CSSSkew =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -23222,6 +23301,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSSkewX")>]
     type CSSSkewX =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -23238,6 +23318,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSSkewY")>]
     type CSSSkewY =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -23252,6 +23333,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSStartingStyleRule")>]
     type CSSStartingStyleRule =
         inherit Web.CSSGroupingRule
 
@@ -23319,6 +23401,7 @@ module Web =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSStyleDeclaration")>]
     type CSSStyleDeclaration =
         inherit Web.CSSStyleProperties
         inherit Iterable<string>
@@ -23330,6 +23413,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSStyleProperties")>]
     type CSSStyleProperties =
         inherit Web.CSSStyleDeclarationBase
         /// <summary>
@@ -26333,6 +26417,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSStyleRule")>]
     type CSSStyleRule =
         inherit Web.CSSGroupingRule
         /// <summary>
@@ -26361,6 +26446,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSStyleSheet")>]
     type CSSStyleSheet =
         inherit Web.StyleSheet
         /// <summary>
@@ -26425,6 +26511,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSStyleValue")>]
     type CSSStyleValue =
         abstract member toString: unit -> string
 
@@ -26433,6 +26520,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSSupportsRule")>]
     type CSSSupportsRule =
         inherit Web.CSSConditionRule
 
@@ -26443,6 +26531,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSTransformComponent")>]
     type CSSTransformComponent =
         /// <summary>
         /// The **<c>is2D</c>** read-only property of the CSSTransformComponent interface indicates where the transform is 2D or 3D.
@@ -26465,6 +26554,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSTransformValue")>]
     type CSSTransformValue =
         inherit Web.CSSStyleValue
         inherit Iterable<Web.CSSTransformComponent>
@@ -26504,6 +26594,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSTransition")>]
     type CSSTransition =
         inherit Web.Animation
         /// <summary>
@@ -26674,6 +26765,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSTranslate")>]
     type CSSTranslate =
         inherit Web.CSSTransformComponent
         /// <summary>
@@ -26702,6 +26794,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSUnitValue")>]
     type CSSUnitValue =
         inherit Web.CSSNumericValue
         /// <summary>
@@ -26724,6 +26817,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSUnparsedValue")>]
     type CSSUnparsedValue =
         inherit Web.CSSStyleValue
         inherit Iterable<Web.CSSUnparsedSegment>
@@ -26751,6 +26845,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSVariableReferenceValue")>]
     type CSSVariableReferenceValue =
         /// <summary>
         /// The **<c>fallback</c>** read-only property of the CSSVariableReferenceValue interface returns the custom property fallback value of the CSSVariableReferenceValue.
@@ -26777,6 +26872,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CSSViewTransitionRule")>]
     type CSSViewTransitionRule =
         inherit Web.CSSRule
         /// <summary>
@@ -26823,6 +26919,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Cache")>]
     type Cache =
         /// <summary>
         /// The **<c>add()</c>** method of the Cache interface takes a URL, retrieves it, and adds the resulting response object to the given cache.
@@ -27032,6 +27129,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CacheStorage")>]
     type CacheStorage =
         /// <summary>
         /// The **<c>delete()</c>** method of the CacheStorage interface finds the Cache object matching the cacheName, and if found, deletes the Cache object and returns a Promise that resolves to true. If no Cache object is found, it resolves to false.
@@ -27102,6 +27200,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CanvasCaptureMediaStreamTrack")>]
     type CanvasCaptureMediaStreamTrack =
         inherit Web.MediaStreamTrack
         /// <summary>
@@ -27644,6 +27743,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CanvasGradient")>]
     type CanvasGradient =
         /// <summary>
         /// The **<c>CanvasGradient.addColorStop()</c>** method adds a new color stop, defined by an offset and a color, to a given canvas gradient.
@@ -27847,6 +27947,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CanvasPattern")>]
     type CanvasPattern =
         /// <summary>
         /// The **<c>CanvasPattern.setTransform()</c>** method uses a DOMMatrix object as the pattern's transformation matrix and invokes it on the pattern.
@@ -27878,6 +27979,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CanvasRenderingContext2D")>]
     type CanvasRenderingContext2D =
         inherit Web.CanvasCompositing
         inherit Web.CanvasDrawImage
@@ -28102,6 +28204,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CaretPosition")>]
     type CaretPosition =
         /// <summary>
         /// The **<c>offset</c>** property of the CaretPosition interface returns an integer representing the offset of the selection in the caret position node.
@@ -28129,6 +28232,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ChannelMergerNode")>]
     type ChannelMergerNode =
         inherit Web.AudioNode
 
@@ -28139,6 +28243,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ChannelSplitterNode")>]
     type ChannelSplitterNode =
         inherit Web.AudioNode
 
@@ -28149,6 +28254,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CharacterData")>]
     type CharacterData =
         inherit Web.Node
         inherit Web.ChildNode
@@ -28255,6 +28361,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Clipboard")>]
     type Clipboard =
         inherit Web.EventTarget
         /// <summary>
@@ -28289,6 +28396,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ClipboardEvent")>]
     type ClipboardEvent =
         inherit Web.Event
         /// <summary>
@@ -28306,6 +28414,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ClipboardItem")>]
     type ClipboardItem =
         /// <summary>
         /// The read-only **<c>presentationStyle</c>** property of the ClipboardItem interface returns a string indicating how an item should be presented.
@@ -28333,6 +28442,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CloseEvent")>]
     type CloseEvent =
         inherit Web.Event
         /// <summary>
@@ -28386,6 +28496,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CloseWatcher")>]
     type CloseWatcher =
         inherit Web.EventTarget
         /// <summary>
@@ -28578,6 +28689,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CommandEvent")>]
     type CommandEvent =
         inherit Web.Event
         /// <summary>
@@ -28600,6 +28712,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Comment")>]
     type Comment =
         inherit Web.CharacterData
 
@@ -28610,6 +28723,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CompositionEvent")>]
     type CompositionEvent =
         inherit Web.UIEvent
         /// <summary>
@@ -28638,6 +28752,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CompressionStream")>]
     type CompressionStream =
         inherit Web.GenericTransformStream
         /// <summary>
@@ -28666,6 +28781,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ConstantSourceNode")>]
     type ConstantSourceNode =
         inherit Web.AudioScheduledSourceNode
         /// <summary>
@@ -28842,6 +28958,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ContentVisibilityAutoStateChangeEvent")>]
     type ContentVisibilityAutoStateChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -28858,6 +28975,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ConvolverNode")>]
     type ConvolverNode =
         inherit Web.AudioNode
         /// <summary>
@@ -28881,6 +28999,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CookieChangeEvent")>]
     type CookieChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -28924,6 +29043,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CookieStore")>]
     type CookieStore =
         inherit Web.EventTarget
         /// <summary>
@@ -29146,6 +29266,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CookieStoreManager")>]
     type CookieStoreManager =
         /// <summary>
         /// The **<c>getSubscriptions()</c>** method of the CookieStoreManager interface returns a list of all the cookie change subscriptions for this ServiceWorkerRegistration.
@@ -29193,6 +29314,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CountQueuingStrategy")>]
     type CountQueuingStrategy =
         inherit Web.QueuingStrategy
         /// <summary>
@@ -29221,6 +29343,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Credential")>]
     type Credential =
         /// <summary>
         /// The **<c>id</c>** read-only property of the Credential interface returns a string containing the credential's identifier. This might be a GUID, username, or email address, or some other value, depending on the type of credential.
@@ -29246,6 +29369,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CredentialsContainer")>]
     type CredentialsContainer =
         /// <summary>
         /// The **<c>create()</c>** method of the CredentialsContainer interface creates a new credential, which can then be stored and later retrieved using the navigator.credentials.get() method. The retrieved credential can then be used by a website to authenticate a user.
@@ -29283,6 +29407,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Crypto")>]
     type Crypto =
         /// <summary>
         /// The **<c>Crypto.subtle</c>** read-only property returns a SubtleCrypto which can then be used to perform low-level cryptographic operations.
@@ -29313,6 +29438,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CryptoKey")>]
     type CryptoKey =
         /// <summary>
         /// The read-only **<c>algorithm</c>** property of the CryptoKey interface returns an object describing the algorithm for which this key can be used, and any associated extra parameters.
@@ -29358,6 +29484,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CustomElementRegistry")>]
     type CustomElementRegistry =
         /// <summary>
         /// The **<c>define()</c>** method of the CustomElementRegistry interface adds a definition for a custom element to the custom element registry, mapping its name to the constructor which will be used to create it.
@@ -29408,6 +29535,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CustomEvent")>]
     type CustomEvent<'T> =
         inherit Web.Event
         /// <summary>
@@ -29431,6 +29559,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("CustomStateSet")>]
     type CustomStateSet =
         abstract member forEach:
             callbackfn: CustomStateSet.forEach.callbackfn * ?thisArg: obj -> unit
@@ -29442,6 +29571,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMException")>]
     type DOMException =
         /// <summary>
         /// The **<c>code</c>** read-only property of the DOMException interface returns one of the legacy error code constants, or 0 if none match.
@@ -29494,6 +29624,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMImplementation")>]
     type DOMImplementation =
         /// <summary>
         /// The **<c>createDocument()</c>** method of the DOMImplementation interface creates and returns an XMLDocument.
@@ -29532,6 +29663,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMMatrix")>]
     type DOMMatrix =
         inherit Web.DOMMatrixReadOnly
         /// <summary>
@@ -29720,6 +29852,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMMatrixReadOnly")>]
     type DOMMatrixReadOnly =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties)
@@ -29943,6 +30076,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMParser")>]
     type DOMParser =
         /// <summary>
         /// The **<c>parseFromString()</c>** method of the DOMParser interface parses an input containing either HTML or XML, returning a Document with the type given in the contentType property.
@@ -29959,6 +30093,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMPoint")>]
     type DOMPoint =
         inherit Web.DOMPointReadOnly
         /// <summary>
@@ -29995,6 +30130,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMPointReadOnly")>]
     type DOMPointReadOnly =
         /// <summary>
         /// The DOMPointReadOnly interface's **<c>w</c>** property holds the point's perspective value, w, for a read-only point in space.
@@ -30040,6 +30176,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMQuad")>]
     type DOMQuad =
         /// <summary>
         /// The DOMQuad interface's **<c>p1</c>** property holds the DOMPoint object that represents one of the four corners of the DOMQuad. When created from DOMQuad.fromRect(), it is the point (x, y).
@@ -30085,6 +30222,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMRect")>]
     type DOMRect =
         inherit Web.DOMRectReadOnly
         /// <summary>
@@ -30121,6 +30259,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMRectList")>]
     type DOMRectList =
         inherit Iterable<Web.DOMRect>
         /// <summary>
@@ -30146,6 +30285,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMRectReadOnly")>]
     type DOMRectReadOnly =
         /// <summary>
         /// The **<c>bottom</c>** read-only property of the DOMRectReadOnly interface returns the bottom coordinate value of the DOMRect. (Has the same value as y + height, or y if height is negative.)
@@ -30209,6 +30349,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMStringList")>]
     type DOMStringList =
         inherit Iterable<string>
         /// <summary>
@@ -30240,6 +30381,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMStringMap")>]
     type DOMStringMap =
         [<EmitIndexer>]
         abstract member Item: name: string -> string option with get, set
@@ -30251,6 +30393,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DOMTokenList")>]
     type DOMTokenList =
         inherit Iterable<string>
         /// <summary>
@@ -30324,6 +30467,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DataTransfer")>]
     type DataTransfer =
         /// <summary>
         /// The **<c>DataTransfer.dropEffect</c>** property controls the feedback (typically visual) the user is given during a drag and drop operation. It will affect which cursor is displayed while dragging. For example, when the user hovers over a target drop element, the browser's cursor may indicate which type of operation will occur.
@@ -30387,6 +30531,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DataTransferItem")>]
     type DataTransferItem =
         /// <summary>
         /// The read-only **<c>DataTransferItem.kind</c>** property returns the kind–a string or a file–of the DataTransferItem object representing the drag data item.
@@ -30426,6 +30571,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DataTransferItemList")>]
     type DataTransferItemList =
         inherit Iterable<Web.DataTransferItem>
         /// <summary>
@@ -30469,6 +30615,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DecompressionStream")>]
     type DecompressionStream =
         inherit Web.GenericTransformStream
         /// <summary>
@@ -30497,6 +30644,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DelayNode")>]
     type DelayNode =
         inherit Web.AudioNode
         /// <summary>
@@ -30514,6 +30662,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DeviceMotionEvent")>]
     type DeviceMotionEvent =
         inherit Web.Event
         /// <summary>
@@ -30616,6 +30765,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DeviceOrientationEvent")>]
     type DeviceOrientationEvent =
         inherit Web.Event
         /// <summary>
@@ -30648,6 +30798,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DigitalCredential")>]
     type DigitalCredential =
         inherit Web.Credential
         abstract member data: obj with get
@@ -31143,6 +31294,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Document")>]
     type Document =
         inherit Web.Node
         inherit Web.DocumentOrShadowRoot
@@ -32537,6 +32689,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DocumentFragment")>]
     type DocumentFragment =
         inherit Web.Node
         inherit Web.NonElementParentNode
@@ -32648,6 +32801,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DocumentPictureInPicture")>]
     type DocumentPictureInPicture =
         inherit Web.EventTarget
         /// <summary>
@@ -32837,6 +32991,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DocumentPictureInPictureEvent")>]
     type DocumentPictureInPictureEvent =
         inherit Web.Event
         /// <summary>
@@ -32853,6 +33008,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DocumentTimeline")>]
     type DocumentTimeline =
         inherit Web.AnimationTimeline
 
@@ -32870,6 +33026,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DocumentType")>]
     type DocumentType =
         inherit Web.Node
         inherit Web.ChildNode
@@ -32909,6 +33066,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DragEvent")>]
     type DragEvent =
         inherit Web.MouseEvent
         /// <summary>
@@ -32925,6 +33083,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("DynamicsCompressorNode")>]
     type DynamicsCompressorNode =
         inherit Web.AudioNode
         /// <summary>
@@ -33200,6 +33359,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Element")>]
     type Element =
         inherit Web.Node
         inherit Web.ARIAMixin
@@ -33971,6 +34131,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ElementInternals")>]
     type ElementInternals =
         inherit Web.ARIAMixin
         /// <summary>
@@ -34115,6 +34276,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("EncodedAudioChunk")>]
     type EncodedAudioChunk =
         /// <summary>
         /// The **<c>byteLength</c>** read-only property of the EncodedAudioChunk interface returns the length in bytes of the encoded audio data.
@@ -34154,6 +34316,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("EncodedVideoChunk")>]
     type EncodedVideoChunk =
         /// <summary>
         /// The **<c>byteLength</c>** read-only property of the EncodedVideoChunk interface returns the length in bytes of the encoded video data.
@@ -34193,6 +34356,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ErrorEvent")>]
     type ErrorEvent =
         inherit Web.Event
         /// <summary>
@@ -34233,6 +34397,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Event")>]
     type Event =
         /// <summary>
         /// The **<c>bubbles</c>** read-only property of the Event interface indicates whether the event bubbles up through the DOM tree or not.
@@ -34357,6 +34522,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("EventCounts")>]
     type EventCounts =
         abstract member forEach: callbackfn: EventCounts.forEach.callbackfn * ?thisArg: obj -> unit
 
@@ -34406,6 +34572,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("EventSource")>]
     type EventSource =
         inherit Web.EventTarget
         /// <summary>
@@ -34665,6 +34832,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("EventTarget")>]
     type EventTarget =
         /// <summary>
         /// The **<c>addEventListener()</c>** method of the EventTarget interface sets up a function that will be called whenever the specified event is delivered to the target.
@@ -34784,6 +34952,7 @@ module Web =
     [<Obsolete>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("External")>]
     type External =
         [<Obsolete>]
         abstract member AddSearchProvider: unit -> unit
@@ -34798,6 +34967,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("File")>]
     type File =
         inherit Web.Blob
         /// <summary>
@@ -34826,6 +34996,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileList")>]
     type FileList =
         inherit Iterable<Web.File>
         /// <summary>
@@ -34902,6 +35073,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileReader")>]
     type FileReader =
         inherit Web.EventTarget
         /// <summary>
@@ -35144,6 +35316,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystem")>]
     type FileSystem =
         /// <summary>
         /// The read-only **<c>name</c>** property of the FileSystem interface indicates the file system's name. This string is unique among all file systems currently exposed by the File and Directory Entries API.
@@ -35169,6 +35342,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemDirectoryEntry")>]
     type FileSystemDirectoryEntry =
         inherit Web.FileSystemEntry
         /// <summary>
@@ -35210,6 +35384,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemDirectoryHandle")>]
     type FileSystemDirectoryHandle =
         inherit Web.FileSystemHandle
         /// <summary>
@@ -35274,6 +35449,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemDirectoryReader")>]
     type FileSystemDirectoryReader =
         /// <summary>
         /// The FileSystemDirectoryReader interface's **<c>readEntries()</c>** method retrieves the directory entries within the directory being read and delivers them in an array to a provided callback function.
@@ -35291,6 +35467,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemEntry")>]
     type FileSystemEntry =
         /// <summary>
         /// The read-only **<c>filesystem</c>** property of the FileSystemEntry interface contains a FileSystem object that represents the file system on which the entry resides.
@@ -35339,6 +35516,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemFileEntry")>]
     type FileSystemFileEntry =
         inherit Web.FileSystemEntry
 
@@ -35358,6 +35536,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemFileHandle")>]
     type FileSystemFileHandle =
         inherit Web.FileSystemHandle
         /// <summary>
@@ -35391,6 +35570,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemHandle")>]
     type FileSystemHandle =
         /// <summary>
         /// The **<c>kind</c>** read-only property of the FileSystemHandle interface returns the type of entry. This is 'file' if the associated entry is a file or 'directory'. It is used to distinguish files from directories when iterating over the contents of a directory.
@@ -35419,6 +35599,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FileSystemWritableFileStream")>]
     type FileSystemWritableFileStream =
         inherit Web.WritableStream
         /// <summary>
@@ -35471,6 +35652,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FocusEvent")>]
     type FocusEvent =
         inherit Web.UIEvent
         /// <summary>
@@ -35487,6 +35669,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FontFace")>]
     type FontFace =
         /// <summary>
         /// The **<c>ascentOverride</c>** property of the FontFace interface returns and sets the ascent metric for the font, the height above the baseline that CSS uses to lay out line boxes in an inline formatting context.
@@ -35616,6 +35799,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FontFaceSet")>]
     type FontFaceSet =
         inherit Web.EventTarget
         /// <summary>
@@ -35819,6 +36003,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FontFaceSetLoadEvent")>]
     type FontFaceSetLoadEvent =
         inherit Web.Event
         /// <summary>
@@ -35846,6 +36031,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FormData")>]
     type FormData =
         inherit Iterable<string * Web.FormDataEntryValue>
         /// <summary>
@@ -35929,6 +36115,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FormDataEvent")>]
     type FormDataEvent =
         inherit Web.Event
         /// <summary>
@@ -35945,6 +36132,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("FragmentDirective")>]
     type FragmentDirective = interface end
 
     /// <summary>
@@ -35955,6 +36143,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPU")>]
     type GPU =
         /// <summary>
         /// The **<c>wgslLanguageFeatures</c>** read-only property of the GPU interface returns a WGSLLanguageFeatures object that reports the WGSL language extensions supported by the WebGPU implementation.
@@ -35985,6 +36174,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUAdapter")>]
     type GPUAdapter =
         /// <summary>
         /// The **<c>features</c>** read-only property of the GPUAdapter interface returns a GPUSupportedFeatures object that describes additional functionality supported by the adapter.
@@ -36021,6 +36211,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUAdapterInfo")>]
     type GPUAdapterInfo =
         /// <summary>
         /// The **<c>architecture</c>** read-only property of the GPUAdapterInfo interface returns the name of the family or class of GPUs the adapter belongs to, or an empty string if it is not available.
@@ -36088,6 +36279,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUBindGroup")>]
     type GPUBindGroup =
         inherit Web.GPUObjectBase
 
@@ -36102,6 +36294,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUBindGroupLayout")>]
     type GPUBindGroupLayout =
         inherit Web.GPUObjectBase
 
@@ -36148,6 +36341,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUBuffer")>]
     type GPUBuffer =
         inherit Web.GPUObjectBase
         /// <summary>
@@ -36205,6 +36399,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUCanvasContext")>]
     type GPUCanvasContext =
         /// <summary>
         /// The **<c>canvas</c>** read-only property of the GPUCanvasContext interface returns a reference to the canvas that the context was created from.
@@ -36245,6 +36440,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUCommandBuffer")>]
     type GPUCommandBuffer =
         inherit Web.GPUObjectBase
 
@@ -36259,6 +36455,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUCommandEncoder")>]
     type GPUCommandEncoder =
         inherit Web.GPUDebugCommandsMixin
         inherit Web.GPUObjectBase
@@ -36468,6 +36665,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUCompilationInfo")>]
     type GPUCompilationInfo =
         /// <summary>
         /// The **<c>messages</c>** read-only property of the GPUCompilationInfo interface is an array of GPUCompilationMessage objects, each one containing the details of an individual shader compilation message. Messages can be informational, warnings, or errors.
@@ -36491,6 +36689,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUCompilationMessage")>]
     type GPUCompilationMessage =
         /// <summary>
         /// The **<c>length</c>** read-only property of the GPUCompilationMessage interface is a number representing the length of the substring that the message corresponds to.
@@ -36551,6 +36750,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUComputePassEncoder")>]
     type GPUComputePassEncoder =
         inherit Web.GPUBindingCommandsMixin
         inherit Web.GPUDebugCommandsMixin
@@ -36596,6 +36796,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUComputePipeline")>]
     type GPUComputePipeline =
         inherit Web.GPUObjectBase
         inherit Web.GPUPipelineBase
@@ -36645,6 +36846,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUDevice")>]
     type GPUDevice =
         inherit Web.EventTarget
         inherit Web.GPUObjectBase
@@ -36978,6 +37180,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUDeviceLostInfo")>]
     type GPUDeviceLostInfo =
         /// <summary>
         /// The **<c>message</c>** read-only property of the GPUDeviceLostInfo interface provides a human-readable message that explains why the device was lost.
@@ -37004,6 +37207,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUError")>]
     type GPUError =
         /// <summary>
         /// The **<c>message</c>** read-only property of the GPUError interface provides a human-readable message that explains why the error occurred.
@@ -37023,6 +37227,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUExternalTexture")>]
     type GPUExternalTexture =
         inherit Web.GPUObjectBase
 
@@ -37037,6 +37242,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUInternalError")>]
     type GPUInternalError =
         inherit Web.GPUError
 
@@ -37062,6 +37268,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUOutOfMemoryError")>]
     type GPUOutOfMemoryError =
         inherit Web.GPUError
 
@@ -37084,6 +37291,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUPipelineError")>]
     type GPUPipelineError =
         inherit Web.DOMException
         /// <summary>
@@ -37101,6 +37309,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUPipelineLayout")>]
     type GPUPipelineLayout =
         inherit Web.GPUObjectBase
 
@@ -37115,6 +37324,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUQuerySet")>]
     type GPUQuerySet =
         inherit Web.GPUObjectBase
         /// <summary>
@@ -37144,6 +37354,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUQueue")>]
     type GPUQueue =
         inherit Web.GPUObjectBase
 
@@ -37280,6 +37491,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPURenderBundle")>]
     type GPURenderBundle =
         inherit Web.GPUObjectBase
 
@@ -37294,6 +37506,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPURenderBundleEncoder")>]
     type GPURenderBundleEncoder =
         inherit Web.GPUBindingCommandsMixin
         inherit Web.GPUDebugCommandsMixin
@@ -37375,6 +37588,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPURenderPassEncoder")>]
     type GPURenderPassEncoder =
         inherit Web.GPUBindingCommandsMixin
         inherit Web.GPUDebugCommandsMixin
@@ -37472,6 +37686,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPURenderPipeline")>]
     type GPURenderPipeline =
         inherit Web.GPUObjectBase
         inherit Web.GPUPipelineBase
@@ -37484,6 +37699,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUSampler")>]
     type GPUSampler =
         inherit Web.GPUObjectBase
 
@@ -37498,6 +37714,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUShaderModule")>]
     type GPUShaderModule =
         inherit Web.GPUObjectBase
         /// <summary>
@@ -37515,6 +37732,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUSupportedFeatures")>]
     type GPUSupportedFeatures =
         abstract member forEach:
             callbackfn: GPUSupportedFeatures.forEach.callbackfn * ?thisArg: obj -> unit
@@ -37527,6 +37745,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUSupportedLimits")>]
     type GPUSupportedLimits =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedLimits#instance_properties)
@@ -37708,6 +37927,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUTexture")>]
     type GPUTexture =
         inherit Web.GPUObjectBase
         /// <summary>
@@ -37779,6 +37999,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUTextureView")>]
     type GPUTextureView =
         inherit Web.GPUObjectBase
 
@@ -37793,6 +38014,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUUncapturedErrorEvent")>]
     type GPUUncapturedErrorEvent =
         inherit Web.Event
         /// <summary>
@@ -37810,6 +38032,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GPUValidationError")>]
     type GPUValidationError =
         inherit Web.GPUError
 
@@ -37823,6 +38046,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GainNode")>]
     type GainNode =
         inherit Web.AudioNode
         /// <summary>
@@ -37839,6 +38063,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Gamepad")>]
     type Gamepad =
         /// <summary>
         /// The **<c>Gamepad.axes</c>** property of the Gamepad interface returns an array representing the controls with axes present on the device (e.g., analog thumb sticks).
@@ -37912,6 +38137,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GamepadButton")>]
     type GamepadButton =
         /// <summary>
         /// The **<c>GamepadButton.pressed</c>** property of the GamepadButton interface returns a boolean indicating whether the button is currently pressed (true) or unpressed (false).
@@ -37943,6 +38169,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GamepadEvent")>]
     type GamepadEvent =
         inherit Web.Event
         /// <summary>
@@ -37959,6 +38186,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GamepadHapticActuator")>]
     type GamepadHapticActuator =
         /// <summary>
         /// The **<c>playEffect()</c>** method of the GamepadHapticActuator interface causes the hardware to play a specific vibration effect.
@@ -38002,6 +38230,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Geolocation")>]
     type Geolocation =
         /// <summary>
         /// The **<c>clearWatch()</c>** method of the Geolocation interface is used to unregister location/error monitoring handlers previously installed using Geolocation.watchPosition().
@@ -38040,6 +38269,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GeolocationCoordinates")>]
     type GeolocationCoordinates =
         /// <summary>
         /// The **<c>accuracy</c>** read-only property of the GeolocationCoordinates interface is a strictly positive double representing the accuracy, with a 95% confidence level, of the GeolocationCoordinates.latitude and GeolocationCoordinates.longitude properties expressed in meters.
@@ -38098,6 +38328,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GeolocationPosition")>]
     type GeolocationPosition =
         /// <summary>
         /// The **<c>coords</c>** read-only property of the GeolocationPosition interface returns a GeolocationCoordinates object representing a geographic position. It contains the location, that is longitude and latitude on the Earth, the altitude, and the speed of the object concerned, regrouped inside the returned value. It also contains accuracy information about these values.
@@ -38125,6 +38356,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("GeolocationPositionError")>]
     type GeolocationPositionError =
         /// <summary>
         /// The **<c>code</c>** read-only property of the GeolocationPositionError interface is an unsigned short representing the error code.
@@ -39191,6 +39423,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLAllCollection")>]
     type HTMLAllCollection =
         inherit Iterable<Web.Element>
         /// <summary>
@@ -39222,6 +39455,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLAnchorElement")>]
     type HTMLAnchorElement =
         inherit Web.HTMLElement
         inherit Web.HTMLHyperlinkElementUtils
@@ -39444,6 +39678,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLAreaElement")>]
     type HTMLAreaElement =
         inherit Web.HTMLElement
         inherit Web.HTMLHyperlinkElementUtils
@@ -39664,6 +39899,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLAudioElement")>]
     type HTMLAudioElement =
         inherit Web.HTMLMediaElement
 
@@ -39830,6 +40066,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLBRElement")>]
     type HTMLBRElement =
         inherit Web.HTMLElement
 
@@ -39999,6 +40236,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLBaseElement")>]
     type HTMLBaseElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -40713,6 +40951,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLBodyElement")>]
     type HTMLBodyElement =
         inherit Web.HTMLElement
         inherit Web.WindowEventHandlers
@@ -40898,6 +41137,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLButtonElement")>]
     type HTMLButtonElement =
         inherit Web.HTMLElement
         inherit Web.PopoverTargetAttributes
@@ -41179,6 +41419,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLCanvasElement")>]
     type HTMLCanvasElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -41456,6 +41697,7 @@ module Web =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLCollection")>]
     type HTMLCollection =
         inherit Web.HTMLCollectionBase
         /// <summary>
@@ -41487,6 +41729,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDListElement")>]
     type HTMLDListElement =
         inherit Web.HTMLElement
 
@@ -41659,6 +41902,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDataElement")>]
     type HTMLDataElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -41831,6 +42075,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDataListElement")>]
     type HTMLDataListElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -42003,6 +42248,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDetailsElement")>]
     type HTMLDetailsElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -42181,6 +42427,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDialogElement")>]
     type HTMLDialogElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -42385,6 +42632,7 @@ module Web =
     [<Obsolete>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDirectoryElement")>]
     type HTMLDirectoryElement =
         inherit Web.HTMLElement
 
@@ -42554,6 +42802,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDivElement")>]
     type HTMLDivElement =
         inherit Web.HTMLElement
 
@@ -42721,6 +42970,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLDocument")>]
     type HTMLDocument =
         inherit Web.Document
 
@@ -43341,6 +43591,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLElement")>]
     type HTMLElement =
         inherit Web.Element
         inherit Web.ElementCSSInlineStyle
@@ -43680,6 +43931,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLEmbedElement")>]
     type HTMLEmbedElement =
         inherit Web.HTMLElement
 
@@ -43884,6 +44136,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLFieldSetElement")>]
     type HTMLFieldSetElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -44115,6 +44368,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFontElement)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLFontElement")>]
     type HTMLFontElement =
         inherit Web.HTMLElement
 
@@ -44299,6 +44553,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLFormControlsCollection")>]
     type HTMLFormControlsCollection =
         inherit Web.HTMLCollectionBase
         /// <summary>
@@ -44315,6 +44570,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLFormElement")>]
     type HTMLFormElement =
         inherit Web.HTMLElement
         inherit Iterable<Web.Element>
@@ -44592,6 +44848,7 @@ module Web =
     [<Obsolete>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLFrameElement")>]
     type HTMLFrameElement =
         inherit Web.HTMLElement
 
@@ -45323,6 +45580,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameSetElement)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLFrameSetElement")>]
     type HTMLFrameSetElement =
         inherit Web.HTMLElement
         inherit Web.WindowEventHandlers
@@ -45500,6 +45758,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLHRElement")>]
     type HTMLHRElement =
         inherit Web.HTMLElement
 
@@ -45681,6 +45940,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLHeadElement")>]
     type HTMLHeadElement =
         inherit Web.HTMLElement
 
@@ -45847,6 +46107,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLHeadingElement")>]
     type HTMLHeadingElement =
         inherit Web.HTMLElement
 
@@ -46016,6 +46277,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLHtmlElement")>]
     type HTMLHtmlElement =
         inherit Web.HTMLElement
 
@@ -46205,6 +46467,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLIFrameElement")>]
     type HTMLIFrameElement =
         inherit Web.HTMLElement
 
@@ -46471,6 +46734,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLImageElement")>]
     type HTMLImageElement =
         inherit Web.HTMLElement
 
@@ -46801,6 +47065,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLInputElement")>]
     type HTMLInputElement =
         inherit Web.HTMLElement
         inherit Web.PopoverTargetAttributes
@@ -47324,6 +47589,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLLIElement")>]
     type HTMLLIElement =
         inherit Web.HTMLElement
 
@@ -47500,6 +47766,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLLabelElement")>]
     type HTMLLabelElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -47684,6 +47951,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLLegendElement")>]
     type HTMLLegendElement =
         inherit Web.HTMLElement
 
@@ -47860,6 +48128,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLLinkElement")>]
     type HTMLLinkElement =
         inherit Web.HTMLElement
         inherit Web.LinkStyle
@@ -48135,6 +48404,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLMapElement")>]
     type HTMLMapElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -48312,6 +48582,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMarqueeElement)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLMarqueeElement")>]
     type HTMLMarqueeElement =
         inherit Web.HTMLElement
 
@@ -48982,6 +49253,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLMediaElement")>]
     type HTMLMediaElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -49406,6 +49678,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLMenuElement")>]
     type HTMLMenuElement =
         inherit Web.HTMLElement
 
@@ -49578,6 +49851,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLMetaElement")>]
     type HTMLMetaElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -49774,6 +50048,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLMeterElement")>]
     type HTMLMeterElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -49982,6 +50257,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLModElement")>]
     type HTMLModElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -50160,6 +50436,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLOListElement")>]
     type HTMLOListElement =
         inherit Web.HTMLElement
 
@@ -50351,6 +50628,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLObjectElement")>]
     type HTMLObjectElement =
         inherit Web.HTMLElement
 
@@ -50649,6 +50927,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLOptGroupElement")>]
     type HTMLOptGroupElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -50827,6 +51106,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLOptionElement")>]
     type HTMLOptionElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -51041,6 +51321,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLOptionsCollection")>]
     type HTMLOptionsCollection =
         inherit Web.HTMLCollectionOf<Web.HTMLOptionElement>
         /// <summary>
@@ -51138,6 +51419,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLOutputElement")>]
     type HTMLOutputElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -51382,6 +51664,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLParagraphElement")>]
     type HTMLParagraphElement =
         inherit Web.HTMLElement
 
@@ -51550,6 +51833,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParamElement)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLParamElement")>]
     type HTMLParamElement =
         inherit Web.HTMLElement
 
@@ -51728,6 +52012,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLPictureElement")>]
     type HTMLPictureElement =
         inherit Web.HTMLElement
 
@@ -51894,6 +52179,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLPreElement")>]
     type HTMLPreElement =
         inherit Web.HTMLElement
 
@@ -52063,6 +52349,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLProgressElement")>]
     type HTMLProgressElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -52253,6 +52540,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLQuoteElement")>]
     type HTMLQuoteElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -52425,6 +52713,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLScriptElement")>]
     type HTMLScriptElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -52669,6 +52958,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLSelectElement")>]
     type HTMLSelectElement =
         inherit Web.HTMLElement
         inherit Iterable<Web.HTMLOptionElement>
@@ -53025,6 +53315,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLSlotElement")>]
     type HTMLSlotElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -53218,6 +53509,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLSourceElement")>]
     type HTMLSourceElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -53426,6 +53718,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLSpanElement")>]
     type HTMLSpanElement =
         inherit Web.HTMLElement
 
@@ -53592,6 +53885,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLStyleElement")>]
     type HTMLStyleElement =
         inherit Web.HTMLElement
         inherit Web.LinkStyle
@@ -53783,6 +54077,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTableCaptionElement")>]
     type HTMLTableCaptionElement =
         inherit Web.HTMLElement
 
@@ -53955,6 +54250,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTableCellElement")>]
     type HTMLTableCellElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -54205,6 +54501,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTableColElement")>]
     type HTMLTableColElement =
         inherit Web.HTMLElement
 
@@ -54567,6 +54864,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTableElement")>]
     type HTMLTableElement =
         inherit Web.HTMLElement
 
@@ -55037,6 +55335,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTableRowElement")>]
     type HTMLTableRowElement =
         inherit Web.HTMLElement
 
@@ -55266,6 +55565,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTableSectionElement")>]
     type HTMLTableSectionElement =
         inherit Web.HTMLElement
 
@@ -55476,6 +55776,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTemplateElement")>]
     type HTMLTemplateElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -55678,6 +55979,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTextAreaElement")>]
     type HTMLTextAreaElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -56035,6 +56337,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTimeElement")>]
     type HTMLTimeElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -56207,6 +56510,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTitleElement")>]
     type HTMLTitleElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -56379,6 +56683,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLTrackElement")>]
     type HTMLTrackElement =
         inherit Web.HTMLElement
         /// <summary>
@@ -56591,6 +56896,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLUListElement")>]
     type HTMLUListElement =
         inherit Web.HTMLElement
 
@@ -56766,6 +57072,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLUnknownElement")>]
     type HTMLUnknownElement =
         inherit Web.HTMLElement
 
@@ -57405,6 +57712,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HTMLVideoElement")>]
     type HTMLVideoElement =
         inherit Web.HTMLMediaElement
         /// <summary>
@@ -57640,6 +57948,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HashChangeEvent")>]
     type HashChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -57662,6 +57971,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Headers")>]
     type Headers =
         inherit Iterable<string * string>
         /// <summary>
@@ -57721,6 +58031,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Highlight")>]
     type Highlight =
         /// <summary>
         /// The **<c>priority</c>** property of the Highlight interface is a number used to determine which highlight's styles should be used to resolve style conflicts in overlapping parts. Highlights with a higher priority number have preference over those with a lower priority.
@@ -57743,6 +58054,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("HighlightRegistry")>]
     type HighlightRegistry =
         /// <summary>
         /// The **<c>highlightsFromPoint()</c>** method of the HighlightRegistry interface returns an array of objects representing the custom highlights applied at a specific point within the viewport.
@@ -57763,6 +58075,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("History")>]
     type History =
         /// <summary>
         /// The **<c>length</c>** read-only property of the History interface returns an integer representing the number of entries in the session history, including the currently loaded page.
@@ -57940,6 +58253,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBCursor")>]
     type IDBCursor =
         /// <summary>
         /// The **<c>direction</c>** read-only property of the IDBCursor interface is a string that returns the direction of traversal of the cursor (set using IDBObjectStore.openCursor for example). See the Value section below for possible values.
@@ -58076,6 +58390,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBCursorWithValue")>]
     type IDBCursorWithValue =
         inherit Web.IDBCursor
         /// <summary>
@@ -58133,6 +58448,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBDatabase")>]
     type IDBDatabase =
         inherit Web.EventTarget
         /// <summary>
@@ -58404,6 +58720,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBFactory")>]
     type IDBFactory =
         /// <summary>
         /// The **<c>cmp()</c>** method of the IDBFactory interface compares two values as keys to determine equality and ordering for IndexedDB operations, such as storing and iterating.
@@ -58437,6 +58754,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBIndex")>]
     type IDBIndex =
         /// <summary>
         /// The **<c>keyPath</c>** property of the IDBIndex interface returns the key path of the current index. If null, this index is not auto-populated.
@@ -58842,6 +59160,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBKeyRange")>]
     type IDBKeyRange =
         /// <summary>
         /// The **<c>lower</c>** read-only property of the IDBKeyRange interface returns the lower bound of the key range.
@@ -58881,6 +59200,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBObjectStore")>]
     type IDBObjectStore =
         /// <summary>
         /// The **<c>autoIncrement</c>** read-only property of the IDBObjectStore interface returns the value of the auto increment flag for this object store.
@@ -59511,6 +59831,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBOpenDBRequest")>]
     type IDBOpenDBRequest =
         inherit Web.IDBRequest<Web.IDBDatabase>
         /// <summary>
@@ -59709,6 +60030,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBRequest")>]
     type IDBRequest<'T> =
         inherit Web.EventTarget
         /// <summary>
@@ -59945,6 +60267,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBTransaction")>]
     type IDBTransaction =
         inherit Web.EventTarget
         /// <summary>
@@ -60171,6 +60494,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IDBVersionChangeEvent")>]
     type IDBVersionChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -60193,6 +60517,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IIRFilterNode")>]
     type IIRFilterNode =
         inherit Web.AudioNode
 
@@ -60214,6 +60539,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IdleDeadline")>]
     type IdleDeadline =
         /// <summary>
         /// The read-only **<c>didTimeout</c>** property on the IdleDeadline interface is a Boolean value which indicates whether or not the idle callback is being invoked because the timeout interval specified when Window.requestIdleCallback() was called has expired.
@@ -60235,6 +60561,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageBitmap")>]
     type ImageBitmap =
         /// <summary>
         /// The **<c>ImageBitmap.height</c>** read-only property returns the ImageBitmap object's height in CSS pixels.
@@ -60262,6 +60589,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageBitmapRenderingContext")>]
     type ImageBitmapRenderingContext =
         /// <summary>
         /// The **<c>ImageBitmapRenderingContext.canvas</c>** property, part of the Canvas API, is a read-only reference to the HTMLCanvasElement or OffscreenCanvas object that is associated with the given context.
@@ -60284,6 +60612,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageCapture")>]
     type ImageCapture =
         /// <summary>
         /// The **<c>track</c>** read-only property of the ImageCapture interface returns a reference to the MediaStreamTrack passed to the ImageCapture() constructor.
@@ -60323,6 +60652,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageData")>]
     type ImageData =
         /// <summary>
         /// The read-only **<c>ImageData.colorSpace</c>** property is a string indicating the color space of the image data.
@@ -60369,6 +60699,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageDecoder")>]
     type ImageDecoder =
         /// <summary>
         /// The **<c>complete</c>** read-only property of the ImageDecoder interface returns true if encoded data has completed buffering.
@@ -60424,6 +60755,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageTrack")>]
     type ImageTrack =
         /// <summary>
         /// The **<c>animated</c>** property of the ImageTrack interface returns true if the track is animated and therefore has multiple frames.
@@ -60465,6 +60797,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ImageTrackList")>]
     type ImageTrackList =
         inherit Iterable<Web.ImageTrack>
         /// <summary>
@@ -60509,6 +60842,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("InputDeviceInfo")>]
     type InputDeviceInfo =
         inherit Web.MediaDeviceInfo
         /// <summary>
@@ -60525,6 +60859,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("InputEvent")>]
     type InputEvent =
         inherit Web.UIEvent
         /// <summary>
@@ -60565,6 +60900,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IntersectionObserver")>]
     type IntersectionObserver =
         /// <summary>
         /// The **<c>root</c>** read-only property of the IntersectionObserver interface identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target.
@@ -60622,6 +60958,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("IntersectionObserverEntry")>]
     type IntersectionObserverEntry =
         /// <summary>
         /// The **<c>boundingClientRect</c>** read-only property of the IntersectionObserverEntry interface returns a DOMRectReadOnly which in essence describes a rectangle describing the smallest rectangle that contains the entire target element.
@@ -60701,6 +61038,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("KeyboardEvent")>]
     type KeyboardEvent =
         inherit Web.UIEvent
         /// <summary>
@@ -60807,6 +61145,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("KeyframeEffect")>]
     type KeyframeEffect =
         inherit Web.AnimationEffect
         /// <summary>
@@ -60867,6 +61206,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("LargestContentfulPaint")>]
     type LargestContentfulPaint =
         inherit Web.PerformanceEntry
         inherit Web.PaintTimingMixin
@@ -60931,6 +61271,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Location")>]
     type Location =
         /// <summary>
         /// The **<c>ancestorOrigins</c>** read-only property of the Location interface is a static DOMStringList containing, in reverse order, the origins of all ancestor browsing contexts of the document associated with the given Location object.
@@ -61044,6 +61385,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Lock")>]
     type Lock =
         /// <summary>
         /// The **<c>mode</c>** read-only property of the Lock interface returns the access mode passed to LockManager.request() when the lock was requested. The mode is either "exclusive" (the default) or "shared".
@@ -61069,6 +61411,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("LockManager")>]
     type LockManager =
         /// <summary>
         /// The **<c>query()</c>** method of the LockManager interface returns a Promise that resolves with an object containing information about held and pending locks.
@@ -61122,6 +61465,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIAccess")>]
     type MIDIAccess =
         inherit Web.EventTarget
         /// <summary>
@@ -61311,6 +61655,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIConnectionEvent")>]
     type MIDIConnectionEvent =
         inherit Web.Event
         /// <summary>
@@ -61356,6 +61701,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIInput")>]
     type MIDIInput =
         inherit Web.MIDIPort
         /// <summary>
@@ -61525,6 +61871,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIInputMap")>]
     type MIDIInputMap =
         abstract member forEach: callbackfn: MIDIInputMap.forEach.callbackfn * ?thisArg: obj -> unit
 
@@ -61536,6 +61883,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIMessageEvent")>]
     type MIDIMessageEvent =
         inherit Web.Event
         /// <summary>
@@ -61553,6 +61901,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIOutput")>]
     type MIDIOutput =
         inherit Web.MIDIPort
         /// <summary>
@@ -61731,6 +62080,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIOutputMap")>]
     type MIDIOutputMap =
         abstract member forEach:
             callbackfn: MIDIOutputMap.forEach.callbackfn * ?thisArg: obj -> unit
@@ -61763,6 +62113,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MIDIPort")>]
     type MIDIPort =
         inherit Web.EventTarget
         /// <summary>
@@ -62441,6 +62792,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MathMLElement")>]
     type MathMLElement =
         inherit Web.Element
         inherit Web.ElementCSSInlineStyle
@@ -62610,6 +62962,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaCapabilities")>]
     type MediaCapabilities =
         /// <summary>
         /// The **<c>decodingInfo()</c>** method of the MediaCapabilities interface returns a promise that fulfils with information about how well the user agent can decode/display media with a given configuration.
@@ -62637,6 +62990,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaDeviceInfo")>]
     type MediaDeviceInfo =
         /// <summary>
         /// The **<c>deviceId</c>** read-only property of the MediaDeviceInfo interface returns a string that is an identifier for the represented device and is persisted across sessions.
@@ -62697,6 +63051,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaDevices")>]
     type MediaDevices =
         inherit Web.EventTarget
         /// <summary>
@@ -62896,6 +63251,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaElementAudioSourceNode")>]
     type MediaElementAudioSourceNode =
         inherit Web.AudioNode
         /// <summary>
@@ -62912,6 +63268,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaEncryptedEvent")>]
     type MediaEncryptedEvent =
         inherit Web.Event
         /// <summary>
@@ -62934,6 +63291,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaError")>]
     type MediaError =
         /// <summary>
         /// The read-only property **<c>MediaError.code</c>** returns a numeric value which represents the kind of error that occurred on a media element. To get a text string with specific diagnostic information, see MediaError.message.
@@ -62974,6 +63332,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaKeyMessageEvent")>]
     type MediaKeyMessageEvent =
         inherit Web.Event
         /// <summary>
@@ -63025,6 +63384,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaKeySession")>]
     type MediaKeySession =
         inherit Web.EventTarget
         /// <summary>
@@ -63257,6 +63617,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaKeyStatusMap")>]
     type MediaKeyStatusMap =
         inherit Iterable<Web.BufferSource * Web.MediaKeyStatus>
         /// <summary>
@@ -63295,6 +63656,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaKeySystemAccess")>]
     type MediaKeySystemAccess =
         /// <summary>
         /// The **<c>keySystem</c>** read-only property of the MediaKeySystemAccess interface returns a string identifying the key system being used.
@@ -63323,6 +63685,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaKeys")>]
     type MediaKeys =
         /// <summary>
         /// The **<c>createSession()</c>** method of the MediaKeys interface returns a new MediaKeySession object, which represents a context for message exchange with a content decryption module (CDM).
@@ -63354,6 +63717,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaList")>]
     type MediaList =
         inherit Iterable<string>
         /// <summary>
@@ -63398,6 +63762,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaMetadata")>]
     type MediaMetadata =
         /// <summary>
         /// The **<c>album</c>** property of the MediaMetadata interface returns or sets the name of the album or collection containing the media to be played.
@@ -63458,6 +63823,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaQueryList")>]
     type MediaQueryList =
         inherit Web.EventTarget
         /// <summary>
@@ -63652,6 +64018,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaQueryListEvent")>]
     type MediaQueryListEvent =
         inherit Web.Event
         /// <summary>
@@ -63725,6 +64092,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaRecorder")>]
     type MediaRecorder =
         inherit Web.EventTarget
         /// <summary>
@@ -63975,6 +64343,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaSession")>]
     type MediaSession =
         /// <summary>
         /// The **<c>metadata</c>** property of the MediaSession interface contains a MediaMetadata object providing descriptive information about the currently playing media, or null if the metadata has not been set. This metadata is provided by the browser to the device for presentation in any standard media control user interface the device might offer.
@@ -64055,6 +64424,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaSource")>]
     type MediaSource =
         inherit Web.EventTarget
         /// <summary>
@@ -64287,6 +64657,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaSourceHandle")>]
     type MediaSourceHandle = interface end
 
     [<AllowNullLiteral>]
@@ -64324,6 +64695,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaStream")>]
     type MediaStream =
         inherit Web.EventTarget
         /// <summary>
@@ -64552,6 +64924,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaStreamAudioDestinationNode")>]
     type MediaStreamAudioDestinationNode =
         inherit Web.AudioNode
         /// <summary>
@@ -64568,6 +64941,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaStreamAudioSourceNode")>]
     type MediaStreamAudioSourceNode =
         inherit Web.AudioNode
         /// <summary>
@@ -64616,6 +64990,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaStreamTrack")>]
     type MediaStreamTrack =
         inherit Web.EventTarget
         /// <summary>
@@ -64875,6 +65250,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MediaStreamTrackEvent")>]
     type MediaStreamTrackEvent =
         inherit Web.Event
         /// <summary>
@@ -64891,6 +65267,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MessageChannel")>]
     type MessageChannel =
         /// <summary>
         /// The **<c>port1</c>** read-only property of the MessageChannel interface returns the first port of the message channel — the port attached to the context that originated the channel.
@@ -64916,6 +65293,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MessageEvent")>]
     type MessageEvent<'T> =
         inherit Web.Event
         /// <summary>
@@ -65119,6 +65497,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MessagePort")>]
     type MessagePort =
         inherit Web.EventTarget
         inherit Web.MessageEventTarget<Web.MessagePort>
@@ -65309,6 +65688,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeType)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MimeType")>]
     type MimeType =
         /// <summary>
         /// Returns the MIME type's description.
@@ -65347,6 +65727,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeTypeArray)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MimeTypeArray")>]
     type MimeTypeArray =
         inherit Iterable<Web.MimeType>
 
@@ -65369,6 +65750,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MouseEvent")>]
     type MouseEvent =
         inherit Web.UIEvent
         /// <summary>
@@ -65533,6 +65915,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MutationObserver")>]
     type MutationObserver =
         /// <summary>
         /// The MutationObserver method **<c>disconnect()</c>** tells the observer to stop watching for mutations.
@@ -65560,6 +65943,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("MutationRecord")>]
     type MutationRecord =
         /// <summary>
         /// The MutationRecord read-only property **<c>addedNodes</c>** is a NodeList of nodes added to a target node by a mutation observed with a MutationObserver.
@@ -65640,6 +66024,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NamedNodeMap")>]
     type NamedNodeMap =
         inherit Iterable<Web.Attr>
         /// <summary>
@@ -65707,6 +66092,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigateEvent")>]
     type NavigateEvent =
         inherit Web.Event
         /// <summary>
@@ -65837,6 +66223,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Navigation")>]
     type Navigation =
         inherit Web.EventTarget
         /// <summary>
@@ -66114,6 +66501,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationActivation")>]
     type NavigationActivation =
         /// <summary>
         /// The **<c>entry</c>** read-only property of the NavigationActivation interface contains a NavigationHistoryEntry object representing the history entry for the inbound ("to") document in the navigation. This is equivalent to the Navigation.currentEntry property at the moment the inbound document was activated.
@@ -66152,6 +66540,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationCurrentEntryChangeEvent")>]
     type NavigationCurrentEntryChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -66174,6 +66563,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationDestination")>]
     type NavigationDestination =
         /// <summary>
         /// The **<c>id</c>** read-only property of the NavigationDestination interface returns the id value of the destination NavigationHistoryEntry if the NavigateEvent.navigationType is traverse, or an empty string otherwise.
@@ -66239,6 +66629,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationHistoryEntry")>]
     type NavigationHistoryEntry =
         inherit Web.EventTarget
         /// <summary>
@@ -66449,6 +66840,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationPrecommitController")>]
     type NavigationPrecommitController =
         /// <summary>
         /// The **<c>addHandler()</c>** method of the NavigationPrecommitController interface allows you to dynamically add a handler callback function in precommit code, which will then be run after the navigation has committed.
@@ -66485,6 +66877,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationPreloadManager")>]
     type NavigationPreloadManager =
         /// <summary>
         /// The **<c>disable()</c>** method of the NavigationPreloadManager interface halts the automatic preloading of service-worker-managed resources previously started using enable() It returns a promise that resolves with undefined.
@@ -66518,6 +66911,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigationTransition")>]
     type NavigationTransition =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationTransition/committed)
@@ -66561,6 +66955,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Navigator")>]
     type Navigator =
         inherit Web.NavigatorAutomationInformation
         inherit Web.NavigatorBadge
@@ -67001,6 +67396,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NavigatorLogin")>]
     type NavigatorLogin =
         /// <summary>
         /// The **<c>setStatus()</c>** method of the NavigatorLogin interface sets the login status of a federated identity provider (IdP), when called from the IdP's origin. By this, we mean "whether any users are logged into the IdP on the current browser or not". This should be called by the IdP site following a user login or logout.
@@ -67061,6 +67457,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Node")>]
     type Node =
         inherit Web.EventTarget
         /// <summary>
@@ -67302,6 +67699,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NodeIterator")>]
     type NodeIterator =
         /// <summary>
         /// The **<c>NodeIterator.filter</c>** read-only property returns a NodeFilter object, that is an object which implements an acceptNode(node) method, used to screen nodes.
@@ -67360,6 +67758,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("NodeList")>]
     type NodeList =
         inherit Iterable<Web.Node>
         /// <summary>
@@ -67498,6 +67897,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Notification")>]
     type Notification =
         inherit Web.EventTarget
         /// <summary>
@@ -67955,6 +68355,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("OfflineAudioCompletionEvent")>]
     type OfflineAudioCompletionEvent =
         inherit Web.Event
         /// <summary>
@@ -67999,6 +68400,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("OfflineAudioContext")>]
     type OfflineAudioContext =
         inherit Web.BaseAudioContext
         /// <summary>
@@ -68225,6 +68627,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("OffscreenCanvas")>]
     type OffscreenCanvas =
         inherit Web.EventTarget
         /// <summary>
@@ -68474,6 +68877,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("OffscreenCanvasRenderingContext2D")>]
     type OffscreenCanvasRenderingContext2D =
         inherit Web.CanvasCompositing
         inherit Web.CanvasDrawImage
@@ -68497,6 +68901,7 @@ module Web =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Origin")>]
     type Origin =
         abstract member opaque: bool with get
         abstract member isSameOrigin: other: Web.Origin -> bool
@@ -68509,6 +68914,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("OscillatorNode")>]
     type OscillatorNode =
         inherit Web.AudioScheduledSourceNode
         /// <summary>
@@ -68703,6 +69109,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("OverconstrainedError")>]
     type OverconstrainedError =
         inherit Web.DOMException
         /// <summary>
@@ -68719,6 +69126,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PageRevealEvent")>]
     type PageRevealEvent =
         inherit Web.Event
         /// <summary>
@@ -68735,6 +69143,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PageSwapEvent")>]
     type PageSwapEvent =
         inherit Web.Event
         /// <summary>
@@ -68757,6 +69166,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PageTransitionEvent")>]
     type PageTransitionEvent =
         inherit Web.Event
         /// <summary>
@@ -68792,6 +69202,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PannerNode")>]
     type PannerNode =
         inherit Web.AudioNode
         /// <summary>
@@ -69042,6 +69453,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Path2D")>]
     type Path2D =
         inherit Web.CanvasPath
         /// <summary>
@@ -69058,6 +69470,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PaymentAddress")>]
     type PaymentAddress =
         /// <summary>
         /// The **<c>addressLine</c>** read-only property of the ContactAddress interface is an array of strings, each specifying a line of the address that is not covered by one of the other properties of ContactAddress. The array may include the street name, the house number, apartment number, the rural delivery route, descriptive instructions, or the post office box.
@@ -69134,6 +69547,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PaymentMethodChangeEvent")>]
     type PaymentMethodChangeEvent =
         inherit Web.PaymentRequestUpdateEvent
         /// <summary>
@@ -69195,6 +69609,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PaymentRequest")>]
     type PaymentRequest =
         inherit Web.EventTarget
         /// <summary>
@@ -69430,6 +69845,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PaymentRequestUpdateEvent")>]
     type PaymentRequestUpdateEvent =
         inherit Web.Event
         /// <summary>
@@ -69483,6 +69899,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PaymentResponse")>]
     type PaymentResponse =
         inherit Web.EventTarget
         /// <summary>
@@ -69739,6 +70156,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Performance")>]
     type Performance =
         inherit Web.EventTarget
         /// <summary>
@@ -70034,6 +70452,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceEntry")>]
     type PerformanceEntry =
         /// <summary>
         /// The read-only **<c>duration</c>** property returns a timestamp that is the duration of the performance entry. The meaning of this property depends on the value of this entry's entryType.
@@ -70073,6 +70492,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceEventTiming")>]
     type PerformanceEventTiming =
         inherit Web.PerformanceEntry
         /// <summary>
@@ -70119,6 +70539,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceMark")>]
     type PerformanceMark =
         inherit Web.PerformanceEntry
         /// <summary>
@@ -70135,6 +70556,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceMeasure")>]
     type PerformanceMeasure =
         inherit Web.PerformanceEntry
         /// <summary>
@@ -70150,6 +70572,7 @@ module Web =
     [<Obsolete("This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceNavigation)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceNavigation")>]
     type PerformanceNavigation =
         /// <summary>
         /// The legacy **<c>PerformanceNavigation.redirectCount</c>** read-only property returns an unsigned short representing the number of REDIRECTs done before reaching the page.
@@ -70181,6 +70604,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceNavigationTiming")>]
     type PerformanceNavigationTiming =
         inherit Web.PerformanceResourceTiming
         /// <summary>
@@ -70257,6 +70681,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceObserver")>]
     type PerformanceObserver =
         /// <summary>
         /// The **<c>disconnect()</c>** method of the PerformanceObserver interface is used to stop the performance observer from receiving any performance entry events.
@@ -70284,6 +70709,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceObserverEntryList")>]
     type PerformanceObserverEntryList =
         /// <summary>
         /// The **<c>getEntries()</c>** method of the PerformanceObserverEntryList interface returns a list of explicitly observed performance entry objects. The list's members are determined by the set of entry types specified in the call to the observe() method. The list is available in the observer's callback function (as the first parameter in the callback).
@@ -70314,6 +70740,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformancePaintTiming")>]
     type PerformancePaintTiming =
         inherit Web.PerformanceEntry
         inherit Web.PaintTimingMixin
@@ -70331,6 +70758,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceResourceTiming")>]
     type PerformanceResourceTiming =
         inherit Web.PerformanceEntry
         /// <summary>
@@ -70485,6 +70913,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceServerTiming")>]
     type PerformanceServerTiming =
         /// <summary>
         /// The **<c>description</c>** read-only property returns a string value of the server-specified metric description, or an empty string.
@@ -70517,6 +70946,7 @@ module Web =
     [<Obsolete("This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceTiming)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PerformanceTiming")>]
     type PerformanceTiming =
         /// <summary>
         /// The legacy **<c>PerformanceTiming.connectEnd</c>** read-only property returns an unsigned long long representing the moment, in milliseconds since the UNIX epoch, where the connection is opened network. If the transport layer reports an error and the connection establishment is started again, the last connection establishment end time is given. If a persistent connection is used, the value will be the same as PerformanceTiming.fetchStart. A connection is considered as opened when all secure connection handshake, or SOCKS authentication, is terminated.
@@ -70657,6 +71087,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PeriodicWave")>]
     type PeriodicWave = interface end
 
     [<AllowNullLiteral>]
@@ -70686,6 +71117,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PermissionStatus")>]
     type PermissionStatus =
         inherit Web.EventTarget
         /// <summary>
@@ -70868,6 +71300,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Permissions")>]
     type Permissions =
         /// <summary>
         /// The **<c>query()</c>** method of the Permissions interface returns the state of a user permission on the global scope.
@@ -70884,6 +71317,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PictureInPictureEvent")>]
     type PictureInPictureEvent =
         inherit Web.Event
         /// <summary>
@@ -70920,6 +71354,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PictureInPictureWindow")>]
     type PictureInPictureWindow =
         inherit Web.EventTarget
         /// <summary>
@@ -71105,6 +71540,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/Plugin)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Plugin")>]
     type Plugin =
         inherit Iterable<Web.MimeType>
 
@@ -71150,6 +71586,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/PluginArray)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PluginArray")>]
     type PluginArray =
         inherit Iterable<Web.Plugin>
 
@@ -71175,6 +71612,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PointerEvent")>]
     type PointerEvent =
         inherit Web.MouseEvent
         /// <summary>
@@ -71276,6 +71714,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PopStateEvent")>]
     type PopStateEvent =
         inherit Web.Event
         /// <summary>
@@ -71321,6 +71760,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ProcessingInstruction")>]
     type ProcessingInstruction =
         inherit Web.CharacterData
         inherit Web.LinkStyle
@@ -71338,6 +71778,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ProgressEvent")>]
     type ProgressEvent<'T> =
         inherit Web.Event
         /// <summary>
@@ -71372,6 +71813,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PromiseRejectionEvent")>]
     type PromiseRejectionEvent =
         inherit Web.Event
         /// <summary>
@@ -71395,6 +71837,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PublicKeyCredential")>]
     type PublicKeyCredential =
         inherit Web.Credential
         /// <summary>
@@ -71438,6 +71881,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PushManager")>]
     type PushManager =
         /// <summary>
         /// The **<c>PushManager.getSubscription()</c>** method of the PushManager interface retrieves an existing push subscription.
@@ -71484,6 +71928,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PushSubscription")>]
     type PushSubscription =
         /// <summary>
         /// The **<c>endpoint</c>** read-only property of the PushSubscription interface returns a string containing the endpoint associated with the push subscription.
@@ -71530,6 +71975,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("PushSubscriptionOptions")>]
     type PushSubscriptionOptions =
         /// <summary>
         /// The **<c>applicationServerKey</c>** read-only property of the PushSubscriptionOptions interface contains the public key used by the push server.
@@ -71558,6 +72004,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCCertificate")>]
     type RTCCertificate =
         /// <summary>
         /// The read-only **<c>expires</c>** property of the RTCCertificate interface returns the expiration date of the certificate.
@@ -71600,6 +72047,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCDTMFSender")>]
     type RTCDTMFSender =
         inherit Web.EventTarget
         /// <summary>
@@ -71788,6 +72236,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCDTMFToneChangeEvent")>]
     type RTCDTMFToneChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -71855,6 +72304,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCDataChannel")>]
     type RTCDataChannel =
         inherit Web.EventTarget
         /// <summary>
@@ -72135,6 +72585,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCDataChannelEvent")>]
     type RTCDataChannelEvent =
         inherit Web.Event
         /// <summary>
@@ -72179,6 +72630,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCDtlsTransport")>]
     type RTCDtlsTransport =
         inherit Web.EventTarget
         /// <summary>
@@ -72366,6 +72818,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCEncodedAudioFrame")>]
     type RTCEncodedAudioFrame =
         /// <summary>
         /// The **<c>data</c>** property of the RTCEncodedAudioFrame interface returns a buffer containing the data for an encoded frame.
@@ -72393,6 +72846,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCEncodedVideoFrame")>]
     type RTCEncodedVideoFrame =
         /// <summary>
         /// The **<c>data</c>** property of the RTCEncodedVideoFrame interface returns a buffer containing the frame data.
@@ -72426,6 +72880,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCError")>]
     type RTCError =
         inherit Web.DOMException
         /// <summary>
@@ -72466,6 +72921,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCErrorEvent")>]
     type RTCErrorEvent =
         inherit Web.Event
         /// <summary>
@@ -72482,6 +72938,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCIceCandidate")>]
     type RTCIceCandidate =
         /// <summary>
         /// The RTCIceCandidate interface's read-only **<c>address</c>** property is a string providing the IP address of the device which is the source of the candidate. The address is null by default if not otherwise specified.
@@ -72639,6 +73096,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCIceTransport")>]
     type RTCIceTransport =
         inherit Web.EventTarget
         /// <summary>
@@ -72908,6 +73366,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCPeerConnection")>]
     type RTCPeerConnection =
         inherit Web.EventTarget
         /// <summary>
@@ -73378,6 +73837,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCPeerConnectionIceErrorEvent")>]
     type RTCPeerConnectionIceErrorEvent =
         inherit Web.Event
         /// <summary>
@@ -73410,6 +73870,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCPeerConnectionIceEvent")>]
     type RTCPeerConnectionIceEvent =
         inherit Web.Event
         /// <summary>
@@ -73426,6 +73887,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCRtpReceiver")>]
     type RTCRtpReceiver =
         /// <summary>
         /// The **<c>jitterBufferTarget</c>** property of the RTCRtpReceiver interface is a DOMHighResTimeStamp that indicates the application's preferred duration, in milliseconds, for which the jitter buffer should hold media before playing it out.
@@ -73485,6 +73947,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCRtpScriptTransform")>]
     type RTCRtpScriptTransform = interface end
 
     /// <summary>
@@ -73494,6 +73957,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCRtpSender")>]
     type RTCRtpSender =
         /// <summary>
         /// The read-only **<c>dtmf</c>** property on the RTCRtpSender interface returns a RTCDTMFSender object which can be used to send DTMF tones over the RTCPeerConnection. See Using DTMF for details on how to make use of the returned RTCDTMFSender object.
@@ -73561,6 +74025,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCRtpTransceiver")>]
     type RTCRtpTransceiver =
         /// <summary>
         /// The read-only RTCRtpTransceiver property **<c>currentDirection</c>** is a string which indicates the current negotiated directionality of the transceiver.
@@ -73638,6 +74103,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCSctpTransport")>]
     type RTCSctpTransport =
         inherit Web.EventTarget
         /// <summary>
@@ -73832,6 +74298,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCSessionDescription")>]
     type RTCSessionDescription =
         /// <summary>
         /// The property **<c>RTCSessionDescription.sdp</c>** is a read-only string containing the SDP which describes the session.
@@ -73859,6 +74326,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCStatsReport")>]
     type RTCStatsReport =
         abstract member forEach:
             callbackfn: RTCStatsReport.forEach.callbackfn * ?thisArg: obj -> unit
@@ -73870,6 +74338,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RTCTrackEvent")>]
     type RTCTrackEvent =
         inherit Web.Event
         /// <summary>
@@ -73904,6 +74373,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RadioNodeList")>]
     type RadioNodeList =
         inherit Web.NodeListOf<Web.HTMLInputElement>
         /// <summary>
@@ -73920,6 +74390,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Range")>]
     type Range =
         inherit Web.AbstractRange
         /// <summary>
@@ -74080,6 +74551,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReadableByteStreamController")>]
     type ReadableByteStreamController =
         /// <summary>
         /// The **<c>byobRequest</c>** read-only property of the ReadableByteStreamController interface returns the current BYOB request, or null if there are no pending requests.
@@ -74119,6 +74591,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReadableStream")>]
     type ReadableStream<'R> =
         /// <summary>
         /// The **<c>locked</c>** read-only property of the ReadableStream interface returns whether or not the readable stream is locked to a reader.
@@ -74191,6 +74664,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReadableStreamBYOBReader")>]
     type ReadableStreamBYOBReader =
         inherit Web.ReadableStreamGenericReader
 
@@ -74217,6 +74691,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReadableStreamBYOBRequest")>]
     type ReadableStreamBYOBRequest =
         /// <summary>
         /// The **<c>view</c>** getter property of the ReadableStreamBYOBRequest interface returns the current view.
@@ -74244,6 +74719,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReadableStreamDefaultController")>]
     type ReadableStreamDefaultController<'R> =
         /// <summary>
         /// The **<c>desiredSize</c>** read-only property of the ReadableStreamDefaultController interface returns the desired size required to fill the stream's internal queue.
@@ -74277,6 +74753,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReadableStreamDefaultReader")>]
     type ReadableStreamDefaultReader<'R> =
         inherit Web.ReadableStreamGenericReader
         /// <summary>
@@ -74343,6 +74820,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("RemotePlayback")>]
     type RemotePlayback =
         inherit Web.EventTarget
         /// <summary>
@@ -74547,6 +75025,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ReportingObserver")>]
     type ReportingObserver =
         /// <summary>
         /// The **<c>disconnect()</c>** method of the ReportingObserver interface stops a reporting observer that had previously started observing from collecting reports.
@@ -74574,6 +75053,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Request")>]
     type Request =
         inherit Web.Body
         /// <summary>
@@ -74668,6 +75148,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ResizeObserver")>]
     type ResizeObserver =
         /// <summary>
         /// The **<c>disconnect()</c>** method of the ResizeObserver interface unobserves all observed Element or SVGElement targets.
@@ -74695,6 +75176,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ResizeObserverEntry")>]
     type ResizeObserverEntry =
         /// <summary>
         /// The **<c>borderBoxSize</c>** read-only property of the ResizeObserverEntry interface returns an array containing the new border box size of the observed element when the callback is run.
@@ -74747,6 +75229,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ResizeObserverSize")>]
     type ResizeObserverSize =
         /// <summary>
         /// The **<c>blockSize</c>** read-only property of the ResizeObserverSize interface returns the length of the observed element's border box in the block dimension. For boxes with a horizontal writing-mode, this is the vertical dimension, or height; if the writing-mode is vertical, this is the horizontal dimension, or width.
@@ -74771,6 +75254,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Response")>]
     type Response =
         inherit Web.Body
         /// <summary>
@@ -74829,6 +75313,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAElement")>]
     type SVGAElement =
         inherit Web.SVGGraphicsElement
         inherit Web.SVGURIReference
@@ -75039,6 +75524,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAngle")>]
     type SVGAngle =
         /// <summary>
         /// The **<c>unitType</c>** property of the SVGAngle interface is one of the unit type constants and represents the units in which this angle's value is expressed.
@@ -75092,6 +75578,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimateElement")>]
     type SVGAnimateElement =
         inherit Web.SVGAnimationElement
 
@@ -75258,6 +75745,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimateMotionElement")>]
     type SVGAnimateMotionElement =
         inherit Web.SVGAnimationElement
 
@@ -75424,6 +75912,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimateTransformElement")>]
     type SVGAnimateTransformElement =
         inherit Web.SVGAnimationElement
 
@@ -75590,6 +76079,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedAngle")>]
     type SVGAnimatedAngle =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedAngle interface represents the current animated value of the associated <angle> on an SVG element. If the attribute is not currently being animated, animVal will be the same as the baseVal.
@@ -75615,6 +76105,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedBoolean")>]
     type SVGAnimatedBoolean =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedBoolean interface represents the current animated value of the associated animatable boolean SVG attribute. If the attribute is not animated, animVal is the same as SVGAnimatedBoolean.baseVal.
@@ -75639,6 +76130,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedEnumeration")>]
     type SVGAnimatedEnumeration =
         /// <summary>
         /// The **<c>animVal</c>** property of the SVGAnimatedEnumeration interface contains the current value of an SVG enumeration. If there is no animation, it is the same value as the baseVal.
@@ -75663,6 +76155,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedInteger")>]
     type SVGAnimatedInteger =
         /// <summary>
         /// The **<c>animVal</c>** property of the SVGAnimatedInteger interface represents the animated value of an <integer>. If no animation is applied, animVal equals baseVal.
@@ -75687,6 +76180,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedLength")>]
     type SVGAnimatedLength =
         /// <summary>
         /// The **<c>animVal</c>** property of the SVGAnimatedLength interface contains the current value of an SVG enumeration. If there is no animation, it is the same value as the baseVal.
@@ -75712,6 +76206,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedLengthList")>]
     type SVGAnimatedLengthList =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedLengthList interface represents the animated value of an attribute that accepts a list of <length>, <percentage>, or <number> values.
@@ -75740,6 +76235,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedNumber")>]
     type SVGAnimatedNumber =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedNumber interface represents the animated value of an SVG element's numeric attribute.
@@ -75764,6 +76260,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedNumberList")>]
     type SVGAnimatedNumberList =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedNumberList interface represents the current animated value of an animatable attribute that accepts a list of <number> values.
@@ -75811,6 +76308,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedPreserveAspectRatio")>]
     type SVGAnimatedPreserveAspectRatio =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedPreserveAspectRatio interface represents the value of the preserveAspectRatio attribute of an SVG element after any animations or transformations are applied.
@@ -75839,6 +76337,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedRect")>]
     type SVGAnimatedRect =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedRect interface represents the current animated value of the viewBox attribute of an SVG element as a read-only DOMRectReadOnly object. It provides access to the rectangle's dynamic state, including the x, y, width, and height values during the animation.
@@ -75864,6 +76363,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedString")>]
     type SVGAnimatedString =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedString interface is a string representing the animated value of the reflected attribute.
@@ -75888,6 +76388,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimatedTransformList")>]
     type SVGAnimatedTransformList =
         /// <summary>
         /// The **<c>animVal</c>** read-only property of the SVGAnimatedTransformList interface represents the animated value of the transform attribute of an SVG element.
@@ -75916,6 +76417,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGAnimationElement")>]
     type SVGAnimationElement =
         inherit Web.SVGElement
         inherit Web.SVGTests
@@ -76131,6 +76633,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGCircleElement")>]
     type SVGCircleElement =
         inherit Web.SVGGeometryElement
         /// <summary>
@@ -76315,6 +76818,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGClipPathElement")>]
     type SVGClipPathElement =
         inherit Web.SVGElement
         /// <summary>
@@ -76493,6 +76997,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGComponentTransferFunctionElement")>]
     type SVGComponentTransferFunctionElement =
         inherit Web.SVGElement
         /// <summary>
@@ -76707,6 +77212,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGDefsElement")>]
     type SVGDefsElement =
         inherit Web.SVGGraphicsElement
 
@@ -76873,6 +77379,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGDescElement")>]
     type SVGDescElement =
         inherit Web.SVGElement
 
@@ -77495,6 +78002,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGElement")>]
     type SVGElement =
         inherit Web.Element
         inherit Web.ElementCSSInlineStyle
@@ -77686,6 +78194,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGEllipseElement")>]
     type SVGEllipseElement =
         inherit Web.SVGGeometryElement
         /// <summary>
@@ -77876,6 +78385,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEBlendElement")>]
     type SVGFEBlendElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -78078,6 +78588,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEColorMatrixElement")>]
     type SVGFEColorMatrixElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -78268,6 +78779,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEComponentTransferElement")>]
     type SVGFEComponentTransferElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -78441,6 +78953,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFECompositeElement")>]
     type SVGFECompositeElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -78657,6 +79170,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEConvolveMatrixElement")>]
     type SVGFEConvolveMatrixElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -78900,6 +79414,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEDiffuseLightingElement")>]
     type SVGFEDiffuseLightingElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -79097,6 +79612,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEDisplacementMapElement")>]
     type SVGFEDisplacementMapElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -79299,6 +79815,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEDistantLightElement")>]
     type SVGFEDistantLightElement =
         inherit Web.SVGElement
         /// <summary>
@@ -79477,6 +79994,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEDropShadowElement")>]
     type SVGFEDropShadowElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -79680,6 +80198,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEFloodElement")>]
     type SVGFEFloodElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -79847,6 +80366,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEFuncAElement")>]
     type SVGFEFuncAElement =
         inherit Web.SVGComponentTransferFunctionElement
 
@@ -80013,6 +80533,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEFuncBElement")>]
     type SVGFEFuncBElement =
         inherit Web.SVGComponentTransferFunctionElement
 
@@ -80179,6 +80700,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEFuncGElement")>]
     type SVGFEFuncGElement =
         inherit Web.SVGComponentTransferFunctionElement
 
@@ -80345,6 +80867,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEFuncRElement")>]
     type SVGFEFuncRElement =
         inherit Web.SVGComponentTransferFunctionElement
 
@@ -80511,6 +81034,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEGaussianBlurElement")>]
     type SVGFEGaussianBlurElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -80702,6 +81226,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEImageElement")>]
     type SVGFEImageElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -80876,6 +81401,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEMergeElement")>]
     type SVGFEMergeElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -81043,6 +81569,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEMergeNodeElement")>]
     type SVGFEMergeNodeElement =
         inherit Web.SVGElement
         /// <summary>
@@ -81215,6 +81742,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEMorphologyElement")>]
     type SVGFEMorphologyElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -81409,6 +81937,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEOffsetElement")>]
     type SVGFEOffsetElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -81594,6 +82123,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFEPointLightElement")>]
     type SVGFEPointLightElement =
         inherit Web.SVGElement
         /// <summary>
@@ -81778,6 +82308,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFESpecularLightingElement")>]
     type SVGFESpecularLightingElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -81981,6 +82512,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFESpotLightElement")>]
     type SVGFESpotLightElement =
         inherit Web.SVGElement
         /// <summary>
@@ -82195,6 +82727,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFETileElement")>]
     type SVGFETileElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -82368,6 +82901,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFETurbulenceElement")>]
     type SVGFETurbulenceElement =
         inherit Web.SVGElement
         inherit Web.SVGFilterPrimitiveStandardAttributes
@@ -82577,6 +83111,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGFilterElement")>]
     type SVGFilterElement =
         inherit Web.SVGElement
         /// <summary>
@@ -82835,6 +83370,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGForeignObjectElement")>]
     type SVGForeignObjectElement =
         inherit Web.SVGGraphicsElement
         /// <summary>
@@ -83025,6 +83561,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGGElement")>]
     type SVGGElement =
         inherit Web.SVGGraphicsElement
 
@@ -83191,6 +83728,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGGeometryElement")>]
     type SVGGeometryElement =
         inherit Web.SVGGraphicsElement
         /// <summary>
@@ -83387,6 +83925,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGGradientElement")>]
     type SVGGradientElement =
         inherit Web.SVGElement
         inherit Web.SVGURIReference
@@ -83576,6 +84115,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGGraphicsElement")>]
     type SVGGraphicsElement =
         inherit Web.SVGElement
         inherit Web.SVGTests
@@ -83767,6 +84307,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGImageElement")>]
     type SVGImageElement =
         inherit Web.SVGGraphicsElement
         inherit Web.SVGURIReference
@@ -83970,6 +84511,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGLength")>]
     type SVGLength =
         /// <summary>
         /// The **<c>unitType</c>** property of the SVGLength interface that represents type of the value as specified by one of the SVG_LENGTHTYPE_* constants defined on this interface.
@@ -84029,6 +84571,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGLengthList")>]
     type SVGLengthList =
         inherit Iterable<Web.SVGLength>
         /// <summary>
@@ -84096,6 +84639,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGLineElement")>]
     type SVGLineElement =
         inherit Web.SVGGeometryElement
         /// <summary>
@@ -84286,6 +84830,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGLinearGradientElement")>]
     type SVGLinearGradientElement =
         inherit Web.SVGGradientElement
         /// <summary>
@@ -84476,6 +85021,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGMPathElement")>]
     type SVGMPathElement =
         inherit Web.SVGElement
         inherit Web.SVGURIReference
@@ -84643,6 +85189,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGMarkerElement")>]
     type SVGMarkerElement =
         inherit Web.SVGElement
         inherit Web.SVGFitToViewBox
@@ -84871,6 +85418,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGMaskElement")>]
     type SVGMaskElement =
         inherit Web.SVGElement
         /// <summary>
@@ -85073,6 +85621,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGMetadataElement")>]
     type SVGMetadataElement =
         inherit Web.SVGElement
 
@@ -85239,6 +85788,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGNumber")>]
     type SVGNumber =
         /// <summary>
         /// The **<c>value</c>** read-only property of the SVGNumber interface represents the number.
@@ -85257,6 +85807,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGNumberList")>]
     type SVGNumberList =
         inherit Iterable<Web.SVGNumber>
         /// <summary>
@@ -85324,6 +85875,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGPathElement")>]
     type SVGPathElement =
         inherit Web.SVGGeometryElement
         /// <summary>
@@ -85508,6 +86060,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGPatternElement")>]
     type SVGPatternElement =
         inherit Web.SVGElement
         inherit Web.SVGFitToViewBox
@@ -85718,6 +86271,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGPointList")>]
     type SVGPointList =
         inherit Iterable<Web.SVGPoint>
         /// <summary>
@@ -85785,6 +86339,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGPolygonElement")>]
     type SVGPolygonElement =
         inherit Web.SVGGeometryElement
         inherit Web.SVGAnimatedPoints
@@ -85952,6 +86507,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGPolylineElement")>]
     type SVGPolylineElement =
         inherit Web.SVGGeometryElement
         inherit Web.SVGAnimatedPoints
@@ -86119,6 +86675,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGPreserveAspectRatio")>]
     type SVGPreserveAspectRatio =
         /// <summary>
         /// The **<c>align</c>** read-only property of the SVGPreserveAspectRatio interface reflects the type of the alignment value as specified by one of the SVG_PRESERVEASPECTRATIO_* constants defined on this interface.
@@ -86178,6 +86735,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGRadialGradientElement")>]
     type SVGRadialGradientElement =
         inherit Web.SVGGradientElement
         /// <summary>
@@ -86380,6 +86938,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGRectElement")>]
     type SVGRectElement =
         inherit Web.SVGGeometryElement
         /// <summary>
@@ -87118,6 +87677,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGSVGElement")>]
     type SVGSVGElement =
         inherit Web.SVGGraphicsElement
         inherit Web.SVGFitToViewBox
@@ -87450,6 +88010,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGScriptElement")>]
     type SVGScriptElement =
         inherit Web.SVGElement
         inherit Web.SVGURIReference
@@ -87623,6 +88184,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGSetElement")>]
     type SVGSetElement =
         inherit Web.SVGAnimationElement
 
@@ -87789,6 +88351,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGStopElement")>]
     type SVGStopElement =
         inherit Web.SVGElement
         /// <summary>
@@ -87961,6 +88524,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGStringList")>]
     type SVGStringList =
         inherit Iterable<string>
         /// <summary>
@@ -88028,6 +88592,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGStyleElement")>]
     type SVGStyleElement =
         inherit Web.SVGElement
         inherit Web.LinkStyle
@@ -88219,6 +88784,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGSwitchElement")>]
     type SVGSwitchElement =
         inherit Web.SVGGraphicsElement
 
@@ -88385,6 +88951,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGSymbolElement")>]
     type SVGSymbolElement =
         inherit Web.SVGElement
         inherit Web.SVGFitToViewBox
@@ -88552,6 +89119,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTSpanElement")>]
     type SVGTSpanElement =
         inherit Web.SVGTextPositioningElement
 
@@ -88737,6 +89305,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTextContentElement")>]
     type SVGTextContentElement =
         inherit Web.SVGGraphicsElement
         /// <summary>
@@ -88970,6 +89539,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTextElement")>]
     type SVGTextElement =
         inherit Web.SVGTextPositioningElement
 
@@ -89136,6 +89706,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTextPathElement")>]
     type SVGTextPathElement =
         inherit Web.SVGTextContentElement
         inherit Web.SVGURIReference
@@ -89327,6 +89898,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTextPositioningElement")>]
     type SVGTextPositioningElement =
         inherit Web.SVGTextContentElement
         /// <summary>
@@ -89523,6 +90095,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTitleElement")>]
     type SVGTitleElement =
         inherit Web.SVGElement
 
@@ -89689,6 +90262,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTransform")>]
     type SVGTransform =
         /// <summary>
         /// The **<c>angle</c>** read-only property of the SVGTransform interface represents the angle of the transformation in degrees.
@@ -89759,6 +90333,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGTransformList")>]
     type SVGTransformList =
         inherit Iterable<Web.SVGTransform>
         /// <summary>
@@ -89855,6 +90430,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGUnitTypes")>]
     type SVGUnitTypes =
         abstract member SVG_UNIT_TYPE_UNKNOWN: int with get
         abstract member SVG_UNIT_TYPE_USERSPACEONUSE: int with get
@@ -89878,6 +90454,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGUseElement")>]
     type SVGUseElement =
         inherit Web.SVGGraphicsElement
         inherit Web.SVGURIReference
@@ -90069,6 +90646,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SVGViewElement")>]
     type SVGViewElement =
         inherit Web.SVGElement
         inherit Web.SVGFitToViewBox
@@ -90236,6 +90814,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Sanitizer")>]
     type Sanitizer =
         /// <summary>
         /// The **<c>allowAttribute()</c>** method of the Sanitizer interface sets an attribute to be allowed on all elements when the sanitizer is used.
@@ -90359,6 +90938,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Scheduler")>]
     type Scheduler =
         /// <summary>
         /// The **<c>postTask()</c>** method of the Scheduler interface is used for adding tasks to be scheduled according to their priority.
@@ -90383,6 +90963,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Screen")>]
     type Screen =
         /// <summary>
         /// The read-only Screen interface's **<c>availHeight</c>** property returns the height, in CSS pixels, of the space available for Web content on the screen. Since Screen is exposed on the Window interface's window.screen property, you access availHeight using window.screen.availHeight.
@@ -90469,6 +91050,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ScreenOrientation")>]
     type ScreenOrientation =
         inherit Web.EventTarget
         /// <summary>
@@ -90683,6 +91265,7 @@ module Web =
     [<Obsolete("As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and was replaced by AudioWorklet (see AudioWorkletNode).\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/ScriptProcessorNode)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ScriptProcessorNode")>]
     type ScriptProcessorNode =
         inherit Web.AudioNode
 
@@ -90862,6 +91445,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ScrollTimeline")>]
     type ScrollTimeline =
         inherit Web.AnimationTimeline
         /// <summary>
@@ -90896,6 +91480,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SecurityPolicyViolationEvent")>]
     type SecurityPolicyViolationEvent =
         inherit Web.Event
         /// <summary>
@@ -90978,6 +91563,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Selection")>]
     type Selection =
         /// <summary>
         /// The **<c>Selection.anchorNode</c>** read-only property returns the Node in which the selection begins. It can return null if selection never existed in the document (e.g., an iframe that was never clicked on, or the node belongs to another document tree).
@@ -91140,6 +91726,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Serial")>]
     type Serial =
         inherit Web.EventTarget
         /// <summary>
@@ -91190,6 +91777,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SerialPort")>]
     type SerialPort =
         inherit Web.EventTarget
         /// <summary>
@@ -91447,6 +92035,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ServiceWorker")>]
     type ServiceWorker =
         inherit Web.EventTarget
         inherit Web.AbstractWorker
@@ -91675,6 +92264,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ServiceWorkerContainer")>]
     type ServiceWorkerContainer =
         inherit Web.EventTarget
         /// <summary>
@@ -91955,6 +92545,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ServiceWorkerRegistration")>]
     type ServiceWorkerRegistration =
         inherit Web.EventTarget
         inherit Web.PushManagerAttribute
@@ -92221,6 +92812,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ShadowRoot")>]
     type ShadowRoot =
         inherit Web.DocumentFragment
         inherit Web.DocumentOrShadowRoot
@@ -92443,6 +93035,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SharedWorker")>]
     type SharedWorker =
         inherit Web.EventTarget
         inherit Web.AbstractWorker
@@ -92673,6 +93266,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SourceBuffer")>]
     type SourceBuffer =
         inherit Web.EventTarget
         /// <summary>
@@ -92947,6 +93541,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SourceBufferList")>]
     type SourceBufferList =
         inherit Web.EventTarget
         inherit Iterable<Web.SourceBuffer>
@@ -93126,6 +93721,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechRecognitionAlternative")>]
     type SpeechRecognitionAlternative =
         /// <summary>
         /// The **<c>confidence</c>** read-only property of the SpeechRecognitionResult interface returns a numeric estimate of how confident the speech recognition system is that the recognition is correct.
@@ -93152,6 +93748,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechRecognitionErrorEvent")>]
     type SpeechRecognitionErrorEvent =
         inherit Web.Event
         /// <summary>
@@ -93175,6 +93772,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechRecognitionEvent")>]
     type SpeechRecognitionEvent =
         inherit Web.Event
         /// <summary>
@@ -93198,6 +93796,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechRecognitionResult")>]
     type SpeechRecognitionResult =
         inherit Iterable<Web.SpeechRecognitionAlternative>
         /// <summary>
@@ -93230,6 +93829,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechRecognitionResultList")>]
     type SpeechRecognitionResultList =
         inherit Iterable<Web.SpeechRecognitionResult>
         /// <summary>
@@ -93275,6 +93875,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechSynthesis")>]
     type SpeechSynthesis =
         inherit Web.EventTarget
         /// <summary>
@@ -93493,6 +94094,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechSynthesisErrorEvent")>]
     type SpeechSynthesisErrorEvent =
         inherit Web.SpeechSynthesisEvent
         /// <summary>
@@ -93509,6 +94111,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechSynthesisEvent")>]
     type SpeechSynthesisEvent =
         inherit Web.Event
         /// <summary>
@@ -93605,6 +94208,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechSynthesisUtterance")>]
     type SpeechSynthesisUtterance =
         inherit Web.EventTarget
         /// <summary>
@@ -93839,6 +94443,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SpeechSynthesisVoice")>]
     type SpeechSynthesisVoice =
         /// <summary>
         /// The **<c>default</c>** read-only property of the SpeechSynthesisVoice interface returns a boolean value indicating whether the voice is the default voice for the current app (true), or not (false.)
@@ -93885,6 +94490,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StaticRange")>]
     type StaticRange =
         inherit Web.AbstractRange
 
@@ -93908,6 +94514,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StereoPannerNode")>]
     type StereoPannerNode =
         inherit Web.AudioNode
         /// <summary>
@@ -93924,6 +94531,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Storage")>]
     type Storage =
         /// <summary>
         /// The **<c>length</c>** read-only property of the Storage interface returns the number of data items stored in a given Storage object.
@@ -93972,6 +94580,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StorageEvent")>]
     type StorageEvent =
         inherit Web.Event
         /// <summary>
@@ -94028,6 +94637,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StorageManager")>]
     type StorageManager =
         /// <summary>
         /// The **<c>estimate()</c>** method of the StorageManager interface asks the Storage Manager for how much storage the current origin takes up (usage), and how much space is available (quota).
@@ -94061,6 +94671,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StylePropertyMap")>]
     type StylePropertyMap =
         inherit Web.StylePropertyMapReadOnly
 
@@ -94100,6 +94711,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StylePropertyMapReadOnly")>]
     type StylePropertyMapReadOnly =
         inherit Iterable<string * Iterable<Web.CSSStyleValue>>
         /// <summary>
@@ -94145,6 +94757,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StyleSheet")>]
     type StyleSheet =
         /// <summary>
         /// The **<c>disabled</c>** property of the StyleSheet interface determines whether the style sheet is prevented from applying to the document.
@@ -94196,6 +94809,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("StyleSheetList")>]
     type StyleSheetList =
         inherit Iterable<Web.CSSStyleSheet>
         /// <summary>
@@ -94221,6 +94835,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SubmitEvent")>]
     type SubmitEvent =
         inherit Web.Event
         /// <summary>
@@ -94238,6 +94853,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("SubtleCrypto")>]
     type SubtleCrypto =
         /// <summary>
         /// The **<c>decrypt()</c>** method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").
@@ -95709,6 +96325,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TaskController")>]
     type TaskController =
         inherit Web.AbortController
         /// <summary>
@@ -95725,6 +96342,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TaskPriorityChangeEvent")>]
     type TaskPriorityChangeEvent =
         inherit Web.Event
         /// <summary>
@@ -95769,6 +96387,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TaskSignal")>]
     type TaskSignal =
         inherit Web.AbortSignal
         /// <summary>
@@ -95945,6 +96564,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Text")>]
     type Text =
         inherit Web.CharacterData
         inherit Web.Slottable
@@ -95968,6 +96588,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextDecoder")>]
     type TextDecoder =
         inherit Web.TextDecoderCommon
 
@@ -96012,6 +96633,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextDecoderStream")>]
     type TextDecoderStream =
         inherit Web.GenericTransformStream
         inherit Web.TextDecoderCommon
@@ -96044,6 +96666,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextEncoder")>]
     type TextEncoder =
         inherit Web.TextEncoderCommon
         /// <summary>
@@ -96081,6 +96704,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextEncoderStream")>]
     type TextEncoderStream =
         inherit Web.GenericTransformStream
         inherit Web.TextEncoderCommon
@@ -96110,6 +96734,7 @@ module Web =
     [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/TextEvent)")>]
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextEvent")>]
     type TextEvent =
         inherit Web.UIEvent
 
@@ -96138,6 +96763,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextMetrics")>]
     type TextMetrics =
         /// <summary>
         /// The read-only **<c>actualBoundingBoxAscent</c>** property of the TextMetrics interface is a double giving the distance from the horizontal line indicated by the CanvasRenderingContext2D.textBaseline attribute to the top of the bounding rectangle used to render the text, in CSS pixels.
@@ -96259,6 +96885,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextTrack")>]
     type TextTrack =
         inherit Web.EventTarget
         /// <summary>
@@ -96511,6 +97138,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextTrackCue")>]
     type TextTrackCue =
         inherit Web.EventTarget
         /// <summary>
@@ -96715,6 +97343,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextTrackCueList")>]
     type TextTrackCueList =
         inherit Iterable<Web.TextTrackCue>
         /// <summary>
@@ -96772,6 +97401,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TextTrackList")>]
     type TextTrackList =
         inherit Web.EventTarget
         inherit Iterable<Web.TextTrack>
@@ -96966,6 +97596,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TimeRanges")>]
     type TimeRanges =
         /// <summary>
         /// The **<c>TimeRanges.length</c>** read-only property returns the number of ranges in the object.
@@ -96993,6 +97624,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ToggleEvent")>]
     type ToggleEvent =
         inherit Web.Event
         /// <summary>
@@ -97021,6 +97653,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Touch")>]
     type Touch =
         /// <summary>
         /// The **<c>Touch.clientX</c>** read-only property returns the X coordinate of the touch point relative to the viewport, not including any scroll offset.
@@ -97122,6 +97755,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TouchEvent")>]
     type TouchEvent =
         inherit Web.UIEvent
         /// <summary>
@@ -97174,6 +97808,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TouchList")>]
     type TouchList =
         inherit Iterable<Web.Touch>
         /// <summary>
@@ -97199,6 +97834,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TrackEvent")>]
     type TrackEvent =
         inherit Web.Event
         /// <summary>
@@ -97215,6 +97851,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TransformStream")>]
     type TransformStream<'I, 'O> =
         /// <summary>
         /// The **<c>readable</c>** read-only property of the TransformStream interface returns the ReadableStream instance controlled by this TransformStream. This stream emits the transformed output data.
@@ -97243,6 +97880,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TransformStreamDefaultController")>]
     type TransformStreamDefaultController<'O> =
         /// <summary>
         /// The **<c>desiredSize</c>** read-only property of the TransformStreamDefaultController interface returns the desired size to fill the queue of the associated ReadableStream.
@@ -97276,6 +97914,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TransitionEvent")>]
     type TransitionEvent =
         inherit Web.Event
         /// <summary>
@@ -97304,6 +97943,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("TreeWalker")>]
     type TreeWalker =
         /// <summary>
         /// The **<c>TreeWalker.currentNode</c>** property represents the Node which the TreeWalker is currently pointing at.
@@ -97379,6 +98019,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("UIEvent")>]
     type UIEvent =
         inherit Web.Event
         /// <summary>
@@ -97419,6 +98060,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("URL")>]
     type URL =
         /// <summary>
         /// The **<c>hash</c>** property of the URL interface is a string containing a "#" followed by the fragment identifier of the URL. If the URL does not have a fragment identifier, this property contains an empty string, "".
@@ -97509,6 +98151,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("URLPattern")>]
     type URLPattern =
         /// <summary>
         /// The **<c>hasRegExpGroups</c>** read-only property of the URLPattern interface is a boolean indicating whether or not any of the URLPattern components contain regular expression capturing groups.
@@ -97661,6 +98304,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("URLSearchParams")>]
     type URLSearchParams =
         inherit Iterable<string * string>
         /// <summary>
@@ -97736,6 +98380,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("UserActivation")>]
     type UserActivation =
         /// <summary>
         /// The read-only **<c>hasBeenActive</c>** property of the UserActivation interface indicates whether the current window has sticky user activation.
@@ -97760,6 +98405,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VTTCue")>]
     type VTTCue =
         inherit Web.TextTrackCue
         /// <summary>
@@ -97992,6 +98638,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VTTRegion")>]
     type VTTRegion =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/id)
@@ -98049,6 +98696,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ValidityState")>]
     type ValidityState =
         /// <summary>
         /// The read-only **<c>badInput</c>** property of the ValidityState interface indicates if the user has provided input that the browser is unable to convert. For example, if you have a number input element whose content is a string.
@@ -98143,6 +98791,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VideoColorSpace")>]
     type VideoColorSpace =
         /// <summary>
         /// The **<c>fullRange</c>** read-only property of the VideoColorSpace interface returns true if full-range color values are used.
@@ -98203,6 +98852,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VideoDecoder")>]
     type VideoDecoder =
         inherit Web.EventTarget
         /// <summary>
@@ -98436,6 +99086,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VideoEncoder")>]
     type VideoEncoder =
         inherit Web.EventTarget
         /// <summary>
@@ -98651,6 +99302,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VideoFrame")>]
     type VideoFrame =
         /// <summary>
         /// The **<c>codedHeight</c>** property of the VideoFrame interface returns the height of the VideoFrame in pixels, potentially including non-visible padding, and prior to considering potential ratio adjustments.
@@ -98747,6 +99399,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VideoPlaybackQuality")>]
     type VideoPlaybackQuality =
         /// <summary>
         /// The VideoPlaybackQuality interface's read-only **<c>corruptedVideoFrames</c>** property the number of corrupted video frames that have been received since the <video> element was last loaded or reloaded.
@@ -98792,6 +99445,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ViewTimeline")>]
     type ViewTimeline =
         inherit Web.ScrollTimeline
         /// <summary>
@@ -98835,6 +99489,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ViewTransition")>]
     type ViewTransition =
         /// <summary>
         /// The **<c>finished</c>** read-only property of the ViewTransition interface is a Promise that fulfills once the transition animation is finished, and the new page view is visible and interactive to the user.
@@ -98874,6 +99529,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("ViewTransitionTypeSet")>]
     type ViewTransitionTypeSet =
         abstract member forEach:
             callbackfn: ViewTransitionTypeSet.forEach.callbackfn * ?thisArg: obj -> unit
@@ -98917,6 +99573,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("VisualViewport")>]
     type VisualViewport =
         inherit Web.EventTarget
         /// <summary>
@@ -100282,6 +100939,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WGSLLanguageFeatures")>]
     type WGSLLanguageFeatures =
         abstract member forEach:
             callbackfn: WGSLLanguageFeatures.forEach.callbackfn * ?thisArg: obj -> unit
@@ -100294,6 +100952,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WakeLock")>]
     type WakeLock =
         /// <summary>
         /// The **<c>request()</c>** method of the WakeLock interface returns a Promise that fulfills with a WakeLockSentinel object if the system screen wake lock is granted.
@@ -100330,6 +100989,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WakeLockSentinel")>]
     type WakeLockSentinel =
         inherit Web.EventTarget
         /// <summary>
@@ -100518,6 +101178,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WaveShaperNode")>]
     type WaveShaperNode =
         inherit Web.AudioNode
         /// <summary>
@@ -100540,6 +101201,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGL2RenderingContext")>]
     type WebGL2RenderingContext =
         inherit Web.WebGL2RenderingContextBase
         inherit Web.WebGL2RenderingContextOverloads
@@ -103429,6 +104091,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLActiveInfo")>]
     type WebGLActiveInfo =
         /// <summary>
         /// The read-only **<c>WebGLActiveInfo.name</c>** property represents the name of the requested data returned by calling the getActiveAttrib() or getActiveUniform() methods.
@@ -103463,6 +104126,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLBuffer")>]
     type WebGLBuffer = interface end
 
     /// <summary>
@@ -103472,6 +104136,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLContextEvent")>]
     type WebGLContextEvent =
         inherit Web.Event
         /// <summary>
@@ -103488,6 +104153,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLFramebuffer")>]
     type WebGLFramebuffer = interface end
 
     /// <summary>
@@ -103497,6 +104163,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLProgram")>]
     type WebGLProgram = interface end
 
     /// <summary>
@@ -103506,6 +104173,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLQuery")>]
     type WebGLQuery = interface end
 
     /// <summary>
@@ -103515,6 +104183,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLRenderbuffer")>]
     type WebGLRenderbuffer = interface end
 
     /// <summary>
@@ -103524,6 +104193,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLRenderingContext")>]
     type WebGLRenderingContext =
         inherit Web.WebGLRenderingContextBase
         inherit Web.WebGLRenderingContextOverloads
@@ -105364,6 +106034,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLSampler")>]
     type WebGLSampler = interface end
 
     /// <summary>
@@ -105373,6 +106044,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLShader")>]
     type WebGLShader = interface end
 
     /// <summary>
@@ -105382,6 +106054,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLShaderPrecisionFormat")>]
     type WebGLShaderPrecisionFormat =
         /// <summary>
         /// The read-only **<c>WebGLShaderPrecisionFormat.precision</c>** property returns the number of bits of precision that can be represented.
@@ -105416,6 +106089,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLSync")>]
     type WebGLSync = interface end
 
     /// <summary>
@@ -105425,6 +106099,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLTexture")>]
     type WebGLTexture = interface end
 
     /// <summary>
@@ -105434,6 +106109,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLTransformFeedback")>]
     type WebGLTransformFeedback = interface end
 
     /// <summary>
@@ -105443,6 +106119,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLUniformLocation")>]
     type WebGLUniformLocation = interface end
 
     /// <summary>
@@ -105452,6 +106129,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebGLVertexArrayObject")>]
     type WebGLVertexArrayObject = interface end
 
     /// <summary>
@@ -105504,6 +106182,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebSocket")>]
     type WebSocket =
         inherit Web.EventTarget
         /// <summary>
@@ -105755,6 +106434,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebTransport")>]
     type WebTransport =
         /// <summary>
         /// The **<c>closed</c>** read-only property of the WebTransport interface returns a promise that resolves when the transport is closed.
@@ -105838,6 +106518,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebTransportBidirectionalStream")>]
     type WebTransportBidirectionalStream =
         /// <summary>
         /// The **<c>readable</c>** read-only property of the WebTransportBidirectionalStream interface returns a WebTransportReceiveStream instance that can be used to reliably read incoming data.
@@ -105867,6 +106548,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebTransportDatagramDuplexStream")>]
     type WebTransportDatagramDuplexStream =
         /// <summary>
         /// The **<c>incomingHighWaterMark</c>** property of the WebTransportDatagramDuplexStream interface gets or sets the high water mark for incoming chunks of data — this is the maximum size, in chunks, that the incoming ReadableStream's internal queue can reach before it is considered full. See Internal queues and queuing strategies for more information.
@@ -105934,6 +106616,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebTransportError")>]
     type WebTransportError =
         inherit Web.DOMException
         /// <summary>
@@ -105957,6 +106640,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebTransportReceiveStream")>]
     type WebTransportReceiveStream =
         inherit Web.ReadableStream
         /// <summary>
@@ -105974,6 +106658,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WebTransportSendStream")>]
     type WebTransportSendStream =
         inherit Web.WritableStream
         /// <summary>
@@ -105996,6 +106681,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WheelEvent")>]
     type WheelEvent =
         inherit Web.MouseEvent
         /// <summary>
@@ -106589,6 +107275,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Window")>]
     type Window =
         inherit Web.EventTarget
         inherit Web.AnimationFrameProvider
@@ -107892,6 +108579,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Worker")>]
     type Worker =
         inherit Web.EventTarget
         inherit Web.AbstractWorker
@@ -108077,6 +108765,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("Worklet")>]
     type Worklet =
         /// <summary>
         /// The **<c>addModule()</c>** method of the Worklet interface loads the module in the given JavaScript file and adds it to the current Worklet.
@@ -108109,6 +108798,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WritableStream")>]
     type WritableStream<'W> =
         /// <summary>
         /// The **<c>locked</c>** read-only property of the WritableStream interface returns a boolean indicating whether the WritableStream is locked to a writer.
@@ -108142,6 +108832,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WritableStreamDefaultController")>]
     type WritableStreamDefaultController =
         /// <summary>
         /// The read-only **<c>signal</c>** property of the WritableStreamDefaultController interface returns the AbortSignal associated with the controller.
@@ -108163,6 +108854,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("WritableStreamDefaultWriter")>]
     type WritableStreamDefaultWriter<'W> =
         /// <summary>
         /// The **<c>closed</c>** read-only property of the WritableStreamDefaultWriter interface returns a Promise that fulfills if the stream becomes closed, or rejects if the stream errors or the writer's lock is released.
@@ -108214,6 +108906,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XMLDocument")>]
     type XMLDocument =
         inherit Web.Document
 
@@ -108440,6 +109133,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XMLHttpRequest")>]
     type XMLHttpRequest =
         inherit Web.XMLHttpRequestEventTarget
         /// <summary>
@@ -108866,6 +109560,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XMLHttpRequestEventTarget")>]
     type XMLHttpRequestEventTarget =
         inherit Web.EventTarget
         abstract member onabort: (Web.ProgressEvent -> unit) option with get, set
@@ -109043,6 +109738,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XMLHttpRequestUpload")>]
     type XMLHttpRequestUpload =
         inherit Web.XMLHttpRequestEventTarget
 
@@ -109213,6 +109909,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XMLSerializer")>]
     type XMLSerializer =
         /// <summary>
         /// The XMLSerializer method **<c>serializeToString()</c>** constructs a string representing the specified DOM tree in XML form.
@@ -109228,6 +109925,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XPathEvaluator")>]
     type XPathEvaluator =
         inherit Web.XPathEvaluatorBase
 
@@ -109288,6 +109986,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XPathExpression")>]
     type XPathExpression =
         /// <summary>
         /// The **<c>evaluate()</c>** method of the XPathExpression interface executes an XPath expression on the given node or document and returns an XPathResult.
@@ -109304,6 +110003,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XPathResult")>]
     type XPathResult =
         /// <summary>
         /// The read-only **<c>booleanValue</c>** property of the XPathResult interface returns the boolean value of a result with XPathResult.resultType being BOOLEAN_TYPE.
@@ -109377,6 +110077,7 @@ module Web =
     /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Global("XSLTProcessor")>]
     type XSLTProcessor =
         /// <summary>
         /// The **<c>clearParameters()</c>** method of the XSLTProcessor interface removes all parameters (<xsl:param>) and their values from the stylesheet imported in the processor. The XSLTProcessor will then use the default values specified in the XSLT stylesheet.

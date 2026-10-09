@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Commander", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Commander =
     abstract member action: fn: System.Delegate -> unit
 

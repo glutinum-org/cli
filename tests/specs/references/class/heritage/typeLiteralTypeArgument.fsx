@@ -17,11 +17,13 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Base", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Base<'I> =
     abstract member files: ReadonlyArray<'I> with get, set
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("RenameFeature", "REPLACE_ME_WITH_MODULE_NAME")>]
 type RenameFeature =
     inherit Base<RenameFeature.Extends>
     abstract member register: unit -> unit

@@ -19,6 +19,7 @@ type Event =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("ProgressEvent", "REPLACE_ME_WITH_MODULE_NAME")>]
 type ProgressEvent =
     abstract member __proto__: ProgressEvent.__proto__ with get, set
     abstract member loaded: float with get

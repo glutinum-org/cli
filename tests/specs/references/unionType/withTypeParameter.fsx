@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("MyType", "REPLACE_ME_WITH_MODULE_NAME")>]
 type MyType<'TResult1> =
     abstract member a: 'TResult1 with get, set
 

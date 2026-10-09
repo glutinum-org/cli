@@ -14,6 +14,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("ChalkInstance", "REPLACE_ME_WITH_MODULE_NAME")>]
 type ChalkInstance =
     interface end
 

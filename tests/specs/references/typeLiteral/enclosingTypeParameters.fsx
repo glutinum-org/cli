@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Marked", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Marked<'ParserOutput, 'RendererOutput> =
     abstract member Parser: Marked.Parser<'RendererOutput, 'ParserOutput> with get, set
 

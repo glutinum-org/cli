@@ -33,11 +33,13 @@ type RecordOptions =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("BaseService", "REPLACE_ME_WITH_MODULE_NAME")>]
 type BaseService =
     abstract member client: string with get
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("CrudService", "REPLACE_ME_WITH_MODULE_NAME")>]
 type CrudService<'M> =
     inherit BaseService
     abstract member decode<'T>: data: string -> 'T
@@ -48,6 +50,7 @@ type CrudService<'M> =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("RecordService", "REPLACE_ME_WITH_MODULE_NAME")>]
 type RecordService<'M> =
     inherit BaseService
     abstract member collectionIdOrName: string with get
@@ -62,6 +65,7 @@ type RecordService =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("LogService", "REPLACE_ME_WITH_MODULE_NAME")>]
 type LogService =
     inherit CrudService<string>
     abstract member delete: id: string * ?options: CommonOptions -> JS.Promise<bool>

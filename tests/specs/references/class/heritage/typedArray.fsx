@@ -15,6 +15,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("Buffer", "REPLACE_ME_WITH_MODULE_NAME")>]
 type Buffer<'TArrayBuffer> =
     abstract member write: string: string -> float
     abstract member subarray: ?start: float * ?``end``: float -> Buffer<'TArrayBuffer>

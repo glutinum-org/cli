@@ -26,6 +26,7 @@ type NotifyingFeature<'P> =
 
 [<AllowNullLiteral>]
 [<Interface>]
+[<Import("TextDocumentLanguageFeature", "REPLACE_ME_WITH_MODULE_NAME")>]
 type TextDocumentLanguageFeature<'PO, 'RO, 'CO> =
     inherit NotifyingFeature<'RO>
     abstract member onNotificationSent: 'RO with get, set

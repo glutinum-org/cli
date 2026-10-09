@@ -14,6 +14,7 @@ module UnionAlias =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    [<Import("AST", "union-alias")>]
     type AST =
         abstract member ``type``: UnionAlias.ast.ExtglobType option with get, set
 

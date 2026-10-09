@@ -5591,7 +5591,95 @@ let private transform
     let rootTransformContext =
         TransformContext(reporter, "", typeMemory, state, typeLiteralsMemory, importSource)
 
-    let rest = transformToFsharp rootTransformContext rest
+    // A type test compiles to `instanceof`, which needs the class: the imported or global one
+    let typeTestAttributes =
+        let classDeclarations =
+            glueAst
+            |> List.choose (
+                function
+                | GlueType.ClassDeclaration info
+                | GlueType.ExportDefault(GlueType.ClassDeclaration info) -> Some info
+                | _ -> None
+            )
+
+        let defaultExported =
+            glueAst
+            |> List.choose (
+                function
+                | GlueType.ExportDefault(GlueType.ClassDeclaration info) -> Some info.Name
+                | GlueType.ExportDefault(GlueType.Variable { Name = name }) when
+                    classDeclarations |> List.exists (fun info -> info.Name = name)
+                    ->
+                    Some name
+                | _ -> None
+            )
+            |> set
+
+        let classes =
+            classDeclarations
+            |> List.filter (fun info -> info.IsExported || importSource = ImportSource.Global)
+            |> List.map _.Name
+            |> set
+
+        let constructorVariables =
+            glueAst
+            |> List.choose (
+                function
+                | GlueType.Variable {
+                                        Name = name
+                                        Type = GlueType.ConstructorType _
+                                    } -> Some name
+                | GlueType.Variable {
+                                        Name = name
+                                        Type = GlueType.TypeLiteral { Members = members }
+                                    } when
+                    members
+                    |> List.exists (
+                        function
+                        | GlueMember.ConstructSignature _ -> true
+                        | _ -> false
+                    )
+                    ->
+                    Some name
+                | _ -> None
+            )
+            |> set
+
+        fun (name: string) ->
+            if not isTopLevel then
+                []
+            elif defaultExported.Contains name then
+                importDefaultAttribute name importSource
+            elif classes.Contains name || constructorVariables.Contains name then
+                importAttribute name importSource
+            else
+                []
+
+    let hasTypeTestAttribute (attributes: FSharpAttribute list) =
+        attributes
+        |> List.exists (
+            function
+            | FSharpAttribute.Import _
+            | FSharpAttribute.ImportDefault _
+            | FSharpAttribute.ImportAll _
+            | FSharpAttribute.Global _ -> true
+            | _ -> false
+        )
+
+    let rest =
+        transformToFsharp rootTransformContext rest
+        |> List.map (
+            function
+            | FSharpType.Interface info when not (hasTypeTestAttribute info.Attributes) ->
+                match typeTestAttributes info.OriginalName with
+                | [] -> FSharpType.Interface info
+                | attributes ->
+                    FSharpType.Interface
+                        { info with
+                            Attributes = info.Attributes @ attributes
+                        }
+            | fsharpType -> fsharpType
+        )
 
     let exportsType =
         if List.isEmpty exports then
