@@ -1,5 +1,5 @@
 ---
-last_commit_released: 9612425df7d3dc823d984920fb0505f00e954a2b
+last_commit_released: ef5678e05c1cc95590a4afe7d63c3133d9a70d3f
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,14 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.6 - 2026-10-09
+
+### 🚀 Features
+
+* A named function type with one parameter is an F# lambda, not a delegate ([ef5678e](https://github.com/glutinum-org/cli/commit/ef5678e05c1cc95590a4afe7d63c3133d9a70d3f))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/9612425df7d3dc823d984920fb0505f00e954a2b..ef5678e05c1cc95590a4afe7d63c3133d9a70d3f)</small></strong>
 
 ## 1.0.0-beta.5 - 2026-10-09
 
