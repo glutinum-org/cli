@@ -1,5 +1,5 @@
 ---
-last_commit_released: 25e4e950d6172c66305950971f9e7b1340592cc5
+last_commit_released: e1058ae6bee597cc187ed10925d0cf9529f279bb
 ---
 
 # Changelog
@@ -7,6 +7,14 @@ last_commit_released: 25e4e950d6172c66305950971f9e7b1340592cc5
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.5 - 2026-10-09
+
+### 🐞 Bug Fixes
+
+* Constructs found by compiling 21 candidate packages ([e1058ae](https://github.com/glutinum-org/cli/commit/e1058ae6bee597cc187ed10925d0cf9529f279bb))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/25e4e950d6172c66305950971f9e7b1340592cc5..e1058ae6bee597cc187ed10925d0cf9529f279bb)</small></strong>
 
 ## 1.0.0-beta.4 - 2026-10-07
 
