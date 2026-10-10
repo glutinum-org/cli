@@ -53,6 +53,7 @@
     <Compile Include="Transformer/TypeParameters.fs" />
     <Compile Include="Transformer/Heritage.fs" />
     <Compile Include="Transformer/Utils.fs" />
+    <Compile Include="Transformer/TypeParameter.fs" />
     <Compile Include="Transformer/ParamObjectCandidate.fs" />
     <Compile Include="Transformer/UnionOverloads.fs" />
     <Compile Include="Transformer/AnyFunctionOverloads.fs" />
@@ -61,6 +62,7 @@
     <Compile Include="Transformer/Enum.fs" />
     <Compile Include="Transformer/KeyOfMaps.fs" />
     <Compile Include="Transformer/Context.fs" />
+    <Compile Include="Transformer/Exports.fs" />
     <Compile Include="FreeTypeParameters.fs" />
     <Compile Include="DelegateExtensions.fs" />
     <Compile Include="Transform.fs" />
