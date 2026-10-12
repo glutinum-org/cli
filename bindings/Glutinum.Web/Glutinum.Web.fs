@@ -8092,9 +8092,6 @@ module Web =
         abstract member sampleRate: float option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create(?sampleRate: float) : AudioContextOptions = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create
             (latencyHint: Web.AudioContextLatencyCategory, ?sampleRate: float)
             : AudioContextOptions
@@ -8103,6 +8100,13 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(latencyHint: float, ?sampleRate: float) : AudioContextOptions =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?latencyHint: U2<Web.AudioContextLatencyCategory, float>, ?sampleRate: float)
+            : AudioContextOptions
+            =
             nativeOnly
 
     [<AllowNullLiteral>]
@@ -8767,9 +8771,6 @@ module Web =
         abstract member media: U2<Web.MediaList, string> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create(?baseURL: string, ?disabled: bool) : CSSStyleSheetInit = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create
             (media: Web.MediaList, ?baseURL: string, ?disabled: bool)
             : CSSStyleSheetInit
@@ -8778,6 +8779,13 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(media: string, ?baseURL: string, ?disabled: bool) : CSSStyleSheetInit =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?baseURL: string, ?disabled: bool, ?media: U2<Web.MediaList, string>)
+            : CSSStyleSheetInit
+            =
             nativeOnly
 
     [<AllowNullLiteral>]
@@ -9006,75 +9014,7 @@ module Web =
             (
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float,
-                ?activeDuration: Web.CSSNumberish,
-                ?currentIteration: float,
-                ?endTime: Web.CSSNumberish,
-                ?localTime: Web.CSSNumberish,
-                ?progress: float,
-                ?startTime: Web.CSSNumberish
-            )
-            : ComputedEffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                duration: float,
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float,
-                ?activeDuration: Web.CSSNumberish,
-                ?currentIteration: float,
-                ?endTime: Web.CSSNumberish,
-                ?localTime: Web.CSSNumberish,
-                ?progress: float,
-                ?startTime: Web.CSSNumberish
-            )
-            : ComputedEffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                duration: Web.CSSNumericValue,
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float,
-                ?activeDuration: Web.CSSNumberish,
-                ?currentIteration: float,
-                ?endTime: Web.CSSNumberish,
-                ?localTime: Web.CSSNumberish,
-                ?progress: float,
-                ?startTime: Web.CSSNumberish
-            )
-            : ComputedEffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                duration: string,
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
+                ?duration: U3<float, Web.CSSNumericValue, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -9795,22 +9735,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float
-            )
-            : EffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
                 duration: float,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -9848,6 +9772,23 @@ module Web =
                 duration: string,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : EffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?duration: U3<float, Web.CSSNumericValue, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -10230,6 +10171,45 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
+            (binding: Web.GPUIndex32, resource: Web.GPUSampler)
+            : GPUBindGroupEntry
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (binding: Web.GPUIndex32, resource: Web.GPUTexture)
+            : GPUBindGroupEntry
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (binding: Web.GPUIndex32, resource: Web.GPUTextureView)
+            : GPUBindGroupEntry
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(binding: Web.GPUIndex32, resource: Web.GPUBuffer) : GPUBindGroupEntry =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (binding: Web.GPUIndex32, resource: Web.GPUBufferBinding)
+            : GPUBindGroupEntry
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (binding: Web.GPUIndex32, resource: Web.GPUExternalTexture)
+            : GPUBindGroupEntry
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
             (binding: Web.GPUIndex32, resource: Web.GPUBindingResource)
             : GPUBindGroupEntry
             =
@@ -10488,12 +10468,51 @@ module Web =
             =
             nativeOnly
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode>,
+                compute: Web.GPUProgrammableStage,
+                ?label: string
+            )
+            : GPUComputePipelineDescriptor
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUCopyExternalImageDestInfo =
         inherit Web.GPUTexelCopyTextureInfo
         abstract member colorSpace: Web.PredefinedColorSpace option with get, set
         abstract member premultipliedAlpha: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
+                origin: ResizeArray<Web.GPUIntegerCoordinate>,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate,
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?premultipliedAlpha: bool
+            )
+            : GPUCopyExternalImageDestInfo
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
+                origin: Web.GPUOrigin3DDict,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate,
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?premultipliedAlpha: bool
+            )
+            : GPUCopyExternalImageDestInfo
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -10618,6 +10637,17 @@ module Web =
             =
             nativeOnly
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                source: U2<Web.HTMLVideoElement, Web.VideoFrame>,
+                ?label: string,
+                ?colorSpace: Web.PredefinedColorSpace
+            )
+            : GPUExternalTextureDescriptor
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUFragmentState =
@@ -10705,6 +10735,13 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (layout: Web.GPUAutoLayoutMode, ?label: string)
+            : GPUPipelineDescriptorBase
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode>, ?label: string)
             : GPUPipelineDescriptorBase
             =
             nativeOnly
@@ -10841,78 +10878,10 @@ module Web =
             (
                 loadOp: Web.GPULoadOp,
                 storeOp: Web.GPUStoreOp,
-                view: Web.GPUTexture,
+                view: U2<Web.GPUTexture, Web.GPUTextureView>,
                 ?clearValue: Web.GPUColor,
-                ?depthSlice: Web.GPUIntegerCoordinate
-            )
-            : GPURenderPassColorAttachment
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                loadOp: Web.GPULoadOp,
-                storeOp: Web.GPUStoreOp,
-                view: Web.GPUTexture,
-                resolveTarget: Web.GPUTexture,
-                ?clearValue: Web.GPUColor,
-                ?depthSlice: Web.GPUIntegerCoordinate
-            )
-            : GPURenderPassColorAttachment
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                loadOp: Web.GPULoadOp,
-                storeOp: Web.GPUStoreOp,
-                view: Web.GPUTexture,
-                resolveTarget: Web.GPUTextureView,
-                ?clearValue: Web.GPUColor,
-                ?depthSlice: Web.GPUIntegerCoordinate
-            )
-            : GPURenderPassColorAttachment
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                loadOp: Web.GPULoadOp,
-                storeOp: Web.GPUStoreOp,
-                view: Web.GPUTextureView,
-                ?clearValue: Web.GPUColor,
-                ?depthSlice: Web.GPUIntegerCoordinate
-            )
-            : GPURenderPassColorAttachment
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                loadOp: Web.GPULoadOp,
-                storeOp: Web.GPUStoreOp,
-                view: Web.GPUTextureView,
-                resolveTarget: Web.GPUTexture,
-                ?clearValue: Web.GPUColor,
-                ?depthSlice: Web.GPUIntegerCoordinate
-            )
-            : GPURenderPassColorAttachment
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                loadOp: Web.GPULoadOp,
-                storeOp: Web.GPUStoreOp,
-                view: Web.GPUTextureView,
-                resolveTarget: Web.GPUTextureView,
-                ?clearValue: Web.GPUColor,
-                ?depthSlice: Web.GPUIntegerCoordinate
+                ?depthSlice: Web.GPUIntegerCoordinate,
+                ?resolveTarget: U2<Web.GPUTexture, Web.GPUTextureView>
             )
             : GPURenderPassColorAttachment
             =
@@ -10952,6 +10921,23 @@ module Web =
         static member Create
             (
                 view: Web.GPUTextureView,
+                ?depthClearValue: float,
+                ?depthLoadOp: Web.GPULoadOp,
+                ?depthReadOnly: bool,
+                ?depthStoreOp: Web.GPUStoreOp,
+                ?stencilClearValue: Web.GPUStencilValue,
+                ?stencilLoadOp: Web.GPULoadOp,
+                ?stencilReadOnly: bool,
+                ?stencilStoreOp: Web.GPUStoreOp
+            )
+            : GPURenderPassDepthStencilAttachment
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                view: U2<Web.GPUTexture, Web.GPUTextureView>,
                 ?depthClearValue: float,
                 ?depthLoadOp: Web.GPULoadOp,
                 ?depthReadOnly: bool,
@@ -11056,6 +11042,21 @@ module Web =
         static member Create
             (
                 layout: Web.GPUAutoLayoutMode,
+                vertex: Web.GPUVertexState,
+                ?label: string,
+                ?depthStencil: Web.GPUDepthStencilState,
+                ?fragment: Web.GPUFragmentState,
+                ?multisample: Web.GPUMultisampleState,
+                ?primitive: Web.GPUPrimitiveState
+            )
+            : GPURenderPipelineDescriptor
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode>,
                 vertex: Web.GPUVertexState,
                 ?label: string,
                 ?depthStencil: Web.GPUDepthStencilState,
@@ -11214,6 +11215,30 @@ module Web =
         static member Create
             (
                 texture: Web.GPUTexture,
+                origin: ResizeArray<Web.GPUIntegerCoordinate>,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate
+            )
+            : GPUTexelCopyTextureInfo
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
+                origin: Web.GPUOrigin3DDict,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate
+            )
+            : GPUTexelCopyTextureInfo
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
                 ?aspect: Web.GPUTextureAspect,
                 ?mipLevel: Web.GPUIntegerCoordinate,
                 ?origin: Web.GPUOrigin3D
@@ -11251,6 +11276,38 @@ module Web =
         abstract member size: Web.GPUExtent3D with get, set
         abstract member usage: Web.GPUTextureUsageFlags with get, set
         abstract member viewFormats: ResizeArray<Web.GPUTextureFormat> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                format: Web.GPUTextureFormat,
+                size: ResizeArray<Web.GPUIntegerCoordinate>,
+                usage: Web.GPUTextureUsageFlags,
+                ?label: string,
+                ?dimension: Web.GPUTextureDimension,
+                ?mipLevelCount: Web.GPUIntegerCoordinate,
+                ?sampleCount: Web.GPUSize32,
+                ?viewFormats: ResizeArray<Web.GPUTextureFormat>
+            )
+            : GPUTextureDescriptor
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                format: Web.GPUTextureFormat,
+                size: Web.GPUExtent3DDict,
+                usage: Web.GPUTextureUsageFlags,
+                ?label: string,
+                ?dimension: Web.GPUTextureDimension,
+                ?mipLevelCount: Web.GPUIntegerCoordinate,
+                ?sampleCount: Web.GPUSize32,
+                ?viewFormats: ResizeArray<Web.GPUTextureFormat>
+            )
+            : GPUTextureDescriptor
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -11588,15 +11645,19 @@ module Web =
         abstract member keyPath: U2<string, ResizeArray<string>> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create(?autoIncrement: bool) : IDBObjectStoreParameters = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create(keyPath: string, ?autoIncrement: bool) : IDBObjectStoreParameters =
             nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
             (keyPath: ResizeArray<string>, ?autoIncrement: bool)
+            : IDBObjectStoreParameters
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?autoIncrement: bool, ?keyPath: U2<string, ResizeArray<string>>)
             : IDBObjectStoreParameters
             =
             nativeOnly
@@ -11736,6 +11797,36 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                data: Web.AllowSharedBufferSource,
+                ``type``: string,
+                ?colorSpaceConversion: Web.ColorSpaceConversion,
+                ?desiredHeight: float,
+                ?desiredWidth: float,
+                ?preferAnimation: bool,
+                ?transfer: ResizeArray<obj>
+            )
+            : ImageDecoderInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                data: Web.ReadableStream,
+                ``type``: string,
+                ?colorSpaceConversion: Web.ColorSpaceConversion,
+                ?desiredHeight: float,
+                ?desiredWidth: float,
+                ?preferAnimation: bool,
+                ?transfer: ResizeArray<obj>
+            )
+            : ImageDecoderInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 data: Web.ImageBufferSource,
                 ``type``: string,
                 ?colorSpaceConversion: Web.ColorSpaceConversion,
@@ -11809,13 +11900,6 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
-            (?rootMargin: string, ?scrollMargin: string)
-            : IntersectionObserverInit
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
             (threshold: float, ?rootMargin: string, ?scrollMargin: string)
             : IntersectionObserverInit
             =
@@ -11875,6 +11959,18 @@ module Web =
                 threshold: ResizeArray<float>,
                 ?rootMargin: string,
                 ?scrollMargin: string
+            )
+            : IntersectionObserverInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?root: U2<Web.Element, Web.Document>,
+                ?rootMargin: string,
+                ?scrollMargin: string,
+                ?threshold: U2<float, ResizeArray<float>>
             )
             : IntersectionObserverInit
             =
@@ -12065,25 +12161,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float,
-                ?composite: Web.CompositeOperation,
-                ?iterationComposite: Web.IterationCompositeOperation,
-                ?pseudoElement: string
-            )
-            : KeyframeEffectOptions
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
                 duration: float,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -12127,6 +12204,26 @@ module Web =
                 duration: string,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string
+            )
+            : KeyframeEffectOptions
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?duration: U3<float, Web.CSSNumericValue, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -12712,31 +12809,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
-                ?aspectRatio: float,
-                ?autoGainControl: bool,
-                ?backgroundBlur: bool,
-                ?channelCount: float,
-                ?deviceId: string,
-                ?displaySurface: string,
-                ?facingMode: string,
-                ?frameRate: float,
-                ?groupId: string,
-                ?height: float,
-                ?noiseSuppression: bool,
-                ?sampleRate: float,
-                ?sampleSize: float,
-                ?torch: bool,
-                ?whiteBalanceMode: string,
-                ?width: float,
-                ?zoom: float
-            )
-            : MediaTrackSettings
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
                 echoCancellation: bool,
                 ?aspectRatio: float,
                 ?autoGainControl: bool,
@@ -12770,6 +12842,32 @@ module Web =
                 ?channelCount: float,
                 ?deviceId: string,
                 ?displaySurface: string,
+                ?facingMode: string,
+                ?frameRate: float,
+                ?groupId: string,
+                ?height: float,
+                ?noiseSuppression: bool,
+                ?sampleRate: float,
+                ?sampleSize: float,
+                ?torch: bool,
+                ?whiteBalanceMode: string,
+                ?width: float,
+                ?zoom: float
+            )
+            : MediaTrackSettings
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?aspectRatio: float,
+                ?autoGainControl: bool,
+                ?backgroundBlur: bool,
+                ?channelCount: float,
+                ?deviceId: string,
+                ?displaySurface: string,
+                ?echoCancellation: U2<bool, string>,
                 ?facingMode: string,
                 ?frameRate: float,
                 ?groupId: string,
@@ -13190,22 +13288,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float
-            )
-            : OptionalEffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
                 duration: float,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -13226,6 +13308,23 @@ module Web =
                 duration: string,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : OptionalEffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?duration: U2<float, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -13382,9 +13481,6 @@ module Web =
             U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create() : ParseHTMLUnsafeOptions = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.Sanitizer) : ParseHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
@@ -13392,6 +13488,13 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.SanitizerPresets) : ParseHTMLUnsafeOptions = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets>)
+            : ParseHTMLUnsafeOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14201,9 +14304,6 @@ module Web =
         abstract member userVisibleOnly: bool option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create(?userVisibleOnly: bool) : PushSubscriptionOptionsInit = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create
             (applicationServerKey: Web.BufferSource, ?userVisibleOnly: bool)
             : PushSubscriptionOptionsInit
@@ -14213,6 +14313,13 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (applicationServerKey: string, ?userVisibleOnly: bool)
+            : PushSubscriptionOptionsInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?applicationServerKey: U2<Web.BufferSource, string>, ?userVisibleOnly: bool)
             : PushSubscriptionOptionsInit
             =
             nativeOnly
@@ -14539,6 +14646,13 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (urls: ResizeArray<string>, ?credential: string, ?username: string)
+            : RTCIceServer
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (urls: U2<string, ResizeArray<string>>, ?credential: string, ?username: string)
             : RTCIceServer
             =
             nativeOnly
@@ -15439,6 +15553,72 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                headers: ResizeArray<string * string>,
+                ?body: Web.BodyInit,
+                ?cache: Web.RequestCache,
+                ?credentials: Web.RequestCredentials,
+                ?integrity: string,
+                ?keepalive: bool,
+                ?``method``: string,
+                ?mode: Web.RequestMode,
+                ?priority: Web.RequestPriority,
+                ?redirect: Web.RequestRedirect,
+                ?referrer: string,
+                ?referrerPolicy: Web.ReferrerPolicy,
+                ?signal: Web.AbortSignal,
+                ?window: obj
+            )
+            : RequestInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                headers: RequestInit.headers,
+                ?body: Web.BodyInit,
+                ?cache: Web.RequestCache,
+                ?credentials: Web.RequestCredentials,
+                ?integrity: string,
+                ?keepalive: bool,
+                ?``method``: string,
+                ?mode: Web.RequestMode,
+                ?priority: Web.RequestPriority,
+                ?redirect: Web.RequestRedirect,
+                ?referrer: string,
+                ?referrerPolicy: Web.ReferrerPolicy,
+                ?signal: Web.AbortSignal,
+                ?window: obj
+            )
+            : RequestInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                headers: Web.Headers,
+                ?body: Web.BodyInit,
+                ?cache: Web.RequestCache,
+                ?credentials: Web.RequestCredentials,
+                ?integrity: string,
+                ?keepalive: bool,
+                ?``method``: string,
+                ?mode: Web.RequestMode,
+                ?priority: Web.RequestPriority,
+                ?redirect: Web.RequestRedirect,
+                ?referrer: string,
+                ?referrerPolicy: Web.ReferrerPolicy,
+                ?signal: Web.AbortSignal,
+                ?window: obj
+            )
+            : RequestInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 ?body: Web.BodyInit,
                 ?cache: Web.RequestCache,
                 ?credentials: Web.RequestCredentials,
@@ -15473,6 +15653,27 @@ module Web =
         abstract member headers: Web.HeadersInit option with get, set
         abstract member status: float option with get, set
         abstract member statusText: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (headers: ResizeArray<string * string>, ?status: float, ?statusText: string)
+            : ResponseInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (headers: ResponseInit.headers, ?status: float, ?statusText: string)
+            : ResponseInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (headers: Web.Headers, ?status: float, ?statusText: string)
+            : ResponseInit
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -15844,6 +16045,20 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
+            (bluetoothServiceClassId: string, ?usbProductId: float, ?usbVendorId: float)
+            : SerialPortFilter
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (bluetoothServiceClassId: float, ?usbProductId: float, ?usbVendorId: float)
+            : SerialPortFilter
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
             (
                 ?bluetoothServiceClassId: Web.BluetoothServiceUUID,
                 ?usbProductId: float,
@@ -15859,6 +16074,20 @@ module Web =
         abstract member bluetoothServiceClassId: Web.BluetoothServiceUUID option with get, set
         abstract member usbProductId: float option with get, set
         abstract member usbVendorId: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (bluetoothServiceClassId: string, ?usbProductId: float, ?usbVendorId: float)
+            : SerialPortInfo
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (bluetoothServiceClassId: float, ?usbProductId: float, ?usbVendorId: float)
+            : SerialPortInfo
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -15896,9 +16125,6 @@ module Web =
             U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create() : SetHTMLOptions = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.Sanitizer) : SetHTMLOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
@@ -15907,14 +16133,18 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.SanitizerPresets) : SetHTMLOptions = nativeOnly
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets>)
+            : SetHTMLOptions
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type SetHTMLUnsafeOptions =
         abstract member sanitizer:
             U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
-
-        [<ParamObject; Emit("$0")>]
-        static member Create() : SetHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.Sanitizer) : SetHTMLUnsafeOptions = nativeOnly
@@ -15924,6 +16154,13 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.SanitizerPresets) : SetHTMLUnsafeOptions = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets>)
+            : SetHTMLUnsafeOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -16239,13 +16476,14 @@ module Web =
         abstract member priority: U2<Web.TaskPriority, Web.TaskSignal> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create() : TaskSignalAnyInit = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create(priority: Web.TaskPriority) : TaskSignalAnyInit = nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create(priority: Web.TaskSignal) : TaskSignalAnyInit = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?priority: U2<Web.TaskPriority, Web.TaskSignal>) : TaskSignalAnyInit =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -17019,10 +17257,6 @@ module Web =
         abstract member subject: Web.Element option with get, set
 
         [<ParamObject; Emit("$0")>]
-        static member Create(?axis: Web.ScrollAxis, ?subject: Web.Element) : ViewTimelineOptions =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
         static member Create
             (inset: string, ?axis: Web.ScrollAxis, ?subject: Web.Element)
             : ViewTimelineOptions
@@ -17040,24 +17274,23 @@ module Web =
             =
             nativeOnly
 
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?axis: Web.ScrollAxis,
+                ?inset: U2<string, ResizeArray<U2<Web.CSSNumericValue, Web.CSSKeywordValue>>>,
+                ?subject: Web.Element
+            )
+            : ViewTimelineOptions
+            =
+            nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type WaveShaperOptions =
         inherit Web.AudioNodeOptions
         abstract member curve: U2<ResizeArray<float>, JS.Float32Array> option with get, set
         abstract member oversample: Web.OverSampleType option with get, set
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?channelCount: float,
-                ?channelCountMode: Web.ChannelCountMode,
-                ?channelInterpretation: Web.ChannelInterpretation,
-                ?oversample: Web.OverSampleType
-            )
-            : WaveShaperOptions
-            =
-            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -17079,6 +17312,19 @@ module Web =
                 ?channelCount: float,
                 ?channelCountMode: Web.ChannelCountMode,
                 ?channelInterpretation: Web.ChannelInterpretation,
+                ?oversample: Web.OverSampleType
+            )
+            : WaveShaperOptions
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?curve: U2<ResizeArray<float>, JS.Float32Array>,
                 ?oversample: Web.OverSampleType
             )
             : WaveShaperOptions
@@ -17365,13 +17611,6 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
-            (``type``: Web.WriteCommandType, ?position: float, ?size: float)
-            : WriteParams
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
             (``type``: Web.WriteCommandType, data: Web.BufferSource, ?position: float, ?size: float)
             : WriteParams
             =
@@ -17387,6 +17626,18 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (``type``: Web.WriteCommandType, data: string, ?position: float, ?size: float)
+            : WriteParams
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ``type``: Web.WriteCommandType,
+                ?data: U3<Web.BufferSource, Web.Blob, string>,
+                ?position: float,
+                ?size: float
+            )
             : WriteParams
             =
             nativeOnly
@@ -113700,7 +113951,44 @@ module Web =
 
     type HeadersInit = U3<ResizeArray<string * string>, HeadersInit.U3.Case2, Web.Headers>
 
-    type IDBValidKey = U5<float, string, Date, Web.BufferSource, ResizeArray<obj>>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type IDBValidKey =
+        | Case1 of float
+        | Case2 of string
+        | Case3 of Date
+        | Case4 of Web.BufferSource
+        | Case5 of ResizeArray<Web.IDBValidKey>
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Date) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Date) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.BufferSource) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.BufferSource) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.IDBValidKey>) : IDBValidKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.IDBValidKey>) : IDBValidKey = nativeOnly
 
     type ImageBitmapSource = U3<Web.CanvasImageSource, Web.Blob, Web.ImageData>
 
@@ -116113,6 +116401,22 @@ module Web =
         type qualityLimitationDurations =
             [<EmitIndexer>]
             abstract member Item: key: string -> float with get, set
+
+    module RequestInit =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type headers =
+            [<EmitIndexer>]
+            abstract member Item: key: string -> string with get, set
+
+    module ResponseInit =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type headers =
+            [<EmitIndexer>]
+            abstract member Item: key: string -> string with get, set
 
     module URLPatternComponentResult =
 

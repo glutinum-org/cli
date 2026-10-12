@@ -33,6 +33,8 @@ type Interval =
     static member Create (start: float, ``end``: Date) : Interval = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (start: float, ``end``: float) : Interval = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (start: U2<Date, float>, ``end``: U2<Date, float>) : Interval = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

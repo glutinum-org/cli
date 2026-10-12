@@ -26,6 +26,8 @@ type Foo =
     static member Create (terminal: Foo.terminal.U2.ReadOnlyTerminalOptions) : Foo = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (terminal: Foo.terminal.U2.ReadOnlyExtersionTerminalOptions) : Foo = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (terminal: U2<Foo.terminal.U2.ReadOnlyTerminalOptions, Foo.terminal.U2.ReadOnlyExtersionTerminalOptions>) : Foo = nativeOnly
 
 module Foo =
 

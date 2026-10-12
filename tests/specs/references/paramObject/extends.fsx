@@ -25,6 +25,8 @@ type BaseOptions =
     static member Create (level: string, ?debug: bool) : BaseOptions = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (level: float, ?debug: bool) : BaseOptions = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: U2<string, float>, ?debug: bool) : BaseOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -35,6 +37,8 @@ type PlainExtends =
     static member Create (level: string, name: string, ?debug: bool) : PlainExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (level: float, name: string, ?debug: bool) : PlainExtends = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: U2<string, float>, name: string, ?debug: bool) : PlainExtends = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -43,11 +47,11 @@ type PartialExtends =
     abstract member debug: bool option with get, set
     abstract member level: U2<string, float> option with get, set
     [<ParamObject; Emit("$0")>]
-    static member Create (name: string, ?debug: bool) : PartialExtends = nativeOnly
-    [<ParamObject; Emit("$0")>]
     static member Create (name: string, level: string, ?debug: bool) : PartialExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (name: string, level: float, ?debug: bool) : PartialExtends = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (name: string, ?debug: bool, ?level: U2<string, float>) : PartialExtends = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -58,6 +62,8 @@ type OmitExtends =
     static member Create (level: string, name: string) : OmitExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (level: float, name: string) : OmitExtends = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (level: U2<string, float>, name: string) : OmitExtends = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

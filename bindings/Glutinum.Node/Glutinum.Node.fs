@@ -17340,7 +17340,7 @@ module Node =
                     [<Interface>]
                     type init =
                         [<EmitIndexer>]
-                        abstract member Item: key: string -> U2<string, ReadonlyArray<string>> with get, set
+                        abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
         module MessageEvent__ =
 
@@ -46521,17 +46521,6 @@ AsyncLocalStorage.snapshot()""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?timeout: float
-                )
-                : MessagingOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     killSignal: Node.NodeJS.Signals,
                     ?signal: Node.AbortSignal,
                     ?serialization: Node.child_process.SerializationType,
@@ -46553,6 +46542,18 @@ AsyncLocalStorage.snapshot()""")>]
                 =
                 nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?timeout: float
+                )
+                : MessagingOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ProcessEnvOptions =
@@ -46560,13 +46561,6 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member gid: float option with get, set
             abstract member cwd: U2<string, Node.url.URL> option with get, set
             abstract member env: Node.NodeJS.ProcessEnv option with get, set
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (?uid: float, ?gid: float, ?env: Node.NodeJS.ProcessEnv)
-                : ProcessEnvOptions
-                =
-                nativeOnly
 
             [<ParamObject; Emit("$0")>]
             static member Create
@@ -46582,25 +46576,24 @@ AsyncLocalStorage.snapshot()""")>]
                 =
                 nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv
+                )
+                : ProcessEnvOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type CommonOptions =
             inherit Node.child_process.ProcessEnvOptions
             abstract member windowsHide: bool option with get, set
             abstract member timeout: float option with get, set
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float
-                )
-                : CommonOptions
-                =
-                nativeOnly
 
             [<ParamObject; Emit("$0")>]
             static member Create
@@ -46622,6 +46615,20 @@ AsyncLocalStorage.snapshot()""")>]
                     cwd: Node.url.URL,
                     ?uid: float,
                     ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float
+                )
+                : CommonOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
                     ?env: Node.NodeJS.ProcessEnv,
                     ?windowsHide: bool,
                     ?timeout: float
@@ -46810,23 +46817,6 @@ AsyncLocalStorage.snapshot()""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?shell: string,
-                    ?signal: Node.AbortSignal,
-                    ?maxBuffer: float,
-                    ?encoding: string
-                )
-                : ExecOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     killSignal: Node.NodeJS.Signals,
                     ?uid: float,
                     ?gid: float,
@@ -46966,6 +46956,25 @@ AsyncLocalStorage.snapshot()""")>]
                     ?shell: string,
                     ?signal: Node.AbortSignal,
                     ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
                     ?encoding: string
                 )
                 : ExecOptions
@@ -46981,23 +46990,6 @@ AsyncLocalStorage.snapshot()""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?shell: string,
-                    ?signal: Node.AbortSignal,
-                    ?maxBuffer: float,
-                    ?encoding: Node.BufferEncoding
-                )
-                : ExecOptionsWithStringEncoding
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     killSignal: Node.NodeJS.Signals,
                     ?uid: float,
                     ?gid: float,
@@ -47137,6 +47129,25 @@ AsyncLocalStorage.snapshot()""")>]
                     ?shell: string,
                     ?signal: Node.AbortSignal,
                     ?maxBuffer: float,
+                    ?encoding: Node.BufferEncoding
+                )
+                : ExecOptionsWithStringEncoding
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
                     ?encoding: Node.BufferEncoding
                 )
                 : ExecOptionsWithStringEncoding
@@ -47152,23 +47163,6 @@ AsyncLocalStorage.snapshot()""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?shell: string,
-                    ?signal: Node.AbortSignal,
-                    ?maxBuffer: float,
-                    ?encoding: string
-                )
-                : ExecOptionsWithBufferEncoding
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     killSignal: Node.NodeJS.Signals,
                     ?uid: float,
                     ?gid: float,
@@ -47308,6 +47302,25 @@ AsyncLocalStorage.snapshot()""")>]
                     ?shell: string,
                     ?signal: Node.AbortSignal,
                     ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : ExecOptionsWithBufferEncoding
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?shell: string,
+                    ?signal: Node.AbortSignal,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
                     ?encoding: string
                 )
                 : ExecOptionsWithBufferEncoding
@@ -47414,6 +47427,16 @@ AsyncLocalStorage.snapshot()""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___2
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            stdout: U2<string, Node.NonSharedBuffer>,
+                            stderr: U2<string, Node.NonSharedBuffer>
+                        )
                         : __promisify___2
                         =
                         nativeOnly
@@ -47671,6 +47694,16 @@ AsyncLocalStorage.snapshot()""")>]
                         =
                         nativeOnly
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            stdout: U2<string, Node.NonSharedBuffer>,
+                            stderr: U2<string, Node.NonSharedBuffer>
+                        )
+                        : __promisify___2
+                        =
+                        nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ForkOptions =
@@ -47693,27 +47726,6 @@ AsyncLocalStorage.snapshot()""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                : ForkOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     killSignal: Node.NodeJS.Signals,
                     ?uid: float,
                     ?gid: float,
@@ -47880,6 +47892,29 @@ AsyncLocalStorage.snapshot()""")>]
                     ?timeout: float,
                     ?signal: Node.AbortSignal,
                     ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
                     ?execPath: string,
                     ?execArgv: ResizeArray<string>,
                     ?silent: bool,
@@ -48537,24 +48572,6 @@ AsyncLocalStorage.snapshot()""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?execArgv: ResizeArray<string>,
-                    ?exec: string,
-                    ?args: ReadonlyArray<string>,
-                    ?silent: bool,
-                    ?stdio: ResizeArray<obj>,
-                    ?uid: float,
-                    ?gid: float,
-                    ?serialization: Node.cluster.SerializationType,
-                    ?cwd: string,
-                    ?windowsHide: bool
-                )
-                : ClusterSettings
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     inspectPort: float,
                     ?execArgv: ResizeArray<string>,
                     ?exec: string,
@@ -48582,6 +48599,25 @@ AsyncLocalStorage.snapshot()""")>]
                     ?stdio: ResizeArray<obj>,
                     ?uid: float,
                     ?gid: float,
+                    ?serialization: Node.cluster.SerializationType,
+                    ?cwd: string,
+                    ?windowsHide: bool
+                )
+                : ClusterSettings
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?execArgv: ResizeArray<string>,
+                    ?exec: string,
+                    ?args: ReadonlyArray<string>,
+                    ?silent: bool,
+                    ?stdio: ResizeArray<obj>,
+                    ?uid: float,
+                    ?gid: float,
+                    ?inspectPort: U2<float, (unit -> float)>,
                     ?serialization: Node.cluster.SerializationType,
                     ?cwd: string,
                     ?windowsHide: bool
@@ -62184,13 +62220,6 @@ Certificate.verifySpkac($0)""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (``type``: Node.crypto.KeyExportOptions.``type``, format: 'T, ?cipher: string)
-                : KeyExportOptions<'T>
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
                 (
                     ``type``: Node.crypto.KeyExportOptions.``type``,
                     format: 'T,
@@ -62208,6 +62237,18 @@ Certificate.verifySpkac($0)""")>]
                     format: 'T,
                     passphrase: Node.Buffer,
                     ?cipher: string
+                )
+                : KeyExportOptions<'T>
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.crypto.KeyExportOptions.``type``,
+                    format: 'T,
+                    ?cipher: string,
+                    ?passphrase: U2<string, Node.Buffer>
                 )
                 : KeyExportOptions<'T>
                 =
@@ -63864,6 +63905,19 @@ KeyObject.from($0)""")>]
                 =
                 nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: U2<string, Node.Buffer>,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: Node.crypto.PrivateKeyInput.``type``,
+                    ?passphrase: U2<string, Node.Buffer>,
+                    ?encoding: string
+                )
+                : PrivateKeyInput
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type PublicKeyInput =
@@ -63888,6 +63942,18 @@ KeyObject.from($0)""")>]
             static member Create
                 (
                     key: Node.Buffer,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: Node.crypto.PublicKeyInput.``type``,
+                    ?encoding: string
+                )
+                : PublicKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: U2<string, Node.Buffer>,
                     ?format: Node.crypto.KeyFormat,
                     ?``type``: Node.crypto.PublicKeyInput.``type``,
                     ?encoding: string
@@ -64026,6 +64092,22 @@ KeyObject.from($0)""")>]
                 =
                 nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: U2<string, Node.Buffer>,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: Node.crypto.SignPrivateKeyInput.``type``,
+                    ?passphrase: U2<string, Node.Buffer>,
+                    ?encoding: string,
+                    ?padding: float,
+                    ?saltLength: float,
+                    ?dsaEncoding: Node.crypto.DSAEncoding
+                )
+                : SignPrivateKeyInput
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type SignKeyObjectInput =
@@ -64088,6 +64170,21 @@ KeyObject.from($0)""")>]
             static member Create
                 (
                     key: Node.Buffer,
+                    ?format: Node.crypto.KeyFormat,
+                    ?``type``: Node.crypto.VerifyPublicKeyInput.``type``,
+                    ?encoding: string,
+                    ?padding: float,
+                    ?saltLength: float,
+                    ?dsaEncoding: Node.crypto.DSAEncoding
+                )
+                : VerifyPublicKeyInput
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: U2<string, Node.Buffer>,
                     ?format: Node.crypto.KeyFormat,
                     ?``type``: Node.crypto.VerifyPublicKeyInput.``type``,
                     ?encoding: string,
@@ -65391,6 +65488,16 @@ KeyObject.from($0)""")>]
             abstract member padding: float option with get, set
 
             [<ParamObject; Emit("$0")>]
+            static member Create(key: string, ?padding: float) : RsaPublicKey = nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(key: Node.Buffer, ?padding: float) : RsaPublicKey = nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(key: Node.crypto.KeyObject, ?padding: float) : RsaPublicKey =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
             static member Create(key: Node.crypto.KeyLike, ?padding: float) : RsaPublicKey =
                 nativeOnly
 
@@ -65402,6 +65509,45 @@ KeyObject.from($0)""")>]
             abstract member oaepHash: string option with get, set
             abstract member oaepLabel: Node.NodeJS.TypedArray option with get, set
             abstract member padding: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: string,
+                    ?passphrase: string,
+                    ?oaepHash: string,
+                    ?oaepLabel: Node.NodeJS.TypedArray,
+                    ?padding: float
+                )
+                : RsaPrivateKey
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.Buffer,
+                    ?passphrase: string,
+                    ?oaepHash: string,
+                    ?oaepLabel: Node.NodeJS.TypedArray,
+                    ?padding: float
+                )
+                : RsaPrivateKey
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.crypto.KeyObject,
+                    ?passphrase: string,
+                    ?oaepHash: string,
+                    ?oaepLabel: Node.NodeJS.TypedArray,
+                    ?padding: float
+                )
+                : RsaPrivateKey
+                =
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
             static member Create
@@ -107615,22 +107761,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?flags: string,
-                    ?encoding: Node.BufferEncoding,
-                    ?mode: float,
-                    ?autoClose: bool,
-                    ?emitClose: bool,
-                    ?start: float,
-                    ?signal: Node.AbortSignal,
-                    ?highWaterMark: float
-                )
-                : StreamOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     fd: float,
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
@@ -107651,6 +107781,23 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     fd: Node.fs.promises.FileHandle,
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
+                    ?mode: float,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?signal: Node.AbortSignal,
+                    ?highWaterMark: float
+                )
+                : StreamOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?flags: string,
+                    ?encoding: Node.BufferEncoding,
+                    ?fd: U2<float, Node.fs.promises.FileHandle>,
                     ?mode: float,
                     ?autoClose: bool,
                     ?emitClose: bool,
@@ -107717,24 +107864,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?flags: string,
-                    ?encoding: Node.BufferEncoding,
-                    ?mode: float,
-                    ?autoClose: bool,
-                    ?emitClose: bool,
-                    ?start: float,
-                    ?signal: Node.AbortSignal,
-                    ?highWaterMark: float,
-                    ?fs: Node.fs.CreateReadStreamFSImplementation,
-                    ?``end``: float
-                )
-                : ReadStreamOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     fd: float,
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
@@ -107757,6 +107886,25 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     fd: Node.fs.promises.FileHandle,
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
+                    ?mode: float,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?signal: Node.AbortSignal,
+                    ?highWaterMark: float,
+                    ?fs: Node.fs.CreateReadStreamFSImplementation,
+                    ?``end``: float
+                )
+                : ReadStreamOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?flags: string,
+                    ?encoding: Node.BufferEncoding,
+                    ?fd: U2<float, Node.fs.promises.FileHandle>,
                     ?mode: float,
                     ?autoClose: bool,
                     ?emitClose: bool,
@@ -107780,24 +107928,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?flags: string,
-                    ?encoding: Node.BufferEncoding,
-                    ?mode: float,
-                    ?autoClose: bool,
-                    ?emitClose: bool,
-                    ?start: float,
-                    ?signal: Node.AbortSignal,
-                    ?highWaterMark: float,
-                    ?fs: Node.fs.CreateWriteStreamFSImplementation,
-                    ?flush: bool
-                )
-                : WriteStreamOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     fd: float,
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
@@ -107820,6 +107950,25 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     fd: Node.fs.promises.FileHandle,
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
+                    ?mode: float,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?signal: Node.AbortSignal,
+                    ?highWaterMark: float,
+                    ?fs: Node.fs.CreateWriteStreamFSImplementation,
+                    ?flush: bool
+                )
+                : WriteStreamOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?flags: string,
+                    ?encoding: Node.BufferEncoding,
+                    ?fd: U2<float, Node.fs.promises.FileHandle>,
                     ?mode: float,
                     ?autoClose: bool,
                     ?emitClose: bool,
@@ -108138,10 +108287,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// provided, each string should be a glob pattern that specifies paths to exclude.
             /// Note: Negation patterns (e.g., '!foo.js') are not supported.
             /// </summary>
-            abstract member exclude: U2<('T -> bool), ReadonlyArray<string>> option with get, set
-
-            [<ParamObject; Emit("$0")>]
-            static member Create(?withFileTypes: bool) : _GlobOptions<'T> = nativeOnly
+            abstract member exclude: U2<('T -> bool), ResizeArray<string>> option with get, set
 
             [<ParamObject; Emit("$0")>]
             static member Create(exclude: ('T -> bool), ?withFileTypes: bool) : _GlobOptions<'T> =
@@ -108149,7 +108295,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (exclude: ResizeArray<string>, ?withFileTypes: bool)
                 : _GlobOptions<'T>
                 =
                 nativeOnly
@@ -108166,7 +108312,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: string, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (cwd: string, exclude: ResizeArray<string>, ?withFileTypes: bool)
                 : _GlobOptions<'T>
                 =
                 nativeOnly
@@ -108184,7 +108330,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: Node.url.URL, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (cwd: Node.url.URL, exclude: ResizeArray<string>, ?withFileTypes: bool)
+                : _GlobOptions<'T>
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?withFileTypes: bool,
+                    ?exclude: U2<('T -> bool), ResizeArray<string>>
+                )
                 : _GlobOptions<'T>
                 =
                 nativeOnly
@@ -108195,9 +108352,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             inherit Node.fs._GlobOptions<U2<Node.fs.Dirent, string>>
 
             [<ParamObject; Emit("$0")>]
-            static member Create(?withFileTypes: bool) : GlobOptions = nativeOnly
-
-            [<ParamObject; Emit("$0")>]
             static member Create
                 (exclude: (U2<Node.fs.Dirent, string> -> bool), ?withFileTypes: bool)
                 : GlobOptions
@@ -108205,10 +108359,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            static member Create
-                (exclude: ReadonlyArray<string>, ?withFileTypes: bool)
-                : GlobOptions
-                =
+            static member Create(exclude: ResizeArray<string>, ?withFileTypes: bool) : GlobOptions =
                 nativeOnly
 
             [<ParamObject; Emit("$0")>]
@@ -108223,7 +108374,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: string, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (cwd: string, exclude: ResizeArray<string>, ?withFileTypes: bool)
                 : GlobOptions
                 =
                 nativeOnly
@@ -108244,7 +108395,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: Node.url.URL, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (cwd: Node.url.URL, exclude: ResizeArray<string>, ?withFileTypes: bool)
+                : GlobOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?withFileTypes: bool,
+                    ?exclude: U2<(U2<Node.fs.Dirent, string> -> bool), ResizeArray<string>>
+                )
                 : GlobOptions
                 =
                 nativeOnly
@@ -108259,9 +108421,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member withFileTypes: bool with get, set
 
             [<ParamObject; Emit("$0")>]
-            static member Create(withFileTypes: bool) : GlobOptionsWithFileTypes = nativeOnly
-
-            [<ParamObject; Emit("$0")>]
             static member Create
                 (withFileTypes: bool, exclude: (Node.fs.Dirent -> bool))
                 : GlobOptionsWithFileTypes
@@ -108270,7 +108429,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (withFileTypes: bool, exclude: ReadonlyArray<string>)
+                (withFileTypes: bool, exclude: ResizeArray<string>)
                 : GlobOptionsWithFileTypes
                 =
                 nativeOnly
@@ -108288,7 +108447,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (withFileTypes: bool, cwd: string, exclude: ReadonlyArray<string>)
+                (withFileTypes: bool, cwd: string, exclude: ResizeArray<string>)
                 : GlobOptionsWithFileTypes
                 =
                 nativeOnly
@@ -108309,7 +108468,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (withFileTypes: bool, cwd: Node.url.URL, exclude: ReadonlyArray<string>)
+                (withFileTypes: bool, cwd: Node.url.URL, exclude: ResizeArray<string>)
+                : GlobOptionsWithFileTypes
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    withFileTypes: bool,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?exclude: U2<(Node.fs.Dirent -> bool), ResizeArray<string>>
+                )
                 : GlobOptionsWithFileTypes
                 =
                 nativeOnly
@@ -108324,9 +108494,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member withFileTypes: bool option with get, set
 
             [<ParamObject; Emit("$0")>]
-            static member Create(?withFileTypes: bool) : GlobOptionsWithoutFileTypes = nativeOnly
-
-            [<ParamObject; Emit("$0")>]
             static member Create
                 (exclude: (string -> bool), ?withFileTypes: bool)
                 : GlobOptionsWithoutFileTypes
@@ -108335,7 +108502,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (exclude: ResizeArray<string>, ?withFileTypes: bool)
                 : GlobOptionsWithoutFileTypes
                 =
                 nativeOnly
@@ -108353,7 +108520,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: string, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (cwd: string, exclude: ResizeArray<string>, ?withFileTypes: bool)
                 : GlobOptionsWithoutFileTypes
                 =
                 nativeOnly
@@ -108374,7 +108541,18 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (cwd: Node.url.URL, exclude: ReadonlyArray<string>, ?withFileTypes: bool)
+                (cwd: Node.url.URL, exclude: ResizeArray<string>, ?withFileTypes: bool)
+                : GlobOptionsWithoutFileTypes
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?exclude: U2<(string -> bool), ResizeArray<string>>,
+                    ?withFileTypes: bool
+                )
                 : GlobOptionsWithoutFileTypes
                 =
                 nativeOnly
@@ -119926,7 +120104,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             abstract member createConnection: Node.http.ClientRequestArgs.createConnection option with get, set
             abstract member defaultPort: U2<float, string> option with get, set
             abstract member family: float option with get, set
-            abstract member headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>> option with get, set
+            abstract member headers: U2<Node.http.OutgoingHttpHeaders, ResizeArray<string>> option with get, set
             abstract member host: string option with get, set
             abstract member hostname: string option with get, set
             abstract member insecureHTTPParser: bool option with get, set
@@ -119961,7 +120139,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?createConnection: Node.http.ClientRequestArgs.createConnection,
                     ?defaultPort: U2<float, string>,
                     ?family: float,
-                    ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
+                    ?headers: U2<Node.http.OutgoingHttpHeaders, ResizeArray<string>>,
                     ?host: string,
                     ?hostname: string,
                     ?insecureHTTPParser: bool,
@@ -126368,7 +126546,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?createConnection: Node.http.RequestOptions.createConnection,
                     ?defaultPort: U2<float, string>,
                     ?family: float,
-                    ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
+                    ?headers: U2<Node.http.OutgoingHttpHeaders, ResizeArray<string>>,
                     ?host: string,
                     ?hostname: string,
                     ?insecureHTTPParser: bool,
@@ -138590,6 +138768,13 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<ParamObject; Emit("$0")>]
             static member Create(origin: Node.url.URL) : AlternativeServiceOptions = nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (origin: U3<float, string, Node.url.URL>)
+                : AlternativeServiceOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> =
@@ -140923,7 +141108,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.http2.SecureClientSessionOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?host: string,
@@ -141013,7 +141198,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.http2.SecureServerSessionOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?allowHalfOpen: bool,
@@ -141147,7 +141332,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.http2.SecureServerOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?allowHalfOpen: bool,
@@ -158238,7 +158423,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.https.ServerOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?allowHalfOpen: bool,
@@ -158276,7 +158461,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     ?createConnection: Node.https.RequestOptions.createConnection,
                     ?defaultPort: U2<float, string>,
                     ?family: float,
-                    ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
+                    ?headers: U2<Node.http.OutgoingHttpHeaders, ResizeArray<string>>,
                     ?host: string,
                     ?hostname: string,
                     ?insecureHTTPParser: bool,
@@ -166869,13 +167054,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (?data: 'Data, ?transferList: ResizeArray<obj>)
-                    : RegisterOptions<'Data>
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
                     (parentURL: string, ?data: 'Data, ?transferList: ResizeArray<obj>)
                     : RegisterOptions<'Data>
                     =
@@ -166884,6 +167062,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (parentURL: Node.url.URL, ?data: 'Data, ?transferList: ResizeArray<obj>)
+                    : RegisterOptions<'Data>
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?parentURL: U2<string, Node.url.URL>,
+                        ?data: 'Data,
+                        ?transferList: ResizeArray<obj>
+                    )
                     : RegisterOptions<'Data>
                     =
                     nativeOnly
@@ -180674,7 +180863,7 @@ SocketAddress.parse($0)""")>]
         [<Interface>]
         type ParsedUrlQueryInput =
             inherit Node.NodeJS.Dict<
-                U5<string, float, bool, bigint, ReadonlyArray<U4<string, float, bool, bigint>>> option
+                U5<string, float, bool, bigint, ResizeArray<U4<string, float, bool, bigint>>> option
                      >
 
         module Exports =
@@ -183093,25 +183282,6 @@ SocketAddress.parse($0)""")>]
             static member Create
                 (
                     input: Node.NodeJS.ReadableStream,
-                    ?output: Node.NodeJS.WritableStream,
-                    ?terminal: bool,
-                    ?history: ResizeArray<string>,
-                    ?historySize: float,
-                    ?removeHistoryDuplicates: bool,
-                    ?prompt: string,
-                    ?crlfDelay: float,
-                    ?escapeCodeTimeout: float,
-                    ?tabSize: float,
-                    ?signal: Node.AbortSignal
-                )
-                : ReadLineOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    input: Node.NodeJS.ReadableStream,
                     completer: Node.readline.Completer,
                     ?output: Node.NodeJS.WritableStream,
                     ?terminal: bool,
@@ -183134,6 +183304,26 @@ SocketAddress.parse($0)""")>]
                     input: Node.NodeJS.ReadableStream,
                     completer: Node.readline.AsyncCompleter,
                     ?output: Node.NodeJS.WritableStream,
+                    ?terminal: bool,
+                    ?history: ResizeArray<string>,
+                    ?historySize: float,
+                    ?removeHistoryDuplicates: bool,
+                    ?prompt: string,
+                    ?crlfDelay: float,
+                    ?escapeCodeTimeout: float,
+                    ?tabSize: float,
+                    ?signal: Node.AbortSignal
+                )
+                : ReadLineOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    input: Node.NodeJS.ReadableStream,
+                    ?output: Node.NodeJS.WritableStream,
+                    ?completer: U2<Node.readline.Completer, Node.readline.AsyncCompleter>,
                     ?terminal: bool,
                     ?history: ResizeArray<string>,
                     ?historySize: float,
@@ -183643,26 +183833,6 @@ SocketAddress.parse($0)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?prompt: string,
-                    ?input: Node.NodeJS.ReadableStream,
-                    ?output: Node.NodeJS.WritableStream,
-                    ?terminal: bool,
-                    ?eval: Node.repl.REPLEval,
-                    ?preview: bool,
-                    ?useColors: bool,
-                    ?useGlobal: bool,
-                    ?ignoreUndefined: bool,
-                    ?writer: Node.repl.REPLWriter,
-                    ?replMode: obj,
-                    ?breakEvalOnSigint: bool
-                )
-                : ReplOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     completer: Node.readline.Completer,
                     ?prompt: string,
                     ?input: Node.NodeJS.ReadableStream,
@@ -183695,6 +183865,27 @@ SocketAddress.parse($0)""")>]
                     ?useGlobal: bool,
                     ?ignoreUndefined: bool,
                     ?writer: Node.repl.REPLWriter,
+                    ?replMode: obj,
+                    ?breakEvalOnSigint: bool
+                )
+                : ReplOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?prompt: string,
+                    ?input: Node.NodeJS.ReadableStream,
+                    ?output: Node.NodeJS.WritableStream,
+                    ?terminal: bool,
+                    ?eval: Node.repl.REPLEval,
+                    ?preview: bool,
+                    ?useColors: bool,
+                    ?useGlobal: bool,
+                    ?ignoreUndefined: bool,
+                    ?writer: Node.repl.REPLWriter,
+                    ?completer: U2<Node.readline.Completer, Node.readline.AsyncCompleter>,
                     ?replMode: obj,
                     ?breakEvalOnSigint: bool
                 )
@@ -186512,6 +186703,22 @@ SocketAddress.parse($0)""")>]
                 =
                 nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    start: U2<'T, (unit -> 'T)>,
+                    step: Node.sqlite.AggregateOptions.step<'T>,
+                    ?deterministic: bool,
+                    ?directOnly: bool,
+                    ?useBigIntArguments: bool,
+                    ?varargs: bool,
+                    ?result: ('T -> Node.sqlite.SQLInputValue),
+                    ?inverse: Node.sqlite.AggregateOptions.inverse<'T>
+                )
+                : AggregateOptions<'T>
+                =
+                nativeOnly
+
         /// <summary>
         /// This class represents a single [connection](https://www.sqlite.org/c3ref/sqlite3.html) to a SQLite database. All APIs
         /// exposed by this class execute synchronously.
@@ -186848,6 +187055,13 @@ SocketAddress.parse($0)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (changes: bigint, lastInsertRowid: bigint)
+                : StatementResultingChanges
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (changes: U2<float, bigint>, lastInsertRowid: U2<float, bigint>)
                 : StatementResultingChanges
                 =
                 nativeOnly
@@ -206080,7 +206294,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// Strings are interpreted as JavaScript regular expressions.
                 /// </summary>
                 abstract member testNamePatterns:
-                    U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>> option with get, set
+                    U3<string, RegExp, ResizeArray<U2<string, RegExp>>> option with get, set
 
                 /// <summary>
                 /// A String, RegExp or a RegExp Array, that can be used to exclude running tests whose
@@ -206089,7 +206303,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// such as <c>beforeEach()</c>, are also run.
                 /// </summary>
                 abstract member testSkipPatterns:
-                    U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>> option with get, set
+                    U3<string, RegExp, ResizeArray<U2<string, RegExp>>> option with get, set
 
                 /// <summary>
                 /// The number of milliseconds after which the test execution will fail.
@@ -206115,7 +206329,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// If both <c>coverageExcludeGlobs</c> and <c>coverageIncludeGlobs</c> are provided,
                 /// files must meet **both** criteria to be included in the coverage report.
                 /// </summary>
-                abstract member coverageExcludeGlobs: U2<string, ReadonlyArray<string>> option with get, set
+                abstract member coverageExcludeGlobs: U2<string, ResizeArray<string>> option with get, set
                 /// <summary>
                 /// Includes specific files in code coverage
                 /// using a glob pattern, which can match both absolute and relative file paths.
@@ -206123,7 +206337,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// If both <c>coverageExcludeGlobs</c> and <c>coverageIncludeGlobs</c> are provided,
                 /// files must meet **both** criteria to be included in the coverage report.
                 /// </summary>
-                abstract member coverageIncludeGlobs: U2<string, ReadonlyArray<string>> option with get, set
+                abstract member coverageIncludeGlobs: U2<string, ResizeArray<string>> option with get, set
                 /// <summary>
                 /// Require a minimum percent of covered lines. If code
                 /// coverage does not reach the threshold specified, the process will exit with code <c>1</c>.
@@ -206154,14 +206368,14 @@ Duplex.fromWeb($0, $1)""")>]
                         ?execArgv: ReadonlyArray<string>,
                         ?argv: ReadonlyArray<string>,
                         ?signal: Node.AbortSignal,
-                        ?testNamePatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>>,
-                        ?testSkipPatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>>,
+                        ?testNamePatterns: U3<string, RegExp, ResizeArray<U2<string, RegExp>>>,
+                        ?testSkipPatterns: U3<string, RegExp, ResizeArray<U2<string, RegExp>>>,
                         ?timeout: float,
                         ?watch: bool,
                         ?shard: Node.test.test_.TestShard,
                         ?coverage: bool,
-                        ?coverageExcludeGlobs: U2<string, ReadonlyArray<string>>,
-                        ?coverageIncludeGlobs: U2<string, ReadonlyArray<string>>,
+                        ?coverageExcludeGlobs: U2<string, ResizeArray<string>>,
+                        ?coverageIncludeGlobs: U2<string, ResizeArray<string>>,
                         ?lineCoverage: float,
                         ?branchCoverage: float,
                         ?functionCoverage: float
@@ -212438,13 +212652,13 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member wait: U2<bool, float> option with get, set
 
                 [<ParamObject; Emit("$0")>]
-                static member Create() : TestContextPlanOptions = nativeOnly
-
-                [<ParamObject; Emit("$0")>]
                 static member Create(wait: bool) : TestContextPlanOptions = nativeOnly
 
                 [<ParamObject; Emit("$0")>]
                 static member Create(wait: float) : TestContextPlanOptions = nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?wait: U2<bool, float>) : TestContextPlanOptions = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -213422,13 +213636,6 @@ Duplex.fromWeb($0, $1)""")>]
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>)
-                    : MockTimersOptions
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
                     (apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>, now: float)
                     : MockTimersOptions
                     =
@@ -213437,6 +213644,16 @@ Duplex.fromWeb($0, $1)""")>]
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>, now: Date)
+                    : MockTimersOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>,
+                        ?now: U2<float, Date>
+                    )
                     : MockTimersOptions
                     =
                     nativeOnly
@@ -215155,6 +215372,10 @@ Duplex.fromWeb($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create(pem: Node.Buffer, ?passphrase: string) : KeyObject = nativeOnly
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(pem: U2<string, Node.Buffer>, ?passphrase: string) : KeyObject =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type PxfObject =
@@ -215172,6 +215393,10 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create(buf: Node.Buffer, ?passphrase: string) : PxfObject = nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(buf: U2<string, Node.Buffer>, ?passphrase: string) : PxfObject =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -215237,7 +215462,7 @@ Duplex.fromWeb($0, $1)""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.tls.TLSSocketOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?isServer: bool,
@@ -216737,7 +216962,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// (Protocols should be ordered by their priority.)
             /// </summary>
             abstract member ALPNProtocols:
-                U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView> option with get, set
+                U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView> option with get, set
 
             /// <summary>
             /// SNICallback(servername, cb) <Function> A function that will be
@@ -216759,20 +216984,7 @@ Duplex.fromWeb($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?secureContext: Node.tls.SecureContext,
-                    ?enableTrace: bool,
-                    ?requestCert: bool,
-                    ?SNICallback: Node.tls.CommonConnectionOptions.SNICallback,
-                    ?rejectUnauthorized: bool
-                )
-                : CommonConnectionOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    ALPNProtocols: ReadonlyArray<string>,
+                    ALPNProtocols: ResizeArray<string>,
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
@@ -216790,6 +217002,20 @@ Duplex.fromWeb($0, $1)""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
+                    ?SNICallback: Node.tls.CommonConnectionOptions.SNICallback,
+                    ?rejectUnauthorized: bool
+                )
+                : CommonConnectionOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.tls.CommonConnectionOptions.SNICallback,
                     ?rejectUnauthorized: bool
                 )
@@ -216888,7 +217114,7 @@ Duplex.fromWeb($0, $1)""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.tls.TlsOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?allowHalfOpen: bool,
@@ -217002,7 +217228,7 @@ Duplex.fromWeb($0, $1)""")>]
                     ?secureContext: Node.tls.SecureContext,
                     ?enableTrace: bool,
                     ?requestCert: bool,
-                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?ALPNProtocols: U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView>,
                     ?SNICallback: Node.tls.ConnectionOptions.SNICallback,
                     ?rejectUnauthorized: bool,
                     ?host: string,
@@ -220924,25 +221150,6 @@ Duplex.fromWeb($0, $1)""")>]
             static member Create
                 (
                     href: string,
-                    ?auth: string,
-                    ?hash: string,
-                    ?host: string,
-                    ?hostname: string,
-                    ?path: string,
-                    ?pathname: string,
-                    ?protocol: string,
-                    ?search: string,
-                    ?slashes: bool,
-                    ?port: string
-                )
-                : Url
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    href: string,
                     query: string,
                     ?auth: string,
                     ?hash: string,
@@ -220974,6 +221181,26 @@ Duplex.fromWeb($0, $1)""")>]
                     ?search: string,
                     ?slashes: bool,
                     ?port: string
+                )
+                : Url
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    href: string,
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?path: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: string,
+                    ?query: U2<string, Node.querystring.ParsedUrlQuery>
                 )
                 : Url
                 =
@@ -221705,7 +221932,7 @@ URL.parse($0, $1)""")>]
                 [<Interface>]
                 type init =
                     [<EmitIndexer>]
-                    abstract member Item: key: string -> U2<string, ReadonlyArray<string>> with get, set
+                    abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
     module util =
 
@@ -224745,13 +224972,6 @@ URL.parse($0, $1)""")>]
 
             [<ParamObject; Emit("$0")>]
             static member Create
-                (``type``: Node.util.ParseArgsOptionsType, ?multiple: bool, ?short: string)
-                : ParseArgsOptionDescriptor
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
                 (
                     ``type``: Node.util.ParseArgsOptionsType,
                     ``default``: string,
@@ -224793,6 +225013,18 @@ URL.parse($0, $1)""")>]
                     ``default``: ResizeArray<bool>,
                     ?multiple: bool,
                     ?short: string
+                )
+                : ParseArgsOptionDescriptor
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.util.ParseArgsOptionsType,
+                    ?multiple: bool,
+                    ?short: string,
+                    ?``default``: U4<string, bool, ResizeArray<string>, ResizeArray<bool>>
                 )
                 : ParseArgsOptionDescriptor
                 =
@@ -228512,19 +228744,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?filename: string,
-                    ?lineOffset: float,
-                    ?columnOffset: float,
-                    ?cachedData: Node.NodeJS.ArrayBufferView,
-                    ?produceCachedData: bool
-                )
-                : ScriptOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Script>,
                     ?filename: string,
                     ?lineOffset: float,
@@ -228545,6 +228764,20 @@ URL.parse($0, $1)""")>]
                     ?columnOffset: float,
                     ?cachedData: Node.NodeJS.ArrayBufferView,
                     ?produceCachedData: bool
+                )
+                : ScriptOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?produceCachedData: bool,
+                    ?importModuleDynamically: U2<Node.vm.DynamicModuleLoader<Node.vm.Script>, float>
                 )
                 : ScriptOptions
                 =
@@ -228647,21 +228880,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?filename: string,
-                    ?lineOffset: float,
-                    ?columnOffset: float,
-                    ?displayErrors: bool,
-                    ?timeout: float,
-                    ?breakOnSigint: bool,
-                    ?cachedData: Node.NodeJS.ArrayBufferView
-                )
-                : RunningCodeOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Script>,
                     ?filename: string,
                     ?lineOffset: float,
@@ -228686,6 +228904,22 @@ URL.parse($0, $1)""")>]
                     ?timeout: float,
                     ?breakOnSigint: bool,
                     ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?importModuleDynamically: U2<Node.vm.DynamicModuleLoader<Node.vm.Script>, float>
                 )
                 : RunningCodeOptions
                 =
@@ -228712,26 +228946,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?filename: string,
-                    ?lineOffset: float,
-                    ?columnOffset: float,
-                    ?displayErrors: bool,
-                    ?timeout: float,
-                    ?breakOnSigint: bool,
-                    ?microtaskMode: string,
-                    ?contextName: string option,
-                    ?contextOrigin: string option,
-                    ?contextCodeGeneration:
-                        Node.vm.RunningCodeInNewContextOptions.contextCodeGeneration option,
-                    ?cachedData: Node.NodeJS.ArrayBufferView
-                )
-                : RunningCodeInNewContextOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Script>,
                     ?filename: string,
                     ?lineOffset: float,
@@ -228766,6 +228980,27 @@ URL.parse($0, $1)""")>]
                     ?contextCodeGeneration:
                         Node.vm.RunningCodeInNewContextOptions.contextCodeGeneration option,
                     ?cachedData: Node.NodeJS.ArrayBufferView
+                )
+                : RunningCodeInNewContextOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?displayErrors: bool,
+                    ?timeout: float,
+                    ?breakOnSigint: bool,
+                    ?microtaskMode: string,
+                    ?contextName: string option,
+                    ?contextOrigin: string option,
+                    ?contextCodeGeneration:
+                        Node.vm.RunningCodeInNewContextOptions.contextCodeGeneration option,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?importModuleDynamically: U2<Node.vm.DynamicModuleLoader<Node.vm.Script>, float>
                 )
                 : RunningCodeInNewContextOptions
                 =
@@ -228803,21 +229038,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?filename: string,
-                    ?lineOffset: float,
-                    ?columnOffset: float,
-                    ?cachedData: Node.NodeJS.ArrayBufferView,
-                    ?produceCachedData: bool,
-                    ?parsingContext: Node.vm.Context,
-                    ?contextExtensions: ResizeArray<obj>
-                )
-                : CompileFunctionOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<obj>,
                     ?filename: string,
                     ?lineOffset: float,
@@ -228842,6 +229062,22 @@ URL.parse($0, $1)""")>]
                     ?produceCachedData: bool,
                     ?parsingContext: Node.vm.Context,
                     ?contextExtensions: ResizeArray<obj>
+                )
+                : CompileFunctionOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?filename: string,
+                    ?lineOffset: float,
+                    ?columnOffset: float,
+                    ?cachedData: Node.NodeJS.ArrayBufferView,
+                    ?produceCachedData: bool,
+                    ?parsingContext: Node.vm.Context,
+                    ?contextExtensions: ResizeArray<obj>,
+                    ?importModuleDynamically: U2<Node.vm.DynamicModuleLoader<obj>, float>
                 )
                 : CompileFunctionOptions
                 =
@@ -228878,18 +229114,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?name: string,
-                    ?origin: string,
-                    ?codeGeneration: Node.vm.CreateContextOptions.codeGeneration,
-                    ?microtaskMode: string
-                )
-                : CreateContextOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Context>,
                     ?name: string,
                     ?origin: string,
@@ -228908,6 +229132,20 @@ URL.parse($0, $1)""")>]
                     ?origin: string,
                     ?codeGeneration: Node.vm.CreateContextOptions.codeGeneration,
                     ?microtaskMode: string
+                )
+                : CreateContextOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?name: string,
+                    ?origin: string,
+                    ?codeGeneration: Node.vm.CreateContextOptions.codeGeneration,
+                    ?microtaskMode: string,
+                    ?importModuleDynamically:
+                        U2<Node.vm.DynamicModuleLoader<Node.vm.Context>, float>
                 )
                 : CreateContextOptions
                 =
@@ -231053,25 +231291,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?argv: ResizeArray<obj>,
-                    ?eval: bool,
-                    ?workerData: obj,
-                    ?stdin: bool,
-                    ?stdout: bool,
-                    ?stderr: bool,
-                    ?execArgv: ResizeArray<string>,
-                    ?resourceLimits: Node.worker_threads.ResourceLimits,
-                    ?transferList: ResizeArray<Node.worker_threads.Transferable>,
-                    ?trackUnmanagedFds: bool,
-                    ?name: string
-                )
-                : WorkerOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     env: Node.NodeJS.Dict<string>,
                     ?argv: ResizeArray<obj>,
                     ?eval: bool,
@@ -231094,6 +231313,26 @@ URL.parse($0, $1)""")>]
                 (
                     env: obj,
                     ?argv: ResizeArray<obj>,
+                    ?eval: bool,
+                    ?workerData: obj,
+                    ?stdin: bool,
+                    ?stdout: bool,
+                    ?stderr: bool,
+                    ?execArgv: ResizeArray<string>,
+                    ?resourceLimits: Node.worker_threads.ResourceLimits,
+                    ?transferList: ResizeArray<Node.worker_threads.Transferable>,
+                    ?trackUnmanagedFds: bool,
+                    ?name: string
+                )
+                : WorkerOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?argv: ResizeArray<obj>,
+                    ?env: U2<Node.NodeJS.Dict<string>, obj>,
                     ?eval: bool,
                     ?workerData: obj,
                     ?stdin: bool,
@@ -236338,23 +236577,6 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?flush: float,
-                    ?finishFlush: float,
-                    ?chunkSize: float,
-                    ?windowBits: float,
-                    ?level: float,
-                    ?memLevel: float,
-                    ?strategy: float,
-                    ?info: bool,
-                    ?maxOutputLength: float
-                )
-                : ZlibOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
                     dictionary: Node.NodeJS.ArrayBufferView,
                     ?flush: float,
                     ?finishFlush: float,
@@ -236381,6 +236603,24 @@ URL.parse($0, $1)""")>]
                     ?level: float,
                     ?memLevel: float,
                     ?strategy: float,
+                    ?info: bool,
+                    ?maxOutputLength: float
+                )
+                : ZlibOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?flush: float,
+                    ?finishFlush: float,
+                    ?chunkSize: float,
+                    ?windowBits: float,
+                    ?level: float,
+                    ?memLevel: float,
+                    ?strategy: float,
+                    ?dictionary: U2<Node.NodeJS.ArrayBufferView, obj>,
                     ?info: bool,
                     ?maxOutputLength: float
                 )
@@ -237684,19 +237924,6 @@ module UndiciTypes =
             static member Create
                 (
                     path: string,
-                    ?opaque: obj,
-                    ?maxRedirections: float,
-                    ?redirectionLimitReached: bool,
-                    ?responseHeader: string
-                )
-                : BalancedPoolConnectOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    path: string,
                     headers: UndiciTypes.header.IncomingHttpHeaders,
                     ?opaque: obj,
                     ?maxRedirections: float,
@@ -237804,6 +238031,21 @@ module UndiciTypes =
                     ?maxRedirections: float,
                     ?redirectionLimitReached: bool,
                     ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string,
+                    ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>>
                 )
                 : BalancedPoolConnectOptions
                 =
@@ -238044,19 +238286,6 @@ module UndiciTypes =
             static member Create
                 (
                     path: string,
-                    ?opaque: obj,
-                    ?maxRedirections: float,
-                    ?redirectionLimitReached: bool,
-                    ?responseHeader: string
-                )
-                : ClientConnectOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    path: string,
                     headers: UndiciTypes.header.IncomingHttpHeaders,
                     ?opaque: obj,
                     ?maxRedirections: float,
@@ -238164,6 +238393,21 @@ module UndiciTypes =
                     ?maxRedirections: float,
                     ?redirectionLimitReached: bool,
                     ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string,
+                    ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>>
                 )
                 : ClientConnectOptions
                 =
@@ -238332,40 +238576,6 @@ module UndiciTypes =
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
-                        ?maxHeaderSize: float,
-                        ?headersTimeout: float,
-                        ?socketTimeout: obj,
-                        ?requestTimeout: obj,
-                        ?connectTimeout: float,
-                        ?bodyTimeout: float,
-                        ?idleTimeout: obj,
-                        ?keepAlive: obj,
-                        ?keepAliveTimeout: float,
-                        ?maxKeepAliveTimeout: obj,
-                        ?keepAliveMaxTimeout: float,
-                        ?keepAliveTimeoutThreshold: float,
-                        ?socketPath: string,
-                        ?pipelining: float,
-                        ?tls: obj,
-                        ?strictContentLength: bool,
-                        ?maxCachedSessions: float,
-                        ?maxRedirections: float,
-                        ?maxRequestsPerClient: float,
-                        ?localAddress: string,
-                        ?maxResponseSize: float,
-                        ?autoSelectFamily: bool,
-                        ?autoSelectFamilyAttemptTimeout: float,
-                        ?allowH2: bool,
-                        ?maxConcurrentStreams: float
-                    )
-                    : Options
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
                         connect: UndiciTypes.connector.buildConnector_.BuildOptions,
                         ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
                         ?maxHeaderSize: float,
@@ -238421,6 +238631,45 @@ module UndiciTypes =
                         ?strictContentLength: bool,
                         ?maxCachedSessions: float,
                         ?maxRedirections: float,
+                        ?maxRequestsPerClient: float,
+                        ?localAddress: string,
+                        ?maxResponseSize: float,
+                        ?autoSelectFamily: bool,
+                        ?autoSelectFamilyAttemptTimeout: float,
+                        ?allowH2: bool,
+                        ?maxConcurrentStreams: float
+                    )
+                    : Options
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
+                        ?maxHeaderSize: float,
+                        ?headersTimeout: float,
+                        ?socketTimeout: obj,
+                        ?requestTimeout: obj,
+                        ?connectTimeout: float,
+                        ?bodyTimeout: float,
+                        ?idleTimeout: obj,
+                        ?keepAlive: obj,
+                        ?keepAliveTimeout: float,
+                        ?maxKeepAliveTimeout: obj,
+                        ?keepAliveMaxTimeout: float,
+                        ?keepAliveTimeoutThreshold: float,
+                        ?socketPath: string,
+                        ?pipelining: float,
+                        ?tls: obj,
+                        ?strictContentLength: bool,
+                        ?maxCachedSessions: float,
+                        ?maxRedirections: float,
+                        ?connect:
+                            U2<
+                                UndiciTypes.connector.buildConnector_.BuildOptions,
+                                UndiciTypes.connector.buildConnector_.connector
+                             >,
                         ?maxRequestsPerClient: float,
                         ?localAddress: string,
                         ?maxResponseSize: float,
@@ -238733,7 +238982,7 @@ module UndiciTypes =
                 /// (Protocols should be ordered by their priority.)
                 /// </summary>
                 abstract member ALPNProtocols:
-                    U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView> option with get, set
+                    U2<ResizeArray<string>, Node.NodeJS.ArrayBufferView> option with get, set
 
                 /// <summary>
                 /// SNICallback(servername, cb) <Function> A function that will be
@@ -238892,23 +239141,6 @@ module UndiciTypes =
                 (
                     name: string,
                     value: string,
-                    ?maxAge: float,
-                    ?domain: string,
-                    ?path: string,
-                    ?secure: bool,
-                    ?httpOnly: bool,
-                    ?sameSite: UndiciTypes.cookies.Cookie.sameSite,
-                    ?unparsed: ResizeArray<string>
-                )
-                : Cookie
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    name: string,
-                    value: string,
                     expires: Date,
                     ?maxAge: float,
                     ?domain: string,
@@ -238928,6 +239160,24 @@ module UndiciTypes =
                     name: string,
                     value: string,
                     expires: float,
+                    ?maxAge: float,
+                    ?domain: string,
+                    ?path: string,
+                    ?secure: bool,
+                    ?httpOnly: bool,
+                    ?sameSite: UndiciTypes.cookies.Cookie.sameSite,
+                    ?unparsed: ResizeArray<string>
+                )
+                : Cookie
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    name: string,
+                    value: string,
+                    ?expires: U2<Date, float>,
                     ?maxAge: float,
                     ?domain: string,
                     ?path: string,
@@ -238968,18 +239218,6 @@ module UndiciTypes =
                         completed: bool,
                         path: string,
                         headers: obj,
-                        ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
-                    )
-                    : Request
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        completed: bool,
-                        path: string,
-                        headers: obj,
                         origin: string,
                         ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
                     )
@@ -238994,6 +239232,19 @@ module UndiciTypes =
                         path: string,
                         headers: obj,
                         origin: Node.url.URL,
+                        ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
+                    )
+                    : Request
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        completed: bool,
+                        path: string,
+                        headers: obj,
+                        ?origin: U2<string, Node.url.URL>,
                         ?``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod
                     )
                     : Request
@@ -240835,20 +241086,6 @@ module UndiciTypes =
                 static member Create
                     (
                         path: string,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    : UpgradeOptions
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        path: string,
                         signal: UndiciTypes.dispatcher.AbortSignal,
                         ?``method``: string,
                         ?protocol: string,
@@ -240961,6 +241198,22 @@ module UndiciTypes =
                         signal: Node.events.EventEmitter,
                         ?``method``: string,
                         ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ?``method``: string,
+                        ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>>,
+                        ?protocol: string,
+                        ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
                         ?maxRedirections: float,
                         ?redirectionLimitReached: bool,
                         ?responseHeader: string
@@ -242209,6 +242462,72 @@ module UndiciTypes =
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
+                    headers: ResizeArray<ResizeArray<string>>,
+                    ?``method``: string,
+                    ?keepalive: bool,
+                    ?body: UndiciTypes.fetch.BodyInit,
+                    ?redirect: UndiciTypes.fetch.RequestRedirect,
+                    ?integrity: string,
+                    ?signal: Node.AbortSignal,
+                    ?credentials: UndiciTypes.fetch.RequestCredentials,
+                    ?mode: UndiciTypes.fetch.RequestMode,
+                    ?referrer: string,
+                    ?referrerPolicy: UndiciTypes.fetch.ReferrerPolicy,
+                    ?window: obj,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
+                    ?duplex: UndiciTypes.fetch.RequestDuplex
+                )
+                : RequestInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    headers: UndiciTypes.fetch.RequestInit.headers,
+                    ?``method``: string,
+                    ?keepalive: bool,
+                    ?body: UndiciTypes.fetch.BodyInit,
+                    ?redirect: UndiciTypes.fetch.RequestRedirect,
+                    ?integrity: string,
+                    ?signal: Node.AbortSignal,
+                    ?credentials: UndiciTypes.fetch.RequestCredentials,
+                    ?mode: UndiciTypes.fetch.RequestMode,
+                    ?referrer: string,
+                    ?referrerPolicy: UndiciTypes.fetch.ReferrerPolicy,
+                    ?window: obj,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
+                    ?duplex: UndiciTypes.fetch.RequestDuplex
+                )
+                : RequestInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    headers: UndiciTypes.fetch.Headers,
+                    ?``method``: string,
+                    ?keepalive: bool,
+                    ?body: UndiciTypes.fetch.BodyInit,
+                    ?redirect: UndiciTypes.fetch.RequestRedirect,
+                    ?integrity: string,
+                    ?signal: Node.AbortSignal,
+                    ?credentials: UndiciTypes.fetch.RequestCredentials,
+                    ?mode: UndiciTypes.fetch.RequestMode,
+                    ?referrer: string,
+                    ?referrerPolicy: UndiciTypes.fetch.ReferrerPolicy,
+                    ?window: obj,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
+                    ?duplex: UndiciTypes.fetch.RequestDuplex
+                )
+                : RequestInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
                     ?``method``: string,
                     ?keepalive: bool,
                     ?headers: UndiciTypes.fetch.HeadersInit,
@@ -242289,6 +242608,31 @@ module UndiciTypes =
 
             [<ParamObject; Emit("$0")>]
             static member Create
+                (headers: ResizeArray<ResizeArray<string>>, ?status: float, ?statusText: string)
+                : ResponseInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    headers: UndiciTypes.fetch.ResponseInit.headers,
+                    ?status: float,
+                    ?statusText: string
+                )
+                : ResponseInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (headers: UndiciTypes.fetch.Headers, ?status: float, ?statusText: string)
+                : ResponseInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
                 (?status: float, ?statusText: string, ?headers: UndiciTypes.fetch.HeadersInit)
                 : ResponseInit
                 =
@@ -242337,7 +242681,7 @@ module UndiciTypes =
                 [<Interface>]
                 type Case2 =
                     [<EmitIndexer>]
-                    abstract member Item: key: string -> U2<string, ReadonlyArray<string>> with get, set
+                    abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
         module Headers =
 
@@ -242354,6 +242698,22 @@ module UndiciTypes =
                 type callbackfn =
                     delegate of
                         value: string * key: string * iterable: UndiciTypes.fetch.Headers -> unit
+
+        module RequestInit =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type headers =
+                [<EmitIndexer>]
+                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
+
+        module ResponseInit =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type headers =
+                [<EmitIndexer>]
+                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
     module file =
 
@@ -243084,41 +243444,6 @@ module UndiciTypes =
                 static member Create
                     (
                         agent: UndiciTypes.mock_agent.MockAgent,
-                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
-                        ?maxHeaderSize: float,
-                        ?headersTimeout: float,
-                        ?socketTimeout: obj,
-                        ?requestTimeout: obj,
-                        ?connectTimeout: float,
-                        ?bodyTimeout: float,
-                        ?idleTimeout: obj,
-                        ?keepAlive: obj,
-                        ?keepAliveTimeout: float,
-                        ?maxKeepAliveTimeout: obj,
-                        ?keepAliveMaxTimeout: float,
-                        ?keepAliveTimeoutThreshold: float,
-                        ?socketPath: string,
-                        ?pipelining: float,
-                        ?tls: obj,
-                        ?strictContentLength: bool,
-                        ?maxCachedSessions: float,
-                        ?maxRedirections: float,
-                        ?maxRequestsPerClient: float,
-                        ?localAddress: string,
-                        ?maxResponseSize: float,
-                        ?autoSelectFamily: bool,
-                        ?autoSelectFamilyAttemptTimeout: float,
-                        ?allowH2: bool,
-                        ?maxConcurrentStreams: float
-                    )
-                    : Options
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
-                        agent: UndiciTypes.mock_agent.MockAgent,
                         connect: UndiciTypes.connector.buildConnector_.BuildOptions,
                         ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
                         ?maxHeaderSize: float,
@@ -243175,6 +243500,46 @@ module UndiciTypes =
                         ?strictContentLength: bool,
                         ?maxCachedSessions: float,
                         ?maxRedirections: float,
+                        ?maxRequestsPerClient: float,
+                        ?localAddress: string,
+                        ?maxResponseSize: float,
+                        ?autoSelectFamily: bool,
+                        ?autoSelectFamilyAttemptTimeout: float,
+                        ?allowH2: bool,
+                        ?maxConcurrentStreams: float
+                    )
+                    : Options
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        agent: UndiciTypes.mock_agent.MockAgent,
+                        ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
+                        ?maxHeaderSize: float,
+                        ?headersTimeout: float,
+                        ?socketTimeout: obj,
+                        ?requestTimeout: obj,
+                        ?connectTimeout: float,
+                        ?bodyTimeout: float,
+                        ?idleTimeout: obj,
+                        ?keepAlive: obj,
+                        ?keepAliveTimeout: float,
+                        ?maxKeepAliveTimeout: obj,
+                        ?keepAliveMaxTimeout: float,
+                        ?keepAliveTimeoutThreshold: float,
+                        ?socketPath: string,
+                        ?pipelining: float,
+                        ?tls: obj,
+                        ?strictContentLength: bool,
+                        ?maxCachedSessions: float,
+                        ?maxRedirections: float,
+                        ?connect:
+                            U2<
+                                UndiciTypes.connector.buildConnector_.BuildOptions,
+                                UndiciTypes.connector.buildConnector_.connector
+                             >,
                         ?maxRequestsPerClient: float,
                         ?localAddress: string,
                         ?maxResponseSize: float,
@@ -243438,19 +243803,6 @@ module UndiciTypes =
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        ?headers: UndiciTypes.header.IncomingHttpHeaders,
-                        ?trailers:
-                            UndiciTypes.mock_interceptor.MockInterceptor_.MockDispatchData.trailers,
-                        ?error: 'TError,
-                        ?statusCode: float
-                    )
-                    : MockDispatchData<'TData, 'TError>
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
-                    (
                         data: 'TData,
                         ?headers: UndiciTypes.header.IncomingHttpHeaders,
                         ?trailers:
@@ -243471,6 +243823,20 @@ module UndiciTypes =
                             UndiciTypes.mock_interceptor.MockInterceptor_.MockDispatchData.trailers,
                         ?error: 'TError,
                         ?statusCode: float
+                    )
+                    : MockDispatchData<'TData, 'TError>
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?headers: UndiciTypes.header.IncomingHttpHeaders,
+                        ?trailers:
+                            UndiciTypes.mock_interceptor.MockInterceptor_.MockDispatchData.trailers,
+                        ?error: 'TError,
+                        ?statusCode: float,
+                        ?data: U2<'TData, string>
                     )
                     : MockDispatchData<'TData, 'TError>
                     =
@@ -243525,13 +243891,6 @@ module UndiciTypes =
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (path: string, ``method``: string, ?origin: string, ?maxRedirections: float)
-                    : MockResponseCallbackOptions
-                    =
-                    nativeOnly
-
-                [<ParamObject; Emit("$0")>]
-                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -243656,6 +244015,34 @@ module UndiciTypes =
                                 UndiciTypes.formdata.FormData
                              > option,
                         ?origin: string,
+                        ?maxRedirections: float
+                    )
+                    : MockResponseCallbackOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ``method``: string,
+                        ?headers:
+                            U2<
+                                UndiciTypes.fetch.Headers,
+                                UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions.headers.U2.Case2
+                             >,
+                        ?origin: string,
+                        ?body:
+                            U2<
+                                UndiciTypes.fetch.BodyInit,
+                                U5<
+                                    string,
+                                    Node.Buffer<obj>,
+                                    JS.Uint8Array,
+                                    Node.stream.Stream_.Readable,
+                                    UndiciTypes.formdata.FormData
+                                 > option
+                             >,
                         ?maxRedirections: float
                     )
                     : MockResponseCallbackOptions
@@ -243769,17 +244156,6 @@ module UndiciTypes =
                     static member Create
                         (
                             statusCode: float,
-                            ?responseOptions:
-                                UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
-                        )
-                        : ReturnType<'TData>
-                        =
-                        nativeOnly
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (
-                            statusCode: float,
                             data: 'TData,
                             ?responseOptions:
                                 UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
@@ -243805,6 +244181,18 @@ module UndiciTypes =
                         (
                             statusCode: float,
                             data: string,
+                            ?responseOptions:
+                                UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
+                        )
+                        : ReturnType<'TData>
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            statusCode: float,
+                            ?data: U3<'TData, Node.Buffer, string>,
                             ?responseOptions:
                                 UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
                         )
@@ -244030,19 +244418,6 @@ module UndiciTypes =
             static member Create
                 (
                     path: string,
-                    ?opaque: obj,
-                    ?maxRedirections: float,
-                    ?redirectionLimitReached: bool,
-                    ?responseHeader: string
-                )
-                : PoolConnectOptions
-                =
-                nativeOnly
-
-            [<ParamObject; Emit("$0")>]
-            static member Create
-                (
-                    path: string,
                     headers: UndiciTypes.header.IncomingHttpHeaders,
                     ?opaque: obj,
                     ?maxRedirections: float,
@@ -244150,6 +244525,21 @@ module UndiciTypes =
                     ?maxRedirections: float,
                     ?redirectionLimitReached: bool,
                     ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string,
+                    ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>>
                 )
                 : PoolConnectOptions
                 =
@@ -245134,8 +245524,43 @@ module UndiciTypes =
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
-                    ?headers: UndiciTypes.fetch.HeadersInit
+                    headers: ResizeArray<ResizeArray<string>>,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
+                )
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    headers: UndiciTypes.websocket.WebSocketInit.headers,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
+                )
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (headers: UndiciTypes.fetch.Headers, ?dispatcher: UndiciTypes.dispatcher.Dispatcher)
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (protocols: string, ?dispatcher: UndiciTypes.dispatcher.Dispatcher)
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    protocols: string,
+                    headers: ResizeArray<ResizeArray<string>>,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
                 )
                 : WebSocketInit
                 =
@@ -245145,8 +245570,37 @@ module UndiciTypes =
             static member Create
                 (
                     protocols: string,
-                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
-                    ?headers: UndiciTypes.fetch.HeadersInit
+                    headers: UndiciTypes.websocket.WebSocketInit.headers,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
+                )
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    protocols: string,
+                    headers: UndiciTypes.fetch.Headers,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
+                )
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (protocols: ResizeArray<string>, ?dispatcher: UndiciTypes.dispatcher.Dispatcher)
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    protocols: ResizeArray<string>,
+                    headers: ResizeArray<ResizeArray<string>>,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
                 )
                 : WebSocketInit
                 =
@@ -245156,6 +245610,28 @@ module UndiciTypes =
             static member Create
                 (
                     protocols: ResizeArray<string>,
+                    headers: UndiciTypes.websocket.WebSocketInit.headers,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
+                )
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    protocols: ResizeArray<string>,
+                    headers: UndiciTypes.fetch.Headers,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher
+                )
+                : WebSocketInit
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?protocols: U2<string, ResizeArray<string>>,
                     ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
                     ?headers: UndiciTypes.fetch.HeadersInit
                 )
@@ -245166,3 +245642,11 @@ module UndiciTypes =
         type MessageEventInit = MessageEventInit<obj>
 
         type MessageEvent = MessageEvent<obj>
+
+        module WebSocketInit =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type headers =
+                [<EmitIndexer>]
+                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set

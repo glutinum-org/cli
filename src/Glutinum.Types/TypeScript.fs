@@ -2814,7 +2814,7 @@ module TypeScript =
                         type callback =
                             delegate of
                                 value: obj * index: float * array: ResizeArray<obj> ->
-                                    U2<obj, ReadonlyArray<obj>>
+                                    U2<obj, ResizeArray<obj>>
 
                     module findLast =
 
@@ -3836,7 +3836,7 @@ module TypeScript =
                         type callback =
                             delegate of
                                 value: obj * index: float * array: ResizeArray<obj> ->
-                                    U2<obj, ReadonlyArray<obj>>
+                                    U2<obj, ResizeArray<obj>>
 
                     module findLast =
 
@@ -5148,13 +5148,20 @@ module TypeScript =
             [<AllowNullLiteral>]
             [<Interface>]
             type template =
-                abstract member raw: U2<ReadonlyArray<string>, TypeScript.ArrayLike<string>> with get, set
+                abstract member raw: U2<ResizeArray<string>, TypeScript.ArrayLike<string>> with get, set
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(raw: ReadonlyArray<string>) : template = nativeOnly
+                static member Create(raw: ResizeArray<string>) : template = nativeOnly
 
                 [<ParamObject; Emit("$0")>]
                 static member Create(raw: TypeScript.ArrayLike<string>) : template = nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (raw: U2<ResizeArray<string>, TypeScript.ArrayLike<string>>)
+                    : template
+                    =
+                    nativeOnly
 
     module ProxyHandler =
 

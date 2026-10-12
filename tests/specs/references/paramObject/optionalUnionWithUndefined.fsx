@@ -15,11 +15,11 @@ type Exports =
 type Options =
     abstract member attribution: U2<string, ResizeArray<string>> option with get, set
     [<ParamObject; Emit("$0")>]
-    static member Create () : Options = nativeOnly
-    [<ParamObject; Emit("$0")>]
     static member Create (attribution: string) : Options = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (attribution: ResizeArray<string>) : Options = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (?attribution: U2<string, ResizeArray<string>>) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

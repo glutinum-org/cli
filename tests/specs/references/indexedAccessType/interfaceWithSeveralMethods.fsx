@@ -14,6 +14,8 @@ type ConfigTypeMap =
     static member Create (methodA: string, methodB: bool, methodC: bool) : ConfigTypeMap = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (methodA: float, methodB: bool, methodC: bool) : ConfigTypeMap = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (methodA: U2<string, float>, methodB: bool, methodC: bool) : ConfigTypeMap = nativeOnly
 
 type ConfigType =
     U3<string, float, bool>

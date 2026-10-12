@@ -2075,6 +2075,7 @@ let private tryErasedUnionCases (parameter: FSharpParameter) =
     | _ -> None
 
 let private tryParameterCombinations
+    (maxOverloads: int)
     (parameters: FSharpParameter list)
     : FSharpParameter list list option
     =
@@ -2100,10 +2101,10 @@ let private tryParameterCombinations
     let combinationsCount =
         (1, variants)
         ||> List.fold (fun count parameterVariants ->
-            min (count * parameterVariants.Length) (MAX_GENERATED_CONSTRUCTORS + 1)
+            min (count * parameterVariants.Length) (maxOverloads + 1)
         )
 
-    if combinationsCount = 1 || combinationsCount > MAX_GENERATED_CONSTRUCTORS then
+    if combinationsCount = 1 || combinationsCount > maxOverloads then
         None
     else
         let combinations =
@@ -2132,7 +2133,74 @@ let private paramObjectParameterSets
     =
     let parameters = paramObjectParameters context members
 
-    tryParameterCombinations parameters |> Option.defaultValue [ parameters ]
+    let withAliasCases (parameter: FSharpParameter) =
+        let aliasCases =
+            match parameter.Type, parameter.OriginalGlueMember with
+            | FSharpType.Union _, _ -> None
+            | _, Some(GlueMember.Property property) ->
+                let propertyType =
+                    match property.Type with
+                    | GlueType.OptionalType glueType -> glueType
+                    | glueType -> glueType
+
+                match propertyType with
+                | GlueType.TypeReference {
+                                             TypeArguments = []
+                                             FullName = fullName
+                                         } when
+                    not (context.State.UnionAliasesBeingExpanded.Contains fullName)
+                    ->
+                    UnionOverloads.tryCases context.TypeMemory propertyType
+                    |> Option.map (fun (cases, nullable) -> fullName, cases, nullable)
+                | _ -> None
+            | _ -> None
+
+        match aliasCases with
+        | Some(fullName, cases, nullable) ->
+            let _, context = sanitizeNameAndPushScope parameter.Name context
+            context.State.UnionAliasesBeingExpanded.Add fullName
+
+            try
+                { parameter with
+                    IsOptional = parameter.IsOptional || nullable
+                    Type =
+                        {
+                            Attributes = []
+                            Name = ""
+                            Cases =
+                                cases
+                                |> List.map (
+                                    arrayAsInput >> transformType context >> FSharpUnionCase.Typed
+                                )
+                            IsOptional = false
+                            TypeParameters = []
+                            Constants = []
+                        }
+                        |> FSharpType.Union
+                }
+            finally
+                context.State.UnionAliasesBeingExpanded.RemoveAt(
+                    context.State.UnionAliasesBeingExpanded.Count - 1
+                )
+        | None -> parameter
+
+    let expandable = parameters |> List.map withAliasCases
+
+    let expandedNames =
+        expandable
+        |> List.filter (fun parameter -> (tryErasedUnionCases parameter).IsSome)
+        |> List.map _.Name
+        |> set
+
+    tryParameterCombinations context.State.MaxOverloads expandable
+    |> Option.map (fun combinations ->
+        let withCase =
+            combinations
+            |> List.filter (List.exists (fun parameter -> expandedNames.Contains parameter.Name))
+
+        withCase @ [ parameters ]
+    )
+    |> Option.defaultValue [ parameters ]
 
 /// `[<ParamObject; Emit("$0")>] static member Create(...)` builds the object type as a literal,
 /// the type stays an interface so it can be inherited and substituted
@@ -2206,7 +2274,7 @@ let private transformParamObjectClass
             }
             : FSharpConstructor
 
-        match tryParameterCombinations typeLiteralParameters with
+        match tryParameterCombinations context.State.MaxOverloads typeLiteralParameters with
         | None -> paramObjectConstructor typeLiteralParameters, []
         | Some combinations ->
             // The secondary constructors call the primary one, so it takes no parameter

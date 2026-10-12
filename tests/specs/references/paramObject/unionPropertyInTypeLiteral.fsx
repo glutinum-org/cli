@@ -23,6 +23,8 @@ module Exports =
             static member Create (value: bool, ?delay: float) : options = nativeOnly
             [<ParamObject; Emit("$0")>]
             static member Create (value: string, ?delay: float) : options = nativeOnly
+            [<ParamObject; Emit("$0")>]
+            static member Create (value: U2<bool, string>, ?delay: float) : options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

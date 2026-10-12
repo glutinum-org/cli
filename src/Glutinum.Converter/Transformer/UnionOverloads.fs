@@ -17,11 +17,7 @@ let isNullish (glueType: GlueType) =
     | _ -> false
 
 /// The cases of a union generated as `U2..U9`, with whether `null` or `undefined` is one of them
-let rec private tryCases
-    (typeMemory: GlueType list)
-    (glueType: GlueType)
-    : (GlueType list * bool) option
-    =
+let rec tryCases (typeMemory: GlueType list) (glueType: GlueType) : (GlueType list * bool) option =
     match glueType with
     | GlueType.Union(GlueTypeUnion cases) ->
         // `Listener | null` where `Listener` is itself a union alias
