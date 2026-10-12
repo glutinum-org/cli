@@ -217,6 +217,20 @@ let tryExpandAnonymousObjectApplication
                 | _ -> false
             | None -> false
 
+        // `type Reader<T> = { tag: T }` is generated as the interface `Reader<'T>`, a reference keeps it
+        let isObjectLiteralAlias =
+            symbolAtLocation reader.checker !!typeReferenceNode.typeName
+            |> Option.bind (resolveAlias reader.checker)
+            |> Option.bind (fun symbol -> symbol.declarations)
+            |> Option.map (
+                Seq.exists (fun declaration ->
+                    declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
+                    && (declaration :?> Ts.TypeAliasDeclaration).``type``.kind =
+                        Ts.SyntaxKind.TypeLiteral
+                )
+            )
+            |> Option.defaultValue false
+
         let isInProgress =
             reader.InProgress.Expansions
             |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, typ))
@@ -249,7 +263,10 @@ let tryExpandAnonymousObjectApplication
             |> Option.map reader.ReadTypeNode
         // A recursive application (e.g. `swap(): Pair<S, C>` inside `Pair<C, S>`) stays a reference
         | HasTypeFlags Ts.TypeFlags.Object when
-            not isNamedDeclaration && not isInProgress && not isGenericMapped
+            not isNamedDeclaration
+            && not isObjectLiteralAlias
+            && not isInProgress
+            && not isGenericMapped
             ->
             let members =
                 withInProgress
