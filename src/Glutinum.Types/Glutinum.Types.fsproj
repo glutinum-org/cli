@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <PackageProjectUrl>https://github.com/glutinum-org/cli</PackageProjectUrl>
         <Authors>Mangel Maxime</Authors>
-        <FablePackageType>library</FablePackageType>
+        <FablePackageType>binding</FablePackageType>
         <PackageTags>fable-javascript</PackageTags>
     </PropertyGroup>
     <PropertyGroup>

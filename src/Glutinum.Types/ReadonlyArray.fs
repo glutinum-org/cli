@@ -1,15 +1,19 @@
 namespace Glutinum.Types
 
-open Fable.Core.JsInterop
+open Fable.Core
 open Glutinum.Types.TypeScript
 
 [<RequireQualifiedAccess>]
 module ReadonlyArray =
 
-    let inline ofArray (values: 'T[]) : ReadonlyArray<'T> = !!values
+    [<Emit("$0")>]
+    let ofArray (values: 'T[]) : ReadonlyArray<'T> = nativeOnly
 
-    let inline ofResizeArray (values: ResizeArray<'T>) : ReadonlyArray<'T> = !!values
+    [<Emit("$0")>]
+    let ofResizeArray (values: ResizeArray<'T>) : ReadonlyArray<'T> = nativeOnly
 
-    let inline ofList (values: 'T list) : ReadonlyArray<'T> = !!(Array.ofList values)
+    [<Emit("Array.from($0)")>]
+    let ofList (values: 'T list) : ReadonlyArray<'T> = nativeOnly
 
-    let inline ofSeq (values: seq<'T>) : ReadonlyArray<'T> = !!(Array.ofSeq values)
+    [<Emit("Array.from($0)")>]
+    let ofSeq (values: seq<'T>) : ReadonlyArray<'T> = nativeOnly
