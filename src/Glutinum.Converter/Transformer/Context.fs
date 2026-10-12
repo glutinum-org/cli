@@ -93,6 +93,8 @@ type TransformState =
         KeyOfMaps: KeyOfMaps.State
         /// The partial interfaces whose members are being expanded, a cycle is cut
         PartialHeritageBeingExpanded: ResizeArray<string>
+        /// The union aliases whose cases `Create` is being expanded into, a cycle is cut
+        UnionAliasesBeingExpanded: ResizeArray<string>
         /// The overloads a signature gets at most from its union parameters
         MaxOverloads: int
     }
@@ -102,6 +104,7 @@ type TransformState =
             Conditionals = Conditionals.create typeMemory
             KeyOfMaps = KeyOfMaps.create typeMemory
             PartialHeritageBeingExpanded = ResizeArray()
+            UnionAliasesBeingExpanded = ResizeArray()
             MaxOverloads = maxOverloads
         }
 

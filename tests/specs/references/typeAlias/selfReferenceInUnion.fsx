@@ -13,12 +13,48 @@ type Nested =
 type Tree =
     ResizeArray<U2<obj, float>>
 
+[<RequireQualifiedAccess>]
+[<Erase>]
 type Json =
-    U5<string, float, bool, ResizeArray<obj>, Json.U5.Case5> option
+    | Case1 of string
+    | Case2 of float
+    | Case3 of bool
+    | Case4 of ResizeArray<Json>
+    | Case5 of Json.Cases.Case5
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: string) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: string) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: float) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: float) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: bool) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: bool) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: ResizeArray<Json>) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: ResizeArray<Json>) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: Json.Cases.Case5) : Json = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: Json.Cases.Case5) : Json = nativeOnly
 
 module Json =
 
-    module U5 =
+    module Cases =
 
         [<AllowNullLiteral>]
         [<Interface>]

@@ -2058,26 +2058,26 @@ let private paramObjectParameters
 /// One parameter list per combination of the erased union cases of the parameters, `None` when
 /// the parameters stay as they are: no union, too many combinations, or combinations F# can't
 /// tell apart
+let private tryErasedUnionCases (parameter: FSharpParameter) =
+    match parameter.Type with
+    | FSharpType.Union unionInfo when unionInfo.Cases.Length > 1 ->
+        unionInfo.Cases
+        |> List.map (
+            function
+            | FSharpUnionCase.Typed typ -> Some typ
+            | _ -> None
+        )
+        |> fun cases ->
+            if List.forall Option.isSome cases then
+                Some(List.choose id cases)
+            else
+                None
+    | _ -> None
+
 let private tryParameterCombinations
     (parameters: FSharpParameter list)
     : FSharpParameter list list option
     =
-    let tryErasedUnionCases (parameter: FSharpParameter) =
-        match parameter.Type with
-        | FSharpType.Union unionInfo when unionInfo.Cases.Length > 1 ->
-            unionInfo.Cases
-            |> List.map (
-                function
-                | FSharpUnionCase.Typed typ -> Some typ
-                | _ -> None
-            )
-            |> fun cases ->
-                if List.forall Option.isSome cases then
-                    Some(List.choose id cases)
-                else
-                    None
-        | _ -> None
-
     let variants =
         parameters
         |> List.map (fun parameter ->
@@ -3541,6 +3541,19 @@ let private aliasInterfaceOf
     }
     |> FSharpType.Interface
 
+// `type Extension = { extension: Extension } | readonly Extension[]`: an abbreviation can't
+// name itself (FS0953), an erased union can
+let private isSelfReferencingUnion (name: string) (cases: GlueType list) =
+    cases |> List.exists (fun case -> replaceSelfReference name case <> case)
+    && not (
+        cases
+        |> List.exists (
+            function
+            | GlueType.Literal _ -> true
+            | _ -> false
+        )
+    )
+
 let private aliasOfUnion (scope: AliasScope) (cases: GlueType list) (unionType: GlueType) =
     let context = scope.Context
 
@@ -3550,38 +3563,56 @@ let private aliasOfUnion (scope: AliasScope) (cases: GlueType list) (unionType: 
         else
             cases
 
-    match tryOptimizeUnionType context scope.Name cases with
-    // `type Slot<T> = FacetReader<T> | StateField<T> | "doc"` is generic
-    | Some(FSharpType.Union unionInfo) ->
-        FSharpType.Union
-            { unionInfo with
-                TypeParameters = scope.TypeParameters.Value.TypeParameters
-            }
-    | Some typ -> typ
-    | None ->
-        let isNullable =
-            function
-            | GlueType.Primitive GluePrimitive.Null
-            | GlueType.Primitive GluePrimitive.Undefined -> true
-            | _ -> false
+    let isNullable =
+        function
+        | GlueType.Primitive GluePrimitive.Null
+        | GlueType.Primitive GluePrimitive.Undefined -> true
+        | _ -> false
 
-        match cases |> List.partition isNullable with
-        // `type Foo = { ... } | undefined`, the scope avoids naming the anonymous type after the alias
-        | _ :: _, [ single ] ->
-            transformType (context.PushScope "Value") single
-            |> FSharpType.Option
-            |> aliasOf scope
-        | _, others when others.Length > 9 ->
-            let caseTypes =
-                others
-                |> List.mapi (fun index caseType ->
-                    transformType (context.PushScope $"Case%i{index + 1}") caseType
-                )
-                |> List.distinct
+    let isSelfReferencing = isSelfReferencingUnion scope.Declaration.Name cases
 
-            erasedUnion scope.Name scope.TypeParameters.Value.TypeParameters caseTypes
-            |> FSharpType.Union
-        | _ -> transformType context unionType |> aliasOf scope
+    // `Extension.Case1` is the union case, the anonymous type of the case is `Extension.Cases.Case1`
+    let erasedUnionOf (others: GlueType list) =
+        let casesContext = context.PushScope "Cases"
+
+        let caseTypes =
+            others
+            |> List.mapi (fun index caseType ->
+                transformType (casesContext.PushScope $"Case%i{index + 1}") caseType
+            )
+            |> List.distinct
+
+        erasedUnion scope.Name scope.TypeParameters.Value.TypeParameters caseTypes
+        |> FSharpType.Union
+
+    // `Create` of a case can't expand the alias being declared
+    context.State.UnionAliasesBeingExpanded.Add scope.Declaration.FullName
+
+    try
+        if isSelfReferencing then
+            cases |> List.filter (not << isNullable) |> erasedUnionOf
+        else
+            match tryOptimizeUnionType context scope.Name cases with
+            // `type Slot<T> = FacetReader<T> | StateField<T> | "doc"` is generic
+            | Some(FSharpType.Union unionInfo) ->
+                FSharpType.Union
+                    { unionInfo with
+                        TypeParameters = scope.TypeParameters.Value.TypeParameters
+                    }
+            | Some typ -> typ
+            | None ->
+                match cases |> List.partition isNullable with
+                // `type Foo = { ... } | undefined`, the scope avoids naming the anonymous type after the alias
+                | _ :: _, [ single ] ->
+                    transformType (context.PushScope "Value") single
+                    |> FSharpType.Option
+                    |> aliasOf scope
+                | _, others when others.Length > 9 -> erasedUnionOf others
+                | _ -> transformType context unionType |> aliasOf scope
+    finally
+        context.State.UnionAliasesBeingExpanded.RemoveAt(
+            context.State.UnionAliasesBeingExpanded.Count - 1
+        )
 
 /// `type Value = Foo[keyof Foo]` is the union of the member types
 let private aliasOfIndexedAccessType (scope: AliasScope) (glueType: GlueIndexedAccessType) =
@@ -3869,8 +3900,16 @@ let private transformTypeAliasDeclaration
     let aliasInterface (members: FSharpMember list) (inheritance: FSharpType list) =
         aliasInterfaceOf scope scope.TypeParameters.Value.TypeParameters members inheritance
 
+    let aliasType =
+        match glueTypeAliasDeclaration.Type with
+        | GlueType.Union(GlueTypeUnion cases) when
+            isSelfReferencingUnion glueTypeAliasDeclaration.Name cases
+            ->
+            glueTypeAliasDeclaration.Type
+        | glueType -> replaceSelfReference glueTypeAliasDeclaration.Name glueType
+
     let fsharpType =
-        match replaceSelfReference glueTypeAliasDeclaration.Name glueTypeAliasDeclaration.Type with
+        match aliasType with
         | GlueType.Union(GlueTypeUnion cases) as unionType -> aliasOfUnion scope cases unionType
 
         | GlueType.KeyOf glueType ->
