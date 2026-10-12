@@ -10921,6 +10921,9 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/requestinit/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/requestinit/headers/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/requestmode/</loc>
   </url>
   <url>
@@ -10931,6 +10934,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/responseinit/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/responseinit/headers/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/responseredirectstatus/</loc>
@@ -11537,6 +11543,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/websocket-module/websocketinit/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/websocket-module/websocketinit/headers/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/websocket/</loc>
@@ -20989,6 +20998,9 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/requestinit/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/requestinit/headers/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/requestmode/</loc>
   </url>
   <url>
@@ -21026,6 +21038,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/responseinit/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/responseinit/headers/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/responsetype/</loc>
