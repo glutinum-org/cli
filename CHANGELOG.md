@@ -1,5 +1,5 @@
 ---
-last_commit_released: e1058ae6bee597cc187ed10925d0cf9529f279bb
+last_commit_released: 3163b97e9972619bffb301e99678973ed3857472
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,14 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.8 - 2026-10-12
+
+### 🚀 Features
+
+* ReadonlyArray helpers in Glutinum.Types ([3163b97](https://github.com/glutinum-org/cli/commit/3163b97e9972619bffb301e99678973ed3857472))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/e1058ae6bee597cc187ed10925d0cf9529f279bb..3163b97e9972619bffb301e99678973ed3857472)</small></strong>
 
 ## 1.0.0-beta.7 - 2026-10-09
 
