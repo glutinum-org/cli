@@ -1,5 +1,5 @@
 ---
-last_commit_released: 3163b97e9972619bffb301e99678973ed3857472
+last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
 ---
 
 # Changelog
@@ -7,6 +7,15 @@ last_commit_released: 3163b97e9972619bffb301e99678973ed3857472
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.7 - 2026-10-12
+
+### 🐞 Bug Fixes
+
+* Glutinum.Types ships its sources ([faf2f15](https://github.com/glutinum-org/cli/commit/faf2f15fcd084aba6f29331a06aea7c175471cdb))
+* Create expands a union alias property ([44ca64c](https://github.com/glutinum-org/cli/commit/44ca64c78db5d575f404fd639ead10a50eaa7e2d))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/3163b97e9972619bffb301e99678973ed3857472..44ca64c78db5d575f404fd639ead10a50eaa7e2d)</small></strong>
 
 ## 1.0.0-beta.6 - 2026-10-12
 

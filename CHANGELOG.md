@@ -1,5 +1,5 @@
 ---
-last_commit_released: 3163b97e9972619bffb301e99678973ed3857472
+last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,17 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.9 - 2026-10-12
+
+### 🐞 Bug Fixes
+
+* A generic alias of an object literal stays a reference ([6ab8be3](https://github.com/glutinum-org/cli/commit/6ab8be357125f35278513ebb2ea6875adb42b93c))
+* Readonly arrays in unions are ResizeArray ([6c5a28f](https://github.com/glutinum-org/cli/commit/6c5a28fb1817d63c32037d6ebfa517899be9f795))
+* A self-referencing union alias is an erased union ([b86d9e2](https://github.com/glutinum-org/cli/commit/b86d9e24c7cae5b92af5c719f32842bd083c5350))
+* Create expands a union alias property ([44ca64c](https://github.com/glutinum-org/cli/commit/44ca64c78db5d575f404fd639ead10a50eaa7e2d))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/3163b97e9972619bffb301e99678973ed3857472..44ca64c78db5d575f404fd639ead10a50eaa7e2d)</small></strong>
 
 ## 1.0.0-beta.8 - 2026-10-12
 

@@ -1,5 +1,5 @@
 ---
-last_commit_released: e1058ae6bee597cc187ed10925d0cf9529f279bb
+last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
 name: Glutinum.Web
 ---
 
@@ -12,6 +12,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0-beta.8 - 2026-10-12
+
+### 🐞 Bug Fixes
+
+* Create expands a union alias property ([44ca64c](https://github.com/glutinum-org/cli/commit/44ca64c78db5d575f404fd639ead10a50eaa7e2d))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/e1058ae6bee597cc187ed10925d0cf9529f279bb..44ca64c78db5d575f404fd639ead10a50eaa7e2d)</small></strong>
 
 ## 1.0.0-beta.7 - 2026-10-09
 
