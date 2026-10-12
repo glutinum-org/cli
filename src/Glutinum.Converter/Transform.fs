@@ -456,6 +456,13 @@ let private transformUnionType (context: TransformContext) (cases: GlueType list
 
     let isOptional = not optionalTypes.IsEmpty
 
+    // `readonly string[]` among other cases is given as an input, a `ResizeArray`
+    let others =
+        if others.Length > 1 then
+            others |> List.map arrayAsInput
+        else
+            others
+
     if isOptional && others.Length = 1 then
         FSharpType.Option(transformType context others.Head)
     else if others.IsEmpty then
@@ -1069,23 +1076,9 @@ let private transformParameter
     =
     let name, context = sanitizeNameAndPushScope parameter.Name context
 
-    // `readonly string[]` given to a function accepts any array, a `ResizeArray` is the F# one
-    let rec asArray (glueType: GlueType) =
-        match glueType with
-        | GlueType.ReadOnly(GlueType.Array elementType) -> GlueType.Array elementType
-        | GlueType.TypeReference {
-                                     Name = "ReadonlyArray"
-                                     IsStandardLibrary = true
-                                     TypeArguments = [ elementType ]
-                                 } -> GlueType.Array elementType
-        | GlueType.Union(GlueTypeUnion cases) ->
-            GlueType.Union(GlueTypeUnion(cases |> List.map asArray))
-        | GlueType.OptionalType glueType -> GlueType.OptionalType(asArray glueType)
-        | glueType -> glueType
-
     let parameter =
         { parameter with
-            Type = asArray parameter.Type
+            Type = arrayAsInput parameter.Type
         }
 
     let typ =
@@ -2250,11 +2243,25 @@ let private transformParamObjectClass
 
 /// `(ev: Event) => any`: the result of a callback is ignored by its caller, a lambda returns `unit`
 // The caller of a callback returning `any` or `unknown` ignores the value
+// `readonly string[]` given to a function accepts any array, a `ResizeArray` is the F# one
+let rec private arrayAsInput (glueType: GlueType) =
+    match glueType with
+    | GlueType.ReadOnly(GlueType.Array elementType) -> GlueType.Array elementType
+    | GlueType.TypeReference {
+                                 Name = "ReadonlyArray"
+                                 IsStandardLibrary = true
+                                 TypeArguments = [ elementType ]
+                             } -> GlueType.Array elementType
+    | GlueType.Union(GlueTypeUnion cases) ->
+        GlueType.Union(GlueTypeUnion(cases |> List.map arrayAsInput))
+    | GlueType.OptionalType glueType -> GlueType.OptionalType(arrayAsInput glueType)
+    | glueType -> glueType
+
 let private transformCallbackReturnType (context: TransformContext) (returnType: GlueType) =
     match returnType with
     | GlueType.Primitive GluePrimitive.Any
     | GlueType.Unknown -> FSharpType.Primitive FSharpPrimitive.Unit
-    | _ -> transformType context returnType
+    | _ -> transformType context (arrayAsInput returnType)
 
 /// `interface Listener { (event: Event): void }` is a function, an F# delegate takes a lambda
 let private tryTransformCallableInterface
@@ -3536,6 +3543,12 @@ let private aliasInterfaceOf
 
 let private aliasOfUnion (scope: AliasScope) (cases: GlueType list) (unionType: GlueType) =
     let context = scope.Context
+
+    let cases =
+        if cases |> List.filter (not << UnionOverloads.isNullish) |> List.length > 1 then
+            cases |> List.map arrayAsInput
+        else
+            cases
 
     match tryOptimizeUnionType context scope.Name cases with
     // `type Slot<T> = FacetReader<T> | StateField<T> | "doc"` is generic

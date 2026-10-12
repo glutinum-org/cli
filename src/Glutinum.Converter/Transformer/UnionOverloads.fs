@@ -10,7 +10,7 @@ open Glutinum.Converter.GlueAST
 /// The overloads a signature gets at most from its union parameters, `--max-overloads`
 let defaultMaxOverloads = 16
 
-let private isNullish (glueType: GlueType) =
+let isNullish (glueType: GlueType) =
     match glueType with
     | GlueType.Primitive GluePrimitive.Null
     | GlueType.Primitive GluePrimitive.Undefined -> true

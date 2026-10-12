@@ -108,7 +108,7 @@ app.get ("/users", RequestHandler(fun request response -> response.json users))
 
 ## Arrays and tuples
 
-An array is a `ResizeArray`. A `readonly` array in a return type is `ReadonlyArray` from `Glutinum.Types`, and a `ResizeArray` when it is a parameter. A tuple is an F# tuple.
+An array is a `ResizeArray`. A `readonly` array in a return type is `ReadonlyArray` from `Glutinum.Types`, and a `ResizeArray` when it is a parameter, a case of a union with other cases, or the return type of a callback. A tuple is an F# tuple.
 
 ## Nested types
 

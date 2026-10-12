@@ -70,7 +70,7 @@ This table is maintained by hand and can fall behind the generator. When the out
 <tr><td><code>void</code>, <code>undefined</code></td><td><code>unit</code>, <code>obj</code></td></tr>
 <tr><td><code>any</code>, <code>unknown</code>, <code>never</code>, <code>symbol</code></td><td><code>obj</code></td></tr>
 <tr><td><code>T[]</code>, <code>Array&lt;T&gt;</code></td><td><code>ResizeArray&lt;T&gt;</code></td></tr>
-<tr><td><code>readonly T[]</code></td><td><code>ReadonlyArray&lt;T&gt;</code>, <code>ResizeArray&lt;T&gt;</code> as a parameter</td></tr>
+<tr><td><code>readonly T[]</code></td><td><code>ReadonlyArray&lt;T&gt;</code>, <code>ResizeArray&lt;T&gt;</code> as a parameter, a union case or a callback return</td></tr>
 <tr><td><code>[A, B]</code></td><td><code>A * B</code></td></tr>
 <tr><td><code>[A, ...B[]]</code></td><td><code>ResizeArray&lt;obj&gt;</code></td></tr>
 <tr><td><code>A | B</code> in a parameter</td><td>one overload per case, up to 16 combinations</td></tr>
