@@ -13,6 +13,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="TypeScript.fs" />
+        <Compile Include="ReadonlyArray.fs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="EasyBuild.PackageReleaseNotes.Tasks">

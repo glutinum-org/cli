@@ -8,7 +8,7 @@ The packages a generated binding depends on. The header of a generated file name
 
 The ES library types the generator refers to that `Fable.Core` does not define: `ReadonlyArray<'T>`, `ArrayLike<'T>`, `PromiseLike<'T>`, `Iterator<'T>`, `Generator<'T>`, `ReadonlyMap<'K, 'V>` and their neighbours. It is generated from the `lib.es*.d.ts` files of TypeScript. `Array`, `Date`, `Promise`, `Map`, `Set` and the typed arrays are the ones of `Fable.Core`. Every binding needs it.
 
-A `ReadonlyArray<'T>` is a sequence, `Seq.map` and `for` read it, and `.[i]` indexes it.
+A `ReadonlyArray<'T>` is a sequence, `Seq.map` and `for` read it, and `.[i]` indexes it. `Glutinum.Types.ReadonlyArray.ofArray`, `ofResizeArray`, `ofList` and `ofSeq` build one. `ofArray` and `ofResizeArray` are casts, the array is the same object.
 
 The static side of the globals is on `Exports`: `Date` with its constructor, and `Number`, `String`, `Object`, `Symbol` and `Reflect` with every member the library declares. A number stays a `float`, a string a `string`, an object an `obj`. `JSON`, `Math`, `Promise`, `Map` and `Set` are the ones of `Fable.Core`.
 

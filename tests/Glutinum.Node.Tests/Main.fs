@@ -221,6 +221,33 @@ let main _ =
 
                             assertThat (names.length) (isEqualTo 3.0)
                     )
+                    test (
+                        "ReadonlyArray: the helpers wrap the array",
+                        fun _ ->
+                            let source = [| "a"; "b" |]
+                            let names = Glutinum.Types.ReadonlyArray.ofArray source
+                            assertThat (obj.ReferenceEquals(names, source)) isTrue
+
+                            let fromList = Glutinum.Types.ReadonlyArray.ofList [ 1; 2; 3 ]
+                            assertThat fromList.[2] (isEqualTo 3)
+
+                            assertThat
+                                (Glutinum.Types.ReadonlyArray.ofSeq (
+                                    seq {
+                                        1
+                                        2
+                                    }
+                                ))
+                                    .length
+                                (isEqualTo 2.0)
+
+                            let resizeArray = ResizeArray [ "x" ]
+
+                            let fromResizeArray =
+                                Glutinum.Types.ReadonlyArray.ofResizeArray resizeArray
+
+                            assertThat (obj.ReferenceEquals(fromResizeArray, resizeArray)) isTrue
+                    )
                 ]
             )
         ]
