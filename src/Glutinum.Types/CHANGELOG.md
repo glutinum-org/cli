@@ -1,5 +1,5 @@
 ---
-last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
+last_commit_released: 42b6e92c8dfd64043e8db65908bb4c85d97ee516
 ---
 
 # Changelog
@@ -7,6 +7,14 @@ last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.8 - 2026-10-13
+
+### 🐞 Bug Fixes
+
+* Glutinum.Types is a binding again ([a846379](https://github.com/glutinum-org/cli/commit/a84637974b8f76c0693d9ef7650990493a31e90f))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/44ca64c78db5d575f404fd639ead10a50eaa7e2d..42b6e92c8dfd64043e8db65908bb4c85d97ee516)</small></strong>
 
 ## 1.0.0-beta.7 - 2026-10-12
 

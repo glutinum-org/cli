@@ -1,5 +1,5 @@
 ---
-last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
+last_commit_released: 42b6e92c8dfd64043e8db65908bb4c85d97ee516
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,15 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.10 - 2026-10-13
+
+### 🐞 Bug Fixes
+
+* A re-exported function alias keeps its arity ([3baed08](https://github.com/glutinum-org/cli/commit/3baed08eb8d90243c6027c41d38847cff7895f0e))
+* Readonly array properties are ResizeArray in Create ([42b6e92](https://github.com/glutinum-org/cli/commit/42b6e92c8dfd64043e8db65908bb4c85d97ee516))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/44ca64c78db5d575f404fd639ead10a50eaa7e2d..42b6e92c8dfd64043e8db65908bb4c85d97ee516)</small></strong>
 
 ## 1.0.0-beta.9 - 2026-10-12
 
