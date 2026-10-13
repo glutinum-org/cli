@@ -1,5 +1,5 @@
 ---
-last_commit_released: 44ca64c78db5d575f404fd639ead10a50eaa7e2d
+last_commit_released: 42b6e92c8dfd64043e8db65908bb4c85d97ee516
 name: Glutinum.Web
 ---
 
@@ -12,6 +12,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0-beta.9 - 2026-10-13
+
+### 🐞 Bug Fixes
+
+* Readonly array properties are ResizeArray in Create ([42b6e92](https://github.com/glutinum-org/cli/commit/42b6e92c8dfd64043e8db65908bb4c85d97ee516))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/44ca64c78db5d575f404fd639ead10a50eaa7e2d..42b6e92c8dfd64043e8db65908bb4c85d97ee516)</small></strong>
 
 ## 1.0.0-beta.8 - 2026-10-12
 
