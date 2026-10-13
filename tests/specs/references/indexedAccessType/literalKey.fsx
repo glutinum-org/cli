@@ -21,7 +21,7 @@ type CodeActionProviderMetadata =
     abstract member documentation: ReadonlyArray<CodeActionProviderMetadata.documentation> with get
     abstract member providedCodeActionKinds: ReadonlyArray<string> option with get
     [<ParamObject; Emit("$0")>]
-    static member Create (documentation: ReadonlyArray<CodeActionProviderMetadata.documentation>, ?providedCodeActionKinds: ReadonlyArray<string>) : CodeActionProviderMetadata = nativeOnly
+    static member Create (documentation: ResizeArray<CodeActionProviderMetadata.documentation>, ?providedCodeActionKinds: ResizeArray<string>) : CodeActionProviderMetadata = nativeOnly
 
 type Documentation =
     ReadonlyArray<Documentation.Item>

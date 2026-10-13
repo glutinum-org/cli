@@ -11,7 +11,7 @@ type Documentation =
     Documentation.Value option
 
 type Docs =
-    ReadonlyArray<Docs.Value> option
+    ReadonlyArray<Docs.Value.Item> option
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -34,12 +34,14 @@ module Documentation =
 
 module Docs =
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Value =
-        abstract member kind: string with get
-        [<ParamObject; Emit("$0")>]
-        static member Create (kind: string) : Value = nativeOnly
+    module Value =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Item =
+            abstract member kind: string with get
+            [<ParamObject; Emit("$0")>]
+            static member Create (kind: string) : Item = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

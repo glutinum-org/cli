@@ -80,137 +80,139 @@ type J =
 [<AllowNullLiteral>]
 [<Interface>]
 type Stack =
-    abstract member frames: ReadonlyArray<Stack.frames> with get
+    abstract member frames: ReadonlyArray<Stack.frames.Item> with get
     [<ParamObject; Emit("$0")>]
-    static member Create (frames: ReadonlyArray<Stack.frames>) : Stack = nativeOnly
+    static member Create (frames: ResizeArray<Stack.frames.Item>) : Stack = nativeOnly
 
 module Stack =
 
-    [<RequireQualifiedAccess>]
-    [<Erase>]
-    type frames =
-        | Case1 of Stack.frames.ReadOnlyA
-        | Case2 of Stack.frames.ReadOnlyB
-        | Case3 of Stack.frames.ReadOnlyC
-        | Case4 of Stack.frames.ReadOnlyD
-        | Case5 of Stack.frames.ReadOnlyE
-        | Case6 of Stack.frames.ReadOnlyF
-        | Case7 of Stack.frames.ReadOnlyG
-        | Case8 of Stack.frames.ReadOnlyH
-        | Case9 of Stack.frames.ReadOnlyI
-        | Case10 of Stack.frames.ReadOnlyJ
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyA) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyA) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyB) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyB) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyC) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyC) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyD) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyD) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyE) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyE) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyF) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyF) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyG) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyG) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyH) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyH) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyI) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyI) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_Implicit(value: Stack.frames.ReadOnlyJ) : frames = nativeOnly
-
-        [<Emit("$0")>]
-        static member op_ErasedCast(value: Stack.frames.ReadOnlyJ) : frames = nativeOnly
-
     module frames =
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyA =
-            abstract member a: string with get
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type Item =
+            | Case1 of Stack.frames.Item.ReadOnlyA
+            | Case2 of Stack.frames.Item.ReadOnlyB
+            | Case3 of Stack.frames.Item.ReadOnlyC
+            | Case4 of Stack.frames.Item.ReadOnlyD
+            | Case5 of Stack.frames.Item.ReadOnlyE
+            | Case6 of Stack.frames.Item.ReadOnlyF
+            | Case7 of Stack.frames.Item.ReadOnlyG
+            | Case8 of Stack.frames.Item.ReadOnlyH
+            | Case9 of Stack.frames.Item.ReadOnlyI
+            | Case10 of Stack.frames.Item.ReadOnlyJ
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyB =
-            abstract member b: string with get
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyA) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyC =
-            abstract member c: string with get
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyA) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyD =
-            abstract member d: string with get
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyB) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyE =
-            abstract member e: string with get
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyB) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyF =
-            abstract member f: string with get
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyC) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyG =
-            abstract member g: string with get
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyC) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyH =
-            abstract member h: string with get
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyD) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyI =
-            abstract member i: string with get
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyD) : Item = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReadOnlyJ =
-            abstract member j: string with get
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyE) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyE) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyF) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyF) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyG) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyG) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyH) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyH) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyI) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyI) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Stack.frames.Item.ReadOnlyJ) : Item = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyJ) : Item = nativeOnly
+
+        module Item =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyA =
+                abstract member a: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyB =
+                abstract member b: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyC =
+                abstract member c: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyD =
+                abstract member d: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyE =
+                abstract member e: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyF =
+                abstract member f: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyG =
+                abstract member g: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyH =
+                abstract member h: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyI =
+                abstract member i: string with get
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReadOnlyJ =
+                abstract member j: string with get
 
 (***)
 #r "nuget: Fable.Core"

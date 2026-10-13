@@ -48575,7 +48575,7 @@ AsyncLocalStorage.snapshot()""")>]
                     inspectPort: float,
                     ?execArgv: ResizeArray<string>,
                     ?exec: string,
-                    ?args: ReadonlyArray<string>,
+                    ?args: ResizeArray<string>,
                     ?silent: bool,
                     ?stdio: ResizeArray<obj>,
                     ?uid: float,
@@ -48594,7 +48594,7 @@ AsyncLocalStorage.snapshot()""")>]
                     inspectPort: (unit -> float),
                     ?execArgv: ResizeArray<string>,
                     ?exec: string,
-                    ?args: ReadonlyArray<string>,
+                    ?args: ResizeArray<string>,
                     ?silent: bool,
                     ?stdio: ResizeArray<obj>,
                     ?uid: float,
@@ -48612,7 +48612,7 @@ AsyncLocalStorage.snapshot()""")>]
                 (
                     ?execArgv: ResizeArray<string>,
                     ?exec: string,
-                    ?args: ReadonlyArray<string>,
+                    ?args: ResizeArray<string>,
                     ?silent: bool,
                     ?stdio: ResizeArray<obj>,
                     ?uid: float,
@@ -167380,7 +167380,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (?lineLengths: ReadonlyArray<float>)
+                    (?lineLengths: ResizeArray<float>)
                     : SourceMapConstructorOptions
                     =
                     nativeOnly
@@ -176227,7 +176227,7 @@ SocketAddress.parse($0)""")>]
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
-                        (entryTypes: ReadonlyArray<Node.perf_hooks.EntryType>, ?buffered: bool)
+                        (entryTypes: ResizeArray<Node.perf_hooks.EntryType>, ?buffered: bool)
                         : options
                         =
                         nativeOnly
@@ -206358,15 +206358,15 @@ Duplex.fromWeb($0, $1)""")>]
                 static member Create
                     (
                         ?concurrency: U2<float, bool>,
-                        ?files: ReadonlyArray<string>,
+                        ?files: ResizeArray<string>,
                         ?forceExit: bool,
-                        ?globPatterns: ReadonlyArray<string>,
+                        ?globPatterns: ResizeArray<string>,
                         ?inspectPort: U2<float, (unit -> float)>,
                         ?isolation: Node.test.test_.RunOptions.isolation,
                         ?only: bool,
                         ?setup: (Node.test.test_.TestsStream -> U2<unit, JS.Promise<unit>>),
-                        ?execArgv: ReadonlyArray<string>,
-                        ?argv: ReadonlyArray<string>,
+                        ?execArgv: ResizeArray<string>,
+                        ?argv: ResizeArray<string>,
                         ?signal: Node.AbortSignal,
                         ?testNamePatterns: U3<string, RegExp, ResizeArray<U2<string, RegExp>>>,
                         ?testSkipPatterns: U3<string, RegExp, ResizeArray<U2<string, RegExp>>>,
@@ -212631,7 +212631,7 @@ Duplex.fromWeb($0, $1)""")>]
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (?serializers: ReadonlyArray<(obj -> unit)>)
+                    (?serializers: ResizeArray<(obj -> unit)>)
                     : AssertSnapshotOptions
                     =
                     nativeOnly
@@ -213636,14 +213636,14 @@ Duplex.fromWeb($0, $1)""")>]
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>, now: float)
+                    (apis: ResizeArray<Node.test.test_.MockTimersOptions.apis.Item>, now: float)
                     : MockTimersOptions
                     =
                     nativeOnly
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>, now: Date)
+                    (apis: ResizeArray<Node.test.test_.MockTimersOptions.apis.Item>, now: Date)
                     : MockTimersOptions
                     =
                     nativeOnly
@@ -213651,7 +213651,7 @@ Duplex.fromWeb($0, $1)""")>]
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        apis: ReadonlyArray<Node.test.test_.MockTimersOptions.apis>,
+                        apis: ResizeArray<Node.test.test_.MockTimersOptions.apis.Item>,
                         ?now: U2<float, Date>
                     )
                     : MockTimersOptions
@@ -214022,6 +214022,16 @@ Duplex.fromWeb($0, $1)""")>]
                     | setTimeout
                     | setImmediate
                     | Date
+
+                module apis =
+
+                    [<RequireQualifiedAccess>]
+                    [<StringEnum(CaseRules.None)>]
+                    type Item =
+                        | setInterval
+                        | setTimeout
+                        | setImmediate
+                        | Date
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -225069,7 +225079,7 @@ URL.parse($0, $1)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create
                 (
-                    ?args: ReadonlyArray<string>,
+                    ?args: ResizeArray<string>,
                     ?options: Node.util.ParseArgsOptionsConfig,
                     ?strict: bool,
                     ?allowPositionals: bool,
@@ -230114,7 +230124,7 @@ URL.parse($0, $1)""")>]
             static member Create
                 (
                     version: Node.wasi.WASIOptions.version,
-                    ?args: ReadonlyArray<string>,
+                    ?args: ResizeArray<string>,
                     ?env: obj,
                     ?preopens: Node.NodeJS.Dict<string>,
                     ?returnOnExit: bool,
@@ -230468,7 +230478,7 @@ URL.parse($0, $1)""")>]
                     (
                         hardwareConcurrency: float,
                         language: string,
-                        languages: ReadonlyArray<string>,
+                        languages: ResizeArray<string>,
                         platform: string,
                         userAgent: string
                     )
@@ -237871,11 +237881,11 @@ module UndiciTypes =
                     static member Create
                         (
                             Client:
-                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
+                                ResizeArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
                             ?Agent:
-                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
+                                ResizeArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
                             ?Pool:
-                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
+                                ResizeArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
                         )
                         : interceptors
                         =
@@ -238458,7 +238468,7 @@ module UndiciTypes =
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (Client: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>)
+                    (Client: ResizeArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>)
                     : OptionsInterceptors
                     =
                     nativeOnly
@@ -244617,9 +244627,9 @@ module UndiciTypes =
                     static member Create
                         (
                             Client:
-                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
+                                ResizeArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
                             ?Pool:
-                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
+                                ResizeArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
                         )
                         : interceptors
                         =

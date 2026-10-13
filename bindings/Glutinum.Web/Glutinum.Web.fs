@@ -18014,28 +18014,28 @@ module Web =
                 ?ariaColIndex: string,
                 ?ariaColIndexText: string,
                 ?ariaColSpan: string,
-                ?ariaControlsElements: ReadonlyArray<Web.Element>,
+                ?ariaControlsElements: ResizeArray<Web.Element>,
                 ?ariaCurrent: string,
-                ?ariaDescribedByElements: ReadonlyArray<Web.Element>,
+                ?ariaDescribedByElements: ResizeArray<Web.Element>,
                 ?ariaDescription: string,
-                ?ariaDetailsElements: ReadonlyArray<Web.Element>,
+                ?ariaDetailsElements: ResizeArray<Web.Element>,
                 ?ariaDisabled: string,
-                ?ariaErrorMessageElements: ReadonlyArray<Web.Element>,
+                ?ariaErrorMessageElements: ResizeArray<Web.Element>,
                 ?ariaExpanded: string,
-                ?ariaFlowToElements: ReadonlyArray<Web.Element>,
+                ?ariaFlowToElements: ResizeArray<Web.Element>,
                 ?ariaHasPopup: string,
                 ?ariaHidden: string,
                 ?ariaInvalid: string,
                 ?ariaKeyShortcuts: string,
                 ?ariaLabel: string,
-                ?ariaLabelledByElements: ReadonlyArray<Web.Element>,
+                ?ariaLabelledByElements: ResizeArray<Web.Element>,
                 ?ariaLevel: string,
                 ?ariaLive: string,
                 ?ariaModal: string,
                 ?ariaMultiLine: string,
                 ?ariaMultiSelectable: string,
                 ?ariaOrientation: string,
-                ?ariaOwnsElements: ReadonlyArray<Web.Element>,
+                ?ariaOwnsElements: ResizeArray<Web.Element>,
                 ?ariaPlaceholder: string,
                 ?ariaPosInSet: string,
                 ?ariaPressed: string,
@@ -22548,7 +22548,7 @@ module Web =
                 SUPPORTS_RULE: int,
                 COUNTER_STYLE_RULE: int,
                 FONT_FEATURE_VALUES_RULE: int,
-                nameList: ReadonlyArray<string>,
+                nameList: ResizeArray<string>,
                 ?parentRule: Web.CSSRule,
                 ?parentStyleSheet: Web.CSSStyleSheet
             )
@@ -27154,7 +27154,7 @@ module Web =
                 COUNTER_STYLE_RULE: int,
                 FONT_FEATURE_VALUES_RULE: int,
                 navigation: string,
-                types: ReadonlyArray<string>,
+                types: ResizeArray<string>,
                 ?parentRule: Web.CSSRule,
                 ?parentStyleSheet: Web.CSSStyleSheet
             )
@@ -36922,7 +36922,7 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
-            (messages: ReadonlyArray<Web.GPUCompilationMessage>)
+            (messages: ResizeArray<Web.GPUCompilationMessage>)
             : GPUCompilationInfo
             =
             nativeOnly
@@ -38363,8 +38363,8 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
-                axes: ReadonlyArray<float>,
-                buttons: ReadonlyArray<Web.GamepadButton>,
+                axes: ResizeArray<float>,
+                buttons: ResizeArray<Web.GamepadButton>,
                 connected: bool,
                 id: string,
                 index: float,
@@ -64036,7 +64036,7 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
-            (album: string, artist: string, artwork: ReadonlyArray<Web.MediaImage>, title: string)
+            (album: string, artist: string, artwork: ResizeArray<Web.MediaImage>, title: string)
             : MediaMetadata
             =
             nativeOnly
@@ -67613,10 +67613,7 @@ module Web =
         abstract member languages: ReadonlyArray<string> with get
 
         [<ParamObject; Emit("$0")>]
-        static member Create
-            (language: string, languages: ReadonlyArray<string>)
-            : NavigatorLanguage
-            =
+        static member Create(language: string, languages: ResizeArray<string>) : NavigatorLanguage =
             nativeOnly
 
     /// <summary>
@@ -75457,10 +75454,10 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
-                borderBoxSize: ReadonlyArray<Web.ResizeObserverSize>,
-                contentBoxSize: ReadonlyArray<Web.ResizeObserverSize>,
+                borderBoxSize: ResizeArray<Web.ResizeObserverSize>,
+                contentBoxSize: ResizeArray<Web.ResizeObserverSize>,
                 contentRect: Web.DOMRectReadOnly,
-                devicePixelContentBoxSize: ReadonlyArray<Web.ResizeObserverSize>,
+                devicePixelContentBoxSize: ResizeArray<Web.ResizeObserverSize>,
                 target: Web.Element
             )
             : ResizeObserverEntry

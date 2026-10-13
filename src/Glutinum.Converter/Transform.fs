@@ -2038,10 +2038,18 @@ let private paramObjectParameters
     : FSharpParameter list
     =
     members
-    |> List.filter (
+    |> List.choose (
         function
-        | GlueMember.IndexSignature _ -> false
-        | _ -> true
+        | GlueMember.IndexSignature _ -> None
+        // `add?: readonly Range<T>[]` is given to `Create`, the property keeps `ReadonlyArray`
+        | GlueMember.Property info ->
+            Some(
+                GlueMember.Property
+                    { info with
+                        Type = arrayAsInput info.Type
+                    }
+            )
+        | glueMember -> Some glueMember
     )
     |> TransformMembers.toFSharpParameters context
     |> List.map (fun parameter ->
@@ -3561,7 +3569,9 @@ let private transformReadOnlyModifier (context: TransformContext) (glueType: Glu
     | GlueType.Array arrayType ->
         context.ExposeReadonlyArray()
 
-        transformType context arrayType |> FSharpJSApi.ReadonlyArray |> FSharpType.JSApi
+        transformType (context.PushScope "Item") arrayType
+        |> FSharpJSApi.ReadonlyArray
+        |> FSharpType.JSApi
 
     // Ignore readonly for other types
     | _ -> transformType context glueType
@@ -4039,6 +4049,9 @@ let private transformTypeAliasDeclaration
 
         | GlueType.ConstructorType constructSignature ->
             aliasOfConstructorType scope constructSignature
+
+        | GlueType.ReadOnly(GlueType.Array _ as glueType) ->
+            transformReadOnlyModifier context glueType |> aliasOf scope
 
         | GlueType.ReadOnly glueType ->
             transformReadOnlyModifier (context.PushScope "Item") glueType |> aliasOf scope
