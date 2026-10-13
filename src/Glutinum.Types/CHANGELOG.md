@@ -1,5 +1,5 @@
 ---
-last_commit_released: b95d8d46d4857a31bdb593ea54511393697784b8
+last_commit_released: ffb5dd3ac2179fc89380b0be9b3795ce3f122ea4
 ---
 
 # Changelog
@@ -7,6 +7,14 @@ last_commit_released: b95d8d46d4857a31bdb593ea54511393697784b8
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.10 - 2026-10-13
+
+### 🚀 Features
+
+* A named union is an erased union with accessors ([ffb5dd3](https://github.com/glutinum-org/cli/commit/ffb5dd3ac2179fc89380b0be9b3795ce3f122ea4))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/b95d8d46d4857a31bdb593ea54511393697784b8..ffb5dd3ac2179fc89380b0be9b3795ce3f122ea4)</small></strong>
 
 ## 1.0.0-beta.9 - 2026-10-13
 
