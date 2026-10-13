@@ -1,5 +1,5 @@
 ---
-last_commit_released: 0f21d0b4daca1c9107867731700c8f50a02a1592
+last_commit_released: 83e5c35dd47aae5100e668824a58a7af9e1de1b0
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,14 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.14 - 2026-10-13
+
+### 🐞 Bug Fixes
+
+* Readonly of a lib type, heritage across packages ([83e5c35](https://github.com/glutinum-org/cli/commit/83e5c35dd47aae5100e668824a58a7af9e1de1b0))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/0f21d0b4daca1c9107867731700c8f50a02a1592..83e5c35dd47aae5100e668824a58a7af9e1de1b0)</small></strong>
 
 ## 1.0.0-beta.13 - 2026-10-13
 
