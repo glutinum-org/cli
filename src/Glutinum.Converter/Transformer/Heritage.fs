@@ -24,7 +24,11 @@ let isInheritableType (typ: FSharpType) =
 /// `declare abstract class XRSystem implements XRSystem {}` merged with the interface
 let isSelfHeritage (fullName: string) (heritageClause: GlueType) =
     match heritageClause with
-    | GlueType.TypeReference typeReference -> fullName <> "" && typeReference.FullName = fullName
+    // `StreamParser` of another package has the qualified name of the one extending it
+    | GlueType.TypeReference typeReference ->
+        fullName <> ""
+        && typeReference.FullName = fullName
+        && typeReference.ModulePath.IsEmpty
     | _ -> false
 
 let isErrorHeritage (heritageClause: GlueType) =

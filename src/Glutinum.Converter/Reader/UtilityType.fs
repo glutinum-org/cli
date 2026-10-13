@@ -660,7 +660,19 @@ let readReadonly (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenc
 
     let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
 
+    // `Readonly<Uint16Array>` of a library type is the type, F# has no read-only view of it
+    let isLibraryType =
+        match typeReferenceNode.typeArguments with
+        | Some typeArguments when typeArguments.Count = 1 ->
+            let argument = typeArguments.[0]
+
+            argument.kind = Ts.SyntaxKind.TypeReference
+            && (symbolAtLocation reader.checker !!(argument :?> Ts.TypeReferenceNode).typeName
+                |> isFromEsLib)
+        | _ -> false
+
     match typ.flags with
+    | _ when isLibraryType -> reader.ReadTypeNode typeReferenceNode.typeArguments.Value.[0]
     | HasTypeFlags Ts.TypeFlags.Object
     | HasTypeFlags Ts.TypeFlags.Intersection ->
         typ

@@ -39,6 +39,7 @@ const fixtures = [
     "typeofUnexportedNamespace",
     "externalLibNamespace",
     "reExportedGenericFunctionAlias",
+    "aliasedImportHeritage",
 ]
 
 const footer = `

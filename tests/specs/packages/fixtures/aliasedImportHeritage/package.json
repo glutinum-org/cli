@@ -1,0 +1,1 @@
+{ "name": "aliased-import-heritage", "version": "1.0.0", "main": "lib/index.js", "types": "types/index.d.ts", "dependencies": { "stream-base": "1.0.0" } }
