@@ -108,3 +108,10 @@ let generatePackagesFromDisk (options: Packages.GenerateOptions) (inputs: string
 /// The packages installed on the disk, from the current directory
 let generatePackages (inputs: string list) =
     generatePackagesFromDisk Packages.defaultOptions inputs
+
+/// The entry of the JavaScript tests, an array stands for the list and `null` for the Node host
+let generatePackagesOfArray (host: Hosting.Host) (inputs: string[]) =
+    if isNull host then
+        generatePackages (List.ofArray inputs)
+    else
+        generatePackagesWith host (List.ofArray inputs)

@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest'
-import { generatePackages } from '../../../src/Glutinum.Converter/Generate.fs.js'
-import { ofArray } from '../../../src/Glutinum.Converter/fable_modules/fable-library-js.5.17.2/List.js'
+import { generatePackagesOfArray } from '../../../src/Glutinum.Converter/Generate.fs.js'
 import { dirname } from "dirname-filename-esm";
 import path from 'node:path';
 
@@ -54,7 +53,7 @@ for (const fixture of fixtures) {
         // Reference: file://./fixtures/${fixture}
         // Expected: file://./fixtures/${fixture}.fsx
         const packageDir = path.join(__dirname, "fixtures", fixture)
-        const result = generatePackages(ofArray([packageDir])) + footer
+        const result = generatePackagesOfArray(null, [packageDir]) + footer
 
         const expectedFile = path.join(__dirname, "fixtures", fixture + ".fsx")
 
@@ -63,7 +62,6 @@ for (const fixture of fixtures) {
 }
 
 // The browser has no disk: the same package read from an in-memory file system gives the same binding
-import { generatePackagesWith } from '../../../src/Glutinum.Converter/Generate.fs.js'
 import { createInMemoryHost } from '../../../src/Glutinum.Converter/Hosting.fs.js'
 import fs from 'node:fs'
 
@@ -76,7 +74,7 @@ test("packages/multiFile in memory", async () => {
         fileSystem.writeFileSync("/node_modules/multi-file/" + file, fs.readFileSync(path.join(packageDir, file), "utf8"))
     }
 
-    const result = generatePackagesWith(host, ofArray(["multi-file"])) + footer
+    const result = generatePackagesOfArray(host, ["multi-file"]) + footer
 
     await expect(result).toMatchFileSnapshot(path.join(__dirname, "fixtures", "multiFile.fsx"))
 })

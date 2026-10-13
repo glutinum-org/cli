@@ -12,6 +12,8 @@ A `ReadonlyArray<'T>` is a sequence, `Seq.map` and `for` read it, and `.[i]` ind
 
 The static side of the globals is on `Exports`: `Date` with its constructor, and `Number`, `String`, `Object`, `Symbol` and `Reflect` with every member the library declares. A number stays a `float`, a string a `string`, an object an `obj`. `JSON`, `Math`, `Promise`, `Map` and `Set` are the ones of `Fable.Core`.
 
+A generated binding needs `Fable.Core` 5.4.0 or later: a parameter that keeps its union type takes a value of any of its cases through the implicit conversions of `U2` to `U9`.
+
 ```fsharp
 open type Glutinum.Types.TypeScript.Exports
 

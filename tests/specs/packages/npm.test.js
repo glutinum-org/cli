@@ -1,8 +1,7 @@
 import { expect, test } from 'vitest'
 import { InMemoryFileSystemHost } from '@ts-morph/bootstrap'
 import { Npm_installPackage as installPackage, Npm_parsePackageSpec as parsePackageSpec, Npm_typesPackageName as typesPackageName, createFileSystemHost } from '../../../src/Glutinum.Converter/Hosting.fs.js'
-import { generatePackagesWith } from '../../../src/Glutinum.Converter/Generate.fs.js'
-import { ofArray } from '../../../src/Glutinum.Converter/fable_modules/fable-library-js.5.17.2/List.js'
+import { generatePackagesOfArray } from '../../../src/Glutinum.Converter/Generate.fs.js'
 
 // A registry with `my-lib` depending on `dep-lib`, and `untyped` described by `@types/untyped`
 const registry = {
@@ -59,7 +58,7 @@ test("installPackage downloads the declarations of the package, its dependencies
     expect(messages.length).toBeGreaterThan(0)
 
     const host = createFileSystemHost(fileSystem, "/")
-    const binding = generatePackagesWith(host, ofArray(["my-lib"]))
+    const binding = generatePackagesOfArray(host, ["my-lib"])
 
     expect(binding).toContain("module MyLib =")
     expect(binding).toContain("static member paint (color: DepLib.Color, thing: Untyped.Thing)")

@@ -8,7 +8,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
     <PackageVersion Include="Fable.Browser.Navigator" Version="2.5.0" />
-    <PackageVersion Include="Fable.Core" Version="5.2.0" />
+    <PackageVersion Include="Fable.Core" Version="5.4.0" />
     <PackageVersion Include="Fable.Elmish" Version="5.0.2" />
     <PackageVersion Include="Fable.Elmish.Browser" Version="4.1.0" />
     <PackageVersion Include="Fable.Elmish.HMR" Version="9.0.0" />
