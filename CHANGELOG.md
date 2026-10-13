@@ -1,5 +1,5 @@
 ---
-last_commit_released: ffb5dd3ac2179fc89380b0be9b3795ce3f122ea4
+last_commit_released: 0f21d0b4daca1c9107867731700c8f50a02a1592
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,14 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.13 - 2026-10-13
+
+### 🐞 Bug Fixes
+
+* One op_Implicit per type on a union ([0f21d0b](https://github.com/glutinum-org/cli/commit/0f21d0b4daca1c9107867731700c8f50a02a1592))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/ffb5dd3ac2179fc89380b0be9b3795ce3f122ea4..0f21d0b4daca1c9107867731700c8f50a02a1592)</small></strong>
 
 ## 1.0.0-beta.12 - 2026-10-13
 
