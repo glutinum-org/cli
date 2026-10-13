@@ -28,6 +28,10 @@ module Exports =
             [<Emit("$0")>]
             static member op_ErasedCast(value: Exports.readdir__.options.Cases.Case1) : options = nativeOnly
 
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Exports.readdir__.options.Cases.Case1 = nativeOnly
+
         module options =
 
             module Cases =

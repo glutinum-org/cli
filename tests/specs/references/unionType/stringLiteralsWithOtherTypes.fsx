@@ -29,6 +29,10 @@ type WithNumber =
     [<Emit("$0")>]
     static member op_ErasedCast(value: float) : WithNumber = nativeOnly
 
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: float = nativeOnly
+
 [<RequireQualifiedAccess>]
 [<Erase(CaseRules.None)>]
 type WithString =
@@ -42,6 +46,10 @@ type WithString =
     [<Emit("$0")>]
     static member op_ErasedCast(value: string) : WithString = nativeOnly
 
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: string = nativeOnly
+
 [<RequireQualifiedAccess>]
 [<Erase(CaseRules.None)>]
 type WithInterface =
@@ -53,6 +61,10 @@ type WithInterface =
 
     [<Emit("$0")>]
     static member op_ErasedCast(value: Foo) : WithInterface = nativeOnly
+
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: Foo = nativeOnly
 
 [<RequireQualifiedAccess>]
 [<Erase(CaseRules.None)>]
@@ -66,6 +78,10 @@ type WithTypeLiteral =
     [<Emit("$0")>]
     static member op_ErasedCast(value: WithTypeLiteral.Cases.Case1) : WithTypeLiteral = nativeOnly
 
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: WithTypeLiteral.Cases.Case1 = nativeOnly
+
 [<RequireQualifiedAccess>]
 [<Erase(CaseRules.None)>]
 type WithBooleanLiteralAndUndefined =
@@ -78,6 +94,10 @@ type WithBooleanLiteralAndUndefined =
 
     [<Emit("$0")>]
     static member op_ErasedCast(value: ResizeArray<string>) : WithBooleanLiteralAndUndefined = nativeOnly
+
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: ResizeArray<string> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -112,6 +132,10 @@ module Props =
         [<Emit("$0")>]
         static member op_ErasedCast(value: ResizeArray<string>) : colorScale = nativeOnly
 
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: ResizeArray<string> = nativeOnly
+
 module Exports =
 
     module scale__ =
@@ -128,6 +152,10 @@ module Exports =
 
             [<Emit("$0")>]
             static member op_ErasedCast(value: float) : value = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: float = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

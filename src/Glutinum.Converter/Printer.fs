@@ -1034,6 +1034,24 @@ let private printUnion (printer: Printer) (unionInfo: FSharpUnion) =
                 printer.NewLine
         )
 
+        unionInfo.Cases
+        |> List.iter (
+            function
+            | FSharpUnionCase.Field(caseName, typ) ->
+                printer.NewLine
+
+                printer.Write(
+                    $"/// Unchecked, the value as <c>{caseName}</c> whatever case it holds"
+                )
+
+                printer.NewLine
+                printer.Write("[<Emit(\"$0\")>]")
+                printer.NewLine
+                printer.Write($"member _.As{caseName}: {printType typ} = nativeOnly")
+                printer.NewLine
+            | _ -> ()
+        )
+
     printer.Unindent
 
 let private printSingleErasedCaseUnion

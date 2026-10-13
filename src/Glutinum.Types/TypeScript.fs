@@ -1279,8 +1279,47 @@ module TypeScript =
         static member Create(``done``: bool, value: 'TReturn) : IteratorReturnResult<'TReturn> =
             nativeOnly
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type IteratorResult<'T, 'TReturn> =
-        U2<TypeScript.IteratorYieldResult<'T>, TypeScript.IteratorReturnResult<'TReturn>>
+        | IteratorYieldResult of TypeScript.IteratorYieldResult<'T>
+        | IteratorReturnResult of TypeScript.IteratorReturnResult<'TReturn>
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: TypeScript.IteratorYieldResult<'T>)
+            : IteratorResult<'T, 'TReturn>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: TypeScript.IteratorYieldResult<'T>)
+            : IteratorResult<'T, 'TReturn>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: TypeScript.IteratorReturnResult<'TReturn>)
+            : IteratorResult<'T, 'TReturn>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: TypeScript.IteratorReturnResult<'TReturn>)
+            : IteratorResult<'T, 'TReturn>
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>IteratorYieldResult</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsIteratorYieldResult: TypeScript.IteratorYieldResult<'T> = nativeOnly
+
+        /// Unchecked, the value as <c>IteratorReturnResult</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsIteratorReturnResult: TypeScript.IteratorReturnResult<'TReturn> = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -2540,6 +2579,14 @@ module TypeScript =
                                 [<Emit("$0")>]
                                 static member op_ErasedCast(value: obj) : useGrouping = nativeOnly
 
+                                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                                [<Emit("$0")>]
+                                member _.AsCase1: bool = nativeOnly
+
+                                /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                                [<Emit("$0")>]
+                                member _.AsCase2: obj = nativeOnly
+
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
                             type dayPeriod =
@@ -3544,6 +3591,14 @@ module TypeScript =
                                 [<Emit("$0")>]
                                 static member op_ErasedCast(value: obj) : useGrouping = nativeOnly
 
+                                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                                [<Emit("$0")>]
+                                member _.AsCase1: bool = nativeOnly
+
+                                /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                                [<Emit("$0")>]
+                                member _.AsCase2: obj = nativeOnly
+
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
                             type dayPeriod =
@@ -4276,7 +4331,42 @@ module TypeScript =
         /// </returns>
         abstract member size: float with get
 
-    type PropertyKey = U3<string, float, obj>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type PropertyKey =
+        | Case1 of string
+        | Case2 of float
+        | Case3 of obj
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : PropertyKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : PropertyKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : PropertyKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : PropertyKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: obj) : PropertyKey = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: obj) : PropertyKey = nativeOnly
+
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: string = nativeOnly
+
+        /// Unchecked, the value as <c>Case2</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase2: float = nativeOnly
+
+        /// Unchecked, the value as <c>Case3</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase3: obj = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -4742,6 +4832,14 @@ module TypeScript =
 
                     [<Emit("$0")>]
                     static member op_ErasedCast(value: obj) : useGrouping = nativeOnly
+
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: bool = nativeOnly
+
+                    /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase2: obj = nativeOnly
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]

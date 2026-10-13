@@ -17,6 +17,10 @@ type WithString =
     [<Emit("$0")>]
     static member op_ErasedCast(value: string) : WithString = nativeOnly
 
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: string = nativeOnly
+
 [<RequireQualifiedAccess>]
 [<Erase(CaseRules.None)>]
 type WithTypeLiteralAndUndefined =
@@ -29,6 +33,10 @@ type WithTypeLiteralAndUndefined =
 
     [<Emit("$0")>]
     static member op_ErasedCast(value: WithTypeLiteralAndUndefined.Cases.Case1) : WithTypeLiteralAndUndefined = nativeOnly
+
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: WithTypeLiteralAndUndefined.Cases.Case1 = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -62,6 +70,10 @@ module Props =
 
         [<Emit("$0")>]
         static member op_ErasedCast(value: ResizeArray<float>) : size = nativeOnly
+
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: ResizeArray<float> = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -47,6 +47,10 @@ module Options =
         [<Emit("$0")>]
         static member op_ErasedCast(value: float) : withNumber = nativeOnly
 
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: float = nativeOnly
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

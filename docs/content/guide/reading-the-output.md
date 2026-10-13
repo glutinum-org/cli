@@ -82,7 +82,9 @@ match request.params.["id"] with
 
 A match works when the cases have distinct runtime types, a string and an array here. A case that is an interface cannot be tested: Fable warns and the branch is never taken.
 
-A union in parameter position is generated as one overload per case, so `setView (paris, 13)` and `setView ((48.85, 2.35), 13)` both compile. There is no overload taking the union itself: a value typed `U2<LatLng, LatLngTuple>` is matched on its cases first. Past `--max-overloads` combinations the parameter keeps its union type, and Fable.Core 5.4.0 converts a value of a case to it.
+A union in parameter position is generated as one overload per case, so `setView (paris, 13)` and `setView ((48.85, 2.35), 13)` both compile. There is no overload taking the union itself. Past `--max-overloads` combinations the parameter keeps its union type, and Fable.Core 5.4.0 converts a value of a case to it.
+
+A named union, `type PathLike = string | Buffer | URL`, is an erased union of its own with a case per type, `PathLike.String`, `PathLike.Buffer`, `PathLike.URL`, an implicit conversion from each case, and an unchecked accessor per case, `path.AsString`. A case is named `Case1` when its type is anonymous or when two cases would share a name. A union written inline stays `U2`..`U9`, with the accessors `AsCase1`..`AsCase9` from `Glutinum.Types`.
 
 ## Objects you construct
 

@@ -21,7 +21,7 @@ type Text =
 [<Erase>]
 type ChangeSpec =
     | Case1 of ChangeSpec.Cases.Case1
-    | Case2 of ResizeArray<ChangeSpec>
+    | ChangeSpecArray of ResizeArray<ChangeSpec>
 
     [<Emit("$0")>]
     static member op_Implicit(value: ChangeSpec.Cases.Case1) : ChangeSpec = nativeOnly
@@ -34,6 +34,14 @@ type ChangeSpec =
 
     [<Emit("$0")>]
     static member op_ErasedCast(value: ResizeArray<ChangeSpec>) : ChangeSpec = nativeOnly
+
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: ChangeSpec.Cases.Case1 = nativeOnly
+
+    /// Unchecked, the value as <c>ChangeSpecArray</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsChangeSpecArray: ResizeArray<ChangeSpec> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

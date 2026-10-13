@@ -16,6 +16,10 @@ type Collision =
     [<Emit("$0")>]
     static member op_ErasedCast(value: float) : Collision = nativeOnly
 
+    /// Unchecked, the value as <c>Case2</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase2: float = nativeOnly
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

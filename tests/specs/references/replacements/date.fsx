@@ -21,8 +21,31 @@ type Exports =
 type MyDate =
     abstract member toDate: unit -> Date
 
+[<RequireQualifiedAccess>]
+[<Erase>]
 type MyDateUnion =
-    U2<string, Date>
+    | String of string
+    | Date of Date
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: string) : MyDateUnion = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: string) : MyDateUnion = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: Date) : MyDateUnion = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: Date) : MyDateUnion = nativeOnly
+
+    /// Unchecked, the value as <c>String</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsString: string = nativeOnly
+
+    /// Unchecked, the value as <c>Date</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsDate: Date = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

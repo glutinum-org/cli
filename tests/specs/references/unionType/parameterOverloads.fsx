@@ -31,8 +31,31 @@ type EventListener =
 type EventListenerObject =
     abstract member handleEvent: ``object``: Event -> unit
 
+[<RequireQualifiedAccess>]
+[<Erase>]
 type EventListenerOrEventListenerObject =
-    U2<EventListener, EventListenerObject>
+    | EventListener of EventListener
+    | EventListenerObject of EventListenerObject
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: EventListener) : EventListenerOrEventListenerObject = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: EventListener) : EventListenerOrEventListenerObject = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: EventListenerObject) : EventListenerOrEventListenerObject = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: EventListenerObject) : EventListenerOrEventListenerObject = nativeOnly
+
+    /// Unchecked, the value as <c>EventListener</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsEventListener: EventListener = nativeOnly
+
+    /// Unchecked, the value as <c>EventListenerObject</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsEventListenerObject: EventListenerObject = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

@@ -404,20 +404,71 @@ let private (|RememberedTypeLiteral|_|) (context: TransformContext) (glueType: G
     | _ -> None
 
 /// Fable.Core stops at `U9`, a larger union is an erased union of its own with a case per type
+/// `PathLike.String`, `PathLike.Buffer`: the case named after its type, `None` when the type
+/// has no name to give
+let rec private caseNameOf (typ: FSharpType) : string option =
+    let lastSegment (name: string) =
+        (name.Split('.') |> Array.last).Trim('`')
+
+    match typ with
+    | FSharpType.Primitive FSharpPrimitive.String -> Some "String"
+    | FSharpType.Primitive FSharpPrimitive.Int -> Some "Int"
+    | FSharpType.Primitive FSharpPrimitive.Float -> Some "Float"
+    | FSharpType.Primitive FSharpPrimitive.Number -> Some "Number"
+    | FSharpType.Primitive FSharpPrimitive.Bool -> Some "Bool"
+    | FSharpType.Primitive FSharpPrimitive.Unit -> Some "Unit"
+    | FSharpType.Primitive FSharpPrimitive.BigInt -> Some "BigInt"
+    | FSharpType.Primitive FSharpPrimitive.Null -> None
+    | FSharpType.Object -> Some "Obj"
+    // `Array<string>` is a reference to `ResizeArray`
+    | FSharpType.TypeReference {
+                                   Name = "ResizeArray" | "ReadonlyArray"
+                                   TypeArguments = [ elementType ]
+                               } ->
+        caseNameOf elementType |> Option.map (fun name -> name + "Array")
+    | FSharpType.TypeReference typeReference -> Some(lastSegment typeReference.Name)
+    | FSharpType.Mapped mappedInfo -> Some(lastSegment mappedInfo.Name)
+    | FSharpType.TypeParameter name -> Some(name.TrimStart '\'')
+    | FSharpType.ResizeArray elementType
+    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray elementType) ->
+        caseNameOf elementType |> Option.map (fun name -> name + "Array")
+    | FSharpType.Option innerType ->
+        caseNameOf innerType |> Option.map (fun name -> name + "Option")
+    | FSharpType.Function _ -> Some "Function"
+    | FSharpType.Tuple _ -> Some "Tuple"
+    | _ -> None
+    |> Option.map (fun name ->
+        let name = Naming.sanitizeTypeName name
+        string (System.Char.ToUpperInvariant name.[0]) + name.Substring 1
+    )
+
 let private erasedUnion
     (name: string)
     (typeParameters: FSharpTypeParameter list)
     (caseTypes: FSharpType list)
     : FSharpUnion
     =
+    let names = caseTypes |> List.map caseNameOf
+
+    // F# declares `Tag` and `Is<Case>` on a union itself
+    let caseNames =
+        if
+            names |> List.forall Option.isSome
+            && (names |> List.distinct).Length = names.Length
+            && names |> List.forall (fun name -> name <> Some "Tag" && name <> Some "Tags")
+        then
+            names |> List.map Option.get
+        else
+            caseTypes |> List.mapi (fun index _ -> $"Case%i{index + 1}")
+
     {
         Attributes = [ FSharpAttribute.RequireQualifiedAccess; FSharpAttribute.Erase ]
         Name = name
         Cases =
-            caseTypes
-            |> List.mapi (fun index caseType ->
-                FSharpUnionCase.Field($"Case%i{index + 1}", caseType)
-            )
+            List.map2
+                (fun caseName caseType -> FSharpUnionCase.Field(caseName, caseType))
+                caseNames
+                caseTypes
         IsOptional = false
         TypeParameters = typeParameters
         Constants = []
@@ -3676,6 +3727,8 @@ let private aliasOfUnion (scope: AliasScope) (cases: GlueType list) (unionType: 
                     transformType (context.PushScope "Value") single
                     |> FSharpType.Option
                     |> aliasOf scope
+                // A named union is a type of its own, with `AsString`-style accessors
+                | [], others when others.Length > 1 -> erasedUnionOf others
                 | _, others when others.Length > 9 -> erasedUnionOf others
                 | _ -> transformType context unionType |> aliasOf scope
     finally

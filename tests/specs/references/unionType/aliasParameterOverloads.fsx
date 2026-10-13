@@ -23,8 +23,31 @@ type LatLng =
 type LatLngTuple =
     float * float
 
+[<RequireQualifiedAccess>]
+[<Erase>]
 type LatLngExpression =
-    U2<LatLng, LatLngTuple>
+    | LatLng of LatLng
+    | LatLngTuple of LatLngTuple
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: LatLng) : LatLngExpression = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: LatLng) : LatLngExpression = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: LatLngTuple) : LatLngExpression = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: LatLngTuple) : LatLngExpression = nativeOnly
+
+    /// Unchecked, the value as <c>LatLng</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsLatLng: LatLng = nativeOnly
+
+    /// Unchecked, the value as <c>LatLngTuple</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsLatLngTuple: LatLngTuple = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

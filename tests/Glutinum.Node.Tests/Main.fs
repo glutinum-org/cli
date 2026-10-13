@@ -4,6 +4,7 @@ open Fable.Core
 open Scriptorium.Nib.Assertion
 open Glutinum
 open Glutinum.Node.Exports
+open Glutinum.Types
 open Glutinum.Types.TypeScript
 open type Glutinum.Types.TypeScript.Exports
 
@@ -208,6 +209,18 @@ let main _ =
                                 isTrue
 
                             assertThat (Reflect.has ({| a = 1 |}, "a")) isTrue
+                    )
+                    test (
+                        "union accessors: a named union and a U2",
+                        fun _ ->
+                            let path: Node.fs.PathLike = Node.fs.PathLike.String "hello.txt"
+                            assertThat path.AsString (isEqualTo "hello.txt")
+
+                            let implicitPath: Node.fs.PathLike = "implicit.txt"
+                            assertThat implicitPath.AsString (isEqualTo "implicit.txt")
+
+                            let value: U2<string, float> = U2.Case1 "text"
+                            assertThat value.AsCase1 (isEqualTo "text")
                     )
                     test (
                         "ReadonlyArray: a sequence with an index",

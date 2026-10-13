@@ -162,6 +162,46 @@ module Stack =
             [<Emit("$0")>]
             static member op_ErasedCast(value: Stack.frames.Item.ReadOnlyJ) : Item = nativeOnly
 
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Stack.frames.Item.ReadOnlyA = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: Stack.frames.Item.ReadOnlyB = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: Stack.frames.Item.ReadOnlyC = nativeOnly
+
+            /// Unchecked, the value as <c>Case4</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase4: Stack.frames.Item.ReadOnlyD = nativeOnly
+
+            /// Unchecked, the value as <c>Case5</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase5: Stack.frames.Item.ReadOnlyE = nativeOnly
+
+            /// Unchecked, the value as <c>Case6</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase6: Stack.frames.Item.ReadOnlyF = nativeOnly
+
+            /// Unchecked, the value as <c>Case7</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase7: Stack.frames.Item.ReadOnlyG = nativeOnly
+
+            /// Unchecked, the value as <c>Case8</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase8: Stack.frames.Item.ReadOnlyH = nativeOnly
+
+            /// Unchecked, the value as <c>Case9</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase9: Stack.frames.Item.ReadOnlyI = nativeOnly
+
+            /// Unchecked, the value as <c>Case10</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase10: Stack.frames.Item.ReadOnlyJ = nativeOnly
+
         module Item =
 
             [<AllowNullLiteral>]

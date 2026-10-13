@@ -73,6 +73,7 @@ This table is maintained by hand and can fall behind the generator. When the out
 <tr><td><code>readonly T[]</code></td><td><code>ReadonlyArray&lt;T&gt;</code>, <code>ResizeArray&lt;T&gt;</code> as a parameter, a union case or a callback return</td></tr>
 <tr><td><code>[A, B]</code></td><td><code>A * B</code></td></tr>
 <tr><td><code>[A, ...B[]]</code></td><td><code>ResizeArray&lt;obj&gt;</code></td></tr>
+<tr><td><code>type X = A | B</code></td><td>an erased union <code>X</code> with the cases <code>X.A</code>, <code>X.B</code> and the accessors <code>AsA</code>, <code>AsB</code></td></tr>
 <tr><td><code>A | B</code> in a parameter</td><td>one overload per case, up to 16 combinations, then <code>U2&lt;A, B&gt;</code></td></tr>
 <tr><td><code>A | B</code> elsewhere</td><td><code>U2&lt;A, B&gt;</code>, up to <code>U9</code></td></tr>
 <tr><td>more than nine cases</td><td><code>obj</code></td></tr>

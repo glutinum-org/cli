@@ -17410,9 +17410,60 @@ module Web =
             =
             nativeOnly
 
-    type NodeFilter = U2<(Web.Node -> float), NodeFilter.U2.Case2>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type NodeFilter =
+        | Function of (Web.Node -> float)
+        | Case2 of NodeFilter.Cases.Case2
 
-    type XPathNSResolver = U2<(string option -> string option), XPathNSResolver.U2.Case2>
+        [<Emit("$0")>]
+        static member op_Implicit(value: (Web.Node -> float)) : NodeFilter = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: (Web.Node -> float)) : NodeFilter = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: NodeFilter.Cases.Case2) : NodeFilter = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: NodeFilter.Cases.Case2) : NodeFilter = nativeOnly
+
+        /// Unchecked, the value as <c>Function</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsFunction: (Web.Node -> float) = nativeOnly
+
+        /// Unchecked, the value as <c>Case2</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase2: NodeFilter.Cases.Case2 = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type XPathNSResolver =
+        | Function of (string option -> string option)
+        | Case2 of XPathNSResolver.Cases.Case2
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: (string option -> string option)) : XPathNSResolver =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: (string option -> string option)) : XPathNSResolver =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: XPathNSResolver.Cases.Case2) : XPathNSResolver = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: XPathNSResolver.Cases.Case2) : XPathNSResolver =
+            nativeOnly
+
+        /// Unchecked, the value as <c>Function</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsFunction: (string option -> string option) = nativeOnly
+
+        /// Unchecked, the value as <c>Case2</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase2: XPathNSResolver.Cases.Case2 = nativeOnly
 
     /// <summary>
     /// The **<c>ANGLE_instanced_arrays</c>** extension is part of the WebGL API and allows to draw the same object, or groups of similar objects multiple times, if they share the same vertex data, primitive count and type.
@@ -108614,7 +108665,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createExpression)
         /// </summary>
         abstract member createExpression:
-            expression: string * resolver: XPathNSResolver.U2.Case2 -> Web.XPathExpression
+            expression: string * resolver: XPathNSResolver.Cases.Case2 -> Web.XPathExpression
 
         [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createNSResolver)")>]
         abstract member createNSResolver: nodeResolver: Web.Node -> Web.Node
@@ -108641,7 +108692,7 @@ module Web =
         abstract member evaluate:
             expression: string *
             contextNode: Web.Node *
-            resolver: XPathNSResolver.U2.Case2 *
+            resolver: XPathNSResolver.Cases.Case2 *
             ?``type``: float *
             ?result: Web.XPathResult ->
                 Web.XPathResult
@@ -109802,10 +109853,81 @@ module Web =
 
         type AddressValue = float
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type ExportValue =
-            U4<Action, Web.WebAssembly_.Global, Web.WebAssembly_.Memory, Web.WebAssembly_.Table>
+            | Action of Action
+            | Global of Web.WebAssembly_.Global
+            | Memory of Web.WebAssembly_.Memory
+            | Table of Web.WebAssembly_.Table
 
-        type ImportValue = U2<Web.WebAssembly_.ExportValue, float>
+            [<Emit("$0")>]
+            static member op_Implicit(value: Action) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Action) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.WebAssembly_.Global) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.WebAssembly_.Global) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.WebAssembly_.Memory) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.WebAssembly_.Memory) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.WebAssembly_.Table) : ExportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.WebAssembly_.Table) : ExportValue = nativeOnly
+
+            /// Unchecked, the value as <c>Action</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAction: Action = nativeOnly
+
+            /// Unchecked, the value as <c>Global</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsGlobal: Web.WebAssembly_.Global = nativeOnly
+
+            /// Unchecked, the value as <c>Memory</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsMemory: Web.WebAssembly_.Memory = nativeOnly
+
+            /// Unchecked, the value as <c>Table</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsTable: Web.WebAssembly_.Table = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type ImportValue =
+            | ExportValue of Web.WebAssembly_.ExportValue
+            | Number of float
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Web.WebAssembly_.ExportValue) : ImportValue =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Web.WebAssembly_.ExportValue) : ImportValue =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : ImportValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : ImportValue = nativeOnly
+
+            /// Unchecked, the value as <c>ExportValue</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsExportValue: Web.WebAssembly_.ExportValue = nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -111676,9 +111798,46 @@ module Web =
         abstract member ``use``: Web.SVGUseElement with get, set
         abstract member view: Web.SVGViewElement with get, set
 
-    type AlgorithmIdentifier = U2<Web.Algorithm, string>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type AlgorithmIdentifier =
+        | Algorithm of Web.Algorithm
+        | String of string
 
-    type AllowSharedBufferSource = obj
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Algorithm) : AlgorithmIdentifier = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Algorithm) : AlgorithmIdentifier = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : AlgorithmIdentifier = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : AlgorithmIdentifier = nativeOnly
+
+        /// Unchecked, the value as <c>Algorithm</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsAlgorithm: Web.Algorithm = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type AllowSharedBufferSource =
+        | Case1 of obj
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: obj) : AllowSharedBufferSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: obj) : AllowSharedBufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: obj = nativeOnly
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]
@@ -112201,47 +112360,457 @@ module Web =
 
     type BigInteger = JS.Uint8Array
 
-    type BlobPart = U3<Web.BufferSource, Web.Blob, string>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type BlobPart =
+        | BufferSource of Web.BufferSource
+        | Blob of Web.Blob
+        | String of string
 
-    type BluetoothServiceUUID = U2<string, float>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.BufferSource) : BlobPart = nativeOnly
 
-    type BodyInit = U2<Web.ReadableStream, Web.XMLHttpRequestBodyInit>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.BufferSource) : BlobPart = nativeOnly
 
-    type BufferSource = obj
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Blob) : BlobPart = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Blob) : BlobPart = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : BlobPart = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : BlobPart = nativeOnly
+
+        /// Unchecked, the value as <c>BufferSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBufferSource: Web.BufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>Blob</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBlob: Web.Blob = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type BluetoothServiceUUID =
+        | String of string
+        | Number of float
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : BluetoothServiceUUID = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : BluetoothServiceUUID = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : BluetoothServiceUUID = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : BluetoothServiceUUID = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type BodyInit =
+        | ReadableStream of Web.ReadableStream
+        | XMLHttpRequestBodyInit of Web.XMLHttpRequestBodyInit
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ReadableStream) : BodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ReadableStream) : BodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.XMLHttpRequestBodyInit) : BodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.XMLHttpRequestBodyInit) : BodyInit = nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStream</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStream: Web.ReadableStream = nativeOnly
+
+        /// Unchecked, the value as <c>XMLHttpRequestBodyInit</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsXMLHttpRequestBodyInit: Web.XMLHttpRequestBodyInit = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type BufferSource =
+        | Case1 of obj
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: obj) : BufferSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: obj) : BufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: obj = nativeOnly
 
     type COSEAlgorithmIdentifier = float
 
-    type CSSKeywordish = U2<string, Web.CSSKeywordValue>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type CSSKeywordish =
+        | String of string
+        | CSSKeywordValue of Web.CSSKeywordValue
 
-    type CSSNumberish = U2<float, Web.CSSNumericValue>
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : CSSKeywordish = nativeOnly
 
-    type CSSPerspectiveValue = U2<Web.CSSNumericValue, Web.CSSKeywordish>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : CSSKeywordish = nativeOnly
 
-    type CSSUnparsedSegment = U2<string, Web.CSSVariableReferenceValue>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CSSKeywordValue) : CSSKeywordish = nativeOnly
 
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CSSKeywordValue) : CSSKeywordish = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>CSSKeywordValue</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCSSKeywordValue: Web.CSSKeywordValue = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type CSSNumberish =
+        | Number of float
+        | CSSNumericValue of Web.CSSNumericValue
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : CSSNumberish = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : CSSNumberish = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CSSNumericValue) : CSSNumberish = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CSSNumericValue) : CSSNumberish = nativeOnly
+
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
+
+        /// Unchecked, the value as <c>CSSNumericValue</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCSSNumericValue: Web.CSSNumericValue = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type CSSPerspectiveValue =
+        | CSSNumericValue of Web.CSSNumericValue
+        | CSSKeywordish of Web.CSSKeywordish
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CSSNumericValue) : CSSPerspectiveValue = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CSSNumericValue) : CSSPerspectiveValue = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CSSKeywordish) : CSSPerspectiveValue = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CSSKeywordish) : CSSPerspectiveValue = nativeOnly
+
+        /// Unchecked, the value as <c>CSSNumericValue</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCSSNumericValue: Web.CSSNumericValue = nativeOnly
+
+        /// Unchecked, the value as <c>CSSKeywordish</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCSSKeywordish: Web.CSSKeywordish = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type CSSUnparsedSegment =
+        | String of string
+        | CSSVariableReferenceValue of Web.CSSVariableReferenceValue
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : CSSUnparsedSegment = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : CSSUnparsedSegment = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CSSVariableReferenceValue) : CSSUnparsedSegment =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CSSVariableReferenceValue) : CSSUnparsedSegment =
+            nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>CSSVariableReferenceValue</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCSSVariableReferenceValue: Web.CSSVariableReferenceValue = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type CanvasImageSource =
-        U6<
-            Web.HTMLOrSVGImageElement,
-            Web.HTMLVideoElement,
-            Web.HTMLCanvasElement,
-            Web.ImageBitmap,
-            Web.OffscreenCanvas,
-            Web.VideoFrame
-         >
+        | HTMLOrSVGImageElement of Web.HTMLOrSVGImageElement
+        | HTMLVideoElement of Web.HTMLVideoElement
+        | HTMLCanvasElement of Web.HTMLCanvasElement
+        | ImageBitmap of Web.ImageBitmap
+        | OffscreenCanvas of Web.OffscreenCanvas
+        | VideoFrame of Web.VideoFrame
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLOrSVGImageElement) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLOrSVGImageElement) : CanvasImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLVideoElement) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLVideoElement) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLCanvasElement) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLCanvasElement) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageBitmap) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageBitmap) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.OffscreenCanvas) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.OffscreenCanvas) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.VideoFrame) : CanvasImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.VideoFrame) : CanvasImageSource = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLOrSVGImageElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLOrSVGImageElement: Web.HTMLOrSVGImageElement = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLVideoElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLVideoElement: Web.HTMLVideoElement = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLCanvasElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLCanvasElement: Web.HTMLCanvasElement = nativeOnly
+
+        /// Unchecked, the value as <c>ImageBitmap</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageBitmap: Web.ImageBitmap = nativeOnly
+
+        /// Unchecked, the value as <c>OffscreenCanvas</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsOffscreenCanvas: Web.OffscreenCanvas = nativeOnly
+
+        /// Unchecked, the value as <c>VideoFrame</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsVideoFrame: Web.VideoFrame = nativeOnly
 
     type ClipboardItemData = JS.Promise<U2<string, Web.Blob>>
 
     type ClipboardItems = ResizeArray<Web.ClipboardItem>
 
-    type ConstrainBoolean = U2<bool, Web.ConstrainBooleanParameters>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ConstrainBoolean =
+        | Bool of bool
+        | ConstrainBooleanParameters of Web.ConstrainBooleanParameters
 
-    type ConstrainBooleanOrDOMString = U3<bool, string, Web.ConstrainBooleanOrDOMStringParameters>
+        [<Emit("$0")>]
+        static member op_Implicit(value: bool) : ConstrainBoolean = nativeOnly
 
-    type ConstrainDOMString = U3<string, ResizeArray<string>, Web.ConstrainDOMStringParameters>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: bool) : ConstrainBoolean = nativeOnly
 
-    type ConstrainDouble = U2<float, Web.ConstrainDoubleRange>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ConstrainBooleanParameters) : ConstrainBoolean =
+            nativeOnly
 
-    type ConstrainULong = U2<float, Web.ConstrainULongRange>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ConstrainBooleanParameters) : ConstrainBoolean =
+            nativeOnly
+
+        /// Unchecked, the value as <c>Bool</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBool: bool = nativeOnly
+
+        /// Unchecked, the value as <c>ConstrainBooleanParameters</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsConstrainBooleanParameters: Web.ConstrainBooleanParameters = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ConstrainBooleanOrDOMString =
+        | Bool of bool
+        | String of string
+        | ConstrainBooleanOrDOMStringParameters of Web.ConstrainBooleanOrDOMStringParameters
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: bool) : ConstrainBooleanOrDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: bool) : ConstrainBooleanOrDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : ConstrainBooleanOrDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : ConstrainBooleanOrDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ConstrainBooleanOrDOMStringParameters)
+            : ConstrainBooleanOrDOMString
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ConstrainBooleanOrDOMStringParameters)
+            : ConstrainBooleanOrDOMString
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>Bool</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBool: bool = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>ConstrainBooleanOrDOMStringParameters</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsConstrainBooleanOrDOMStringParameters: Web.ConstrainBooleanOrDOMStringParameters =
+            nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ConstrainDOMString =
+        | String of string
+        | StringArray of ResizeArray<string>
+        | ConstrainDOMStringParameters of Web.ConstrainDOMStringParameters
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : ConstrainDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : ConstrainDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<string>) : ConstrainDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<string>) : ConstrainDOMString = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ConstrainDOMStringParameters) : ConstrainDOMString =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ConstrainDOMStringParameters) : ConstrainDOMString =
+            nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>StringArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsStringArray: ResizeArray<string> = nativeOnly
+
+        /// Unchecked, the value as <c>ConstrainDOMStringParameters</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsConstrainDOMStringParameters: Web.ConstrainDOMStringParameters = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ConstrainDouble =
+        | Number of float
+        | ConstrainDoubleRange of Web.ConstrainDoubleRange
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : ConstrainDouble = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : ConstrainDouble = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ConstrainDoubleRange) : ConstrainDouble = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ConstrainDoubleRange) : ConstrainDouble = nativeOnly
+
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
+
+        /// Unchecked, the value as <c>ConstrainDoubleRange</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsConstrainDoubleRange: Web.ConstrainDoubleRange = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ConstrainULong =
+        | Number of float
+        | ConstrainULongRange of Web.ConstrainULongRange
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : ConstrainULong = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : ConstrainULong = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ConstrainULongRange) : ConstrainULong = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ConstrainULongRange) : ConstrainULong = nativeOnly
+
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
+
+        /// Unchecked, the value as <c>ConstrainULongRange</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsConstrainULongRange: Web.ConstrainULongRange = nativeOnly
 
     type CookieList = ResizeArray<Web.CookieListItem>
 
@@ -112249,13 +112818,141 @@ module Web =
 
     type EpochTimeStamp = float
 
-    type EventListenerOrEventListenerObject = U2<Web.EventListener, Web.EventListenerObject>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type EventListenerOrEventListenerObject =
+        | EventListener of Web.EventListener
+        | EventListenerObject of Web.EventListenerObject
 
-    type FileSystemWriteChunkType = U4<Web.BufferSource, Web.Blob, string, Web.WriteParams>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.EventListener) : EventListenerOrEventListenerObject =
+            nativeOnly
 
-    type Float32List = U2<JS.Float32Array, ResizeArray<Web.GLfloat>>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.EventListener) : EventListenerOrEventListenerObject =
+            nativeOnly
 
-    type FormDataEntryValue = U2<Web.File, string>
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.EventListenerObject)
+            : EventListenerOrEventListenerObject
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.EventListenerObject)
+            : EventListenerOrEventListenerObject
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>EventListener</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsEventListener: Web.EventListener = nativeOnly
+
+        /// Unchecked, the value as <c>EventListenerObject</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsEventListenerObject: Web.EventListenerObject = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type FileSystemWriteChunkType =
+        | BufferSource of Web.BufferSource
+        | Blob of Web.Blob
+        | String of string
+        | WriteParams of Web.WriteParams
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.BufferSource) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.BufferSource) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Blob) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Blob) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WriteParams) : FileSystemWriteChunkType = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WriteParams) : FileSystemWriteChunkType = nativeOnly
+
+        /// Unchecked, the value as <c>BufferSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBufferSource: Web.BufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>Blob</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBlob: Web.Blob = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>WriteParams</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsWriteParams: Web.WriteParams = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type Float32List =
+        | Float32Array of JS.Float32Array
+        | GLfloatArray of ResizeArray<Web.GLfloat>
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: JS.Float32Array) : Float32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: JS.Float32Array) : Float32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.GLfloat>) : Float32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.GLfloat>) : Float32List = nativeOnly
+
+        /// Unchecked, the value as <c>Float32Array</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsFloat32Array: JS.Float32Array = nativeOnly
+
+        /// Unchecked, the value as <c>GLfloatArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGLfloatArray: ResizeArray<Web.GLfloat> = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type FormDataEntryValue =
+        | File of Web.File
+        | String of string
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.File) : FormDataEntryValue = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.File) : FormDataEntryValue = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : FormDataEntryValue = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : FormDataEntryValue = nativeOnly
+
+        /// Unchecked, the value as <c>File</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsFile: Web.File = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
 
     type GLbitfield = float
 
@@ -112281,38 +112978,228 @@ module Web =
 
     type GLuint64 = float
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type GPUBindingResource =
-        U6<
-            Web.GPUSampler,
-            Web.GPUTexture,
-            Web.GPUTextureView,
-            Web.GPUBuffer,
-            Web.GPUBufferBinding,
-            Web.GPUExternalTexture
-         >
+        | GPUSampler of Web.GPUSampler
+        | GPUTexture of Web.GPUTexture
+        | GPUTextureView of Web.GPUTextureView
+        | GPUBuffer of Web.GPUBuffer
+        | GPUBufferBinding of Web.GPUBufferBinding
+        | GPUExternalTexture of Web.GPUExternalTexture
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUSampler) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUSampler) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUTexture) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUTexture) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUTextureView) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUTextureView) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUBuffer) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUBuffer) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUBufferBinding) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUBufferBinding) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUExternalTexture) : GPUBindingResource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUExternalTexture) : GPUBindingResource = nativeOnly
+
+        /// Unchecked, the value as <c>GPUSampler</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUSampler: Web.GPUSampler = nativeOnly
+
+        /// Unchecked, the value as <c>GPUTexture</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUTexture: Web.GPUTexture = nativeOnly
+
+        /// Unchecked, the value as <c>GPUTextureView</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUTextureView: Web.GPUTextureView = nativeOnly
+
+        /// Unchecked, the value as <c>GPUBuffer</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUBuffer: Web.GPUBuffer = nativeOnly
+
+        /// Unchecked, the value as <c>GPUBufferBinding</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUBufferBinding: Web.GPUBufferBinding = nativeOnly
+
+        /// Unchecked, the value as <c>GPUExternalTexture</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUExternalTexture: Web.GPUExternalTexture = nativeOnly
 
     type GPUBufferDynamicOffset = float
 
     type GPUBufferUsageFlags = float
 
-    type GPUColor = U2<ResizeArray<float>, Web.GPUColorDict>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type GPUColor =
+        | NumberArray of ResizeArray<float>
+        | GPUColorDict of Web.GPUColorDict
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<float>) : GPUColor = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<float>) : GPUColor = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUColorDict) : GPUColor = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUColorDict) : GPUColor = nativeOnly
+
+        /// Unchecked, the value as <c>NumberArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumberArray: ResizeArray<float> = nativeOnly
+
+        /// Unchecked, the value as <c>GPUColorDict</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUColorDict: Web.GPUColorDict = nativeOnly
 
     type GPUColorWriteFlags = float
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type GPUCopyExternalImageSource =
-        U7<
-            Web.ImageBitmap,
-            Web.ImageData,
-            Web.HTMLImageElement,
-            Web.HTMLVideoElement,
-            Web.VideoFrame,
-            Web.HTMLCanvasElement,
-            Web.OffscreenCanvas
-         >
+        | ImageBitmap of Web.ImageBitmap
+        | ImageData of Web.ImageData
+        | HTMLImageElement of Web.HTMLImageElement
+        | HTMLVideoElement of Web.HTMLVideoElement
+        | VideoFrame of Web.VideoFrame
+        | HTMLCanvasElement of Web.HTMLCanvasElement
+        | OffscreenCanvas of Web.OffscreenCanvas
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageBitmap) : GPUCopyExternalImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageBitmap) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageData) : GPUCopyExternalImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageData) : GPUCopyExternalImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLImageElement) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLImageElement) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLVideoElement) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLVideoElement) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.VideoFrame) : GPUCopyExternalImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.VideoFrame) : GPUCopyExternalImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLCanvasElement) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLCanvasElement) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.OffscreenCanvas) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.OffscreenCanvas) : GPUCopyExternalImageSource =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ImageBitmap</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageBitmap: Web.ImageBitmap = nativeOnly
+
+        /// Unchecked, the value as <c>ImageData</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageData: Web.ImageData = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLImageElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLImageElement: Web.HTMLImageElement = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLVideoElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLVideoElement: Web.HTMLVideoElement = nativeOnly
+
+        /// Unchecked, the value as <c>VideoFrame</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsVideoFrame: Web.VideoFrame = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLCanvasElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLCanvasElement: Web.HTMLCanvasElement = nativeOnly
+
+        /// Unchecked, the value as <c>OffscreenCanvas</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsOffscreenCanvas: Web.OffscreenCanvas = nativeOnly
 
     type GPUDepthBias = float
 
-    type GPUExtent3D = U2<ResizeArray<Web.GPUIntegerCoordinate>, Web.GPUExtent3DDict>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type GPUExtent3D =
+        | GPUIntegerCoordinateArray of ResizeArray<Web.GPUIntegerCoordinate>
+        | GPUExtent3DDict of Web.GPUExtent3DDict
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.GPUIntegerCoordinate>) : GPUExtent3D =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.GPUIntegerCoordinate>) : GPUExtent3D =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUExtent3DDict) : GPUExtent3D = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUExtent3DDict) : GPUExtent3D = nativeOnly
+
+        /// Unchecked, the value as <c>GPUIntegerCoordinateArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUIntegerCoordinateArray: ResizeArray<Web.GPUIntegerCoordinate> =
+            nativeOnly
+
+        /// Unchecked, the value as <c>GPUExtent3DDict</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUExtent3DDict: Web.GPUExtent3DDict = nativeOnly
 
     type GPUFlagsConstant = float
 
@@ -112324,9 +113211,63 @@ module Web =
 
     type GPUMapModeFlags = float
 
-    type GPUOrigin2D = U2<ResizeArray<Web.GPUIntegerCoordinate>, Web.GPUOrigin2DDict>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type GPUOrigin2D =
+        | GPUIntegerCoordinateArray of ResizeArray<Web.GPUIntegerCoordinate>
+        | GPUOrigin2DDict of Web.GPUOrigin2DDict
 
-    type GPUOrigin3D = U2<ResizeArray<Web.GPUIntegerCoordinate>, Web.GPUOrigin3DDict>
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.GPUIntegerCoordinate>) : GPUOrigin2D =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.GPUIntegerCoordinate>) : GPUOrigin2D =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUOrigin2DDict) : GPUOrigin2D = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUOrigin2DDict) : GPUOrigin2D = nativeOnly
+
+        /// Unchecked, the value as <c>GPUIntegerCoordinateArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUIntegerCoordinateArray: ResizeArray<Web.GPUIntegerCoordinate> =
+            nativeOnly
+
+        /// Unchecked, the value as <c>GPUOrigin2DDict</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUOrigin2DDict: Web.GPUOrigin2DDict = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type GPUOrigin3D =
+        | GPUIntegerCoordinateArray of ResizeArray<Web.GPUIntegerCoordinate>
+        | GPUOrigin3DDict of Web.GPUOrigin3DDict
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.GPUIntegerCoordinate>) : GPUOrigin3D =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.GPUIntegerCoordinate>) : GPUOrigin3D =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUOrigin3DDict) : GPUOrigin3D = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUOrigin3DDict) : GPUOrigin3D = nativeOnly
+
+        /// Unchecked, the value as <c>GPUIntegerCoordinateArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUIntegerCoordinateArray: ResizeArray<Web.GPUIntegerCoordinate> =
+            nativeOnly
+
+        /// Unchecked, the value as <c>GPUOrigin3DDict</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUOrigin3DDict: Web.GPUOrigin3DDict = nativeOnly
 
     type GPUPipelineConstantValue = float
 
@@ -112348,22 +113289,109 @@ module Web =
 
     type GPUTextureUsageFlags = float
 
-    type HTMLOrSVGImageElement = U2<Web.HTMLImageElement, Web.SVGImageElement>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type HTMLOrSVGImageElement =
+        | HTMLImageElement of Web.HTMLImageElement
+        | SVGImageElement of Web.SVGImageElement
 
-    type HTMLOrSVGScriptElement = U2<Web.HTMLScriptElement, Web.SVGScriptElement>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLImageElement) : HTMLOrSVGImageElement = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLImageElement) : HTMLOrSVGImageElement =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.SVGImageElement) : HTMLOrSVGImageElement = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.SVGImageElement) : HTMLOrSVGImageElement = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLImageElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLImageElement: Web.HTMLImageElement = nativeOnly
+
+        /// Unchecked, the value as <c>SVGImageElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsSVGImageElement: Web.SVGImageElement = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type HTMLOrSVGScriptElement =
+        | HTMLScriptElement of Web.HTMLScriptElement
+        | SVGScriptElement of Web.SVGScriptElement
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLScriptElement) : HTMLOrSVGScriptElement =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLScriptElement) : HTMLOrSVGScriptElement =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.SVGScriptElement) : HTMLOrSVGScriptElement = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.SVGScriptElement) : HTMLOrSVGScriptElement =
+            nativeOnly
+
+        /// Unchecked, the value as <c>HTMLScriptElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLScriptElement: Web.HTMLScriptElement = nativeOnly
+
+        /// Unchecked, the value as <c>SVGScriptElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsSVGScriptElement: Web.SVGScriptElement = nativeOnly
 
     type HashAlgorithmIdentifier = Web.AlgorithmIdentifier
 
-    type HeadersInit = U3<ResizeArray<string * string>, HeadersInit.U3.Case2, Web.Headers>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type HeadersInit =
+        | TupleArray of ResizeArray<string * string>
+        | Case2 of HeadersInit.Cases.Case2
+        | Headers of Web.Headers
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<string * string>) : HeadersInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<string * string>) : HeadersInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: HeadersInit.Cases.Case2) : HeadersInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: HeadersInit.Cases.Case2) : HeadersInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Headers) : HeadersInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Headers) : HeadersInit = nativeOnly
+
+        /// Unchecked, the value as <c>TupleArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsTupleArray: ResizeArray<string * string> = nativeOnly
+
+        /// Unchecked, the value as <c>Case2</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase2: HeadersInit.Cases.Case2 = nativeOnly
+
+        /// Unchecked, the value as <c>Headers</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHeaders: Web.Headers = nativeOnly
 
     [<RequireQualifiedAccess>]
     [<Erase>]
     type IDBValidKey =
-        | Case1 of float
-        | Case2 of string
-        | Case3 of Date
-        | Case4 of Web.BufferSource
-        | Case5 of ResizeArray<Web.IDBValidKey>
+        | Number of float
+        | String of string
+        | Date of Date
+        | BufferSource of Web.BufferSource
+        | IDBValidKeyArray of ResizeArray<Web.IDBValidKey>
 
         [<Emit("$0")>]
         static member op_Implicit(value: float) : IDBValidKey = nativeOnly
@@ -112395,19 +113423,218 @@ module Web =
         [<Emit("$0")>]
         static member op_ErasedCast(value: ResizeArray<Web.IDBValidKey>) : IDBValidKey = nativeOnly
 
-    type ImageBitmapSource = U3<Web.CanvasImageSource, Web.Blob, Web.ImageData>
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
 
-    type ImageBufferSource = U2<Web.AllowSharedBufferSource, Web.ReadableStream>
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>Date</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsDate: Date = nativeOnly
+
+        /// Unchecked, the value as <c>BufferSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBufferSource: Web.BufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>IDBValidKeyArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsIDBValidKeyArray: ResizeArray<Web.IDBValidKey> = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ImageBitmapSource =
+        | CanvasImageSource of Web.CanvasImageSource
+        | Blob of Web.Blob
+        | ImageData of Web.ImageData
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CanvasImageSource) : ImageBitmapSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CanvasImageSource) : ImageBitmapSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Blob) : ImageBitmapSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Blob) : ImageBitmapSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageData) : ImageBitmapSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageData) : ImageBitmapSource = nativeOnly
+
+        /// Unchecked, the value as <c>CanvasImageSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCanvasImageSource: Web.CanvasImageSource = nativeOnly
+
+        /// Unchecked, the value as <c>Blob</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBlob: Web.Blob = nativeOnly
+
+        /// Unchecked, the value as <c>ImageData</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageData: Web.ImageData = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type ImageBufferSource =
+        | AllowSharedBufferSource of Web.AllowSharedBufferSource
+        | ReadableStream of Web.ReadableStream
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.AllowSharedBufferSource) : ImageBufferSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.AllowSharedBufferSource) : ImageBufferSource =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ReadableStream) : ImageBufferSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ReadableStream) : ImageBufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>AllowSharedBufferSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsAllowSharedBufferSource: Web.AllowSharedBufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStream</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStream: Web.ReadableStream = nativeOnly
 
     type ImageDataArray = JS.Uint8ClampedArray
 
-    type Int32List = U2<JS.Int32Array, ResizeArray<Web.GLint>>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type Int32List =
+        | Int32Array of JS.Int32Array
+        | GLintArray of ResizeArray<Web.GLint>
 
-    type LineAndPositionSetting = U2<float, Web.AutoKeyword>
+        [<Emit("$0")>]
+        static member op_Implicit(value: JS.Int32Array) : Int32List = nativeOnly
 
-    type MediaProvider = U3<Web.MediaStream, Web.MediaSource, Web.Blob>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: JS.Int32Array) : Int32List = nativeOnly
 
-    type MessageEventSource = U3<Web.WindowProxy, Web.MessagePort, Web.ServiceWorker>
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.GLint>) : Int32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.GLint>) : Int32List = nativeOnly
+
+        /// Unchecked, the value as <c>Int32Array</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsInt32Array: JS.Int32Array = nativeOnly
+
+        /// Unchecked, the value as <c>GLintArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGLintArray: ResizeArray<Web.GLint> = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type LineAndPositionSetting =
+        | Number of float
+        | AutoKeyword of Web.AutoKeyword
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : LineAndPositionSetting = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : LineAndPositionSetting = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.AutoKeyword) : LineAndPositionSetting = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.AutoKeyword) : LineAndPositionSetting = nativeOnly
+
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
+
+        /// Unchecked, the value as <c>AutoKeyword</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsAutoKeyword: Web.AutoKeyword = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type MediaProvider =
+        | MediaStream of Web.MediaStream
+        | MediaSource of Web.MediaSource
+        | Blob of Web.Blob
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.MediaStream) : MediaProvider = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.MediaStream) : MediaProvider = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.MediaSource) : MediaProvider = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.MediaSource) : MediaProvider = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Blob) : MediaProvider = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Blob) : MediaProvider = nativeOnly
+
+        /// Unchecked, the value as <c>MediaStream</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsMediaStream: Web.MediaStream = nativeOnly
+
+        /// Unchecked, the value as <c>MediaSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsMediaSource: Web.MediaSource = nativeOnly
+
+        /// Unchecked, the value as <c>Blob</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBlob: Web.Blob = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type MessageEventSource =
+        | WindowProxy of Web.WindowProxy
+        | MessagePort of Web.MessagePort
+        | ServiceWorker of Web.ServiceWorker
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WindowProxy) : MessageEventSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WindowProxy) : MessageEventSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.MessagePort) : MessageEventSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.MessagePort) : MessageEventSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ServiceWorker) : MessageEventSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ServiceWorker) : MessageEventSource = nativeOnly
+
+        /// Unchecked, the value as <c>WindowProxy</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsWindowProxy: Web.WindowProxy = nativeOnly
+
+        /// Unchecked, the value as <c>MessagePort</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsMessagePort: Web.MessagePort = nativeOnly
+
+        /// Unchecked, the value as <c>ServiceWorker</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsServiceWorker: Web.ServiceWorker = nativeOnly
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]
@@ -112418,14 +113645,87 @@ module Web =
 
     type NamedCurve = string
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type OffscreenRenderingContext =
-        U5<
-            Web.OffscreenCanvasRenderingContext2D,
-            Web.ImageBitmapRenderingContext,
-            Web.WebGLRenderingContext,
-            Web.WebGL2RenderingContext,
-            Web.GPUCanvasContext
-         >
+        | OffscreenCanvasRenderingContext2D of Web.OffscreenCanvasRenderingContext2D
+        | ImageBitmapRenderingContext of Web.ImageBitmapRenderingContext
+        | WebGLRenderingContext of Web.WebGLRenderingContext
+        | WebGL2RenderingContext of Web.WebGL2RenderingContext
+        | GPUCanvasContext of Web.GPUCanvasContext
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.OffscreenCanvasRenderingContext2D)
+            : OffscreenRenderingContext
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.OffscreenCanvasRenderingContext2D)
+            : OffscreenRenderingContext
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ImageBitmapRenderingContext)
+            : OffscreenRenderingContext
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ImageBitmapRenderingContext)
+            : OffscreenRenderingContext
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WebGLRenderingContext) : OffscreenRenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WebGLRenderingContext) : OffscreenRenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WebGL2RenderingContext) : OffscreenRenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WebGL2RenderingContext) : OffscreenRenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUCanvasContext) : OffscreenRenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUCanvasContext) : OffscreenRenderingContext =
+            nativeOnly
+
+        /// Unchecked, the value as <c>OffscreenCanvasRenderingContext2D</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsOffscreenCanvasRenderingContext2D: Web.OffscreenCanvasRenderingContext2D =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ImageBitmapRenderingContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageBitmapRenderingContext: Web.ImageBitmapRenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>WebGLRenderingContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsWebGLRenderingContext: Web.WebGLRenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>WebGL2RenderingContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsWebGL2RenderingContext: Web.WebGL2RenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>GPUCanvasContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUCanvasContext: Web.GPUCanvasContext = nativeOnly
 
     type OnBeforeUnloadEventHandler = Web.OnBeforeUnloadEventHandlerNonNull option
 
@@ -112443,6 +113743,10 @@ module Web =
         [<Emit("$0")>]
         static member op_ErasedCast(value: string) : OptionalPostfixToken<'T> = nativeOnly
 
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: string = nativeOnly
+
     [<RequireQualifiedAccess>]
     [<Erase(CaseRules.None)>]
     type OptionalPrefixToken<'T> =
@@ -112454,6 +113758,10 @@ module Web =
 
         [<Emit("$0")>]
         static member op_ErasedCast(value: string) : OptionalPrefixToken<'T> = nativeOnly
+
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: string = nativeOnly
 
     type PerformanceEntryList = ResizeArray<Web.PerformanceEntry>
 
@@ -112467,35 +113775,346 @@ module Web =
 
     type RTCRtpSenderTransform = Web.RTCRtpScriptTransform
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type ReadableStreamController<'T> =
-        U2<Web.ReadableStreamDefaultController<'T>, Web.ReadableByteStreamController>
+        | ReadableStreamDefaultController of Web.ReadableStreamDefaultController<'T>
+        | ReadableByteStreamController of Web.ReadableByteStreamController
 
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ReadableStreamDefaultController<'T>)
+            : ReadableStreamController<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ReadableStreamDefaultController<'T>)
+            : ReadableStreamController<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ReadableByteStreamController)
+            : ReadableStreamController<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ReadableByteStreamController)
+            : ReadableStreamController<'T>
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStreamDefaultController</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStreamDefaultController: Web.ReadableStreamDefaultController<'T> =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ReadableByteStreamController</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableByteStreamController: Web.ReadableByteStreamController = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type ReadableStreamReadResult<'T> =
-        U2<Web.ReadableStreamReadValueResult<'T>, Web.ReadableStreamReadDoneResult<'T>>
+        | ReadableStreamReadValueResult of Web.ReadableStreamReadValueResult<'T>
+        | ReadableStreamReadDoneResult of Web.ReadableStreamReadDoneResult<'T>
 
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ReadableStreamReadValueResult<'T>)
+            : ReadableStreamReadResult<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ReadableStreamReadValueResult<'T>)
+            : ReadableStreamReadResult<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ReadableStreamReadDoneResult<'T>)
+            : ReadableStreamReadResult<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ReadableStreamReadDoneResult<'T>)
+            : ReadableStreamReadResult<'T>
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStreamReadValueResult</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStreamReadValueResult: Web.ReadableStreamReadValueResult<'T> =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStreamReadDoneResult</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStreamReadDoneResult: Web.ReadableStreamReadDoneResult<'T> =
+            nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type ReadableStreamReader<'T> =
-        U2<Web.ReadableStreamDefaultReader<'T>, Web.ReadableStreamBYOBReader>
+        | ReadableStreamDefaultReader of Web.ReadableStreamDefaultReader<'T>
+        | ReadableStreamBYOBReader of Web.ReadableStreamBYOBReader
 
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.ReadableStreamDefaultReader<'T>)
+            : ReadableStreamReader<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ReadableStreamDefaultReader<'T>)
+            : ReadableStreamReader<'T>
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ReadableStreamBYOBReader) : ReadableStreamReader<'T> =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.ReadableStreamBYOBReader)
+            : ReadableStreamReader<'T>
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStreamDefaultReader</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStreamDefaultReader: Web.ReadableStreamDefaultReader<'T> =
+            nativeOnly
+
+        /// Unchecked, the value as <c>ReadableStreamBYOBReader</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsReadableStreamBYOBReader: Web.ReadableStreamBYOBReader = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type RenderingContext =
-        U5<
-            Web.CanvasRenderingContext2D,
-            Web.ImageBitmapRenderingContext,
-            Web.WebGLRenderingContext,
-            Web.WebGL2RenderingContext,
-            Web.GPUCanvasContext
-         >
+        | CanvasRenderingContext2D of Web.CanvasRenderingContext2D
+        | ImageBitmapRenderingContext of Web.ImageBitmapRenderingContext
+        | WebGLRenderingContext of Web.WebGLRenderingContext
+        | WebGL2RenderingContext of Web.WebGL2RenderingContext
+        | GPUCanvasContext of Web.GPUCanvasContext
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.CanvasRenderingContext2D) : RenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.CanvasRenderingContext2D) : RenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageBitmapRenderingContext) : RenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageBitmapRenderingContext) : RenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WebGLRenderingContext) : RenderingContext = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WebGLRenderingContext) : RenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.WebGL2RenderingContext) : RenderingContext = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.WebGL2RenderingContext) : RenderingContext =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.GPUCanvasContext) : RenderingContext = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.GPUCanvasContext) : RenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>CanvasRenderingContext2D</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCanvasRenderingContext2D: Web.CanvasRenderingContext2D = nativeOnly
+
+        /// Unchecked, the value as <c>ImageBitmapRenderingContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageBitmapRenderingContext: Web.ImageBitmapRenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>WebGLRenderingContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsWebGLRenderingContext: Web.WebGLRenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>WebGL2RenderingContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsWebGL2RenderingContext: Web.WebGL2RenderingContext = nativeOnly
+
+        /// Unchecked, the value as <c>GPUCanvasContext</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGPUCanvasContext: Web.GPUCanvasContext = nativeOnly
 
     type ReportList = ResizeArray<Web.Report>
 
-    type RequestInfo = U2<Web.Request, string>
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type RequestInfo =
+        | Request of Web.Request
+        | String of string
 
-    type SanitizerAttribute = U2<string, Web.SanitizerAttributeNamespace>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Request) : RequestInfo = nativeOnly
 
-    type SanitizerElement = U2<string, Web.SanitizerElementNamespace>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Request) : RequestInfo = nativeOnly
 
-    type SanitizerElementWithAttributes = U2<string, Web.SanitizerElementNamespaceWithAttributes>
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : RequestInfo = nativeOnly
 
-    type SanitizerPI = U2<string, Web.SanitizerProcessingInstruction>
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : RequestInfo = nativeOnly
+
+        /// Unchecked, the value as <c>Request</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsRequest: Web.Request = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type SanitizerAttribute =
+        | String of string
+        | SanitizerAttributeNamespace of Web.SanitizerAttributeNamespace
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : SanitizerAttribute = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : SanitizerAttribute = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.SanitizerAttributeNamespace) : SanitizerAttribute =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.SanitizerAttributeNamespace) : SanitizerAttribute =
+            nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>SanitizerAttributeNamespace</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsSanitizerAttributeNamespace: Web.SanitizerAttributeNamespace = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type SanitizerElement =
+        | String of string
+        | SanitizerElementNamespace of Web.SanitizerElementNamespace
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : SanitizerElement = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : SanitizerElement = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.SanitizerElementNamespace) : SanitizerElement =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.SanitizerElementNamespace) : SanitizerElement =
+            nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>SanitizerElementNamespace</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsSanitizerElementNamespace: Web.SanitizerElementNamespace = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type SanitizerElementWithAttributes =
+        | String of string
+        | SanitizerElementNamespaceWithAttributes of Web.SanitizerElementNamespaceWithAttributes
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : SanitizerElementWithAttributes = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : SanitizerElementWithAttributes = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit
+            (value: Web.SanitizerElementNamespaceWithAttributes)
+            : SanitizerElementWithAttributes
+            =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast
+            (value: Web.SanitizerElementNamespaceWithAttributes)
+            : SanitizerElementWithAttributes
+            =
+            nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>SanitizerElementNamespaceWithAttributes</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsSanitizerElementNamespaceWithAttributes
+            : Web.SanitizerElementNamespaceWithAttributes =
+            nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type SanitizerPI =
+        | String of string
+        | SanitizerProcessingInstruction of Web.SanitizerProcessingInstruction
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : SanitizerPI = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : SanitizerPI = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.SanitizerProcessingInstruction) : SanitizerPI =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.SanitizerProcessingInstruction) : SanitizerPI =
+            nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>SanitizerProcessingInstruction</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsSanitizerProcessingInstruction: Web.SanitizerProcessingInstruction =
+            nativeOnly
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]
@@ -112504,18 +114123,112 @@ module Web =
         | backward
         | none
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type TexImageSource =
-        U7<
-            Web.ImageBitmap,
-            Web.ImageData,
-            Web.HTMLImageElement,
-            Web.HTMLCanvasElement,
-            Web.HTMLVideoElement,
-            Web.OffscreenCanvas,
-            Web.VideoFrame
-         >
+        | ImageBitmap of Web.ImageBitmap
+        | ImageData of Web.ImageData
+        | HTMLImageElement of Web.HTMLImageElement
+        | HTMLCanvasElement of Web.HTMLCanvasElement
+        | HTMLVideoElement of Web.HTMLVideoElement
+        | OffscreenCanvas of Web.OffscreenCanvas
+        | VideoFrame of Web.VideoFrame
 
-    type TimerHandler = U2<string, Action>
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageBitmap) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageBitmap) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.ImageData) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.ImageData) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLImageElement) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLImageElement) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLCanvasElement) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLCanvasElement) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.HTMLVideoElement) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.HTMLVideoElement) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.OffscreenCanvas) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.OffscreenCanvas) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.VideoFrame) : TexImageSource = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.VideoFrame) : TexImageSource = nativeOnly
+
+        /// Unchecked, the value as <c>ImageBitmap</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageBitmap: Web.ImageBitmap = nativeOnly
+
+        /// Unchecked, the value as <c>ImageData</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsImageData: Web.ImageData = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLImageElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLImageElement: Web.HTMLImageElement = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLCanvasElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLCanvasElement: Web.HTMLCanvasElement = nativeOnly
+
+        /// Unchecked, the value as <c>HTMLVideoElement</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsHTMLVideoElement: Web.HTMLVideoElement = nativeOnly
+
+        /// Unchecked, the value as <c>OffscreenCanvas</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsOffscreenCanvas: Web.OffscreenCanvas = nativeOnly
+
+        /// Unchecked, the value as <c>VideoFrame</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsVideoFrame: Web.VideoFrame = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type TimerHandler =
+        | String of string
+        | Action of Action
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : TimerHandler = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : TimerHandler = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Action) : TimerHandler = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Action) : TimerHandler = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>Action</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsAction: Action = nativeOnly
 
     [<RequireQualifiedAccess>]
     [<Erase>]
@@ -112598,16 +114311,189 @@ module Web =
         [<Emit("$0")>]
         static member op_ErasedCast(value: obj) : Transferable = nativeOnly
 
-    type URLPatternInput = U2<string, Web.URLPatternInit>
+        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase1: Web.OffscreenCanvas = nativeOnly
 
-    type Uint32List = U2<JS.Uint32Array, ResizeArray<Web.GLuint>>
+        /// Unchecked, the value as <c>Case2</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase2: Web.ImageBitmap = nativeOnly
 
-    type VibratePattern = U2<float, ResizeArray<float>>
+        /// Unchecked, the value as <c>Case3</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase3: Web.MessagePort = nativeOnly
+
+        /// Unchecked, the value as <c>Case4</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase4: Web.MediaSourceHandle = nativeOnly
+
+        /// Unchecked, the value as <c>Case5</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase5: Web.ReadableStream = nativeOnly
+
+        /// Unchecked, the value as <c>Case6</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase6: Web.WritableStream = nativeOnly
+
+        /// Unchecked, the value as <c>Case7</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase7: Web.TransformStream = nativeOnly
+
+        /// Unchecked, the value as <c>Case8</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase8: Web.AudioData = nativeOnly
+
+        /// Unchecked, the value as <c>Case9</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase9: Web.VideoFrame = nativeOnly
+
+        /// Unchecked, the value as <c>Case10</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase10: Web.RTCDataChannel = nativeOnly
+
+        /// Unchecked, the value as <c>Case11</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsCase11: obj = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type URLPatternInput =
+        | String of string
+        | URLPatternInit of Web.URLPatternInit
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : URLPatternInput = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : URLPatternInput = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.URLPatternInit) : URLPatternInput = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.URLPatternInit) : URLPatternInput = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
+
+        /// Unchecked, the value as <c>URLPatternInit</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsURLPatternInit: Web.URLPatternInit = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type Uint32List =
+        | Uint32Array of JS.Uint32Array
+        | GLuintArray of ResizeArray<Web.GLuint>
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: JS.Uint32Array) : Uint32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: JS.Uint32Array) : Uint32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<Web.GLuint>) : Uint32List = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<Web.GLuint>) : Uint32List = nativeOnly
+
+        /// Unchecked, the value as <c>Uint32Array</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsUint32Array: JS.Uint32Array = nativeOnly
+
+        /// Unchecked, the value as <c>GLuintArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsGLuintArray: ResizeArray<Web.GLuint> = nativeOnly
+
+    [<RequireQualifiedAccess>]
+    [<Erase>]
+    type VibratePattern =
+        | Number of float
+        | NumberArray of ResizeArray<float>
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: float) : VibratePattern = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: float) : VibratePattern = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: ResizeArray<float>) : VibratePattern = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: ResizeArray<float>) : VibratePattern = nativeOnly
+
+        /// Unchecked, the value as <c>Number</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumber: float = nativeOnly
+
+        /// Unchecked, the value as <c>NumberArray</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsNumberArray: ResizeArray<float> = nativeOnly
 
     type WindowProxy = Web.Window
 
+    [<RequireQualifiedAccess>]
+    [<Erase>]
     type XMLHttpRequestBodyInit =
-        U5<Web.Blob, Web.BufferSource, Web.FormData, Web.URLSearchParams, string>
+        | Blob of Web.Blob
+        | BufferSource of Web.BufferSource
+        | FormData of Web.FormData
+        | URLSearchParams of Web.URLSearchParams
+        | String of string
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.Blob) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.Blob) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.BufferSource) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.BufferSource) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.FormData) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.FormData) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: Web.URLSearchParams) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: Web.URLSearchParams) : XMLHttpRequestBodyInit =
+            nativeOnly
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : XMLHttpRequestBodyInit = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : XMLHttpRequestBodyInit = nativeOnly
+
+        /// Unchecked, the value as <c>Blob</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBlob: Web.Blob = nativeOnly
+
+        /// Unchecked, the value as <c>BufferSource</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsBufferSource: Web.BufferSource = nativeOnly
+
+        /// Unchecked, the value as <c>FormData</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsFormData: Web.FormData = nativeOnly
+
+        /// Unchecked, the value as <c>URLSearchParams</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsURLSearchParams: Web.URLSearchParams = nativeOnly
+
+        /// Unchecked, the value as <c>String</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsString: string = nativeOnly
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]
@@ -114833,7 +116719,7 @@ module Web =
 
     module NodeFilter =
 
-        module U2 =
+        module Cases =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114845,7 +116731,7 @@ module Web =
 
     module XPathNSResolver =
 
-        module U2 =
+        module Cases =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115134,16 +117020,16 @@ module Web =
         [<RequireQualifiedAccess>]
         [<Erase>]
         type getEnclosureList =
-            | Case1 of Web.SVGCircleElement
-            | Case2 of Web.SVGEllipseElement
-            | Case3 of Web.SVGImageElement
-            | Case4 of Web.SVGLineElement
-            | Case5 of Web.SVGPathElement
-            | Case6 of Web.SVGPolygonElement
-            | Case7 of Web.SVGPolylineElement
-            | Case8 of Web.SVGRectElement
-            | Case9 of Web.SVGTextElement
-            | Case10 of Web.SVGUseElement
+            | SVGCircleElement of Web.SVGCircleElement
+            | SVGEllipseElement of Web.SVGEllipseElement
+            | SVGImageElement of Web.SVGImageElement
+            | SVGLineElement of Web.SVGLineElement
+            | SVGPathElement of Web.SVGPathElement
+            | SVGPolygonElement of Web.SVGPolygonElement
+            | SVGPolylineElement of Web.SVGPolylineElement
+            | SVGRectElement of Web.SVGRectElement
+            | SVGTextElement of Web.SVGTextElement
+            | SVGUseElement of Web.SVGUseElement
 
             [<Emit("$0")>]
             static member op_Implicit(value: Web.SVGCircleElement) : getEnclosureList = nativeOnly
@@ -115208,19 +117094,59 @@ module Web =
             [<Emit("$0")>]
             static member op_ErasedCast(value: Web.SVGUseElement) : getEnclosureList = nativeOnly
 
+            /// Unchecked, the value as <c>SVGCircleElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGCircleElement: Web.SVGCircleElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGEllipseElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGEllipseElement: Web.SVGEllipseElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGImageElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGImageElement: Web.SVGImageElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGLineElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGLineElement: Web.SVGLineElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGPathElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGPathElement: Web.SVGPathElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGPolygonElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGPolygonElement: Web.SVGPolygonElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGPolylineElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGPolylineElement: Web.SVGPolylineElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGRectElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGRectElement: Web.SVGRectElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGTextElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGTextElement: Web.SVGTextElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGUseElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGUseElement: Web.SVGUseElement = nativeOnly
+
         [<RequireQualifiedAccess>]
         [<Erase>]
         type getIntersectionList =
-            | Case1 of Web.SVGCircleElement
-            | Case2 of Web.SVGEllipseElement
-            | Case3 of Web.SVGImageElement
-            | Case4 of Web.SVGLineElement
-            | Case5 of Web.SVGPathElement
-            | Case6 of Web.SVGPolygonElement
-            | Case7 of Web.SVGPolylineElement
-            | Case8 of Web.SVGRectElement
-            | Case9 of Web.SVGTextElement
-            | Case10 of Web.SVGUseElement
+            | SVGCircleElement of Web.SVGCircleElement
+            | SVGEllipseElement of Web.SVGEllipseElement
+            | SVGImageElement of Web.SVGImageElement
+            | SVGLineElement of Web.SVGLineElement
+            | SVGPathElement of Web.SVGPathElement
+            | SVGPolygonElement of Web.SVGPolygonElement
+            | SVGPolylineElement of Web.SVGPolylineElement
+            | SVGRectElement of Web.SVGRectElement
+            | SVGTextElement of Web.SVGTextElement
+            | SVGUseElement of Web.SVGUseElement
 
             [<Emit("$0")>]
             static member op_Implicit(value: Web.SVGCircleElement) : getIntersectionList =
@@ -115295,6 +117221,46 @@ module Web =
             [<Emit("$0")>]
             static member op_ErasedCast(value: Web.SVGUseElement) : getIntersectionList = nativeOnly
 
+            /// Unchecked, the value as <c>SVGCircleElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGCircleElement: Web.SVGCircleElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGEllipseElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGEllipseElement: Web.SVGEllipseElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGImageElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGImageElement: Web.SVGImageElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGLineElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGLineElement: Web.SVGLineElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGPathElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGPathElement: Web.SVGPathElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGPolygonElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGPolygonElement: Web.SVGPolygonElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGPolylineElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGPolylineElement: Web.SVGPolylineElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGRectElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGRectElement: Web.SVGRectElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGTextElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGTextElement: Web.SVGTextElement = nativeOnly
+
+            /// Unchecked, the value as <c>SVGUseElement</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsSVGUseElement: Web.SVGUseElement = nativeOnly
+
     module StylePropertyMapReadOnly =
 
         module forEach =
@@ -115338,6 +117304,10 @@ module Web =
                     : algorithm
                     =
                     nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: SubtleCrypto.generateKey.algorithm.Cases.Case1 = nativeOnly
 
             module algorithm =
 
@@ -115393,6 +117363,10 @@ module Web =
                     =
                     nativeOnly
 
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: SubtleCrypto.generateKey.algorithm.Cases.Case1_1 = nativeOnly
+
         module importKey =
 
             [<RequireQualifiedAccess>]
@@ -115434,7 +117408,7 @@ module Web =
 
     module HeadersInit =
 
-        module U3 =
+        module Cases =
 
             [<AllowNullLiteral>]
             [<Interface>]

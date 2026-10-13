@@ -83,16 +83,16 @@ type J =
 [<RequireQualifiedAccess>]
 [<Erase>]
 type Big =
-    | Case1 of A
-    | Case2 of B
-    | Case3 of C
-    | Case4 of D
-    | Case5 of E
-    | Case6 of F
-    | Case7 of G
-    | Case8 of H
-    | Case9 of I
-    | Case10 of J
+    | A of A
+    | B of B
+    | C of C
+    | D of D
+    | E of E
+    | F of F
+    | G of G
+    | H of H
+    | I of I
+    | J of J
 
     [<Emit("$0")>]
     static member op_Implicit(value: A) : Big = nativeOnly
@@ -154,6 +154,46 @@ type Big =
     [<Emit("$0")>]
     static member op_ErasedCast(value: J) : Big = nativeOnly
 
+    /// Unchecked, the value as <c>A</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsA: A = nativeOnly
+
+    /// Unchecked, the value as <c>B</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsB: B = nativeOnly
+
+    /// Unchecked, the value as <c>C</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsC: C = nativeOnly
+
+    /// Unchecked, the value as <c>D</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsD: D = nativeOnly
+
+    /// Unchecked, the value as <c>E</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsE: E = nativeOnly
+
+    /// Unchecked, the value as <c>F</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsF: F = nativeOnly
+
+    /// Unchecked, the value as <c>G</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsG: G = nativeOnly
+
+    /// Unchecked, the value as <c>H</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsH: H = nativeOnly
+
+    /// Unchecked, the value as <c>I</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsI: I = nativeOnly
+
+    /// Unchecked, the value as <c>J</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsJ: J = nativeOnly
+
 [<AllowNullLiteral>]
 [<Interface>]
 type Holder =
@@ -166,16 +206,16 @@ module Holder =
     [<RequireQualifiedAccess>]
     [<Erase>]
     type value =
-        | Case1 of A
-        | Case2 of B
-        | Case3 of C
-        | Case4 of D
-        | Case5 of E
-        | Case6 of F
-        | Case7 of G
-        | Case8 of H
-        | Case9 of I
-        | Case10 of J
+        | A of A
+        | B of B
+        | C of C
+        | D of D
+        | E of E
+        | F of F
+        | G of G
+        | H of H
+        | I of I
+        | J of J
 
         [<Emit("$0")>]
         static member op_Implicit(value: A) : value = nativeOnly
@@ -237,6 +277,46 @@ module Holder =
         [<Emit("$0")>]
         static member op_ErasedCast(value: J) : value = nativeOnly
 
+        /// Unchecked, the value as <c>A</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsA: A = nativeOnly
+
+        /// Unchecked, the value as <c>B</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsB: B = nativeOnly
+
+        /// Unchecked, the value as <c>C</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsC: C = nativeOnly
+
+        /// Unchecked, the value as <c>D</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsD: D = nativeOnly
+
+        /// Unchecked, the value as <c>E</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsE: E = nativeOnly
+
+        /// Unchecked, the value as <c>F</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsF: F = nativeOnly
+
+        /// Unchecked, the value as <c>G</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsG: G = nativeOnly
+
+        /// Unchecked, the value as <c>H</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsH: H = nativeOnly
+
+        /// Unchecked, the value as <c>I</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsI: I = nativeOnly
+
+        /// Unchecked, the value as <c>J</c> whatever case it holds
+        [<Emit("$0")>]
+        member _.AsJ: J = nativeOnly
+
 module Exports =
 
     module f__ =
@@ -244,16 +324,16 @@ module Exports =
         [<RequireQualifiedAccess>]
         [<Erase>]
         type value =
-            | Case1 of A
-            | Case2 of B
-            | Case3 of C
-            | Case4 of D
-            | Case5 of E
-            | Case6 of F
-            | Case7 of G
-            | Case8 of H
-            | Case9 of I
-            | Case10 of J
+            | A of A
+            | B of B
+            | C of C
+            | D of D
+            | E of E
+            | F of F
+            | G of G
+            | H of H
+            | I of I
+            | J of J
 
             [<Emit("$0")>]
             static member op_Implicit(value: A) : value = nativeOnly
@@ -314,6 +394,46 @@ module Exports =
 
             [<Emit("$0")>]
             static member op_ErasedCast(value: J) : value = nativeOnly
+
+            /// Unchecked, the value as <c>A</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsA: A = nativeOnly
+
+            /// Unchecked, the value as <c>B</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsB: B = nativeOnly
+
+            /// Unchecked, the value as <c>C</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsC: C = nativeOnly
+
+            /// Unchecked, the value as <c>D</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsD: D = nativeOnly
+
+            /// Unchecked, the value as <c>E</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsE: E = nativeOnly
+
+            /// Unchecked, the value as <c>F</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsF: F = nativeOnly
+
+            /// Unchecked, the value as <c>G</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsG: G = nativeOnly
+
+            /// Unchecked, the value as <c>H</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsH: H = nativeOnly
+
+            /// Unchecked, the value as <c>I</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsI: I = nativeOnly
+
+            /// Unchecked, the value as <c>J</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsJ: J = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

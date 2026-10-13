@@ -14,6 +14,7 @@
     <ItemGroup>
         <Compile Include="TypeScript.fs" />
         <Compile Include="ReadonlyArray.fs" />
+        <Compile Include="UnionCases.fs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="EasyBuild.PackageReleaseNotes.Tasks">

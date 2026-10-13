@@ -31,6 +31,10 @@ type WithOtherTypes =
     [<Emit("$0")>]
     static member op_ErasedCast(value: ResizeArray<string>) : WithOtherTypes = nativeOnly
 
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: ResizeArray<string> = nativeOnly
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

@@ -19,8 +19,42 @@ type Exports =
     [<Import("run", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member run<'T> (value: 'T, options: Options) : unit = nativeOnly
 
+[<RequireQualifiedAccess>]
+[<Erase>]
 type DateArg =
-    U3<Date, float, string>
+    | Date of Date
+    | Number of float
+    | String of string
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: Date) : DateArg = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: Date) : DateArg = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: float) : DateArg = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: float) : DateArg = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: string) : DateArg = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: string) : DateArg = nativeOnly
+
+    /// Unchecked, the value as <c>Date</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsDate: Date = nativeOnly
+
+    /// Unchecked, the value as <c>Number</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsNumber: float = nativeOnly
+
+    /// Unchecked, the value as <c>String</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsString: string = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

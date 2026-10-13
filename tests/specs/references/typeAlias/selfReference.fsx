@@ -7,9 +7,9 @@ open System
 [<RequireQualifiedAccess>]
 [<Erase>]
 type Key =
-    | Case1 of string
-    | Case2 of float
-    | Case3 of ResizeArray<Key>
+    | String of string
+    | Number of float
+    | KeyArray of ResizeArray<Key>
 
     [<Emit("$0")>]
     static member op_Implicit(value: string) : Key = nativeOnly
@@ -28,6 +28,18 @@ type Key =
 
     [<Emit("$0")>]
     static member op_ErasedCast(value: ResizeArray<Key>) : Key = nativeOnly
+
+    /// Unchecked, the value as <c>String</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsString: string = nativeOnly
+
+    /// Unchecked, the value as <c>Number</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsNumber: float = nativeOnly
+
+    /// Unchecked, the value as <c>KeyArray</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsKeyArray: ResizeArray<Key> = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

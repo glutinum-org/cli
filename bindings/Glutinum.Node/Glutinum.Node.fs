@@ -7245,7 +7245,79 @@ module Node =
             static member op_ErasedCast(value: JS.Float64Array) : TypedArray<'TArrayBuffer> =
                 nativeOnly
 
-        type ArrayBufferView<'TArrayBuffer> = U2<Node.NodeJS.TypedArray<'TArrayBuffer>, obj>
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: JS.Uint8Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: JS.Uint8ClampedArray = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: JS.Uint16Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case4</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase4: JS.Uint32Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case5</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase5: JS.Int8Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case6</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase6: JS.Int16Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case7</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase7: JS.Int32Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case8</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase8: obj = nativeOnly
+
+            /// Unchecked, the value as <c>Case9</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase9: JS.Float32Array = nativeOnly
+
+            /// Unchecked, the value as <c>Case10</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase10: JS.Float64Array = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type ArrayBufferView<'TArrayBuffer> =
+            | Case1 of Node.NodeJS.TypedArray<'TArrayBuffer>
+            | Case2 of obj
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: Node.NodeJS.TypedArray<'TArrayBuffer>)
+                : ArrayBufferView<'TArrayBuffer>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: Node.NodeJS.TypedArray<'TArrayBuffer>)
+                : ArrayBufferView<'TArrayBuffer>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : ArrayBufferView<'TArrayBuffer> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : ArrayBufferView<'TArrayBuffer> = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Node.NodeJS.TypedArray<'TArrayBuffer> = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: obj = nativeOnly
 
         type NonSharedUint8Array = JS.Uint8Array
 
@@ -23757,14 +23829,72 @@ module Node =
                     =
                     nativeOnly
 
+            [<RequireQualifiedAccess>]
+            [<Erase>]
             type AssertPredicate =
-                U5<
-                    RegExp,
-                    Node.``assert``.assert_.AssertPredicate.U5.Case2,
-                    (obj -> bool),
-                    obj,
-                    Exception
-                 >
+                | Case1 of RegExp
+                | Case2 of Node.``assert``.assert_.AssertPredicate.Cases.Case2
+                | Case3 of (obj -> bool)
+                | Case4 of obj
+                | Case5 of Exception
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: RegExp) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: RegExp) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.``assert``.assert_.AssertPredicate.Cases.Case2)
+                    : AssertPredicate
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.``assert``.assert_.AssertPredicate.Cases.Case2)
+                    : AssertPredicate
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: (obj -> bool)) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: (obj -> bool)) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: obj) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: obj) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: Exception) : AssertPredicate = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: Exception) : AssertPredicate = nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: RegExp = nativeOnly
+
+                /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase2: Node.``assert``.assert_.AssertPredicate.Cases.Case2 = nativeOnly
+
+                /// Unchecked, the value as <c>Case3</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase3: (obj -> bool) = nativeOnly
+
+                /// Unchecked, the value as <c>Case4</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase4: obj = nativeOnly
+
+                /// Unchecked, the value as <c>Case5</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase5: Exception = nativeOnly
 
             module AssertOptions =
 
@@ -23818,7 +23948,7 @@ module Node =
 
             module AssertPredicate =
 
-                module U5 =
+                module Cases =
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -29709,14 +29839,73 @@ module Node =
                         =
                         nativeOnly
 
+                [<RequireQualifiedAccess>]
+                [<Erase>]
                 type AssertPredicate =
-                    U5<
-                        RegExp,
-                        Node.``assert``.strict.strict_.AssertPredicate.U5.Case2,
-                        (obj -> bool),
-                        obj,
-                        Exception
-                     >
+                    | Case1 of RegExp
+                    | Case2 of Node.``assert``.strict.strict_.AssertPredicate.Cases.Case2
+                    | Case3 of (obj -> bool)
+                    | Case4 of obj
+                    | Case5 of Exception
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: RegExp) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: RegExp) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit
+                        (value: Node.``assert``.strict.strict_.AssertPredicate.Cases.Case2)
+                        : AssertPredicate
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast
+                        (value: Node.``assert``.strict.strict_.AssertPredicate.Cases.Case2)
+                        : AssertPredicate
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: (obj -> bool)) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: (obj -> bool)) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: obj) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: obj) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Exception) : AssertPredicate = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Exception) : AssertPredicate = nativeOnly
+
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: RegExp = nativeOnly
+
+                    /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase2: Node.``assert``.strict.strict_.AssertPredicate.Cases.Case2 =
+                        nativeOnly
+
+                    /// Unchecked, the value as <c>Case3</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase3: (obj -> bool) = nativeOnly
+
+                    /// Unchecked, the value as <c>Case4</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase4: obj = nativeOnly
+
+                    /// Unchecked, the value as <c>Case5</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase5: Exception = nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -32130,7 +32319,7 @@ module Node =
 
                 module AssertPredicate =
 
-                    module U5 =
+                    module Cases =
 
                         [<AllowNullLiteral>]
                         [<Interface>]
@@ -36510,7 +36699,50 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member lastModified: float with get
 
-        type WithImplicitCoercion<'T> = U3<'T, Node.buffer.WithImplicitCoercion.U3.Case2<'T>, obj>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type WithImplicitCoercion<'T> =
+            | T of 'T
+            | Case2 of Node.buffer.WithImplicitCoercion.Cases.Case2<'T>
+            | Obj of obj
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: 'T) : WithImplicitCoercion<'T> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: 'T) : WithImplicitCoercion<'T> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: Node.buffer.WithImplicitCoercion.Cases.Case2<'T>)
+                : WithImplicitCoercion<'T>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: Node.buffer.WithImplicitCoercion.Cases.Case2<'T>)
+                : WithImplicitCoercion<'T>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : WithImplicitCoercion<'T> = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : WithImplicitCoercion<'T> = nativeOnly
+
+            /// Unchecked, the value as <c>T</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsT: 'T = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: Node.buffer.WithImplicitCoercion.Cases.Case2<'T> = nativeOnly
+
+            /// Unchecked, the value as <c>Obj</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsObj: obj = nativeOnly
 
         type Buffer = Buffer<obj>
 
@@ -36550,7 +36782,7 @@ AsyncLocalStorage.snapshot()""")>]
 
         module WithImplicitCoercion =
 
-            module U3 =
+            module Cases =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -37822,7 +38054,64 @@ AsyncLocalStorage.snapshot()""")>]
             [<ImportAll("node:child_process")>]
             static member execFile_: execFile_.Exports = nativeOnly
 
-        type Serializable = U5<string, obj, float, bool, bigint>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type Serializable =
+            | Case1 of string
+            | Case2 of obj
+            | Case3 of float
+            | Case4 of bool
+            | Case5 of bigint
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: bool) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bool) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: bigint) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bigint) : Serializable = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: string = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: obj = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: float = nativeOnly
+
+            /// Unchecked, the value as <c>Case4</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase4: bool = nativeOnly
+
+            /// Unchecked, the value as <c>Case5</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase5: bigint = nativeOnly
 
         type SendHandle = U3<Node.net.Socket, Node.net.Server, Node.dgram.Socket> option
 
@@ -42781,8 +43070,41 @@ AsyncLocalStorage.snapshot()""")>]
             | ignore
             | ``inherit``
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type StdioOptions =
-            U2<Node.child_process.IOType, ResizeArray<Node.child_process.StdioOptions.U2.Case2>>
+            | IOType of Node.child_process.IOType
+            | Case2Array of ResizeArray<Node.child_process.StdioOptions.Cases.Case2>
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.child_process.IOType) : StdioOptions = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.child_process.IOType) : StdioOptions =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: ResizeArray<Node.child_process.StdioOptions.Cases.Case2>)
+                : StdioOptions
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: ResizeArray<Node.child_process.StdioOptions.Cases.Case2>)
+                : StdioOptions
+                =
+                nativeOnly
+
+            /// Unchecked, the value as <c>IOType</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsIOType: Node.child_process.IOType = nativeOnly
+
+            /// Unchecked, the value as <c>Case2Array</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2Array: ResizeArray<Node.child_process.StdioOptions.Cases.Case2> =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -43038,6 +43360,10 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Emit("$0")>]
             static member op_ErasedCast(value: Node.stream.Stream) : StdioNull = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Node.stream.Stream = nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -44598,7 +44924,7 @@ AsyncLocalStorage.snapshot()""")>]
 
         module StdioOptions =
 
-            module U2 =
+            module Cases =
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
@@ -44626,6 +44952,18 @@ AsyncLocalStorage.snapshot()""")>]
 
                     [<Emit("$0")>]
                     static member op_ErasedCast(value: float) : Case2 = nativeOnly
+
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: Node.child_process.IOType = nativeOnly
+
+                    /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase2: Node.stream.Stream = nativeOnly
+
+                    /// Unchecked, the value as <c>Case3</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase3: float = nativeOnly
 
         module SpawnSyncOptions =
 
@@ -57592,9 +57930,58 @@ KeyObject.from($0)""")>]
         [<StringEnum(CaseRules.None)>]
         type CipherChaCha20Poly1305Types = | ``chacha20-poly1305``
 
-        type BinaryLike = U2<string, Node.NodeJS.ArrayBufferView>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type BinaryLike =
+            | String of string
+            | ArrayBufferView of Node.NodeJS.ArrayBufferView
 
-        type CipherKey = U2<Node.crypto.BinaryLike, Node.crypto.KeyObject>
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : BinaryLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : BinaryLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.NodeJS.ArrayBufferView) : BinaryLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.NodeJS.ArrayBufferView) : BinaryLike =
+                nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>ArrayBufferView</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsArrayBufferView: Node.NodeJS.ArrayBufferView = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type CipherKey =
+            | BinaryLike of Node.crypto.BinaryLike
+            | KeyObject of Node.crypto.KeyObject
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.crypto.BinaryLike) : CipherKey = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.crypto.BinaryLike) : CipherKey = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.crypto.KeyObject) : CipherKey = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.crypto.KeyObject) : CipherKey = nativeOnly
+
+            /// Unchecked, the value as <c>BinaryLike</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsBinaryLike: Node.crypto.BinaryLike = nativeOnly
+
+            /// Unchecked, the value as <c>KeyObject</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsKeyObject: Node.crypto.KeyObject = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -59052,7 +59439,42 @@ KeyObject.from($0)""")>]
                 =
                 nativeOnly
 
-        type KeyLike = U3<string, Node.Buffer, Node.crypto.KeyObject>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type KeyLike =
+            | String of string
+            | Buffer of Node.Buffer
+            | KeyObject of Node.crypto.KeyObject
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : KeyLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : KeyLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.Buffer) : KeyLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.Buffer) : KeyLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.crypto.KeyObject) : KeyLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.crypto.KeyObject) : KeyLike = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>Buffer</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsBuffer: Node.Buffer = nativeOnly
+
+            /// Unchecked, the value as <c>KeyObject</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsKeyObject: Node.crypto.KeyObject = nativeOnly
 
         /// <summary>
         /// The <c>Sign</c> class is a utility for generating signatures. It can be used in one
@@ -61346,7 +61768,44 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </param>
             abstract member verify: publicKey: Node.crypto.KeyObject -> bool
 
-        type LargeNumberLike = U3<Node.NodeJS.ArrayBufferView, obj, bigint>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type LargeNumberLike =
+            | Case1 of Node.NodeJS.ArrayBufferView
+            | Case2 of obj
+            | Case3 of bigint
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.NodeJS.ArrayBufferView) : LargeNumberLike =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.NodeJS.ArrayBufferView) : LargeNumberLike =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : LargeNumberLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : LargeNumberLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: bigint) : LargeNumberLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bigint) : LargeNumberLike = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Node.NodeJS.ArrayBufferView = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: obj = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: bigint = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -61420,7 +61879,20 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
         module webcrypto_ =
 
-            type BufferSource = obj
+            [<RequireQualifiedAccess>]
+            [<Erase>]
+            type BufferSource =
+                | Case1 of obj
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: obj) : BufferSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: obj) : BufferSource = nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: obj = nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -61449,7 +61921,39 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 | verify
                 | wrapKey
 
-            type AlgorithmIdentifier = U2<Node.crypto.webcrypto_.Algorithm, string>
+            [<RequireQualifiedAccess>]
+            [<Erase>]
+            type AlgorithmIdentifier =
+                | Algorithm of Node.crypto.webcrypto_.Algorithm
+                | String of string
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.crypto.webcrypto_.Algorithm)
+                    : AlgorithmIdentifier
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.crypto.webcrypto_.Algorithm)
+                    : AlgorithmIdentifier
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: string) : AlgorithmIdentifier = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: string) : AlgorithmIdentifier = nativeOnly
+
+                /// Unchecked, the value as <c>Algorithm</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsAlgorithm: Node.crypto.webcrypto_.Algorithm = nativeOnly
+
+                /// Unchecked, the value as <c>String</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsString: string = nativeOnly
 
             type HashAlgorithmIdentifier = Node.crypto.webcrypto_.AlgorithmIdentifier
 
@@ -70676,8 +71180,32 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             [<ParamObject; Emit("$0")>]
             static member Create(address: string, ttl: float) : RecordWithTtl = nativeOnly
 
-        [<Obsolete("Use `AnyARecord` or `AnyAaaaRecord` instead.")>]
-        type AnyRecordWithTtl = U2<Node.dns.AnyARecord, Node.dns.AnyAaaaRecord>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type AnyRecordWithTtl =
+            | AnyARecord of Node.dns.AnyARecord
+            | AnyAaaaRecord of Node.dns.AnyAaaaRecord
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyARecord) : AnyRecordWithTtl = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyARecord) : AnyRecordWithTtl = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.dns.AnyAaaaRecord) : AnyRecordWithTtl = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.dns.AnyAaaaRecord) : AnyRecordWithTtl =
+                nativeOnly
+
+            /// Unchecked, the value as <c>AnyARecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyARecord: Node.dns.AnyARecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyAaaaRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyAaaaRecord: Node.dns.AnyAaaaRecord = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -70955,18 +71483,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
         [<RequireQualifiedAccess>]
         [<Erase>]
         type AnyRecord =
-            | Case1 of Node.dns.AnyARecord
-            | Case2 of Node.dns.AnyAaaaRecord
-            | Case3 of Node.dns.AnyCaaRecord
-            | Case4 of Node.dns.AnyCnameRecord
-            | Case5 of Node.dns.AnyMxRecord
-            | Case6 of Node.dns.AnyNaptrRecord
-            | Case7 of Node.dns.AnyNsRecord
-            | Case8 of Node.dns.AnyPtrRecord
-            | Case9 of Node.dns.AnySoaRecord
-            | Case10 of Node.dns.AnySrvRecord
-            | Case11 of Node.dns.AnyTlsaRecord
-            | Case12 of Node.dns.AnyTxtRecord
+            | AnyARecord of Node.dns.AnyARecord
+            | AnyAaaaRecord of Node.dns.AnyAaaaRecord
+            | AnyCaaRecord of Node.dns.AnyCaaRecord
+            | AnyCnameRecord of Node.dns.AnyCnameRecord
+            | AnyMxRecord of Node.dns.AnyMxRecord
+            | AnyNaptrRecord of Node.dns.AnyNaptrRecord
+            | AnyNsRecord of Node.dns.AnyNsRecord
+            | AnyPtrRecord of Node.dns.AnyPtrRecord
+            | AnySoaRecord of Node.dns.AnySoaRecord
+            | AnySrvRecord of Node.dns.AnySrvRecord
+            | AnyTlsaRecord of Node.dns.AnyTlsaRecord
+            | AnyTxtRecord of Node.dns.AnyTxtRecord
 
             [<Emit("$0")>]
             static member op_Implicit(value: Node.dns.AnyARecord) : AnyRecord = nativeOnly
@@ -71039,6 +71567,54 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
             [<Emit("$0")>]
             static member op_ErasedCast(value: Node.dns.AnyTxtRecord) : AnyRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyARecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyARecord: Node.dns.AnyARecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyAaaaRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyAaaaRecord: Node.dns.AnyAaaaRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyCaaRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyCaaRecord: Node.dns.AnyCaaRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyCnameRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyCnameRecord: Node.dns.AnyCnameRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyMxRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyMxRecord: Node.dns.AnyMxRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyNaptrRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyNaptrRecord: Node.dns.AnyNaptrRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyNsRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyNsRecord: Node.dns.AnyNsRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyPtrRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyPtrRecord: Node.dns.AnyPtrRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnySoaRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnySoaRecord: Node.dns.AnySoaRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnySrvRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnySrvRecord: Node.dns.AnySrvRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyTlsaRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyTlsaRecord: Node.dns.AnyTlsaRecord = nativeOnly
+
+            /// Unchecked, the value as <c>AnyTxtRecord</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsAnyTxtRecord: Node.dns.AnyTxtRecord = nativeOnly
 
         module resolve_ =
 
@@ -72012,6 +72588,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0")>]
                 static member op_ErasedCast(value: float) : family = nativeOnly
 
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: float = nativeOnly
+
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
             type order =
@@ -72034,6 +72614,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0")>]
                 static member op_ErasedCast(value: float) : family = nativeOnly
 
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: float = nativeOnly
+
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
             type order =
@@ -72055,6 +72639,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<Emit("$0")>]
                 static member op_ErasedCast(value: float) : family = nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: float = nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -73725,9 +74313,35 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 with get (): float = nativeOnly
                 and set (value: float) = nativeOnly
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type EventMap<'T> = interface end
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type EventMap<'T> =
+            | Case1 of Node.events.EventMap.Cases.Case1
+            | DefaultEventMap of Node.events.DefaultEventMap
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.events.EventMap.Cases.Case1) : EventMap<'T> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.events.EventMap.Cases.Case1) : EventMap<'T> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.events.DefaultEventMap) : EventMap<'T> =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.events.DefaultEventMap) : EventMap<'T> =
+                nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Node.events.EventMap.Cases.Case1 = nativeOnly
+
+            /// Unchecked, the value as <c>DefaultEventMap</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsDefaultEventMap: Node.events.DefaultEventMap = nativeOnly
 
         type DefaultEventMap = ResizeArray<obj>
 
@@ -73975,7 +74589,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
         module EventMap =
 
-            module U2 =
+            module Cases =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -91432,14 +92046,105 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<ImportAll("node:fs")>]
             static member opendir_: opendir_.Exports = nativeOnly
 
-        /// <summary>
-        /// Valid types for path values in "fs".
-        /// </summary>
-        type PathLike = U3<string, Node.Buffer, Node.url.URL>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type PathLike =
+            | String of string
+            | Buffer of Node.Buffer
+            | URL of Node.url.URL
 
-        type PathOrFileDescriptor = U2<Node.fs.PathLike, float>
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : PathLike = nativeOnly
 
-        type TimeLike = U3<string, float, Date>
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : PathLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.Buffer) : PathLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.Buffer) : PathLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.url.URL) : PathLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.url.URL) : PathLike = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>Buffer</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsBuffer: Node.Buffer = nativeOnly
+
+            /// Unchecked, the value as <c>URL</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsURL: Node.url.URL = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type PathOrFileDescriptor =
+            | PathLike of Node.fs.PathLike
+            | Number of float
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.fs.PathLike) : PathOrFileDescriptor = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.fs.PathLike) : PathOrFileDescriptor = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : PathOrFileDescriptor = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : PathOrFileDescriptor = nativeOnly
+
+            /// Unchecked, the value as <c>PathLike</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsPathLike: Node.fs.PathLike = nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type TimeLike =
+            | String of string
+            | Number of float
+            | Date of Date
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : TimeLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : TimeLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : TimeLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : TimeLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Date) : TimeLike = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Date) : TimeLike = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
+
+            /// Unchecked, the value as <c>Date</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsDate: Date = nativeOnly
 
         type NoParamCallback = Node.NodeJS.ErrnoException option -> unit
 
@@ -91463,6 +92168,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 =
                 nativeOnly
 
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Node.fs.BufferEncodingOption.Cases.Case1 = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ObjectEncodingOptions =
@@ -91474,9 +92183,57 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
         type EncodingOption = U2<Node.fs.ObjectEncodingOptions, Node.BufferEncoding> option
 
-        type OpenMode = U2<float, string>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type OpenMode =
+            | Number of float
+            | String of string
 
-        type Mode = U2<float, string>
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : OpenMode = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : OpenMode = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : OpenMode = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : OpenMode = nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type Mode =
+            | Number of float
+            | String of string
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : Mode = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : Mode = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : Mode = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : Mode = nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -95681,6 +96438,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                             =
                             nativeOnly
 
+                        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                        [<Emit("$0")>]
+                        member _.AsCase1: Node.fs.readdir_.Exports.__promisify__.options.Cases.Case1 =
+                            nativeOnly
+
                     module options =
 
                         module Cases =
@@ -96260,7 +97022,31 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     static member Create(bytesWritten: float, buffer: string) : __promisify___1 =
                         nativeOnly
 
-        type ReadPosition = U2<float, bigint>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type ReadPosition =
+            | Number of float
+            | BigInt of bigint
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : ReadPosition = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : ReadPosition = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: bigint) : ReadPosition = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bigint) : ReadPosition = nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
+
+            /// Unchecked, the value as <c>BigInt</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsBigInt: bigint = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -105888,6 +106674,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                             =
                             nativeOnly
 
+                        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                        [<Emit("$0")>]
+                        member _.AsCase1: Node.fs.promises.Exports.readdir__.options.Cases.Case1 =
+                            nativeOnly
+
                     module options =
 
                         module Cases =
@@ -106136,6 +106927,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                             =
                             nativeOnly
 
+                        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                        [<Emit("$0")>]
+                        member _.AsCase1: Node.fs.promises.WatchOptionsWithBufferEncoding =
+                            nativeOnly
+
                     [<RequireQualifiedAccess>]
                     [<Erase(CaseRules.None)>]
                     type options_1 =
@@ -106164,6 +106960,14 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                         [<Emit("$0")>]
                         static member op_ErasedCast(value: Node.BufferEncoding) : options_1 =
                             nativeOnly
+
+                        /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                        [<Emit("$0")>]
+                        member _.AsCase1: Node.fs.promises.WatchOptions = nativeOnly
+
+                        /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                        [<Emit("$0")>]
+                        member _.AsCase2: Node.BufferEncoding = nativeOnly
 
         type WriteVResult = WriteVResult<ResizeArray<Node.NodeJS.ArrayBufferView>>
 
@@ -106649,6 +107453,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                         =
                         nativeOnly
 
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: Node.fs.Exports.readdir__.options.Cases.Case1 = nativeOnly
+
                 type callback_1 =
                     delegate of
                         err: Node.NodeJS.ErrnoException option *
@@ -106767,6 +107575,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                         : options_1
                         =
                         nativeOnly
+
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: Node.fs.Exports.readdirSync__.options.Cases.Case1 = nativeOnly
 
                 module options =
 
@@ -107065,6 +107877,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                         =
                         nativeOnly
 
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: Node.fs.WatchOptionsWithBufferEncoding = nativeOnly
+
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
                 type options_1 =
@@ -107084,6 +107900,14 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                     [<Emit("$0")>]
                     static member op_ErasedCast(value: Node.BufferEncoding) : options_1 = nativeOnly
+
+                    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase1: Node.fs.WatchOptions = nativeOnly
+
+                    /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                    [<Emit("$0")>]
+                    member _.AsCase2: Node.BufferEncoding = nativeOnly
 
             module writev__ =
 
@@ -108439,7 +109263,43 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 =
                 nativeOnly
 
-        type OutgoingHttpHeader = U3<float, string, ResizeArray<string>>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type OutgoingHttpHeader =
+            | Number of float
+            | String of string
+            | StringArray of ResizeArray<string>
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : OutgoingHttpHeader = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : OutgoingHttpHeader = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : OutgoingHttpHeader = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : OutgoingHttpHeader = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: ResizeArray<string>) : OutgoingHttpHeader = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: ResizeArray<string>) : OutgoingHttpHeader =
+                nativeOnly
+
+            /// Unchecked, the value as <c>Number</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNumber: float = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>StringArray</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsStringArray: ResizeArray<string> = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -150246,7 +151106,43 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 | ``module-typescript``
                 | wasm
 
-            type ModuleSource = U3<string, obj, Node.NodeJS.TypedArray>
+            [<RequireQualifiedAccess>]
+            [<Erase>]
+            type ModuleSource =
+                | Case1 of string
+                | Case2 of obj
+                | Case3 of Node.NodeJS.TypedArray
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: string) : ModuleSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: string) : ModuleSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: obj) : ModuleSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: obj) : ModuleSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: Node.NodeJS.TypedArray) : ModuleSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: Node.NodeJS.TypedArray) : ModuleSource =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: string = nativeOnly
+
+                /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase2: obj = nativeOnly
+
+                /// Unchecked, the value as <c>Case3</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase3: Node.NodeJS.TypedArray = nativeOnly
 
             /// <summary>
             /// The <c>initialize</c> hook provides a way to define a custom function that runs in
@@ -151238,7 +152134,35 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<ParamObject; Emit("$0")>]
             static member Create(path: string) : IpcSocketConnectOpts = nativeOnly
 
-        type SocketConnectOpts = U2<Node.net.TcpSocketConnectOpts, Node.net.IpcSocketConnectOpts>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type SocketConnectOpts =
+            | TcpSocketConnectOpts of Node.net.TcpSocketConnectOpts
+            | IpcSocketConnectOpts of Node.net.IpcSocketConnectOpts
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.net.TcpSocketConnectOpts) : SocketConnectOpts =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.net.TcpSocketConnectOpts) : SocketConnectOpts =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.net.IpcSocketConnectOpts) : SocketConnectOpts =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.net.IpcSocketConnectOpts) : SocketConnectOpts =
+                nativeOnly
+
+            /// Unchecked, the value as <c>TcpSocketConnectOpts</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsTcpSocketConnectOpts: Node.net.TcpSocketConnectOpts = nativeOnly
+
+            /// Unchecked, the value as <c>IpcSocketConnectOpts</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsIpcSocketConnectOpts: Node.net.IpcSocketConnectOpts = nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -156204,7 +157128,35 @@ BlockList.isBlockList($0)""")>]
                 =
                 nativeOnly
 
-        type NetConnectOpts = U2<Node.net.TcpNetConnectOpts, Node.net.IpcNetConnectOpts>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type NetConnectOpts =
+            | TcpNetConnectOpts of Node.net.TcpNetConnectOpts
+            | IpcNetConnectOpts of Node.net.IpcNetConnectOpts
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.net.TcpNetConnectOpts) : NetConnectOpts =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.net.TcpNetConnectOpts) : NetConnectOpts =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.net.IpcNetConnectOpts) : NetConnectOpts =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.net.IpcNetConnectOpts) : NetConnectOpts =
+                nativeOnly
+
+            /// Unchecked, the value as <c>TcpNetConnectOpts</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsTcpNetConnectOpts: Node.net.TcpNetConnectOpts = nativeOnly
+
+            /// Unchecked, the value as <c>IpcNetConnectOpts</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsIpcNetConnectOpts: Node.net.IpcNetConnectOpts = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -156812,8 +157764,47 @@ SocketAddress.parse($0)""")>]
                 =
                 nativeOnly
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type NetworkInterfaceInfo =
-            U2<Node.os.NetworkInterfaceInfoIPv4, Node.os.NetworkInterfaceInfoIPv6>
+            | NetworkInterfaceInfoIPv4 of Node.os.NetworkInterfaceInfoIPv4
+            | NetworkInterfaceInfoIPv6 of Node.os.NetworkInterfaceInfoIPv6
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: Node.os.NetworkInterfaceInfoIPv4)
+                : NetworkInterfaceInfo
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: Node.os.NetworkInterfaceInfoIPv4)
+                : NetworkInterfaceInfo
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: Node.os.NetworkInterfaceInfoIPv6)
+                : NetworkInterfaceInfo
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: Node.os.NetworkInterfaceInfoIPv6)
+                : NetworkInterfaceInfo
+                =
+                nativeOnly
+
+            /// Unchecked, the value as <c>NetworkInterfaceInfoIPv4</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNetworkInterfaceInfoIPv4: Node.os.NetworkInterfaceInfoIPv4 = nativeOnly
+
+            /// Unchecked, the value as <c>NetworkInterfaceInfoIPv6</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsNetworkInterfaceInfoIPv6: Node.os.NetworkInterfaceInfoIPv6 = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -182991,23 +183982,145 @@ Duplex.fromWeb($0, $1)""")>]
 
             type PipelineSourceFunction<'T> = unit -> U2<Iterable<'T>, obj>
 
+            [<RequireQualifiedAccess>]
+            [<Erase>]
             type PipelineSource<'T> =
-                U4<
-                    Iterable<'T>,
-                    obj,
-                    Node.NodeJS.ReadableStream,
-                    Node.stream.Stream_.PipelineSourceFunction<'T>
-                 >
+                | Case1 of Iterable<'T>
+                | Case2 of obj
+                | Case3 of Node.NodeJS.ReadableStream
+                | Case4 of Node.stream.Stream_.PipelineSourceFunction<'T>
 
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type PipelineTransform<'S, 'U> = interface end
+                [<Emit("$0")>]
+                static member op_Implicit(value: Iterable<'T>) : PipelineSource<'T> = nativeOnly
 
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: Iterable<'T>) : PipelineSource<'T> = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: obj) : PipelineSource<'T> = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: obj) : PipelineSource<'T> = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: Node.NodeJS.ReadableStream) : PipelineSource<'T> =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.NodeJS.ReadableStream)
+                    : PipelineSource<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.Stream_.PipelineSourceFunction<'T>)
+                    : PipelineSource<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.Stream_.PipelineSourceFunction<'T>)
+                    : PipelineSource<'T>
+                    =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: Iterable<'T> = nativeOnly
+
+                /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase2: obj = nativeOnly
+
+                /// Unchecked, the value as <c>Case3</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase3: Node.NodeJS.ReadableStream = nativeOnly
+
+                /// Unchecked, the value as <c>Case4</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase4: Node.stream.Stream_.PipelineSourceFunction<'T> = nativeOnly
+
+            [<RequireQualifiedAccess>]
+            [<Erase>]
+            type PipelineTransform<'S, 'U> =
+                | ReadWriteStream of Node.NodeJS.ReadWriteStream
+                | Function of (obj -> unit)
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.NodeJS.ReadWriteStream)
+                    : PipelineTransform<'S, 'U>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.NodeJS.ReadWriteStream)
+                    : PipelineTransform<'S, 'U>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: (obj -> unit)) : PipelineTransform<'S, 'U> =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: (obj -> unit)) : PipelineTransform<'S, 'U> =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>ReadWriteStream</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsReadWriteStream: Node.NodeJS.ReadWriteStream = nativeOnly
+
+                /// Unchecked, the value as <c>Function</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsFunction: (obj -> unit) = nativeOnly
+
+            [<RequireQualifiedAccess>]
+            [<Erase>]
             type PipelineTransformSource<'T> =
-                U2<
-                    Node.stream.Stream_.PipelineSource<'T>,
-                    Node.stream.Stream_.PipelineTransform<obj, 'T>
-                 >
+                | PipelineSource of Node.stream.Stream_.PipelineSource<'T>
+                | PipelineTransform of Node.stream.Stream_.PipelineTransform<obj, 'T>
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.Stream_.PipelineSource<'T>)
+                    : PipelineTransformSource<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.Stream_.PipelineSource<'T>)
+                    : PipelineTransformSource<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.Stream_.PipelineTransform<obj, 'T>)
+                    : PipelineTransformSource<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.Stream_.PipelineTransform<obj, 'T>)
+                    : PipelineTransformSource<'T>
+                    =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>PipelineSource</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsPipelineSource: Node.stream.Stream_.PipelineSource<'T> = nativeOnly
+
+                /// Unchecked, the value as <c>PipelineTransform</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsPipelineTransform: Node.stream.Stream_.PipelineTransform<obj, 'T> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -184178,11 +185291,51 @@ Duplex.fromWeb($0, $1)""")>]
                     =
                     nativeOnly
 
+            [<RequireQualifiedAccess>]
+            [<Erase>]
             type ReadableStreamReadResult<'T> =
-                U2<
-                    Node.stream.web.ReadableStreamReadValueResult<'T>,
-                    Node.stream.web.ReadableStreamReadDoneResult<'T>
-                 >
+                | ReadableStreamReadValueResult of Node.stream.web.ReadableStreamReadValueResult<'T>
+                | ReadableStreamReadDoneResult of Node.stream.web.ReadableStreamReadDoneResult<'T>
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.web.ReadableStreamReadValueResult<'T>)
+                    : ReadableStreamReadResult<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.web.ReadableStreamReadValueResult<'T>)
+                    : ReadableStreamReadResult<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.web.ReadableStreamReadDoneResult<'T>)
+                    : ReadableStreamReadResult<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.web.ReadableStreamReadDoneResult<'T>)
+                    : ReadableStreamReadResult<'T>
+                    =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>ReadableStreamReadValueResult</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsReadableStreamReadValueResult
+                    : Node.stream.web.ReadableStreamReadValueResult<'T> =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>ReadableStreamReadDoneResult</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsReadableStreamReadDoneResult
+                    : Node.stream.web.ReadableStreamReadDoneResult<'T> =
+                    nativeOnly
 
             type ReadableByteStreamControllerCallback =
                 Node.stream.web.ReadableByteStreamController -> U2<unit, obj>
@@ -184349,11 +185502,50 @@ Duplex.fromWeb($0, $1)""")>]
                     =
                     nativeOnly
 
+            [<RequireQualifiedAccess>]
+            [<Erase>]
             type ReadableStreamReader<'T> =
-                U2<
-                    Node.stream.web.ReadableStreamDefaultReader<'T>,
-                    Node.stream.web.ReadableStreamBYOBReader
-                 >
+                | ReadableStreamDefaultReader of Node.stream.web.ReadableStreamDefaultReader<'T>
+                | ReadableStreamBYOBReader of Node.stream.web.ReadableStreamBYOBReader
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.web.ReadableStreamDefaultReader<'T>)
+                    : ReadableStreamReader<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.web.ReadableStreamDefaultReader<'T>)
+                    : ReadableStreamReader<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: Node.stream.web.ReadableStreamBYOBReader)
+                    : ReadableStreamReader<'T>
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: Node.stream.web.ReadableStreamBYOBReader)
+                    : ReadableStreamReader<'T>
+                    =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>ReadableStreamDefaultReader</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsReadableStreamDefaultReader
+                    : Node.stream.web.ReadableStreamDefaultReader<'T> =
+                    nativeOnly
+
+                /// Unchecked, the value as <c>ReadableStreamBYOBReader</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsReadableStreamBYOBReader: Node.stream.web.ReadableStreamBYOBReader =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -184625,7 +185817,20 @@ Duplex.fromWeb($0, $1)""")>]
                 static member Create(?fatal: bool, ?ignoreBOM: bool) : TextDecoderOptions =
                     nativeOnly
 
-            type BufferSource = obj
+            [<RequireQualifiedAccess>]
+            [<Erase>]
+            type BufferSource =
+                | Case1 of obj
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: obj) : BufferSource = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: obj) : BufferSource = nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: obj = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -203945,8 +205150,49 @@ URL.parse($0, $1)""")>]
         [<Interface>]
         type CustomPromisifySymbol<'TCustom> = interface end
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type CustomPromisify<'TCustom> =
-            U2<Node.util.CustomPromisifySymbol<'TCustom>, Node.util.CustomPromisifyLegacy<'TCustom>>
+            | CustomPromisifySymbol of Node.util.CustomPromisifySymbol<'TCustom>
+            | CustomPromisifyLegacy of Node.util.CustomPromisifyLegacy<'TCustom>
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: Node.util.CustomPromisifySymbol<'TCustom>)
+                : CustomPromisify<'TCustom>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: Node.util.CustomPromisifySymbol<'TCustom>)
+                : CustomPromisify<'TCustom>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: Node.util.CustomPromisifyLegacy<'TCustom>)
+                : CustomPromisify<'TCustom>
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: Node.util.CustomPromisifyLegacy<'TCustom>)
+                : CustomPromisify<'TCustom>
+                =
+                nativeOnly
+
+            /// Unchecked, the value as <c>CustomPromisifySymbol</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCustomPromisifySymbol: Node.util.CustomPromisifySymbol<'TCustom> =
+                nativeOnly
+
+            /// Unchecked, the value as <c>CustomPromisifyLegacy</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCustomPromisifyLegacy: Node.util.CustomPromisifyLegacy<'TCustom> =
+                nativeOnly
 
         module promisify_ =
 
@@ -204356,9 +205602,72 @@ URL.parse($0, $1)""")>]
         [<Interface>]
         type PreciseParsedResults<'T> = interface end
 
-        type OptionToken = U2<Node.util.OptionToken.U2.Case1, Node.util.OptionToken.U2.Case2>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type OptionToken =
+            | Case1 of Node.util.OptionToken.Cases.Case1
+            | Case2 of Node.util.OptionToken.Cases.Case2
 
-        type Token = U3<Node.util.OptionToken, Node.util.Token.U3.Case2, Node.util.Token.U3.Case3>
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.util.OptionToken.Cases.Case1) : OptionToken =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.util.OptionToken.Cases.Case1) : OptionToken =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.util.OptionToken.Cases.Case2) : OptionToken =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.util.OptionToken.Cases.Case2) : OptionToken =
+                nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: Node.util.OptionToken.Cases.Case1 = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: Node.util.OptionToken.Cases.Case2 = nativeOnly
+
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type Token =
+            | OptionToken of Node.util.OptionToken
+            | Case2 of Node.util.Token.Cases.Case2
+            | Case3 of Node.util.Token.Cases.Case3
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.util.OptionToken) : Token = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.util.OptionToken) : Token = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.util.Token.Cases.Case2) : Token = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.util.Token.Cases.Case2) : Token = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.util.Token.Cases.Case3) : Token = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.util.Token.Cases.Case3) : Token = nativeOnly
+
+            /// Unchecked, the value as <c>OptionToken</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsOptionToken: Node.util.OptionToken = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: Node.util.Token.Cases.Case2 = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: Node.util.Token.Cases.Case3 = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -205180,7 +206489,7 @@ URL.parse($0, $1)""")>]
 
         module OptionToken =
 
-            module U2 =
+            module Cases =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -205232,7 +206541,7 @@ URL.parse($0, $1)""")>]
 
         module Token =
 
-            module U3 =
+            module Cases =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -210129,16 +211438,96 @@ URL.parse($0, $1)""")>]
                 =
                 nativeOnly
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type Transferable =
-            U7<
-                obj,
-                Node.worker_threads.MessagePort,
-                Node.AbortSignal,
-                Node.fs.promises.FileHandle,
-                Node.stream.web.ReadableStream,
-                Node.stream.web.WritableStream,
-                Node.stream.web.TransformStream
-             >
+            | Case1 of obj
+            | Case2 of Node.worker_threads.MessagePort
+            | Case3 of Node.AbortSignal
+            | Case4 of Node.fs.promises.FileHandle
+            | Case5 of Node.stream.web.ReadableStream
+            | Case6 of Node.stream.web.WritableStream
+            | Case7 of Node.stream.web.TransformStream
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : Transferable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : Transferable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.worker_threads.MessagePort) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.worker_threads.MessagePort) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.AbortSignal) : Transferable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.AbortSignal) : Transferable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.fs.promises.FileHandle) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.fs.promises.FileHandle) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.stream.web.ReadableStream) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.stream.web.ReadableStream) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.stream.web.WritableStream) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.stream.web.WritableStream) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.stream.web.TransformStream) : Transferable =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.stream.web.TransformStream) : Transferable =
+                nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: obj = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: Node.worker_threads.MessagePort = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: Node.AbortSignal = nativeOnly
+
+            /// Unchecked, the value as <c>Case4</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase4: Node.fs.promises.FileHandle = nativeOnly
+
+            /// Unchecked, the value as <c>Case5</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase5: Node.stream.web.ReadableStream = nativeOnly
+
+            /// Unchecked, the value as <c>Case6</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase6: Node.stream.web.WritableStream = nativeOnly
+
+            /// Unchecked, the value as <c>Case7</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase7: Node.stream.web.TransformStream = nativeOnly
 
         [<Obsolete("Use `import { Transferable } from \"node:worker_threads\"` instead.")>]
         type TransferListItem = Node.worker_threads.Transferable
@@ -213411,7 +214800,64 @@ URL.parse($0, $1)""")>]
             /// </param>
             abstract member postMessage: message: obj -> unit
 
-        type Serializable = U5<string, obj, float, bool, bigint>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type Serializable =
+            | Case1 of string
+            | Case2 of obj
+            | Case3 of float
+            | Case4 of bool
+            | Case5 of bigint
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: float) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: float) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: bool) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bool) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: bigint) : Serializable = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bigint) : Serializable = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: string = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: obj = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: float = nativeOnly
+
+            /// Unchecked, the value as <c>Case4</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase4: bool = nativeOnly
+
+            /// Unchecked, the value as <c>Case5</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase5: bigint = nativeOnly
 
         module Exports =
 
@@ -214777,7 +216223,42 @@ URL.parse($0, $1)""")>]
             inherit Node.stream.Stream_.Transform
             inherit Node.zlib.Zlib
 
-        type InputType = U3<string, obj, Node.NodeJS.ArrayBufferView>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type InputType =
+            | Case1 of string
+            | Case2 of obj
+            | Case3 of Node.NodeJS.ArrayBufferView
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : InputType = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : InputType = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: obj) : InputType = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: obj) : InputType = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.NodeJS.ArrayBufferView) : InputType = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.NodeJS.ArrayBufferView) : InputType = nativeOnly
+
+            /// Unchecked, the value as <c>Case1</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase1: string = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: obj = nativeOnly
+
+            /// Unchecked, the value as <c>Case3</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase3: Node.NodeJS.ArrayBufferView = nativeOnly
 
         type CompressCallback =
             delegate of error: Exception option * result: Node.NonSharedBuffer -> unit
@@ -216929,7 +218410,39 @@ module UndiciTypes =
                     [<ParamArray>] args: UndiciTypes.connector.buildConnector_.CallbackArgs[] ->
                         unit
 
-            type CallbackArgs = U2<obj * U2<Node.net.Socket, Node.tls.TLSSocket>, Exception * obj>
+            [<RequireQualifiedAccess>]
+            [<Erase>]
+            type CallbackArgs =
+                | Case1 of obj * U2<Node.net.Socket, Node.tls.TLSSocket>
+                | Case2 of Exception * obj
+
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: obj * U2<Node.net.Socket, Node.tls.TLSSocket>)
+                    : CallbackArgs
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: obj * U2<Node.net.Socket, Node.tls.TLSSocket>)
+                    : CallbackArgs
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: Exception * obj) : CallbackArgs = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: Exception * obj) : CallbackArgs = nativeOnly
+
+                /// Unchecked, the value as <c>Case1</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase1: obj * U2<Node.net.Socket, Node.tls.TLSSocket> = nativeOnly
+
+                /// Unchecked, the value as <c>Case2</c> whatever case it holds
+                [<Emit("$0")>]
+                member _.AsCase2: Exception * obj = nativeOnly
 
             type connector =
                 delegate of
@@ -220175,7 +221688,42 @@ module UndiciTypes =
 
     module fetch =
 
-        type RequestInfo = U3<string, Node.url.URL, UndiciTypes.fetch.Request>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type RequestInfo =
+            | String of string
+            | URL of Node.url.URL
+            | Request of UndiciTypes.fetch.Request
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : RequestInfo = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : RequestInfo = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.url.URL) : RequestInfo = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.url.URL) : RequestInfo = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: UndiciTypes.fetch.Request) : RequestInfo = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: UndiciTypes.fetch.Request) : RequestInfo = nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>URL</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsURL: Node.url.URL = nativeOnly
+
+            /// Unchecked, the value as <c>Request</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsRequest: UndiciTypes.fetch.Request = nativeOnly
 
         type BodyInit =
             U7<
@@ -220232,12 +221780,52 @@ module UndiciTypes =
         type SpecIterable<'T> =
             inherit Iterable<'T>
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type HeadersInit =
-            U3<
-                ResizeArray<ResizeArray<string>>,
-                UndiciTypes.fetch.HeadersInit.U3.Case2,
-                UndiciTypes.fetch.Headers
-             >
+            | StringArrayArray of ResizeArray<ResizeArray<string>>
+            | Case2 of UndiciTypes.fetch.HeadersInit.Cases.Case2
+            | Headers of UndiciTypes.fetch.Headers
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: ResizeArray<ResizeArray<string>>) : HeadersInit =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: ResizeArray<ResizeArray<string>>) : HeadersInit =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: UndiciTypes.fetch.HeadersInit.Cases.Case2)
+                : HeadersInit
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: UndiciTypes.fetch.HeadersInit.Cases.Case2)
+                : HeadersInit
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: UndiciTypes.fetch.Headers) : HeadersInit = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: UndiciTypes.fetch.Headers) : HeadersInit = nativeOnly
+
+            /// Unchecked, the value as <c>StringArrayArray</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsStringArrayArray: ResizeArray<ResizeArray<string>> = nativeOnly
+
+            /// Unchecked, the value as <c>Case2</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsCase2: UndiciTypes.fetch.HeadersInit.Cases.Case2 = nativeOnly
+
+            /// Unchecked, the value as <c>Headers</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsHeaders: UndiciTypes.fetch.Headers = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -220534,7 +222122,7 @@ module UndiciTypes =
 
         module HeadersInit =
 
-            module U3 =
+            module Cases =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -220900,10 +222488,33 @@ module UndiciTypes =
 
     module formdata =
 
-        /// <summary>
-        /// A <c>string</c> or <c>File</c> that represents a single value from a set of <c>FormData</c> key-value pairs.
-        /// </summary>
-        type FormDataEntryValue = U2<string, UndiciTypes.file.File>
+        [<RequireQualifiedAccess>]
+        [<Erase>]
+        type FormDataEntryValue =
+            | String of string
+            | File of UndiciTypes.file.File
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: string) : FormDataEntryValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: string) : FormDataEntryValue = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit(value: UndiciTypes.file.File) : FormDataEntryValue =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: UndiciTypes.file.File) : FormDataEntryValue =
+                nativeOnly
+
+            /// Unchecked, the value as <c>String</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsString: string = nativeOnly
+
+            /// Unchecked, the value as <c>File</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsFile: UndiciTypes.file.File = nativeOnly
 
         /// <summary>
         /// Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using fetch().
@@ -222170,8 +223781,47 @@ module UndiciTypes =
                 =
                 nativeOnly
 
+        [<RequireQualifiedAccess>]
+        [<Erase>]
         type EventListenerOrEventListenerObject =
-            U2<UndiciTypes.patch.EventListener, UndiciTypes.patch.EventListenerObject>
+            | EventListener of UndiciTypes.patch.EventListener
+            | EventListenerObject of UndiciTypes.patch.EventListenerObject
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: UndiciTypes.patch.EventListener)
+                : EventListenerOrEventListenerObject
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: UndiciTypes.patch.EventListener)
+                : EventListenerOrEventListenerObject
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: UndiciTypes.patch.EventListenerObject)
+                : EventListenerOrEventListenerObject
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: UndiciTypes.patch.EventListenerObject)
+                : EventListenerOrEventListenerObject
+                =
+                nativeOnly
+
+            /// Unchecked, the value as <c>EventListener</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsEventListener: UndiciTypes.patch.EventListener = nativeOnly
+
+            /// Unchecked, the value as <c>EventListenerObject</c> whatever case it holds
+            [<Emit("$0")>]
+            member _.AsEventListenerObject: UndiciTypes.patch.EventListenerObject = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]

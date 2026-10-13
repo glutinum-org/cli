@@ -14,7 +14,7 @@ type Exports =
 [<Erase>]
 type Extension =
     | Case1 of Extension.Cases.Case1
-    | Case2 of ResizeArray<Extension>
+    | ExtensionArray of ResizeArray<Extension>
 
     [<Emit("$0")>]
     static member op_Implicit(value: Extension.Cases.Case1) : Extension = nativeOnly
@@ -28,8 +28,39 @@ type Extension =
     [<Emit("$0")>]
     static member op_ErasedCast(value: ResizeArray<Extension>) : Extension = nativeOnly
 
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: Extension.Cases.Case1 = nativeOnly
+
+    /// Unchecked, the value as <c>ExtensionArray</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsExtensionArray: ResizeArray<Extension> = nativeOnly
+
+[<RequireQualifiedAccess>]
+[<Erase>]
 type Names =
-    U2<Names.U2.Case1, ResizeArray<string>>
+    | Case1 of Names.Cases.Case1
+    | StringArray of ResizeArray<string>
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: Names.Cases.Case1) : Names = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: Names.Cases.Case1) : Names = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: ResizeArray<string>) : Names = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: ResizeArray<string>) : Names = nativeOnly
+
+    /// Unchecked, the value as <c>Case1</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsCase1: Names.Cases.Case1 = nativeOnly
+
+    /// Unchecked, the value as <c>StringArray</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsStringArray: ResizeArray<string> = nativeOnly
 
 module Extension =
 
@@ -44,7 +75,7 @@ module Extension =
 
 module Names =
 
-    module U2 =
+    module Cases =
 
         [<AllowNullLiteral>]
         [<Interface>]

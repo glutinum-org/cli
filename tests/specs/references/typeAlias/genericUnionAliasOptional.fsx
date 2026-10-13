@@ -19,8 +19,31 @@ type BuildInvalidedProject<'T> =
     [<ParamObject; Emit("$0")>]
     static member Create (kind: int, program: 'T) : BuildInvalidedProject<'T> = nativeOnly
 
+[<RequireQualifiedAccess>]
+[<Erase>]
 type InvalidatedProject<'T> =
-    U2<UpdateOutputFileStampsProject, BuildInvalidedProject<'T>>
+    | UpdateOutputFileStampsProject of UpdateOutputFileStampsProject
+    | BuildInvalidedProject of BuildInvalidedProject<'T>
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: UpdateOutputFileStampsProject) : InvalidatedProject<'T> = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: UpdateOutputFileStampsProject) : InvalidatedProject<'T> = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: BuildInvalidedProject<'T>) : InvalidatedProject<'T> = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: BuildInvalidedProject<'T>) : InvalidatedProject<'T> = nativeOnly
+
+    /// Unchecked, the value as <c>UpdateOutputFileStampsProject</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsUpdateOutputFileStampsProject: UpdateOutputFileStampsProject = nativeOnly
+
+    /// Unchecked, the value as <c>BuildInvalidedProject</c> whatever case it holds
+    [<Emit("$0")>]
+    member _.AsBuildInvalidedProject: BuildInvalidedProject<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
