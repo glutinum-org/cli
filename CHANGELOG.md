@@ -1,5 +1,5 @@
 ---
-last_commit_released: 42b6e92c8dfd64043e8db65908bb4c85d97ee516
+last_commit_released: b95d8d46d4857a31bdb593ea54511393697784b8
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,14 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.11 - 2026-10-13
+
+### 🐞 Bug Fixes
+
+* No overload takes the union beside its cases ([116b1f7](https://github.com/glutinum-org/cli/commit/116b1f712d8062c92f20b7fb5a2619fc4ca5bc3c))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/42b6e92c8dfd64043e8db65908bb4c85d97ee516..b95d8d46d4857a31bdb593ea54511393697784b8)</small></strong>
 
 ## 1.0.0-beta.10 - 2026-10-13
 
