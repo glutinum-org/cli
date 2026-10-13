@@ -127,10 +127,10 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/assert-module/assertpredicate/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/assert-module/assertpredicate/u5/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/assert-module/assertpredicate/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/assert-module/assertpredicate/u5/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/assert-module/assertpredicate/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/assert-module/assertstrict/</loc>
@@ -304,10 +304,10 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/strict/strict/assertpredicate/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/strict/strict/assertpredicate/u5/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/strict/strict/assertpredicate/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/strict/strict/assertpredicate/u5/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/strict/strict/assertpredicate/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/strict/strict/assertstrict/</loc>
@@ -436,10 +436,10 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-module/withimplicitcoercion/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-module/withimplicitcoercion/u3/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-module/withimplicitcoercion/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-module/withimplicitcoercion/u3/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-module/withimplicitcoercion/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer/</loc>
@@ -754,10 +754,10 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/child-process/stdiooptions/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/child-process/stdiooptions/u2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/child-process/stdiooptions/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/child-process/stdiooptions/u2/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/child-process/stdiooptions/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/child-process/stdiopipe/</loc>
@@ -2446,10 +2446,10 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/events/eventmap/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/events/eventmap/u2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/events/eventmap/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/events/eventmap/u2/case1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/events/eventmap/cases/case1/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/events/exports/</loc>
@@ -9403,13 +9403,13 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/u2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/u2/case1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/cases/case1/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/u2/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/optiontoken/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/parseargsconfig/</loc>
@@ -9484,13 +9484,13 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/u3/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/u3/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/cases/case2/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/u3/case3/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/token/cases/case3/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/tokenforoptions/</loc>
@@ -10846,10 +10846,10 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/headersinit/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/headersinit/u3/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/headersinit/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/headersinit/u3/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/headersinit/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/fetch/referrerpolicy/</loc>
@@ -12293,6 +12293,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/typedpropertydescriptor/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/unioncases/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/</loc>
@@ -18931,10 +18934,10 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersinit/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersinit/u3/</loc>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersinit/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersinit/u3/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersinit/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersiterator/</loc>
@@ -20206,10 +20209,10 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/nodefilter/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/nodefilter/u2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/nodefilter/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/nodefilter/u2/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/nodefilter/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/nodeiterator/</loc>
@@ -23071,10 +23074,10 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/xpathnsresolver/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/xpathnsresolver/u2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/xpathnsresolver/cases/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/xpathnsresolver/u2/case2/</loc>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/xpathnsresolver/cases/case2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/xpathresult/</loc>
