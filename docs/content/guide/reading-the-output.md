@@ -82,7 +82,7 @@ match request.params.["id"] with
 
 A match works when the cases have distinct runtime types, a string and an array here. A case that is an interface cannot be tested: Fable warns and the branch is never taken.
 
-An overloaded parameter is generated as one overload per case, so a union in parameter position rarely needs `U2`.
+A union in parameter position is generated as one overload per case, so `setView (paris, 13)` and `setView ((48.85, 2.35), 13)` both compile. There is no overload taking the union itself: a value typed `U2<LatLng, LatLngTuple>` is matched on its cases first. Past `--max-overloads` combinations the parameter keeps its union type, and Fable.Core 5.4.0 converts a value of a case to it.
 
 ## Objects you construct
 

@@ -22,22 +22,22 @@ type Value =
 type Inline =
     abstract member ``inline``: U2<Inline.``inline``.U2.Case1, ResizeArray<string>> option with get, set
     [<ParamObject; Emit("$0")>]
+    static member Create () : Inline = nativeOnly
+    [<ParamObject; Emit("$0")>]
     static member Create (``inline``: Inline.``inline``.U2.Case1) : Inline = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (``inline``: ResizeArray<string>) : Inline = nativeOnly
-    [<ParamObject; Emit("$0")>]
-    static member Create (?``inline``: U2<Inline.``inline``.U2.Case1, ResizeArray<string>>) : Inline = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type Aliased =
     abstract member alias: Value option with get, set
     [<ParamObject; Emit("$0")>]
+    static member Create () : Aliased = nativeOnly
+    [<ParamObject; Emit("$0")>]
     static member Create (alias: Value.U2.Case1) : Aliased = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (alias: ResizeArray<string>) : Aliased = nativeOnly
-    [<ParamObject; Emit("$0")>]
-    static member Create (?alias: Value) : Aliased = nativeOnly
 
 module Value =
 

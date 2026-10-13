@@ -7376,16 +7376,6 @@ module Web =
             =
             nativeOnly
 
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap)
-        /// </summary>
-        [<Global("createImageBitmap")>]
-        static member createImageBitmap
-            (image: Web.ImageBitmapSource, ?options: Web.ImageBitmapOptions)
-            : JS.Promise<Web.ImageBitmap>
-            =
-            nativeOnly
-
         [<Global("createImageBitmap")>]
         static member createImageBitmap
             (
@@ -7512,20 +7502,6 @@ module Web =
             =
             nativeOnly
 
-        [<Global("createImageBitmap")>]
-        static member createImageBitmap
-            (
-                image: Web.ImageBitmapSource,
-                sx: float,
-                sy: float,
-                sw: float,
-                sh: float,
-                ?options: Web.ImageBitmapOptions
-            )
-            : JS.Promise<Web.ImageBitmap>
-            =
-            nativeOnly
-
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch)
         /// </summary>
@@ -7545,16 +7521,6 @@ module Web =
         /// </summary>
         [<Global("fetch")>]
         static member fetch(input: Web.URL, ?init: Web.RequestInit) : JS.Promise<Web.Response> =
-            nativeOnly
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch)
-        /// </summary>
-        [<Global("fetch")>]
-        static member fetch
-            (input: U2<Web.RequestInfo, Web.URL>, ?init: Web.RequestInit)
-            : JS.Promise<Web.Response>
-            =
             nativeOnly
 
         /// <summary>
@@ -7590,16 +7556,6 @@ module Web =
             nativeOnly
 
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/setInterval)
-        /// </summary>
-        [<Global("setInterval")>]
-        static member setInterval
-            (handler: Web.TimerHandler, timeout: float, [<ParamArray>] arguments: obj[])
-            : float
-            =
-            nativeOnly
-
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/setTimeout)
         /// </summary>
         [<Global("setTimeout")>]
@@ -7615,16 +7571,6 @@ module Web =
         [<Global("setTimeout")>]
         static member setTimeout
             (handler: Action, timeout: float, [<ParamArray>] arguments: obj[])
-            : float
-            =
-            nativeOnly
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/setTimeout)
-        /// </summary>
-        [<Global("setTimeout")>]
-        static member setTimeout
-            (handler: Web.TimerHandler, timeout: float, [<ParamArray>] arguments: obj[])
             : float
             =
             nativeOnly
@@ -8092,6 +8038,9 @@ module Web =
         abstract member sampleRate: float option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?sampleRate: float) : AudioContextOptions = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create
             (latencyHint: Web.AudioContextLatencyCategory, ?sampleRate: float)
             : AudioContextOptions
@@ -8100,13 +8049,6 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(latencyHint: float, ?sampleRate: float) : AudioContextOptions =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?latencyHint: U2<Web.AudioContextLatencyCategory, float>, ?sampleRate: float)
-            : AudioContextOptions
-            =
             nativeOnly
 
     [<AllowNullLiteral>]
@@ -8771,6 +8713,9 @@ module Web =
         abstract member media: U2<Web.MediaList, string> option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?baseURL: string, ?disabled: bool) : CSSStyleSheetInit = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create
             (media: Web.MediaList, ?baseURL: string, ?disabled: bool)
             : CSSStyleSheetInit
@@ -8779,13 +8724,6 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(media: string, ?baseURL: string, ?disabled: bool) : CSSStyleSheetInit =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?baseURL: string, ?disabled: bool, ?media: U2<Web.MediaList, string>)
-            : CSSStyleSheetInit
-            =
             nativeOnly
 
     [<AllowNullLiteral>]
@@ -9735,6 +9673,22 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : EffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 duration: float,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -9772,23 +9726,6 @@ module Web =
                 duration: string,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float
-            )
-            : EffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?duration: U3<float, Web.CSSNumericValue, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -10208,13 +10145,6 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (binding: Web.GPUIndex32, resource: Web.GPUBindingResource)
-            : GPUBindGroupEntry
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUBindGroupLayoutDescriptor =
@@ -10468,23 +10398,25 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode>,
-                compute: Web.GPUProgrammableStage,
-                ?label: string
-            )
-            : GPUComputePipelineDescriptor
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUCopyExternalImageDestInfo =
         inherit Web.GPUTexelCopyTextureInfo
         abstract member colorSpace: Web.PredefinedColorSpace option with get, set
         abstract member premultipliedAlpha: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate,
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?premultipliedAlpha: bool
+            )
+            : GPUCopyExternalImageDestInfo
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -10507,20 +10439,6 @@ module Web =
                 origin: Web.GPUOrigin3DDict,
                 ?aspect: Web.GPUTextureAspect,
                 ?mipLevel: Web.GPUIntegerCoordinate,
-                ?colorSpace: Web.PredefinedColorSpace,
-                ?premultipliedAlpha: bool
-            )
-            : GPUCopyExternalImageDestInfo
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                texture: Web.GPUTexture,
-                ?aspect: Web.GPUTextureAspect,
-                ?mipLevel: Web.GPUIntegerCoordinate,
-                ?origin: Web.GPUOrigin3D,
                 ?colorSpace: Web.PredefinedColorSpace,
                 ?premultipliedAlpha: bool
             )
@@ -10637,17 +10555,6 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                source: U2<Web.HTMLVideoElement, Web.VideoFrame>,
-                ?label: string,
-                ?colorSpace: Web.PredefinedColorSpace
-            )
-            : GPUExternalTextureDescriptor
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUFragmentState =
@@ -10735,13 +10642,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (layout: Web.GPUAutoLayoutMode, ?label: string)
-            : GPUPipelineDescriptorBase
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode>, ?label: string)
             : GPUPipelineDescriptorBase
             =
             nativeOnly
@@ -10934,23 +10834,6 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                view: U2<Web.GPUTexture, Web.GPUTextureView>,
-                ?depthClearValue: float,
-                ?depthLoadOp: Web.GPULoadOp,
-                ?depthReadOnly: bool,
-                ?depthStoreOp: Web.GPUStoreOp,
-                ?stencilClearValue: Web.GPUStencilValue,
-                ?stencilLoadOp: Web.GPULoadOp,
-                ?stencilReadOnly: bool,
-                ?stencilStoreOp: Web.GPUStoreOp
-            )
-            : GPURenderPassDepthStencilAttachment
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type GPURenderPassDescriptor =
@@ -11042,21 +10925,6 @@ module Web =
         static member Create
             (
                 layout: Web.GPUAutoLayoutMode,
-                vertex: Web.GPUVertexState,
-                ?label: string,
-                ?depthStencil: Web.GPUDepthStencilState,
-                ?fragment: Web.GPUFragmentState,
-                ?multisample: Web.GPUMultisampleState,
-                ?primitive: Web.GPUPrimitiveState
-            )
-            : GPURenderPipelineDescriptor
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode>,
                 vertex: Web.GPUVertexState,
                 ?label: string,
                 ?depthStencil: Web.GPUDepthStencilState,
@@ -11215,6 +11083,17 @@ module Web =
         static member Create
             (
                 texture: Web.GPUTexture,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate
+            )
+            : GPUTexelCopyTextureInfo
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                texture: Web.GPUTexture,
                 origin: ResizeArray<Web.GPUIntegerCoordinate>,
                 ?aspect: Web.GPUTextureAspect,
                 ?mipLevel: Web.GPUIntegerCoordinate
@@ -11230,18 +11109,6 @@ module Web =
                 origin: Web.GPUOrigin3DDict,
                 ?aspect: Web.GPUTextureAspect,
                 ?mipLevel: Web.GPUIntegerCoordinate
-            )
-            : GPUTexelCopyTextureInfo
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                texture: Web.GPUTexture,
-                ?aspect: Web.GPUTextureAspect,
-                ?mipLevel: Web.GPUIntegerCoordinate,
-                ?origin: Web.GPUOrigin3D
             )
             : GPUTexelCopyTextureInfo
             =
@@ -11298,22 +11165,6 @@ module Web =
             (
                 format: Web.GPUTextureFormat,
                 size: Web.GPUExtent3DDict,
-                usage: Web.GPUTextureUsageFlags,
-                ?label: string,
-                ?dimension: Web.GPUTextureDimension,
-                ?mipLevelCount: Web.GPUIntegerCoordinate,
-                ?sampleCount: Web.GPUSize32,
-                ?viewFormats: ResizeArray<Web.GPUTextureFormat>
-            )
-            : GPUTextureDescriptor
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                format: Web.GPUTextureFormat,
-                size: Web.GPUExtent3D,
                 usage: Web.GPUTextureUsageFlags,
                 ?label: string,
                 ?dimension: Web.GPUTextureDimension,
@@ -11645,19 +11496,15 @@ module Web =
         abstract member keyPath: U2<string, ResizeArray<string>> option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?autoIncrement: bool) : IDBObjectStoreParameters = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create(keyPath: string, ?autoIncrement: bool) : IDBObjectStoreParameters =
             nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
             (keyPath: ResizeArray<string>, ?autoIncrement: bool)
-            : IDBObjectStoreParameters
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?autoIncrement: bool, ?keyPath: U2<string, ResizeArray<string>>)
             : IDBObjectStoreParameters
             =
             nativeOnly
@@ -11824,21 +11671,6 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                data: Web.ImageBufferSource,
-                ``type``: string,
-                ?colorSpaceConversion: Web.ColorSpaceConversion,
-                ?desiredHeight: float,
-                ?desiredWidth: float,
-                ?preferAnimation: bool,
-                ?transfer: ResizeArray<obj>
-            )
-            : ImageDecoderInit
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type ImageEncodeOptions =
@@ -11897,6 +11729,13 @@ module Web =
         abstract member rootMargin: string option with get, set
         abstract member scrollMargin: string option with get, set
         abstract member threshold: U2<float, ResizeArray<float>> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -11959,18 +11798,6 @@ module Web =
                 threshold: ResizeArray<float>,
                 ?rootMargin: string,
                 ?scrollMargin: string
-            )
-            : IntersectionObserverInit
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?root: U2<Web.Element, Web.Document>,
-                ?rootMargin: string,
-                ?scrollMargin: string,
-                ?threshold: U2<float, ResizeArray<float>>
             )
             : IntersectionObserverInit
             =
@@ -12161,6 +11988,25 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string
+            )
+            : KeyframeEffectOptions
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 duration: float,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -12204,26 +12050,6 @@ module Web =
                 duration: string,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float,
-                ?composite: Web.CompositeOperation,
-                ?iterationComposite: Web.IterationCompositeOperation,
-                ?pseudoElement: string
-            )
-            : KeyframeEffectOptions
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?duration: U3<float, Web.CSSNumericValue, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -12809,6 +12635,31 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                ?aspectRatio: float,
+                ?autoGainControl: bool,
+                ?backgroundBlur: bool,
+                ?channelCount: float,
+                ?deviceId: string,
+                ?displaySurface: string,
+                ?facingMode: string,
+                ?frameRate: float,
+                ?groupId: string,
+                ?height: float,
+                ?noiseSuppression: bool,
+                ?sampleRate: float,
+                ?sampleSize: float,
+                ?torch: bool,
+                ?whiteBalanceMode: string,
+                ?width: float,
+                ?zoom: float
+            )
+            : MediaTrackSettings
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 echoCancellation: bool,
                 ?aspectRatio: float,
                 ?autoGainControl: bool,
@@ -12842,32 +12693,6 @@ module Web =
                 ?channelCount: float,
                 ?deviceId: string,
                 ?displaySurface: string,
-                ?facingMode: string,
-                ?frameRate: float,
-                ?groupId: string,
-                ?height: float,
-                ?noiseSuppression: bool,
-                ?sampleRate: float,
-                ?sampleSize: float,
-                ?torch: bool,
-                ?whiteBalanceMode: string,
-                ?width: float,
-                ?zoom: float
-            )
-            : MediaTrackSettings
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?aspectRatio: float,
-                ?autoGainControl: bool,
-                ?backgroundBlur: bool,
-                ?channelCount: float,
-                ?deviceId: string,
-                ?displaySurface: string,
-                ?echoCancellation: U2<bool, string>,
                 ?facingMode: string,
                 ?frameRate: float,
                 ?groupId: string,
@@ -13288,6 +13113,22 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float
+            )
+            : OptionalEffectTiming
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 duration: float,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -13308,23 +13149,6 @@ module Web =
                 duration: string,
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
-                ?easing: string,
-                ?endDelay: float,
-                ?fill: Web.FillMode,
-                ?iterationStart: float,
-                ?iterations: float,
-                ?playbackRate: float
-            )
-            : OptionalEffectTiming
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?delay: float,
-                ?direction: Web.PlaybackDirection,
-                ?duration: U2<float, string>,
                 ?easing: string,
                 ?endDelay: float,
                 ?fill: Web.FillMode,
@@ -13481,6 +13305,9 @@ module Web =
             U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create() : ParseHTMLUnsafeOptions = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.Sanitizer) : ParseHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
@@ -13488,13 +13315,6 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.SanitizerPresets) : ParseHTMLUnsafeOptions = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets>)
-            : ParseHTMLUnsafeOptions
-            =
-            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14304,6 +14124,9 @@ module Web =
         abstract member userVisibleOnly: bool option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?userVisibleOnly: bool) : PushSubscriptionOptionsInit = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create
             (applicationServerKey: Web.BufferSource, ?userVisibleOnly: bool)
             : PushSubscriptionOptionsInit
@@ -14313,13 +14136,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (applicationServerKey: string, ?userVisibleOnly: bool)
-            : PushSubscriptionOptionsInit
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?applicationServerKey: U2<Web.BufferSource, string>, ?userVisibleOnly: bool)
             : PushSubscriptionOptionsInit
             =
             nativeOnly
@@ -14646,13 +14462,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (urls: ResizeArray<string>, ?credential: string, ?username: string)
-            : RTCIceServer
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (urls: U2<string, ResizeArray<string>>, ?credential: string, ?username: string)
             : RTCIceServer
             =
             nativeOnly
@@ -15553,6 +15362,27 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (
+                ?body: Web.BodyInit,
+                ?cache: Web.RequestCache,
+                ?credentials: Web.RequestCredentials,
+                ?integrity: string,
+                ?keepalive: bool,
+                ?``method``: string,
+                ?mode: Web.RequestMode,
+                ?priority: Web.RequestPriority,
+                ?redirect: Web.RequestRedirect,
+                ?referrer: string,
+                ?referrerPolicy: Web.ReferrerPolicy,
+                ?signal: Web.AbortSignal,
+                ?window: obj
+            )
+            : RequestInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
                 headers: ResizeArray<string * string>,
                 ?body: Web.BodyInit,
                 ?cache: Web.RequestCache,
@@ -15616,28 +15446,6 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?body: Web.BodyInit,
-                ?cache: Web.RequestCache,
-                ?credentials: Web.RequestCredentials,
-                ?headers: Web.HeadersInit,
-                ?integrity: string,
-                ?keepalive: bool,
-                ?``method``: string,
-                ?mode: Web.RequestMode,
-                ?priority: Web.RequestPriority,
-                ?redirect: Web.RequestRedirect,
-                ?referrer: string,
-                ?referrerPolicy: Web.ReferrerPolicy,
-                ?signal: Web.AbortSignal,
-                ?window: obj
-            )
-            : RequestInit
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type ResizeObserverOptions =
@@ -15653,6 +15461,9 @@ module Web =
         abstract member headers: Web.HeadersInit option with get, set
         abstract member status: float option with get, set
         abstract member statusText: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?status: float, ?statusText: string) : ResponseInit = nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -15671,13 +15482,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (headers: Web.Headers, ?status: float, ?statusText: string)
-            : ResponseInit
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?headers: Web.HeadersInit, ?status: float, ?statusText: string)
             : ResponseInit
             =
             nativeOnly
@@ -16044,6 +15848,10 @@ module Web =
         abstract member usbVendorId: float option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?usbProductId: float, ?usbVendorId: float) : SerialPortFilter =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create
             (bluetoothServiceClassId: string, ?usbProductId: float, ?usbVendorId: float)
             : SerialPortFilter
@@ -16053,17 +15861,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (bluetoothServiceClassId: float, ?usbProductId: float, ?usbVendorId: float)
-            : SerialPortFilter
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?bluetoothServiceClassId: Web.BluetoothServiceUUID,
-                ?usbProductId: float,
-                ?usbVendorId: float
-            )
             : SerialPortFilter
             =
             nativeOnly
@@ -16076,6 +15873,10 @@ module Web =
         abstract member usbVendorId: float option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?usbProductId: float, ?usbVendorId: float) : SerialPortInfo =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create
             (bluetoothServiceClassId: string, ?usbProductId: float, ?usbVendorId: float)
             : SerialPortInfo
@@ -16085,17 +15886,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (bluetoothServiceClassId: float, ?usbProductId: float, ?usbVendorId: float)
-            : SerialPortInfo
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?bluetoothServiceClassId: Web.BluetoothServiceUUID,
-                ?usbProductId: float,
-                ?usbVendorId: float
-            )
             : SerialPortInfo
             =
             nativeOnly
@@ -16125,6 +15915,9 @@ module Web =
             U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create() : SetHTMLOptions = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.Sanitizer) : SetHTMLOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
@@ -16133,18 +15926,14 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.SanitizerPresets) : SetHTMLOptions = nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets>)
-            : SetHTMLOptions
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type SetHTMLUnsafeOptions =
         abstract member sanitizer:
             U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create() : SetHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.Sanitizer) : SetHTMLUnsafeOptions = nativeOnly
@@ -16154,13 +15943,6 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create(sanitizer: Web.SanitizerPresets) : SetHTMLUnsafeOptions = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (?sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets>)
-            : SetHTMLUnsafeOptions
-            =
-            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -16476,14 +16258,13 @@ module Web =
         abstract member priority: U2<Web.TaskPriority, Web.TaskSignal> option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create() : TaskSignalAnyInit = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create(priority: Web.TaskPriority) : TaskSignalAnyInit = nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create(priority: Web.TaskSignal) : TaskSignalAnyInit = nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create(?priority: U2<Web.TaskPriority, Web.TaskSignal>) : TaskSignalAnyInit =
-            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -17257,6 +17038,10 @@ module Web =
         abstract member subject: Web.Element option with get, set
 
         [<ParamObject; Emit("$0")>]
+        static member Create(?axis: Web.ScrollAxis, ?subject: Web.Element) : ViewTimelineOptions =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
         static member Create
             (inset: string, ?axis: Web.ScrollAxis, ?subject: Web.Element)
             : ViewTimelineOptions
@@ -17274,23 +17059,24 @@ module Web =
             =
             nativeOnly
 
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?axis: Web.ScrollAxis,
-                ?inset: U2<string, ResizeArray<U2<Web.CSSNumericValue, Web.CSSKeywordValue>>>,
-                ?subject: Web.Element
-            )
-            : ViewTimelineOptions
-            =
-            nativeOnly
-
     [<AllowNullLiteral>]
     [<Interface>]
     type WaveShaperOptions =
         inherit Web.AudioNodeOptions
         abstract member curve: U2<ResizeArray<float>, JS.Float32Array> option with get, set
         abstract member oversample: Web.OverSampleType option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?oversample: Web.OverSampleType
+            )
+            : WaveShaperOptions
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
         static member Create
@@ -17312,19 +17098,6 @@ module Web =
                 ?channelCount: float,
                 ?channelCountMode: Web.ChannelCountMode,
                 ?channelInterpretation: Web.ChannelInterpretation,
-                ?oversample: Web.OverSampleType
-            )
-            : WaveShaperOptions
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ?channelCount: float,
-                ?channelCountMode: Web.ChannelCountMode,
-                ?channelInterpretation: Web.ChannelInterpretation,
-                ?curve: U2<ResizeArray<float>, JS.Float32Array>,
                 ?oversample: Web.OverSampleType
             )
             : WaveShaperOptions
@@ -17611,6 +17384,13 @@ module Web =
 
         [<ParamObject; Emit("$0")>]
         static member Create
+            (``type``: Web.WriteCommandType, ?position: float, ?size: float)
+            : WriteParams
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
             (``type``: Web.WriteCommandType, data: Web.BufferSource, ?position: float, ?size: float)
             : WriteParams
             =
@@ -17626,18 +17406,6 @@ module Web =
         [<ParamObject; Emit("$0")>]
         static member Create
             (``type``: Web.WriteCommandType, data: string, ?position: float, ?size: float)
-            : WriteParams
-            =
-            nativeOnly
-
-        [<ParamObject; Emit("$0")>]
-        static member Create
-            (
-                ``type``: Web.WriteCommandType,
-                ?data: U3<Web.BufferSource, Web.Blob, string>,
-                ?position: float,
-                ?size: float
-            )
             : WriteParams
             =
             nativeOnly
@@ -20414,15 +20182,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam/setValueCurveAtTime)
         /// </summary>
         abstract member setValueCurveAtTime:
-            values: U2<ResizeArray<float>, JS.Float32Array> * startTime: float * duration: float ->
-                Web.AudioParam
-
-        /// <summary>
-        /// The **<c>setValueCurveAtTime()</c>** method of the AudioParam interface schedules the parameter's value to change following a curve defined by a list of values.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam/setValueCurveAtTime)
-        /// </summary>
-        abstract member setValueCurveAtTime:
             values: Iterable<float> * startTime: float * duration: float -> Web.AudioParam
 
     /// <summary>
@@ -21209,17 +20968,6 @@ module Web =
         abstract member createPeriodicWave:
             real: JS.Float32Array *
             imag: JS.Float32Array *
-            ?constraints: Web.PeriodicWaveConstraints ->
-                Web.PeriodicWave
-
-        /// <summary>
-        /// The **<c>createPeriodicWave()</c>** method of the BaseAudioContext interface is used to create a PeriodicWave. This wave is used to define a periodic waveform that can be used to shape the output of an OscillatorNode.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BaseAudioContext/createPeriodicWave)
-        /// </summary>
-        abstract member createPeriodicWave:
-            real: U2<ResizeArray<float>, JS.Float32Array> *
-            imag: U2<ResizeArray<float>, JS.Float32Array> *
             ?constraints: Web.PeriodicWaveConstraints ->
                 Web.PeriodicWave
 
@@ -27191,12 +26939,6 @@ module Web =
         /// </summary>
         abstract member add: request: Web.URL -> JS.Promise<unit>
         /// <summary>
-        /// The **<c>add()</c>** method of the Cache interface takes a URL, retrieves it, and adds the resulting response object to the given cache.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/add)
-        /// </summary>
-        abstract member add: request: U2<Web.RequestInfo, Web.URL> -> JS.Promise<unit>
-        /// <summary>
         /// The **<c>addAll()</c>** method of the Cache interface takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache. The request objects created during retrieval become keys to the stored response operations.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/addAll)
@@ -27226,15 +26968,6 @@ module Web =
         /// </summary>
         abstract member delete:
             request: Web.URL * ?options: Web.CacheQueryOptions -> JS.Promise<bool>
-
-        /// <summary>
-        /// The **<c>delete()</c>** method of the Cache interface finds the Cache entry whose key is the request, and if found, deletes the Cache entry and returns a Promise that resolves to true. If no Cache entry is found, it resolves to false.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/delete)
-        /// </summary>
-        abstract member delete:
-            request: U2<Web.RequestInfo, Web.URL> * ?options: Web.CacheQueryOptions ->
-                JS.Promise<bool>
 
         /// <summary>
         /// The **<c>keys()</c>** method of the Cache interface returns a Promise that resolves to an array of Request objects representing the keys of the Cache.
@@ -27296,15 +27029,6 @@ module Web =
             request: Web.URL * ?options: Web.CacheQueryOptions -> JS.Promise<Web.Response option>
 
         /// <summary>
-        /// The **<c>match()</c>** method of the Cache interface returns a Promise that resolves to the Response associated with the first matching request in the Cache object. If no match is found, the Promise resolves to undefined.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/match)
-        /// </summary>
-        abstract member ``match``:
-            request: U2<Web.RequestInfo, Web.URL> * ?options: Web.CacheQueryOptions ->
-                JS.Promise<Web.Response option>
-
-        /// <summary>
         /// The **<c>matchAll()</c>** method of the Cache interface returns a Promise that resolves to an array of all matching responses in the Cache object.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/matchAll)
@@ -27356,15 +27080,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/put)
         /// </summary>
         abstract member put: request: Web.URL * response: Web.Response -> JS.Promise<unit>
-
-        /// <summary>
-        /// The **<c>put()</c>** method of the Cache interface allows key/value pairs to be added to the current Cache object.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/put)
-        /// </summary>
-        abstract member put:
-            request: U2<Web.RequestInfo, Web.URL> * response: Web.Response -> JS.Promise<unit>
-
         /// <summary>
         /// The **<c>addAll()</c>** method of the Cache interface takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache. The request objects created during retrieval become keys to the stored response operations.
         ///
@@ -27426,15 +27141,6 @@ module Web =
         /// </summary>
         abstract member ``match``:
             request: Web.URL * ?options: Web.MultiCacheQueryOptions ->
-                JS.Promise<Web.Response option>
-
-        /// <summary>
-        /// The **<c>match()</c>** method of the CacheStorage interface checks if a given Request or URL string is a key for a stored Response. This method returns a Promise for a Response, or a Promise which resolves to undefined if no match is found.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage/match)
-        /// </summary>
-        abstract member ``match``:
-            request: U2<Web.RequestInfo, Web.URL> * ?options: Web.MultiCacheQueryOptions ->
                 JS.Promise<Web.Response option>
 
         /// <summary>
@@ -27673,10 +27379,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/drawImage)
         /// </summary>
         abstract member drawImage: image: Web.VideoFrame * dx: float * dy: float -> unit
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/drawImage)
-        /// </summary>
-        abstract member drawImage: image: Web.CanvasImageSource * dx: float * dy: float -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/drawImage)
@@ -27719,12 +27421,6 @@ module Web =
         /// </summary>
         abstract member drawImage:
             image: Web.VideoFrame * dx: float * dy: float * dw: float * dh: float -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/drawImage)
-        /// </summary>
-        abstract member drawImage:
-            image: Web.CanvasImageSource * dx: float * dy: float * dw: float * dh: float -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/drawImage)
@@ -27821,21 +27517,6 @@ module Web =
         /// </summary>
         abstract member drawImage:
             image: Web.VideoFrame *
-            sx: float *
-            sy: float *
-            sw: float *
-            sh: float *
-            dx: float *
-            dy: float *
-            dw: float *
-            dh: float ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/drawImage)
-        /// </summary>
-        abstract member drawImage:
-            image: Web.CanvasImageSource *
             sx: float *
             sy: float *
             sw: float *
@@ -27962,12 +27643,6 @@ module Web =
         /// </summary>
         abstract member createPattern:
             image: Web.VideoFrame * repetition: string option -> Web.CanvasPattern option
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/createPattern)
-        /// </summary>
-        abstract member createPattern:
-            image: Web.CanvasImageSource * repetition: string option -> Web.CanvasPattern option
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/createRadialGradient)
@@ -32697,14 +32372,6 @@ module Web =
             url: Web.URL * name: string * features: string -> Web.WindowProxy option
 
         /// <summary>
-        /// The **<c>Document.open()</c>** method opens a document for writing.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/open)
-        /// </summary>
-        abstract member ``open``:
-            url: U2<string, Web.URL> * name: string * features: string -> Web.WindowProxy option
-
-        /// <summary>
         /// The **<c>Document.queryCommandEnabled()</c>** method reports whether or not the specified editor command is enabled by the browser.
         /// </summary>
         [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/queryCommandEnabled)")>]
@@ -35884,12 +35551,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/write)
         /// </summary>
         abstract member write: data: Web.WriteParams -> JS.Promise<unit>
-        /// <summary>
-        /// The **<c>write()</c>** method of the FileSystemWritableFileStream interface writes content into the file the method is called on, at the current file cursor offset.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/write)
-        /// </summary>
-        abstract member write: data: Web.FileSystemWriteChunkType -> JS.Promise<unit>
 
     /// <summary>
     /// The **<c>FocusEvent</c>** interface represents focus-related events, including focus, blur, focusin, and focusout.
@@ -36291,12 +35952,6 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/append)
         /// </summary>
-        abstract member append: name: string * value: U2<string, Web.Blob> -> unit
-        /// <summary>
-        /// The **<c>append()</c>** method of the FormData interface appends a new value onto an existing key inside a FormData object, or adds the key if it does not already exist.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/append)
-        /// </summary>
         abstract member append: name: string * blobValue: Web.Blob * ?filename: string -> unit
         /// <summary>
         /// The **<c>delete()</c>** method of the FormData interface deletes a key and its value(s) from a FormData object.
@@ -36328,12 +35983,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/set)
         /// </summary>
         abstract member set: name: string * value: string -> unit
-        /// <summary>
-        /// The **<c>set()</c>** method of the FormData interface sets a new value for an existing key inside a FormData object, or adds the key/value if it does not already exist.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/set)
-        /// </summary>
-        abstract member set: name: string * value: U2<string, Web.Blob> -> unit
         /// <summary>
         /// The **<c>set()</c>** method of the FormData interface sets a new value for an existing key inside a FormData object, or adds the key/value if it does not already exist.
         ///
@@ -36774,17 +36423,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>copyBufferToTexture()</c>** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUBuffer to a GPUTexture.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyBufferToTexture)
-        /// </summary>
-        abstract member copyBufferToTexture:
-            source: Web.GPUTexelCopyBufferInfo *
-            destination: Web.GPUTexelCopyTextureInfo *
-            copySize: Web.GPUExtent3D ->
-                unit
-
-        /// <summary>
         /// The **<c>copyTextureToBuffer()</c>** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUTexture to a GPUBuffer.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToBuffer)
@@ -36807,17 +36445,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>copyTextureToBuffer()</c>** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUTexture to a GPUBuffer.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToBuffer)
-        /// </summary>
-        abstract member copyTextureToBuffer:
-            source: Web.GPUTexelCopyTextureInfo *
-            destination: Web.GPUTexelCopyBufferInfo *
-            copySize: Web.GPUExtent3D ->
-                unit
-
-        /// <summary>
         /// The **<c>copyTextureToTexture()</c>** method of the GPUCommandEncoder interface encodes a command that copies data from one GPUTexture to another.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToTexture)
@@ -36837,17 +36464,6 @@ module Web =
             source: Web.GPUTexelCopyTextureInfo *
             destination: Web.GPUTexelCopyTextureInfo *
             copySize: Web.GPUExtent3DDict ->
-                unit
-
-        /// <summary>
-        /// The **<c>copyTextureToTexture()</c>** method of the GPUCommandEncoder interface encodes a command that copies data from one GPUTexture to another.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToTexture)
-        /// </summary>
-        abstract member copyTextureToTexture:
-            source: Web.GPUTexelCopyTextureInfo *
-            destination: Web.GPUTexelCopyTextureInfo *
-            copySize: Web.GPUExtent3D ->
                 unit
 
         /// <summary>
@@ -37627,17 +37243,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>copyExternalImageToTexture()</c>** method of the GPUQueue interface copies a snapshot taken from a source image, video, or canvas into a given GPUTexture.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/copyExternalImageToTexture)
-        /// </summary>
-        abstract member copyExternalImageToTexture:
-            source: Web.GPUCopyExternalImageSourceInfo *
-            destination: Web.GPUCopyExternalImageDestInfo *
-            copySize: Web.GPUExtent3D ->
-                unit
-
-        /// <summary>
         /// The **<c>onSubmittedWorkDone()</c>** method of the GPUQueue interface returns a Promise that resolves when all the work submitted to the GPU via this GPUQueue at the point the method is called has been processed.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/onSubmittedWorkDone)
@@ -37685,18 +37290,6 @@ module Web =
             data: Web.AllowSharedBufferSource *
             dataLayout: Web.GPUTexelCopyBufferLayout *
             size: Web.GPUExtent3DDict ->
-                unit
-
-        /// <summary>
-        /// The **<c>writeTexture()</c>** method of the GPUQueue interface writes a provided data source into a given GPUTexture.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/writeTexture)
-        /// </summary>
-        abstract member writeTexture:
-            destination: Web.GPUTexelCopyTextureInfo *
-            data: Web.AllowSharedBufferSource *
-            dataLayout: Web.GPUTexelCopyBufferLayout *
-            size: Web.GPUExtent3D ->
                 unit
 
         /// <summary>
@@ -37876,12 +37469,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPURenderPassEncoder/setBlendConstant)
         /// </summary>
         abstract member setBlendConstant: color: Web.GPUColorDict -> unit
-        /// <summary>
-        /// The **<c>setBlendConstant()</c>** method of the GPURenderPassEncoder interface sets the constant blend color and alpha values used with "constant" and "one-minus-constant" blend factors (as set in the descriptor of the GPUDevice.createRenderPipeline() method, in the blend property).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPURenderPassEncoder/setBlendConstant)
-        /// </summary>
-        abstract member setBlendConstant: color: Web.GPUColor -> unit
 
         /// <summary>
         /// The **<c>setScissorRect()</c>** method of the GPURenderPassEncoder interface sets the scissor rectangle used during the rasterization stage. After transformation into viewport coordinates any fragments that fall outside the scissor rectangle will be discarded.
@@ -58608,14 +58195,6 @@ module Web =
             key: ResizeArray<Web.IDBValidKey> * primaryKey: Web.IDBValidKey -> unit
 
         /// <summary>
-        /// The **<c>continuePrimaryKey()</c>** method of the IDBCursor interface advances the cursor to the item whose key matches the key parameter as well as whose primary key matches the primary key parameter.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBCursor/continuePrimaryKey)
-        /// </summary>
-        abstract member continuePrimaryKey:
-            key: Web.IDBValidKey * primaryKey: Web.IDBValidKey -> unit
-
-        /// <summary>
         /// The **<c>delete()</c>** method of the IDBCursor interface returns an IDBRequest object, and, in a separate thread, deletes the record at the cursor's position, without changing the cursor's position. Once the record is deleted, the cursor's value is set to null.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBCursor/delete)
@@ -58765,17 +58344,6 @@ module Web =
         /// </summary>
         abstract member transaction:
             storeNames: ResizeArray<string> *
-            ?mode: Web.IDBTransactionMode *
-            ?options: Web.IDBTransactionOptions ->
-                Web.IDBTransaction
-
-        /// <summary>
-        /// The **<c>transaction</c>** method of the IDBDatabase interface immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBDatabase/transaction)
-        /// </summary>
-        abstract member transaction:
-            storeNames: U2<string, ResizeArray<string>> *
             ?mode: Web.IDBTransactionMode *
             ?options: Web.IDBTransactionOptions ->
                 Web.IDBTransaction
@@ -58947,17 +58515,6 @@ module Web =
             ?options: Web.IDBTransactionOptions ->
                 Web.IDBTransaction
 
-        /// <summary>
-        /// The **<c>transaction</c>** method of the IDBDatabase interface immediately returns a transaction object (IDBTransaction) containing the IDBTransaction.objectStore method, which you can use to access your object store.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBDatabase/transaction)
-        /// </summary>
-        abstract member transaction:
-            storeNames: U2<string, Iterable<string>> *
-            ?mode: Web.IDBTransactionMode *
-            ?options: Web.IDBTransactionOptions ->
-                Web.IDBTransaction
-
     /// <summary>
     /// The **<c>IDBFactory</c>** interface of the IndexedDB API lets applications asynchronously access the indexed databases. The object that implements the interface is window.indexedDB. You open — that is, create and access — and delete a database with this object, and not directly with IDBFactory.
     ///
@@ -59109,12 +58666,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/get)
         /// </summary>
         abstract member get: query: Web.IDBKeyRange -> Web.IDBRequest<obj>
-        /// <summary>
-        /// The **<c>get()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, finds either the value in the referenced object store that corresponds to the given key or the first corresponding value, if key is set to an IDBKeyRange.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/get)
-        /// </summary>
-        abstract member get: query: U2<Web.IDBValidKey, Web.IDBKeyRange> -> Web.IDBRequest<obj>
         /// <summary>
         /// The **<c>getAll()</c>** method of the IDBIndex interface retrieves all objects that are inside the index.
         ///
@@ -59268,15 +58819,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/getKey)
         /// </summary>
         abstract member getKey: query: Web.IDBKeyRange -> Web.IDBRequest<Web.IDBValidKey option>
-
-        /// <summary>
-        /// The **<c>getKey()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, finds either the primary key that corresponds to the given key in this index or the first corresponding primary key, if key is set to an IDBKeyRange.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/getKey)
-        /// </summary>
-        abstract member getKey:
-            query: U2<Web.IDBValidKey, Web.IDBKeyRange> -> Web.IDBRequest<Web.IDBValidKey option>
-
         /// <summary>
         /// The **<c>openCursor()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         ///
@@ -59583,17 +59125,6 @@ module Web =
                 Web.IDBIndex
 
         /// <summary>
-        /// The **<c>createIndex()</c>** method of the IDBObjectStore interface creates and returns a new IDBIndex object in the connected database. It creates a new field/column defining a new data point for each database record to contain.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/createIndex)
-        /// </summary>
-        abstract member createIndex:
-            name: string *
-            keyPath: U2<string, ResizeArray<string>> *
-            ?options: Web.IDBIndexParameters ->
-                Web.IDBIndex
-
-        /// <summary>
         /// The **<c>delete()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, deletes the specified record or records.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/delete)
@@ -59629,12 +59160,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/delete)
         /// </summary>
         abstract member delete: query: Web.IDBKeyRange -> Web.IDBRequest<obj>
-        /// <summary>
-        /// The **<c>delete()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, deletes the specified record or records.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/delete)
-        /// </summary>
-        abstract member delete: query: U2<Web.IDBValidKey, Web.IDBKeyRange> -> Web.IDBRequest<obj>
         /// <summary>
         /// The **<c>deleteIndex()</c>** method of the IDBObjectStore interface destroys the index with the specified name in the connected database, used during a version upgrade.
         ///
@@ -59677,12 +59202,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/get)
         /// </summary>
         abstract member get: query: Web.IDBKeyRange -> Web.IDBRequest<obj>
-        /// <summary>
-        /// The **<c>get()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, returns the object selected by the specified key. This is for retrieving specific records from an object store.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/get)
-        /// </summary>
-        abstract member get: query: U2<Web.IDBValidKey, Web.IDBKeyRange> -> Web.IDBRequest<obj>
         /// <summary>
         /// The **<c>getAll()</c>** method of the IDBObjectStore interface returns an IDBRequest object containing all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         ///
@@ -59836,15 +59355,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/getKey)
         /// </summary>
         abstract member getKey: query: Web.IDBKeyRange -> Web.IDBRequest<Web.IDBValidKey option>
-
-        /// <summary>
-        /// The **<c>getKey()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, returns the key selected by the specified query. This is for retrieving specific records from an object store.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/getKey)
-        /// </summary>
-        abstract member getKey:
-            query: U2<Web.IDBValidKey, Web.IDBKeyRange> -> Web.IDBRequest<Web.IDBValidKey option>
-
         /// <summary>
         /// The **<c>index()</c>** method of the IDBObjectStore interface opens a named index in the current object store, after which it can be used to, for example, return a series of records sorted by that index using a cursor.
         ///
@@ -60018,15 +59528,6 @@ module Web =
         /// </summary>
         abstract member createIndex:
             name: string * keyPath: Iterable<string> * ?options: Web.IDBIndexParameters ->
-                Web.IDBIndex
-
-        /// <summary>
-        /// The **<c>createIndex()</c>** method of the IDBObjectStore interface creates and returns a new IDBIndex object in the connected database. It creates a new field/column defining a new data point for each database record to contain.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/createIndex)
-        /// </summary>
-        abstract member createIndex:
-            name: string * keyPath: U2<string, Iterable<string>> * ?options: Web.IDBIndexParameters ->
                 Web.IDBIndex
 
     [<AllowNullLiteral>]
@@ -61436,14 +60937,6 @@ module Web =
         /// </summary>
         abstract member setKeyframes: keyframes: Web.PropertyIndexedKeyframes option -> unit
 
-        /// <summary>
-        /// The **<c>setKeyframes()</c>** method of the KeyframeEffect interface replaces the keyframes that make up the affected KeyframeEffect with a new set of keyframes.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/KeyframeEffect/setKeyframes)
-        /// </summary>
-        abstract member setKeyframes:
-            keyframes: U2<ResizeArray<Web.Keyframe>, Web.PropertyIndexedKeyframes> option -> unit
-
     /// <summary>
     /// The **<c>LargestContentfulPaint</c>** interface provides timing information about the largest image or text paint before user input on a web page.
     ///
@@ -61592,12 +61085,6 @@ module Web =
         /// </summary>
         abstract member assign: url: Web.URL -> unit
         /// <summary>
-        /// The **<c>assign()</c>** method of the Location interface causes the window to load and display the document at the URL specified. After the navigation occurs, the user can navigate back to the page that called Location.assign() by pressing the "back" button.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Location/assign)
-        /// </summary>
-        abstract member assign: url: U2<string, Web.URL> -> unit
-        /// <summary>
         /// The **<c>reload()</c>** method of the Location interface reloads the current URL, like the Refresh button.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Location/reload)
@@ -61615,12 +61102,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Location/replace)
         /// </summary>
         abstract member replace: url: Web.URL -> unit
-        /// <summary>
-        /// The **<c>replace()</c>** method of the Location interface replaces the current resource with the one at the provided URL. The difference from the assign() method is that after using replace() the current page will not be saved in session History, meaning the user won't be able to use the back button to navigate to it. Not to be confused with the String method String.prototype.replace().
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Location/replace)
-        /// </summary>
-        abstract member replace: url: U2<string, Web.URL> -> unit
 
     /// <summary>
     /// The **<c>Lock</c>** interface of the Web Locks API provides the name and mode of a lock. This may be a newly requested lock that is received in the callback to LockManager.request(), or a record of an active or queued lock returned by LockManager.query().
@@ -66553,15 +66034,6 @@ module Web =
             url: Web.URL * ?options: Web.NavigationNavigateOptions -> Web.NavigationResult
 
         /// <summary>
-        /// The **<c>navigate()</c>** method of the Navigation interface navigates to a specific URL, updating any provided state in the history entries list.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigation/navigate)
-        /// </summary>
-        abstract member navigate:
-            url: U2<string, Web.URL> * ?options: Web.NavigationNavigateOptions ->
-                Web.NavigationResult
-
-        /// <summary>
         /// The **<c>reload()</c>** method of the Navigation interface reloads the current URL, updating any provided state in the history entries list.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigation/reload)
@@ -67106,14 +66578,6 @@ module Web =
         /// </summary>
         abstract member redirect: url: Web.URL * ?options: Web.NavigationNavigateOptions -> unit
 
-        /// <summary>
-        /// The **<c>redirect()</c>** method of the NavigationPrecommitController interface redirects the browser to a specified URL and specifies history behavior and any desired state information.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPrecommitController/redirect)
-        /// </summary>
-        abstract member redirect:
-            url: U2<string, Web.URL> * ?options: Web.NavigationNavigateOptions -> unit
-
     /// <summary>
     /// The **<c>NavigationPreloadManager</c>** interface of the Service Worker API provides methods for managing the preloading of resources in parallel with service worker bootup.
     /// Available only in secure contexts.
@@ -67436,12 +66900,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/vibrate)
         /// </summary>
         abstract member vibrate: pattern: ResizeArray<float> -> bool
-        /// <summary>
-        /// The **<c>vibrate()</c>** method of the Navigator interface pulses the vibration hardware on the device, if such hardware exists. If the device doesn't support vibration, this method has no effect. If a vibration pattern is already in progress when this method is called, the previous pattern is halted and the new one begins instead.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/vibrate)
-        /// </summary>
-        abstract member vibrate: pattern: Web.VibratePattern -> bool
 
         /// <summary>
         /// The **<c>requestMediaKeySystemAccess()</c>** method of the Navigator interface returns a Promise which delivers a MediaKeySystemAccess object that can be used to access a particular media key system, which can in turn be used to create keys for decrypting a media stream.
@@ -67512,12 +66970,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/registerProtocolHandler)
         /// </summary>
         abstract member registerProtocolHandler: scheme: string * url: Web.URL -> unit
-        /// <summary>
-        /// Available only in secure contexts.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/registerProtocolHandler)
-        /// </summary>
-        abstract member registerProtocolHandler: scheme: string * url: U2<string, Web.URL> -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -70102,12 +69554,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequestUpdateEvent/updateWith)
         /// </summary>
         abstract member updateWith: detailsPromise: obj -> unit
-        /// <summary>
-        /// The **<c>updateWith()</c>** method of the PaymentRequestUpdateEvent interface updates the details of an existing PaymentRequest.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequestUpdateEvent/updateWith)
-        /// </summary>
-        abstract member updateWith: detailsPromise: U2<Web.PaymentDetailsUpdate, obj> -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -73763,15 +73209,6 @@ module Web =
         /// </summary>
         abstract member addTransceiver:
             trackOrKind: string * ?init: Web.RTCRtpTransceiverInit -> Web.RTCRtpTransceiver
-
-        /// <summary>
-        /// The **<c>addTransceiver()</c>** method of the RTCPeerConnection interface creates a new RTCRtpTransceiver and adds it to the set of transceivers associated with the RTCPeerConnection. Each transceiver represents a bidirectional stream, with both an RTCRtpSender and an RTCRtpReceiver associated with it.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addTransceiver)
-        /// </summary>
-        abstract member addTransceiver:
-            trackOrKind: U2<Web.MediaStreamTrack, string> * ?init: Web.RTCRtpTransceiverInit ->
-                Web.RTCRtpTransceiver
 
         /// <summary>
         /// The **<c>close()</c>** method of the RTCPeerConnection interface closes the current peer connection.
@@ -91070,12 +90507,6 @@ module Web =
         /// </summary>
         abstract member allowAttribute: attribute: Web.SanitizerAttributeNamespace -> bool
         /// <summary>
-        /// The **<c>allowAttribute()</c>** method of the Sanitizer interface sets an attribute to be allowed on all elements when the sanitizer is used.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/allowAttribute)
-        /// </summary>
-        abstract member allowAttribute: attribute: Web.SanitizerAttribute -> bool
-        /// <summary>
         /// The **<c>allowElement()</c>** method of the Sanitizer interface sets that the specified element is allowed in the output when the sanitizer is used.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/allowElement)
@@ -91087,12 +90518,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/allowElement)
         /// </summary>
         abstract member allowElement: element: Web.SanitizerElementNamespaceWithAttributes -> bool
-        /// <summary>
-        /// The **<c>allowElement()</c>** method of the Sanitizer interface sets that the specified element is allowed in the output when the sanitizer is used.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/allowElement)
-        /// </summary>
-        abstract member allowElement: element: Web.SanitizerElementWithAttributes -> bool
         /// <summary>
         /// The **<c>get()</c>** method of the Sanitizer interface returns a SanitizerConfig dictionary instance that represents the current Sanitizer configuration.
         ///
@@ -91112,12 +90537,6 @@ module Web =
         /// </summary>
         abstract member removeAttribute: attribute: Web.SanitizerAttributeNamespace -> bool
         /// <summary>
-        /// The **<c>removeAttribute()</c>** method of the Sanitizer interface sets an attribute to be removed from all elements when the sanitizer is used.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/removeAttribute)
-        /// </summary>
-        abstract member removeAttribute: attribute: Web.SanitizerAttribute -> bool
-        /// <summary>
         /// The **<c>removeElement()</c>** method of the Sanitizer interface sets the specified element be removed from the output when the sanitizer is used.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/removeElement)
@@ -91129,12 +90548,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/removeElement)
         /// </summary>
         abstract member removeElement: element: Web.SanitizerElementNamespace -> bool
-        /// <summary>
-        /// The **<c>removeElement()</c>** method of the Sanitizer interface sets the specified element be removed from the output when the sanitizer is used.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/removeElement)
-        /// </summary>
-        abstract member removeElement: element: Web.SanitizerElement -> bool
         /// <summary>
         /// The **<c>removeUnsafe()</c>** method of the Sanitizer interface configures the sanitizer so that it will remove all elements and attributes that are considered XSS-unsafe by the browser.
         ///
@@ -91153,12 +90566,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/replaceElementWithChildren)
         /// </summary>
         abstract member replaceElementWithChildren: element: Web.SanitizerElementNamespace -> bool
-        /// <summary>
-        /// The **<c>replaceElementWithChildren()</c>** method of the Sanitizer interface sets an element to be replaced by its child HTML elements when the sanitizer is used. This is primarily used for stripping styles from text.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer/replaceElementWithChildren)
-        /// </summary>
-        abstract member replaceElementWithChildren: element: Web.SanitizerElement -> bool
         /// <summary>
         /// The **<c>setComments()</c>** method of the Sanitizer interface sets whether comments will be allowed or removed by the sanitizer.
         ///
@@ -92579,15 +91986,6 @@ module Web =
         /// </summary>
         abstract member register:
             scriptURL: Web.URL * ?options: Web.RegistrationOptions ->
-                JS.Promise<Web.ServiceWorkerRegistration>
-
-        /// <summary>
-        /// The **<c>register()</c>** method of the ServiceWorkerContainer interface creates or updates a ServiceWorkerRegistration for the given scope.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/register)
-        /// </summary>
-        abstract member register:
-            scriptURL: U2<string, Web.URL> * ?options: Web.RegistrationOptions ->
                 JS.Promise<Web.ServiceWorkerRegistration>
 
         /// <summary>
@@ -95150,24 +94548,6 @@ module Web =
                 JS.Promise<obj>
 
         /// <summary>
-        /// The **<c>decrypt()</c>** method of the SubtleCrypto interface decrypts some encrypted data. It takes as arguments a key to decrypt with, some optional extra parameters, and the data to decrypt (also known as "ciphertext"). It returns a Promise which will be fulfilled with the decrypted data (also known as "plaintext").
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/decrypt)
-        /// </summary>
-        abstract member decrypt:
-            algorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaOaepParams,
-                    Web.AesCtrParams,
-                    Web.AesCbcParams,
-                    Web.AesGcmParams
-                 > *
-            key: Web.CryptoKey *
-            data: Web.BufferSource ->
-                JS.Promise<obj>
-
-        /// <summary>
         /// The **<c>deriveBits()</c>** method of the SubtleCrypto interface can be used to derive an array of bits from a base key.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveBits)
@@ -95207,23 +94587,6 @@ module Web =
         /// </summary>
         abstract member deriveBits:
             algorithm: Web.Pbkdf2Params * baseKey: Web.CryptoKey * ?length: float -> JS.Promise<obj>
-
-        /// <summary>
-        /// The **<c>deriveBits()</c>** method of the SubtleCrypto interface can be used to derive an array of bits from a base key.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveBits)
-        /// </summary>
-        abstract member deriveBits:
-            algorithm:
-                U4<
-                    Web.AlgorithmIdentifier,
-                    Web.EcdhKeyDeriveParams,
-                    Web.HkdfParams,
-                    Web.Pbkdf2Params
-                 > *
-            baseKey: Web.CryptoKey *
-            ?length: float ->
-                JS.Promise<obj>
 
         /// <summary>
         /// The **<c>deriveKey()</c>** method of the SubtleCrypto interface can be used to derive a secret key from a master key.
@@ -95326,32 +94689,6 @@ module Web =
                 JS.Promise<Web.CryptoKey>
 
         /// <summary>
-        /// The **<c>deriveKey()</c>** method of the SubtleCrypto interface can be used to derive a secret key from a master key.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey)
-        /// </summary>
-        abstract member deriveKey:
-            algorithm:
-                U4<
-                    Web.AlgorithmIdentifier,
-                    Web.EcdhKeyDeriveParams,
-                    Web.HkdfParams,
-                    Web.Pbkdf2Params
-                 > *
-            baseKey: Web.CryptoKey *
-            derivedKeyType:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.AesDerivedKeyParams,
-                    Web.HmacImportParams,
-                    Web.HkdfParams,
-                    Web.Pbkdf2Params
-                 > *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
         /// The **<c>digest()</c>** method of the SubtleCrypto interface generates a digest of the given data, using the specified hash function. A digest is a short fixed-length value derived from some variable-length input. Cryptographic digests should exhibit collision-resistance, meaning that it's hard to come up with two different inputs that have the same digest value.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest)
@@ -95363,14 +94700,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest)
         /// </summary>
         abstract member digest: algorithm: string * data: Web.BufferSource -> JS.Promise<obj>
-
-        /// <summary>
-        /// The **<c>digest()</c>** method of the SubtleCrypto interface generates a digest of the given data, using the specified hash function. A digest is a short fixed-length value derived from some variable-length input. Cryptographic digests should exhibit collision-resistance, meaning that it's hard to come up with two different inputs that have the same digest value.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest)
-        /// </summary>
-        abstract member digest:
-            algorithm: Web.AlgorithmIdentifier * data: Web.BufferSource -> JS.Promise<obj>
 
         /// <summary>
         /// The **<c>encrypt()</c>** method of the SubtleCrypto interface encrypts data.
@@ -95423,24 +94752,6 @@ module Web =
         /// </summary>
         abstract member encrypt:
             algorithm: Web.AesGcmParams * key: Web.CryptoKey * data: Web.BufferSource ->
-                JS.Promise<obj>
-
-        /// <summary>
-        /// The **<c>encrypt()</c>** method of the SubtleCrypto interface encrypts data.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/encrypt)
-        /// </summary>
-        abstract member encrypt:
-            algorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaOaepParams,
-                    Web.AesCtrParams,
-                    Web.AesCbcParams,
-                    Web.AesGcmParams
-                 > *
-            key: Web.CryptoKey *
-            data: Web.BufferSource ->
                 JS.Promise<obj>
 
         /// <summary>
@@ -95515,17 +94826,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
         abstract member generateKey:
-            algorithm: U2<Web.RsaHashedKeyGenParams, Web.EcKeyGenParams> *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKeyPair>
-
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey:
             algorithm: Web.AesKeyGenParams *
             extractable: bool *
             keyUsages: ResizeArray<Web.KeyUsage> ->
@@ -95557,17 +94857,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
         abstract member generateKey:
-            algorithm: U3<Web.AesKeyGenParams, Web.HmacKeyGenParams, Web.Pbkdf2Params> *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey:
             algorithm: Web.Algorithm * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> ->
                 JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
 
@@ -95581,17 +94870,6 @@ module Web =
                 JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
 
         /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey:
-            algorithm: Web.AlgorithmIdentifier *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
-
-        /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
@@ -95674,26 +94952,6 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk:
-            keyData: Web.JsonWebKey *
-            algorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaHashedImportParams,
-                    Web.EcKeyImportParams,
-                    Web.HmacImportParams,
-                    Web.AesKeyAlgorithm
-                 > *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
-        /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
-        /// </summary>
         abstract member importKey:
             format: SubtleCrypto.importKey.format *
             keyData: Web.BufferSource *
@@ -95763,26 +95021,6 @@ module Web =
             format: SubtleCrypto.importKey.format *
             keyData: Web.BufferSource *
             algorithm: Web.AesKeyAlgorithm *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
-        /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
-        /// </summary>
-        abstract member importKey:
-            format: SubtleCrypto.importKey.format *
-            keyData: Web.BufferSource *
-            algorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaHashedImportParams,
-                    Web.EcKeyImportParams,
-                    Web.HmacImportParams,
-                    Web.AesKeyAlgorithm
-                 > *
             extractable: bool *
             keyUsages: ResizeArray<Web.KeyUsage> ->
                 JS.Promise<Web.CryptoKey>
@@ -95820,17 +95058,6 @@ module Web =
         /// </summary>
         abstract member sign:
             algorithm: Web.EcdsaParams * key: Web.CryptoKey * data: Web.BufferSource ->
-                JS.Promise<obj>
-
-        /// <summary>
-        /// The **<c>sign()</c>** method of the SubtleCrypto interface generates a digital signature.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/sign)
-        /// </summary>
-        abstract member sign:
-            algorithm: U3<Web.AlgorithmIdentifier, Web.RsaPssParams, Web.EcdsaParams> *
-            key: Web.CryptoKey *
-            data: Web.BufferSource ->
                 JS.Promise<obj>
 
         /// <summary>
@@ -95966,35 +95193,6 @@ module Web =
                 JS.Promise<Web.CryptoKey>
 
         /// <summary>
-        /// The **<c>unwrapKey()</c>** method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey)
-        /// </summary>
-        abstract member unwrapKey:
-            format: Web.KeyFormat *
-            wrappedKey: Web.BufferSource *
-            unwrappingKey: Web.CryptoKey *
-            unwrapAlgorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaOaepParams,
-                    Web.AesCtrParams,
-                    Web.AesCbcParams,
-                    Web.AesGcmParams
-                 > *
-            unwrappedKeyAlgorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaHashedImportParams,
-                    Web.EcKeyImportParams,
-                    Web.HmacImportParams,
-                    Web.AesKeyAlgorithm
-                 > *
-            extractable: bool *
-            keyUsages: ResizeArray<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
         /// The **<c>verify()</c>** method of the SubtleCrypto interface verifies a digital signature.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/verify)
@@ -96037,18 +95235,6 @@ module Web =
         /// </summary>
         abstract member verify:
             algorithm: Web.EcdsaParams *
-            key: Web.CryptoKey *
-            signature: Web.BufferSource *
-            data: Web.BufferSource ->
-                JS.Promise<bool>
-
-        /// <summary>
-        /// The **<c>verify()</c>** method of the SubtleCrypto interface verifies a digital signature.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/verify)
-        /// </summary>
-        abstract member verify:
-            algorithm: U3<Web.AlgorithmIdentifier, Web.RsaPssParams, Web.EcdsaParams> *
             key: Web.CryptoKey *
             signature: Web.BufferSource *
             data: Web.BufferSource ->
@@ -96127,25 +95313,6 @@ module Web =
                 JS.Promise<obj>
 
         /// <summary>
-        /// The **<c>wrapKey()</c>** method of the SubtleCrypto interface "wraps" a key. This means that it exports the key in an external, portable format, then encrypts the exported key. Wrapping a key helps protect it in untrusted environments, such as inside an otherwise unprotected data store or in transmission over an unprotected network.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/wrapKey)
-        /// </summary>
-        abstract member wrapKey:
-            format: Web.KeyFormat *
-            key: Web.CryptoKey *
-            wrappingKey: Web.CryptoKey *
-            wrapAlgorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaOaepParams,
-                    Web.AesCtrParams,
-                    Web.AesCbcParams,
-                    Web.AesGcmParams
-                 > ->
-                JS.Promise<obj>
-
-        /// <summary>
         /// The **<c>deriveKey()</c>** method of the SubtleCrypto interface can be used to derive a secret key from a master key.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey)
@@ -96246,32 +95413,6 @@ module Web =
                 JS.Promise<Web.CryptoKey>
 
         /// <summary>
-        /// The **<c>deriveKey()</c>** method of the SubtleCrypto interface can be used to derive a secret key from a master key.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey)
-        /// </summary>
-        abstract member deriveKey:
-            algorithm:
-                U4<
-                    Web.AlgorithmIdentifier,
-                    Web.EcdhKeyDeriveParams,
-                    Web.HkdfParams,
-                    Web.Pbkdf2Params
-                 > *
-            baseKey: Web.CryptoKey *
-            derivedKeyType:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.AesDerivedKeyParams,
-                    Web.HmacImportParams,
-                    Web.HkdfParams,
-                    Web.Pbkdf2Params
-                 > *
-            extractable: bool *
-            keyUsages: Iterable<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
@@ -96287,17 +95428,6 @@ module Web =
         /// </summary>
         abstract member generateKey:
             algorithm: string * extractable: bool * keyUsages: Iterable<Web.KeyUsage> ->
-                JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
-
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey:
-            algorithm: Web.AlgorithmIdentifier *
-            extractable: bool *
-            keyUsages: Iterable<Web.KeyUsage> ->
                 JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
 
         /// <summary>
@@ -96374,26 +95504,6 @@ module Web =
             format: SubtleCrypto.importKey.format *
             keyData: Web.BufferSource *
             algorithm: Web.AesKeyAlgorithm *
-            extractable: bool *
-            keyUsages: Iterable<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
-        /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
-        /// </summary>
-        abstract member importKey:
-            format: SubtleCrypto.importKey.format *
-            keyData: Web.BufferSource *
-            algorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaHashedImportParams,
-                    Web.EcKeyImportParams,
-                    Web.HmacImportParams,
-                    Web.AesKeyAlgorithm
-                 > *
             extractable: bool *
             keyUsages: Iterable<Web.KeyUsage> ->
                 JS.Promise<Web.CryptoKey>
@@ -96518,35 +95628,6 @@ module Web =
             wrappedKey: Web.BufferSource *
             unwrappingKey: Web.CryptoKey *
             unwrapAlgorithm: Web.AesGcmParams *
-            unwrappedKeyAlgorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaHashedImportParams,
-                    Web.EcKeyImportParams,
-                    Web.HmacImportParams,
-                    Web.AesKeyAlgorithm
-                 > *
-            extractable: bool *
-            keyUsages: Iterable<Web.KeyUsage> ->
-                JS.Promise<Web.CryptoKey>
-
-        /// <summary>
-        /// The **<c>unwrapKey()</c>** method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey)
-        /// </summary>
-        abstract member unwrapKey:
-            format: Web.KeyFormat *
-            wrappedKey: Web.BufferSource *
-            unwrappingKey: Web.CryptoKey *
-            unwrapAlgorithm:
-                U5<
-                    Web.AlgorithmIdentifier,
-                    Web.RsaOaepParams,
-                    Web.AesCtrParams,
-                    Web.AesCbcParams,
-                    Web.AesGcmParams
-                 > *
             unwrappedKeyAlgorithm:
                 U5<
                     Web.AlgorithmIdentifier,
@@ -100479,22 +99560,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawArraysInstancedWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArraysInstanced() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysInstancedWEBGL)
-        /// </summary>
-        abstract member multiDrawArraysInstancedWEBGL:
-            mode: Web.GLenum *
-            firstsList: U2<JS.Int32Array, ResizeArray<Web.GLint>> *
-            firstsOffset: float *
-            countsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            countsOffset: float *
-            instanceCountsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            instanceCountsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
         /// The **<c>WEBGL_multi_draw.multiDrawArraysWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArrays() method.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL)
@@ -100551,20 +99616,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawArraysWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArrays() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL)
-        /// </summary>
-        abstract member multiDrawArraysWEBGL:
-            mode: Web.GLenum *
-            firstsList: U2<JS.Int32Array, ResizeArray<Web.GLint>> *
-            firstsOffset: float *
-            countsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            countsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
         /// The **<c>WEBGL_multi_draw.multiDrawElementsInstancedWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElementsInstanced() method.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsInstancedWEBGL)
@@ -100701,23 +99752,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawElementsInstancedWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElementsInstanced() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsInstancedWEBGL)
-        /// </summary>
-        abstract member multiDrawElementsInstancedWEBGL:
-            mode: Web.GLenum *
-            countsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            countsOffset: float *
-            ``type``: Web.GLenum *
-            offsetsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            offsetsOffset: float *
-            instanceCountsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            instanceCountsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
         /// The **<c>WEBGL_multi_draw.multiDrawElementsWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElements() method.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL)
@@ -100778,21 +99812,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawElementsWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElements() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL)
-        /// </summary>
-        abstract member multiDrawElementsWEBGL:
-            mode: Web.GLenum *
-            countsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            countsOffset: float *
-            ``type``: Web.GLenum *
-            offsetsList: U2<JS.Int32Array, ResizeArray<Web.GLsizei>> *
-            offsetsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
         /// The **<c>WEBGL_multi_draw.multiDrawArraysInstancedWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArraysInstanced() method.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysInstancedWEBGL)
@@ -100905,22 +99924,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawArraysInstancedWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArraysInstanced() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysInstancedWEBGL)
-        /// </summary>
-        abstract member multiDrawArraysInstancedWEBGL:
-            mode: Web.GLenum *
-            firstsList: U2<JS.Int32Array, Iterable<Web.GLint>> *
-            firstsOffset: float *
-            countsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
-            countsOffset: float *
-            instanceCountsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
-            instanceCountsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
         /// The **<c>WEBGL_multi_draw.multiDrawArraysWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArrays() method.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL)
@@ -100958,20 +99961,6 @@ module Web =
             firstsList: Iterable<Web.GLint> *
             firstsOffset: float *
             countsList: Iterable<Web.GLsizei> *
-            countsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawArraysWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawArrays() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL)
-        /// </summary>
-        abstract member multiDrawArraysWEBGL:
-            mode: Web.GLenum *
-            firstsList: U2<JS.Int32Array, Iterable<Web.GLint>> *
-            firstsOffset: float *
-            countsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
             countsOffset: float *
             drawcount: Web.GLsizei ->
                 unit
@@ -101096,23 +100085,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawElementsInstancedWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElementsInstanced() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsInstancedWEBGL)
-        /// </summary>
-        abstract member multiDrawElementsInstancedWEBGL:
-            mode: Web.GLenum *
-            countsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
-            countsOffset: float *
-            ``type``: Web.GLenum *
-            offsetsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
-            offsetsOffset: float *
-            instanceCountsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
-            instanceCountsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
         /// The **<c>WEBGL_multi_draw.multiDrawElementsWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElements() method.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL)
@@ -101153,21 +100125,6 @@ module Web =
             countsOffset: float *
             ``type``: Web.GLenum *
             offsetsList: Iterable<Web.GLsizei> *
-            offsetsOffset: float *
-            drawcount: Web.GLsizei ->
-                unit
-
-        /// <summary>
-        /// The **<c>WEBGL_multi_draw.multiDrawElementsWEBGL()</c>** method of the WebGL API renders multiple primitives from array data. It is identical to multiple calls to the gl.drawElements() method.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL)
-        /// </summary>
-        abstract member multiDrawElementsWEBGL:
-            mode: Web.GLenum *
-            countsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
-            countsOffset: float *
-            ``type``: Web.GLenum *
-            offsetsList: U2<JS.Int32Array, Iterable<Web.GLsizei>> *
             offsetsOffset: float *
             drawcount: Web.GLsizei ->
                 unit
@@ -101536,13 +100493,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer)
         /// </summary>
-        abstract member clearBufferfv:
-            buffer: Web.GLenum * drawbuffer: Web.GLint * values: Web.Float32List * ?srcOffset: float ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer)
-        /// </summary>
         abstract member clearBufferiv:
             buffer: Web.GLenum * drawbuffer: Web.GLint * values: JS.Int32Array * ?srcOffset: float ->
                 unit
@@ -101560,13 +100510,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer)
         /// </summary>
-        abstract member clearBufferiv:
-            buffer: Web.GLenum * drawbuffer: Web.GLint * values: Web.Int32List * ?srcOffset: float ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer)
-        /// </summary>
         abstract member clearBufferuiv:
             buffer: Web.GLenum * drawbuffer: Web.GLint * values: JS.Uint32Array * ?srcOffset: float ->
                 unit
@@ -101579,13 +100522,6 @@ module Web =
             drawbuffer: Web.GLint *
             values: ResizeArray<Web.GLuint> *
             ?srcOffset: float ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer)
-        /// </summary>
-        abstract member clearBufferuiv:
-            buffer: Web.GLenum * drawbuffer: Web.GLint * values: Web.Uint32List * ?srcOffset: float ->
                 unit
 
         /// <summary>
@@ -102084,22 +101020,6 @@ module Web =
             border: Web.GLint *
             format: Web.GLenum *
             ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/texImage3D)
-        /// </summary>
-        abstract member texImage3D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            internalformat: Web.GLint *
-            width: Web.GLsizei *
-            height: Web.GLsizei *
-            depth: Web.GLsizei *
-            border: Web.GLint *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
             srcData: obj option ->
                 unit
 
@@ -102293,23 +101213,6 @@ module Web =
             depth: Web.GLsizei *
             format: Web.GLenum *
             ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/texSubImage3D)
-        /// </summary>
-        abstract member texSubImage3D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            xoffset: Web.GLint *
-            yoffset: Web.GLint *
-            zoffset: Web.GLint *
-            width: Web.GLsizei *
-            height: Web.GLsizei *
-            depth: Web.GLsizei *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
             srcData: obj option *
             ?srcOffset: float ->
                 unit
@@ -102350,16 +101253,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform)
         /// </summary>
-        abstract member uniform1uiv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Uint32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform)
-        /// </summary>
         abstract member uniform2ui:
             location: Web.WebGLUniformLocation option * v0: Web.GLuint * v1: Web.GLuint -> unit
 
@@ -102379,16 +101272,6 @@ module Web =
         abstract member uniform2uiv:
             location: Web.WebGLUniformLocation option *
             data: ResizeArray<Web.GLuint> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform)
-        /// </summary>
-        abstract member uniform2uiv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Uint32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -102426,16 +101309,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform)
         /// </summary>
-        abstract member uniform3uiv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Uint32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform)
-        /// </summary>
         abstract member uniform4ui:
             location: Web.WebGLUniformLocation option *
             v0: Web.GLuint *
@@ -102460,16 +101333,6 @@ module Web =
         abstract member uniform4uiv:
             location: Web.WebGLUniformLocation option *
             data: ResizeArray<Web.GLuint> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform)
-        /// </summary>
-        abstract member uniform4uiv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Uint32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -102508,17 +101371,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
         /// </summary>
-        abstract member uniformMatrix2x3fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
         abstract member uniformMatrix2x4fv:
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
@@ -102534,17 +101386,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             data: ResizeArray<Web.GLfloat> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix2x4fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -102574,17 +101415,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
         /// </summary>
-        abstract member uniformMatrix3x2fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
         abstract member uniformMatrix3x4fv:
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
@@ -102600,17 +101430,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             data: ResizeArray<Web.GLfloat> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix3x4fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -102640,17 +101459,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
         /// </summary>
-        abstract member uniformMatrix4x2fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
         abstract member uniformMatrix4x3fv:
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
@@ -102666,17 +101474,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             data: ResizeArray<Web.GLfloat> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix4x3fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -102700,10 +101497,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI)
         /// </summary>
         abstract member vertexAttribI4iv: index: Web.GLuint * values: ResizeArray<Web.GLint> -> unit
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI)
-        /// </summary>
-        abstract member vertexAttribI4iv: index: Web.GLuint * values: Web.Int32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI)
@@ -102722,11 +101515,6 @@ module Web =
         /// </summary>
         abstract member vertexAttribI4uiv:
             index: Web.GLuint * values: ResizeArray<Web.GLuint> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI)
-        /// </summary>
-        abstract member vertexAttribI4uiv: index: Web.GLuint * values: Web.Uint32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribIPointer)
@@ -103447,18 +102235,6 @@ module Web =
             target: Web.GLenum *
             level: Web.GLint *
             internalformat: Web.GLint *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texImage2D)
-        /// </summary>
-        abstract member texImage2D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            internalformat: Web.GLint *
             width: Web.GLsizei *
             height: Web.GLsizei *
             border: Web.GLint *
@@ -103570,21 +102346,6 @@ module Web =
             format: Web.GLenum *
             ``type``: Web.GLenum *
             source: Web.VideoFrame ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texImage2D)
-        /// </summary>
-        abstract member texImage2D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            internalformat: Web.GLint *
-            width: Web.GLsizei *
-            height: Web.GLsizei *
-            border: Web.GLint *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
                 unit
 
         /// <summary>
@@ -103717,19 +102478,6 @@ module Web =
             level: Web.GLint *
             xoffset: Web.GLint *
             yoffset: Web.GLint *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texSubImage2D)
-        /// </summary>
-        abstract member texSubImage2D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            xoffset: Web.GLint *
-            yoffset: Web.GLint *
             width: Web.GLsizei *
             height: Web.GLsizei *
             format: Web.GLenum *
@@ -103854,21 +102602,6 @@ module Web =
             height: Web.GLsizei *
             format: Web.GLenum *
             ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texSubImage2D)
-        /// </summary>
-        abstract member texSubImage2D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            xoffset: Web.GLint *
-            yoffset: Web.GLint *
-            width: Web.GLsizei *
-            height: Web.GLsizei *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
             srcData: obj *
             srcOffset: float ->
                 unit
@@ -103896,16 +102629,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform1fv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform1iv:
             location: Web.WebGLUniformLocation option *
             data: JS.Int32Array *
@@ -103919,16 +102642,6 @@ module Web =
         abstract member uniform1iv:
             location: Web.WebGLUniformLocation option *
             data: ResizeArray<Web.GLint> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform1iv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Int32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -103956,16 +102669,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform2fv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform2iv:
             location: Web.WebGLUniformLocation option *
             data: JS.Int32Array *
@@ -103979,16 +102682,6 @@ module Web =
         abstract member uniform2iv:
             location: Web.WebGLUniformLocation option *
             data: ResizeArray<Web.GLint> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform2iv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Int32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -104016,16 +102709,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform3fv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform3iv:
             location: Web.WebGLUniformLocation option *
             data: JS.Int32Array *
@@ -104039,16 +102722,6 @@ module Web =
         abstract member uniform3iv:
             location: Web.WebGLUniformLocation option *
             data: ResizeArray<Web.GLint> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform3iv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Int32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -104076,16 +102749,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform4fv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform4iv:
             location: Web.WebGLUniformLocation option *
             data: JS.Int32Array *
@@ -104099,16 +102762,6 @@ module Web =
         abstract member uniform4iv:
             location: Web.WebGLUniformLocation option *
             data: ResizeArray<Web.GLint> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform4iv:
-            location: Web.WebGLUniformLocation option *
-            data: Web.Int32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -104131,17 +102784,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             data: ResizeArray<Web.GLfloat> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix2fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -104171,17 +102813,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
         /// </summary>
-        abstract member uniformMatrix3fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
-        /// </summary>
         abstract member uniformMatrix4fv:
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
@@ -104197,17 +102828,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             data: ResizeArray<Web.GLfloat> *
-            ?srcOffset: float *
-            ?srcLength: Web.GLuint ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix4fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            data: Web.Float32List *
             ?srcOffset: float *
             ?srcLength: Web.GLuint ->
                 unit
@@ -105115,10 +103735,6 @@ module Web =
         /// </summary>
         abstract member pixelStorei: pname: Web.GLenum * param: Web.GLboolean -> unit
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/pixelStorei)
-        /// </summary>
-        abstract member pixelStorei: pname: Web.GLenum * param: U2<Web.GLint, Web.GLboolean> -> unit
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/polygonOffset)
         /// </summary>
         abstract member polygonOffset: factor: Web.GLfloat * units: Web.GLfloat -> unit
@@ -105278,10 +103894,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
         /// </summary>
-        abstract member vertexAttrib1fv: index: Web.GLuint * values: Web.Float32List -> unit
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
-        /// </summary>
         abstract member vertexAttrib2f: index: Web.GLuint * x: Web.GLfloat * y: Web.GLfloat -> unit
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
@@ -105293,11 +103905,6 @@ module Web =
         /// </summary>
         abstract member vertexAttrib2fv:
             index: Web.GLuint * values: ResizeArray<Web.GLfloat> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
-        /// </summary>
-        abstract member vertexAttrib2fv: index: Web.GLuint * values: Web.Float32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
@@ -105319,11 +103926,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
         /// </summary>
-        abstract member vertexAttrib3fv: index: Web.GLuint * values: Web.Float32List -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
-        /// </summary>
         abstract member vertexAttrib4f:
             index: Web.GLuint * x: Web.GLfloat * y: Web.GLfloat * z: Web.GLfloat * w: Web.GLfloat ->
                 unit
@@ -105338,11 +103940,6 @@ module Web =
         /// </summary>
         abstract member vertexAttrib4fv:
             index: Web.GLuint * values: ResizeArray<Web.GLfloat> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib)
-        /// </summary>
-        abstract member vertexAttrib4fv: index: Web.GLuint * values: Web.Float32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttribPointer)
@@ -105838,18 +104435,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texImage2D)
-        /// </summary>
-        abstract member texImage2D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            internalformat: Web.GLint *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texSubImage2D)
         /// </summary>
         abstract member texSubImage2D:
@@ -105956,19 +104541,6 @@ module Web =
                 unit
 
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/texSubImage2D)
-        /// </summary>
-        abstract member texSubImage2D:
-            target: Web.GLenum *
-            level: Web.GLint *
-            xoffset: Web.GLint *
-            yoffset: Web.GLint *
-            format: Web.GLenum *
-            ``type``: Web.GLenum *
-            source: Web.TexImageSource ->
-                unit
-
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
         abstract member uniform1fv:
@@ -105979,12 +104551,6 @@ module Web =
         /// </summary>
         abstract member uniform1fv:
             location: Web.WebGLUniformLocation option * v: ResizeArray<Web.GLfloat> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform1fv:
-            location: Web.WebGLUniformLocation option * v: Web.Float32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
@@ -106001,12 +104567,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform1iv:
-            location: Web.WebGLUniformLocation option * v: Web.Int32List -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform2fv:
             location: Web.WebGLUniformLocation option * v: JS.Float32Array -> unit
 
@@ -106015,12 +104575,6 @@ module Web =
         /// </summary>
         abstract member uniform2fv:
             location: Web.WebGLUniformLocation option * v: ResizeArray<Web.GLfloat> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform2fv:
-            location: Web.WebGLUniformLocation option * v: Web.Float32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
@@ -106037,12 +104591,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform2iv:
-            location: Web.WebGLUniformLocation option * v: Web.Int32List -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform3fv:
             location: Web.WebGLUniformLocation option * v: JS.Float32Array -> unit
 
@@ -106051,12 +104599,6 @@ module Web =
         /// </summary>
         abstract member uniform3fv:
             location: Web.WebGLUniformLocation option * v: ResizeArray<Web.GLfloat> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform3fv:
-            location: Web.WebGLUniformLocation option * v: Web.Float32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
@@ -106073,12 +104615,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform3iv:
-            location: Web.WebGLUniformLocation option * v: Web.Int32List -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform4fv:
             location: Web.WebGLUniformLocation option * v: JS.Float32Array -> unit
 
@@ -106091,12 +104627,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
         /// </summary>
-        abstract member uniform4fv:
-            location: Web.WebGLUniformLocation option * v: Web.Float32List -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
         abstract member uniform4iv:
             location: Web.WebGLUniformLocation option * v: JS.Int32Array -> unit
 
@@ -106105,12 +104635,6 @@ module Web =
         /// </summary>
         abstract member uniform4iv:
             location: Web.WebGLUniformLocation option * v: ResizeArray<Web.GLint> -> unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform)
-        /// </summary>
-        abstract member uniform4iv:
-            location: Web.WebGLUniformLocation option * v: Web.Int32List -> unit
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
@@ -106128,15 +104652,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             value: ResizeArray<Web.GLfloat> ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix2fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            value: Web.Float32List ->
                 unit
 
         /// <summary>
@@ -106160,15 +104675,6 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
         /// </summary>
-        abstract member uniformMatrix3fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            value: Web.Float32List ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
-        /// </summary>
         abstract member uniformMatrix4fv:
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
@@ -106182,15 +104688,6 @@ module Web =
             location: Web.WebGLUniformLocation option *
             transpose: Web.GLboolean *
             value: ResizeArray<Web.GLfloat> ->
-                unit
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix)
-        /// </summary>
-        abstract member uniformMatrix4fv:
-            location: Web.WebGLUniformLocation option *
-            transpose: Web.GLboolean *
-            value: Web.Float32List ->
                 unit
 
         /// <summary>
@@ -106502,12 +104999,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/send)
         /// </summary>
         abstract member send: data: string -> unit
-        /// <summary>
-        /// The **<c>WebSocket.send()</c>** method enqueues the specified data to be transmitted to the server over the WebSocket connection, increasing the value of bufferedAmount by the number of bytes needed to contain the data. If the data can't be sent (for example, because it needs to be buffered but the buffer is full), the socket is closed automatically. The browser will throw an exception if you call send() when the connection is in the CONNECTING state. If you call send() when the connection is in the CLOSING or CLOSED states, the browser will silently discard the data.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/send)
-        /// </summary>
-        abstract member send: data: U3<Web.BufferSource, Web.Blob, string> -> unit
         abstract member CONNECTING: int with get
         abstract member OPEN: int with get
         abstract member CLOSING: int with get
@@ -108576,13 +107067,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap)
         /// </summary>
         abstract member createImageBitmap:
-            image: Web.ImageBitmapSource * ?options: Web.ImageBitmapOptions ->
-                JS.Promise<Web.ImageBitmap>
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap)
-        /// </summary>
-        abstract member createImageBitmap:
             image: Web.HTMLImageElement *
             sx: float *
             sy: float *
@@ -108688,18 +107172,6 @@ module Web =
                 JS.Promise<Web.ImageBitmap>
 
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/createImageBitmap)
-        /// </summary>
-        abstract member createImageBitmap:
-            image: Web.ImageBitmapSource *
-            sx: float *
-            sy: float *
-            sw: float *
-            sh: float *
-            ?options: Web.ImageBitmapOptions ->
-                JS.Promise<Web.ImageBitmap>
-
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch)
         /// </summary>
         abstract member fetch:
@@ -108713,13 +107185,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch)
         /// </summary>
         abstract member fetch: input: Web.URL * ?init: Web.RequestInit -> JS.Promise<Web.Response>
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch)
-        /// </summary>
-        abstract member fetch:
-            input: U2<Web.RequestInfo, Web.URL> * ?init: Web.RequestInit -> JS.Promise<Web.Response>
-
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/queueMicrotask)
         /// </summary>
@@ -108742,12 +107207,6 @@ module Web =
             handler: Action * timeout: float * [<ParamArray>] arguments: obj[] -> float
 
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/setInterval)
-        /// </summary>
-        abstract member setInterval:
-            handler: Web.TimerHandler * timeout: float * [<ParamArray>] arguments: obj[] -> float
-
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/setTimeout)
         /// </summary>
         abstract member setTimeout:
@@ -108758,12 +107217,6 @@ module Web =
         /// </summary>
         abstract member setTimeout:
             handler: Action * timeout: float * [<ParamArray>] arguments: obj[] -> float
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/setTimeout)
-        /// </summary>
-        abstract member setTimeout:
-            handler: Web.TimerHandler * timeout: float * [<ParamArray>] arguments: obj[] -> float
 
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/structuredClone)
@@ -109023,14 +107476,6 @@ module Web =
         /// </summary>
         abstract member addModule:
             moduleURL: Web.URL * ?options: Web.WorkletOptions -> JS.Promise<unit>
-
-        /// <summary>
-        /// The **<c>addModule()</c>** method of the Worklet interface loads the module in the given JavaScript file and adds it to the current Worklet.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Worklet/addModule)
-        /// </summary>
-        abstract member addModule:
-            moduleURL: U2<string, Web.URL> * ?options: Web.WorkletOptions -> JS.Promise<unit>
 
     /// <summary>
     /// The **<c>WritableStream</c>** interface of the Streams API provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing.
@@ -109477,12 +107922,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open)
         /// </summary>
         abstract member ``open``: ``method``: string * url: Web.URL -> unit
-        /// <summary>
-        /// The XMLHttpRequest method **<c>open()</c>** initializes a newly-created request, or re-initializes an existing one.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open)
-        /// </summary>
-        abstract member ``open``: ``method``: string * url: U2<string, Web.URL> -> unit
 
         /// <summary>
         /// The XMLHttpRequest method **<c>open()</c>** initializes a newly-created request, or re-initializes an existing one.
@@ -109500,19 +107939,6 @@ module Web =
         /// </summary>
         abstract member ``open``:
             ``method``: string * url: Web.URL * async: bool * ?username: string * ?password: string ->
-                unit
-
-        /// <summary>
-        /// The XMLHttpRequest method **<c>open()</c>** initializes a newly-created request, or re-initializes an existing one.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open)
-        /// </summary>
-        abstract member ``open``:
-            ``method``: string *
-            url: U2<string, Web.URL> *
-            async: bool *
-            ?username: string *
-            ?password: string ->
                 unit
 
         /// <summary>
@@ -110997,14 +109423,6 @@ module Web =
                     JS.Promise<Web.WebAssembly_.Module>
 
             /// <summary>
-            /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/compileStreaming_static)
-            /// </summary>
-            [<Emit("$0.compileStreaming($1...)")>]
-            abstract member compileStreaming:
-                source: U2<Web.Response, obj> * ?options: Web.WebAssembly_.WebAssemblyCompileOptions ->
-                    JS.Promise<Web.WebAssembly_.Module>
-
-            /// <summary>
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/instantiate_static)
             /// </summary>
             [<Emit("$0.instantiate($1...)")>]
@@ -111035,16 +109453,6 @@ module Web =
             [<Emit("$0.instantiateStreaming($1...)")>]
             abstract member instantiateStreaming:
                 source: obj *
-                ?importObject: Web.WebAssembly_.Imports *
-                ?options: Web.WebAssembly_.WebAssemblyCompileOptions ->
-                    JS.Promise<Web.WebAssembly_.WebAssemblyInstantiatedSource>
-
-            /// <summary>
-            /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/instantiateStreaming_static)
-            /// </summary>
-            [<Emit("$0.instantiateStreaming($1...)")>]
-            abstract member instantiateStreaming:
-                source: U2<Web.Response, obj> *
                 ?importObject: Web.WebAssembly_.Imports *
                 ?options: Web.WebAssembly_.WebAssemblyCompileOptions ->
                     JS.Promise<Web.WebAssembly_.WebAssemblyInstantiatedSource>
@@ -117713,11 +116121,6 @@ module Web =
                     upper: Web.CSSNumericValue ->
                         Web.CSSMathClamp
 
-                [<EmitConstructor>]
-                abstract member Create:
-                    lower: Web.CSSNumberish * value: Web.CSSNumberish * upper: Web.CSSNumberish ->
-                        Web.CSSMathClamp
-
         module CSSMathInvert__ =
 
             [<AllowNullLiteral>]
@@ -117730,9 +116133,6 @@ module Web =
 
                 [<EmitConstructor>]
                 abstract member Create: arg: Web.CSSNumericValue -> Web.CSSMathInvert
-
-                [<EmitConstructor>]
-                abstract member Create: arg: Web.CSSNumberish -> Web.CSSMathInvert
 
         module CSSMathMax__ =
 
@@ -117766,9 +116166,6 @@ module Web =
 
                 [<EmitConstructor>]
                 abstract member Create: arg: Web.CSSNumericValue -> Web.CSSMathNegate
-
-                [<EmitConstructor>]
-                abstract member Create: arg: Web.CSSNumberish -> Web.CSSMathNegate
 
         module CSSMathProduct__ =
 
@@ -117906,9 +116303,6 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: length: Web.CSSKeywordValue -> Web.CSSPerspective
 
-                [<EmitConstructor>]
-                abstract member Create: length: Web.CSSPerspectiveValue -> Web.CSSPerspective
-
         module CSSPositionTryDescriptors__ =
 
             [<AllowNullLiteral>]
@@ -117997,14 +116391,6 @@ module Web =
                     x: Web.CSSNumericValue *
                     y: Web.CSSNumericValue *
                     z: Web.CSSNumericValue *
-                    angle: Web.CSSNumericValue ->
-                        Web.CSSRotate
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    x: Web.CSSNumberish *
-                    y: Web.CSSNumberish *
-                    z: Web.CSSNumberish *
                     angle: Web.CSSNumericValue ->
                         Web.CSSRotate
 
@@ -119218,11 +117604,6 @@ module Web =
                 abstract member Create:
                     url: Web.URL * ?eventSourceInitDict: Web.EventSourceInit -> Web.EventSource
 
-                [<EmitConstructor>]
-                abstract member Create:
-                    url: U2<string, Web.URL> * ?eventSourceInitDict: Web.EventSourceInit ->
-                        Web.EventSource
-
                 abstract member CONNECTING: int with get
                 abstract member OPEN: int with get
                 abstract member CLOSED: int with get
@@ -119402,13 +117783,6 @@ module Web =
                 abstract member Create:
                     family: string *
                     source: Web.BufferSource *
-                    ?descriptors: Web.FontFaceDescriptors ->
-                        Web.FontFace
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    family: string *
-                    source: U2<string, Web.BufferSource> *
                     ?descriptors: Web.FontFaceDescriptors ->
                         Web.FontFace
 
@@ -122615,14 +120989,6 @@ module Web =
                 abstract member generateCertificate:
                     keygenAlgorithm: string -> JS.Promise<Web.RTCCertificate>
 
-                /// <summary>
-                /// The **<c>generateCertificate()</c>** static function of the RTCPeerConnection interface creates an X.509 certificate and corresponding private key, returning a promise that resolves with the new RTCCertificate once it's generated.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/generateCertificate_static)
-                /// </summary>
-                abstract member generateCertificate:
-                    keygenAlgorithm: Web.AlgorithmIdentifier -> JS.Promise<Web.RTCCertificate>
-
         module RTCPeerConnectionIceErrorEvent__ =
 
             [<AllowNullLiteral>]
@@ -122898,10 +121264,6 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: input: Web.URL * ?init: Web.RequestInit -> Web.Request
 
-                [<EmitConstructor>]
-                abstract member Create:
-                    input: U2<Web.RequestInfo, Web.URL> * ?init: Web.RequestInit -> Web.Request
-
         module ResizeObserver__ =
 
             [<AllowNullLiteral>]
@@ -122987,12 +121349,6 @@ module Web =
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Response/redirect_static)
                 /// </summary>
                 abstract member redirect: url: Web.URL * ?status: float -> Web.Response
-                /// <summary>
-                /// The **<c>redirect()</c>** static method of the Response interface returns a Response resulting in a redirect to the specified URL.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Response/redirect_static)
-                /// </summary>
-                abstract member redirect: url: U2<string, Web.URL> * ?status: float -> Web.Response
 
         module SVGAElement__ =
 
@@ -124828,12 +123184,6 @@ module Web =
                 /// </summary>
                 abstract member createObjectURL: obj: Web.MediaSource -> string
                 /// <summary>
-                /// The **<c>createObjectURL()</c>** static method of the URL interface creates a string containing a blob URL pointing to the object given in the parameter.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/createObjectURL_static)
-                /// </summary>
-                abstract member createObjectURL: obj: U2<Web.Blob, Web.MediaSource> -> string
-                /// <summary>
                 /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
                 ///
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
@@ -124901,13 +123251,6 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create:
                     input: Web.URLPatternInit * baseURL: Web.URL * ?options: Web.URLPatternOptions ->
-                        Web.URLPattern
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    input: Web.URLPatternInput *
-                    baseURL: U2<string, Web.URL> *
-                    ?options: Web.URLPatternOptions ->
                         Web.URLPattern
 
                 [<EmitConstructor>]
@@ -125076,10 +123419,6 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create:
                     image: Web.VideoFrame * ?init: Web.VideoFrameInit -> Web.VideoFrame
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    image: Web.CanvasImageSource * ?init: Web.VideoFrameInit -> Web.VideoFrame
 
                 [<EmitConstructor>]
                 abstract member Create:
@@ -126255,10 +124594,6 @@ module Web =
                 abstract member Create:
                     url: Web.URL * ?options: Web.WebTransportOptions -> Web.WebTransport
 
-                [<EmitConstructor>]
-                abstract member Create:
-                    url: U2<string, Web.URL> * ?options: Web.WebTransportOptions -> Web.WebTransport
-
         module WebTransportBidirectionalStream__ =
 
             [<AllowNullLiteral>]
@@ -126350,10 +124685,6 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create:
                     scriptURL: Web.URL * ?options: Web.WorkerOptions -> Web.Worker
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    scriptURL: U2<string, Web.URL> * ?options: Web.WorkerOptions -> Web.Worker
 
         module Worklet__ =
 

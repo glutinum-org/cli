@@ -16,8 +16,6 @@ type Exports =
     static member format (date: float, formatStr: string) : string = nativeOnly
     [<Import("format", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member format (date: string, formatStr: string) : string = nativeOnly
-    [<Import("format", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member format (date: DateArg, formatStr: string) : string = nativeOnly
     [<Import("run", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member run<'T> (value: 'T, options: Options) : unit = nativeOnly
 

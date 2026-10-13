@@ -16,11 +16,11 @@ type AllOptional =
     abstract member value: U2<bool, string> option with get, set
     abstract member delay: float option with get, set
     [<ParamObject; Emit("$0")>]
+    static member Create (?delay: float) : AllOptional = nativeOnly
+    [<ParamObject; Emit("$0")>]
     static member Create (value: bool, ?delay: float) : AllOptional = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (value: string, ?delay: float) : AllOptional = nativeOnly
-    [<ParamObject; Emit("$0")>]
-    static member Create (?value: U2<bool, string>, ?delay: float) : AllOptional = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

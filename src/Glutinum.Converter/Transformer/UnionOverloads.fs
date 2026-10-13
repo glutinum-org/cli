@@ -200,28 +200,17 @@ let expandParameters
                 acc @ [ [ Some parameter ] ], count
         )
 
-    // An overload omitting an optional parameter and the one keeping its union are
-    // indistinguishable at a call site passing nothing (FS0041)
-    let expandsAnOptional =
-        List.zip choices parameters
-        |> List.exists (fun (choice, parameter) -> parameter.IsOptional && choice.Length > 1)
-
+    // The signature with the union is not kept beside the cases: a case value matches both
+    // through `op_Implicit` and F# can't rank them once another argument converts (FS0041)
     if count <= 1 then
         [ parameters ]
     else
-        let expanded =
-            cartesian choices
-            // The parameters after an omitted one can't be passed
-            |> List.map (fun combination ->
-                combination |> List.takeWhile Option.isSome |> List.choose id
-            )
-            |> List.distinct
-
-        if expandsAnOptional then
-            expanded
-        else
-            // A caller holding a value at the union type has no expanded overload to pass it to
-            expanded @ [ parameters ] |> List.distinct
+        cartesian choices
+        // The parameters after an omitted one can't be passed
+        |> List.map (fun combination ->
+            combination |> List.takeWhile Option.isSome |> List.choose id
+        )
+        |> List.distinct
 
 let expandMembers
     (maxOverloads: int)

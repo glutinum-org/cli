@@ -19,8 +19,6 @@ type Base =
     static member Create (value: string, other: float) : Base = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (value: float, other: float) : Base = nativeOnly
-    [<ParamObject; Emit("$0")>]
-    static member Create (value: U2<string, float>, other: float) : Base = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

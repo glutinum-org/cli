@@ -2192,22 +2192,13 @@ let private paramObjectParameterSets
                 )
         | None -> parameter
 
-    let expandable = parameters |> List.map withAliasCases
-
-    let expandedNames =
-        expandable
-        |> List.filter (fun parameter -> (tryErasedUnionCases parameter).IsSome)
-        |> List.map _.Name
-        |> set
+    let expandable =
+        if context.State.MaxOverloads > 1 then
+            parameters |> List.map withAliasCases
+        else
+            parameters
 
     tryParameterCombinations context.State.MaxOverloads expandable
-    |> Option.map (fun combinations ->
-        let withCase =
-            combinations
-            |> List.filter (List.exists (fun parameter -> expandedNames.Contains parameter.Name))
-
-        withCase @ [ parameters ]
-    )
     |> Option.defaultValue [ parameters ]
 
 /// `[<ParamObject; Emit("$0")>] static member Create(...)` builds the object type as a literal,

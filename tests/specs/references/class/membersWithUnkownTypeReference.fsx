@@ -16,7 +16,6 @@ type Exports =
 type Dayjs =
     abstract member locale: preset: string -> Dayjs
     abstract member locale: preset: obj -> Dayjs
-    abstract member locale: preset: U2<string, obj> -> Dayjs
 
 (***)
 #r "nuget: Fable.Core"

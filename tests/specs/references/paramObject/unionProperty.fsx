@@ -28,8 +28,6 @@ type Options =
     static member Create (required: string, trackVisibility: bool, ?delay: float) : Options = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (required: string, trackVisibility: string, ?delay: float) : Options = nativeOnly
-    [<ParamObject; Emit("$0")>]
-    static member Create (required: U2<float, string>, ?trackVisibility: U2<bool, string>, ?delay: float) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

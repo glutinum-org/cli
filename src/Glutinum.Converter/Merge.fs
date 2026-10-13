@@ -405,12 +405,56 @@ let private withoutSubsumedOverloads
             && longParameters |> List.skip shortParameters.Length |> List.forall snd
         | _ -> false
 
+    // `Create(value: U2<float, string>)` of ES5 and `Create(value: U3<float, string, Date>)` of
+    // ES2015: a string converts to both, F# can't rank them (FS0041)
+    let caseTypes (typ: FSharpType) =
+        let typ =
+            match typ with
+            | FSharpType.Option inner -> inner
+            | typ -> typ
+
+        match typ with
+        | FSharpType.Union unionInfo when
+            unionInfo.Cases
+            |> List.forall (
+                function
+                | FSharpUnionCase.Typed _ -> true
+                | _ -> false
+            )
+            ->
+            unionInfo.Cases
+            |> List.choose (
+                function
+                | FSharpUnionCase.Typed typ -> Some typ
+                | _ -> None
+            )
+            |> set
+        | typ -> Set.singleton typ
+
+    let widens (wider: FSharpMember) (narrower: FSharpMember) =
+        match signatureOf wider, signatureOf narrower with
+        | Some(wideKey, wideTypeParameters, wideParameters, wideType),
+          Some(narrowKey, narrowTypeParameters, narrowParameters, narrowType) ->
+            wideKey = narrowKey
+            && wideTypeParameters = narrowTypeParameters
+            && wideType = narrowType
+            && wideParameters.Length = narrowParameters.Length
+            && wideParameters <> narrowParameters
+            && List.forall2
+                (fun (wideType, wideIsOptional) (narrowType, narrowIsOptional) ->
+                    Set.isSubset (caseTypes narrowType) (caseTypes wideType)
+                    && (not narrowIsOptional || wideIsOptional)
+                )
+                wideParameters
+                narrowParameters
+        | _ -> false
+
     members
     |> List.filter (fun candidate ->
         match members |> List.filter (fun other -> subsumes other candidate) with
         // Two overloads accepting the same call are ambiguous, the shorter one resolves it
         | [ _ ] -> false
-        | _ -> true
+        | _ -> not (members |> List.exists (fun other -> widens other candidate))
     )
 
 let distinctBySignature (aliases: Aliases) (members: FSharpMember list) : FSharpMember list =

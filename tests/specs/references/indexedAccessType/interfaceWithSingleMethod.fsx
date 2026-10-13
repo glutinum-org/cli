@@ -12,8 +12,6 @@ type ConfigTypeMap =
     static member Create (``default``: string) : ConfigTypeMap = nativeOnly
     [<ParamObject; Emit("$0")>]
     static member Create (``default``: float) : ConfigTypeMap = nativeOnly
-    [<ParamObject; Emit("$0")>]
-    static member Create (``default``: U2<string, float>) : ConfigTypeMap = nativeOnly
 
 type ConfigType =
     U2<string, float>
