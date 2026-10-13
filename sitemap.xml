@@ -3163,12 +3163,6 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/mkdir/options/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/mkdir/options/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/mkdir/options/u2/case2/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/mkdirsync/</loc>
   </url>
   <url>
@@ -3250,12 +3244,6 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readdir/options/cases/case1/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readdir/options/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readdir/options/u2/case1/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readdirsync/</loc>
   </url>
   <url>
@@ -3299,15 +3287,6 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readfile/options/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readfile/options/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readfile/options/u2/case1-1/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readfile/options/u2/case1/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/exports/readfilesync/</loc>
@@ -3709,12 +3688,6 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/exports/readfile/options/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/exports/readfile/options/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/exports/readfile/options/u2/case1/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/exports/stat/</loc>
   </url>
   <url>
@@ -3776,12 +3749,6 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/filehandle/readfile/options/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/filehandle/readfile/options/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/filehandle/readfile/options/u2/case1/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/fs/promises/filehandle/stat/</loc>
@@ -6931,9 +6898,6 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/send-6/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/send-7/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/send/</loc>
   </url>
   <url>
@@ -9376,12 +9340,6 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/exports/styletext/format/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/exports/styletext/format/u4/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/exports/styletext/format/u4/case4/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/util/exports/textdecoder/</loc>
   </url>
   <url>
@@ -10135,9 +10093,6 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/agent-module/agent-module/options/factory-1/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/agent-module/agent-module/options/factory-2/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/agent-module/agent-module/options/factory/</loc>
   </url>
   <url>
@@ -10427,9 +10382,6 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/dispatcher-module/dispatcher-module/dispatchhandlers/onupgrade-1/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/dispatcher-module/dispatcher-module/dispatchhandlers/onupgrade-2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/dispatcher-module/dispatcher-module/dispatchhandlers/onupgrade/</loc>
@@ -11638,12 +11590,6 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/entries/o/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/entries/o/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/entries/o/u2/case1/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/freeze/</loc>
   </url>
   <url>
@@ -11666,12 +11612,6 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/values/o/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/values/o/u2/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/values/o/u2/case1/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/promiselike/</loc>
@@ -11704,16 +11644,10 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/defineproperty-1/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/defineproperty-2/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/defineproperty/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/deleteproperty-1/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/deleteproperty-2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/deleteproperty/</loc>
@@ -11722,16 +11656,10 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/get-1/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/get-2/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/get/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/getownpropertydescriptor-1/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/getownpropertydescriptor-2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/getownpropertydescriptor/</loc>
@@ -11740,16 +11668,10 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/has-1/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/has-2/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/has/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/set-1/</loc>
-  </url>
-  <url>
-    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/set-2/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/proxyhandler/set/</loc>
