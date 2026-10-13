@@ -39,6 +39,7 @@ const fixtures = [
     "typeNamedLikePackage",
     "typeofUnexportedNamespace",
     "externalLibNamespace",
+    "reExportedGenericFunctionAlias",
 ]
 
 const footer = `

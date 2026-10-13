@@ -4111,18 +4111,6 @@ let private transformReExport
     let declared =
         match reExport.Declaration with
         | GlueType.Interface info -> Some(info.Name, info.TypeParameters)
-        // `type Fn = <T>(value: T) => T` is a generic delegate
-        | GlueType.TypeAliasDeclaration({
-                                            Type = GlueType.FunctionType {
-                                                                             OwnTypeParameterNames = ownNames
-                                                                             TypeParameters = functionTypeParameters
-                                                                         }
-                                        } as info) when not ownNames.IsEmpty ->
-            let own =
-                functionTypeParameters
-                |> List.filter (fun typeParameter -> List.contains typeParameter.Name ownNames)
-
-            Some(info.Name, info.TypeParameters @ own)
         | GlueType.TypeAliasDeclaration info -> Some(info.Name, info.TypeParameters)
         | GlueType.ClassDeclaration info -> Some(info.Name, info.TypeParameters)
         | GlueType.Enum info -> Some(info.Name, [])
