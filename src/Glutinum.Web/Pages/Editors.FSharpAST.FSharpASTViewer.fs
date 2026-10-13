@@ -545,6 +545,9 @@ type FSharpASTViewer =
                         ASTViewer.renderKeyValue constant.Name $"{constant.Case} {constant.Value}"
                     )
                     |> ASTViewer.renderNode "Constants"
+                    unionInfo.Conversions
+                    |> List.map FSharpASTViewer.FSharpType
+                    |> ASTViewer.renderNode "Conversions"
                 ]
                 context
 

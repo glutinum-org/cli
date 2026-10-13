@@ -103,6 +103,8 @@ type FSharpUnion =
         IsOptional: bool
         TypeParameters: FSharpTypeParameter list
         Constants: FSharpUnionConstant list
+        /// The case types given an `op_Implicit`, one per type once the aliases are resolved, set by `Merge`
+        Conversions: FSharpType list
     }
 
 type FSharpModule =

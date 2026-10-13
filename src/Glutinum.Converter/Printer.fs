@@ -1007,20 +1007,8 @@ let private printUnion (printer: Printer) (unionInfo: FSharpUnion) =
         let returnType =
             printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters
 
-        unionInfo.Cases
-        |> List.choose (
-            function
-            | FSharpUnionCase.Field(_, typ) -> Some(printType typ)
-            | _ -> None
-        )
-        // An overload per distinct type, two cases can share one; Fable.Core declares
-        // `JS.Uint8ClampedArray` as `JS.Uint8Array`
-        |> List.distinctBy (fun caseType ->
-            if caseType = "JS.Uint8ClampedArray" then
-                "JS.Uint8Array"
-            else
-                caseType
-        )
+        unionInfo.Conversions
+        |> List.map printType
         |> List.iter (fun caseType ->
             for name in [ "op_Implicit"; "op_ErasedCast" ] do
                 printer.NewLine

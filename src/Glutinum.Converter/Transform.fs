@@ -256,6 +256,7 @@ module private UtilityType =
                 IsOptional = false
                 TypeParameters = []
                 Constants = []
+                Conversions = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -472,6 +473,7 @@ let private erasedUnion
         IsOptional = false
         TypeParameters = typeParameters
         Constants = []
+        Conversions = []
     }
 
 /// The reference to a type exposed in the scope under `name`
@@ -600,6 +602,7 @@ let private transformUnionType (context: TransformContext) (cases: GlueType list
                     IsOptional = isOptional
                     TypeParameters = []
                     Constants = []
+                    Conversions = []
                 }
                 |> FSharpType.Union
 
@@ -2234,6 +2237,7 @@ let private paramObjectParameterSets
                             IsOptional = false
                             TypeParameters = []
                             Constants = []
+                            Conversions = []
                         }
                         |> FSharpType.Union
                 }
@@ -2760,6 +2764,7 @@ module TypeAliasDeclaration =
                 IsOptional = false
                 TypeParameters = []
                 Constants = []
+                Conversions = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -2830,6 +2835,7 @@ module TypeAliasDeclaration =
                 IsOptional = false
                 TypeParameters = []
                 Constants = []
+                Conversions = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -3406,6 +3412,7 @@ let private tryOptimizeUnionType
             IsOptional = false
             TypeParameters = []
             Constants = []
+            Conversions = []
         }
         : FSharpUnion)
         |> FSharpType.Union
@@ -3440,6 +3447,7 @@ let private tryOptimizeUnionType
                 IsOptional = false
                 TypeParameters = []
                 Constants = []
+                Conversions = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -3470,6 +3478,7 @@ let private tryOptimizeUnionType
                 IsOptional = false
                 TypeParameters = []
                 Constants = []
+                Conversions = []
             }
             : FSharpUnion)
             |> FSharpType.Union

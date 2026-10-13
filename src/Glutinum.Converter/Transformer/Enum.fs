@@ -78,6 +78,7 @@ let transformEnum (glueEnum: GlueEnum) : FSharpType =
             IsOptional = false
             TypeParameters = []
             Constants = []
+            Conversions = []
         }
         |> FSharpType.Union
     // `enum Mixed { A = "a", B = 2 }`: an erased union of the value kinds, the members are constants
@@ -117,5 +118,6 @@ let transformEnum (glueEnum: GlueEnum) : FSharpType =
             IsOptional = false
             TypeParameters = []
             Constants = constants
+            Conversions = []
         }
         |> FSharpType.Union

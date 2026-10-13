@@ -750,11 +750,55 @@ let rec disambiguateOverloads (aliases: Aliases) (types: FSharpType list) : FSha
 /// <returns>
 /// A new list of types with the duplicates merged.
 /// </returns>
+// F# compares function types without their parameter names
+let rec private withoutParameterNames (typ: FSharpType) : FSharpType =
+    match typ with
+    | FSharpType.Function functionType ->
+        { functionType with
+            Parameters =
+                functionType.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Name = ""
+                        Type = withoutParameterNames parameter.Type
+                    }
+                )
+            ReturnType = withoutParameterNames functionType.ReturnType
+        }
+        |> FSharpType.Function
+    | typ -> FSharpType.mapChildren withoutParameterNames typ
+
+// `PowerEasing` and `BackEasing` abbreviating the same function type would be one `op_Implicit` twice (FS0438)
+let rec private unionConversions (aliases: Aliases) (types: FSharpType list) =
+    types
+    |> List.map (fun typ ->
+        match typ with
+        | FSharpType.Union unionInfo ->
+            FSharpType.Union
+                { unionInfo with
+                    Conversions =
+                        unionInfo.Cases
+                        |> List.choose (
+                            function
+                            | FSharpUnionCase.Field(_, caseType) -> Some caseType
+                            | _ -> None
+                        )
+                        |> List.distinctBy (signatureType aliases >> withoutParameterNames)
+                }
+        | FSharpType.Module moduleInfo ->
+            FSharpType.Module
+                { moduleInfo with
+                    Types = unionConversions aliases moduleInfo.Types
+                }
+        | _ -> typ
+    )
+
 let applyWith (aliases: Aliases) (types: FSharpType list) =
     types
     |> mergeTypes aliases
     |> mergeModules aliases
     |> dropEmptyModules
     |> distinctMembers aliases
+    |> unionConversions aliases
 
 let apply (types: FSharpType list) = applyWith (aliasesOf types) types
